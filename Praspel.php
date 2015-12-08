@@ -37,7 +37,7 @@
 namespace Hoa\Praspel {
 
 use Hoa\Compiler;
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\File;
 
 /**
@@ -131,7 +131,7 @@ class Praspel
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Praspel\Praspel');
+Consistency::flexEntity('Hoa\Praspel\Praspel');
 
 }
 

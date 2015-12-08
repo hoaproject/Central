@@ -38,7 +38,6 @@ namespace Hoa\Praspel\Bin;
 
 use Hoa\Compiler;
 use Hoa\Console;
-use Hoa\Core;
 use Hoa\File;
 use Hoa\Math;
 use Hoa\Praspel;

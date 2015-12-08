@@ -36,7 +36,7 @@
 
 namespace Hoa\Praspel\Preambler;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Praspel;
 
 /**
@@ -52,7 +52,7 @@ class Handler
     /**
      * Callable to validate and verify.
      *
-     * @var \Hoa\Core\Consistency\Xcallable
+     * @var \Hoa\Consistency\Xcallable
      */
     protected $__callable = null;
 
@@ -61,10 +61,10 @@ class Handler
     /**
      * Construct.
      *
-     * @param   \Hoa\Core\Consistency\Xcallable   $callable    Callable.
+     * @param   \Hoa\Consistency\Xcallable   $callable    Callable.
      * @return  void
      */
-    public function __construct(Core\Consistency\Xcallable  $callable)
+    public function __construct(Consistency\Xcallable  $callable)
     {
         $this->__setCallable($callable);
 
@@ -158,10 +158,10 @@ class Handler
     /**
      * Set callable.
      *
-     * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
-     * @return  \Hoa\Core\Consistency\Xcallable
+     * @param   \Hoa\Consistency\Xcallable  $callable    Callable.
+     * @return  \Hoa\Consistency\Xcallable
      */
-    public function __setCallable(Core\Consistency\Xcallable $callable)
+    public function __setCallable(Consistency\Xcallable $callable)
     {
         $old              = $this->__callable;
         $this->__callable = $callable;
@@ -172,7 +172,7 @@ class Handler
     /**
      * Get callable.
      *
-     * @return  \Hoa\Core\Consistency\Xcallable
+     * @return  \Hoa\Consistency\Xcallable
      */
     public function __getCallable()
     {

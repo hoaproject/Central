@@ -36,7 +36,7 @@
 
 namespace Hoa\Praspel\Model\Variable;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Math;
 use Hoa\Praspel;
 use Hoa\Realdom;
@@ -464,4 +464,4 @@ class          Variable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Praspel\Model\Variable\Variable');
+Consistency::flexEntity('Hoa\Praspel\Model\Variable\Variable');

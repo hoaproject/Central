@@ -36,7 +36,7 @@
 
 namespace Hoa\Praspel\Iterator\Coverage;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Iterator;
 use Hoa\Praspel;
 
@@ -119,4 +119,4 @@ class Coverage implements Iterator\Aggregate
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Praspel\Iterator\Coverage\Coverage');
+Consistency::flexEntity('Hoa\Praspel\Iterator\Coverage\Coverage');

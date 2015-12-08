@@ -36,7 +36,7 @@
 
 namespace Hoa\Praspel\Exception\Failure;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Praspel;
 
 /**
@@ -54,4 +54,4 @@ class Failure extends Praspel\Exception\AssertionChecker
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Praspel\Exception\Failure\Failure');
+Consistency::flexEntity('Hoa\Praspel\Exception\Failure\Failure');

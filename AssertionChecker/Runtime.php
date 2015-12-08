@@ -343,10 +343,10 @@ class Runtime extends AssertionChecker
     /**
      * Get attribute data.
      *
-     * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
+     * @param   \Hoa\Consistency\Xcallable  $callable    Callable.
      * @return  array
      */
-    protected function getAttributeData(Core\Consistency\Xcallable $callable)
+    protected function getAttributeData(Consistency\Xcallable $callable)
     {
         $callback = $callable->getValidCallback();
 
@@ -375,17 +375,17 @@ class Runtime extends AssertionChecker
      * Invoke.
      *
      * @acccess  protected
-     * @param    \Hoa\Core\Consistency\Xcallable    &$reflection       Callable.
-     * @param    \ReflectionFunctionAbstract        &$reflection       Reflection.
-     * @param    array                              &$arguments        Arguments.
-     * @param    bool                                $isConstructor    Whether
-     *                                                                 it is a
-     *                                                                 constructor.
+     * @param    \Hoa\Consistency\Xcallable     &$reflection       Callable.
+     * @param    \ReflectionFunctionAbstract    &$reflection       Reflection.
+     * @param    array                          &$arguments        Arguments.
+     * @param    bool                            $isConstructor    Whether
+     *                                                             it is a
+     *                                                             constructor.
      * @return   mixed
      * @throws   \Exception
      */
     protected function invoke(
-        Core\Consistency\Xcallable &$callable,
+        Consistency\Xcallable       &$callable,
         \ReflectionFunctionAbstract &$reflection,
         Array &$arguments,
         $isConstructor

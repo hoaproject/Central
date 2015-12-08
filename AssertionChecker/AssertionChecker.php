@@ -36,7 +36,7 @@
 
 namespace Hoa\Praspel\AssertionChecker;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Praspel;
 
 /**
@@ -73,7 +73,7 @@ abstract class AssertionChecker
     /**
      * Callable to validate and verify.
      *
-     * @var \Hoa\Core\Consistency\Xcallable
+     * @var \Hoa\Consistency\Xcallable
      */
     protected $_callable       = null;
 
@@ -83,13 +83,13 @@ abstract class AssertionChecker
      * Construct.
      *
      * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
-     * @param   \Hoa\Core\Consistency\Xcallable   $callable         Callable.
+     * @param   \Hoa\Consistency\Xcallable        $callable         Callable.
      * @param   bool                              $genrateData      Generate data.
      * @return  void
      */
     public function __construct(
         Praspel\Model\Specification $specification,
-        Core\Consistency\Xcallable  $callable,
+        Consistency\Xcallable       $callable,
         $generateData = false
     ) {
         $this->setSpecification($specification);
@@ -238,10 +238,10 @@ abstract class AssertionChecker
     /**
      * Set callable.
      *
-     * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
-     * @return  \Hoa\Core\Consistency\Xcallable
+     * @param   \Hoa\Consistency\Xcallable  $callable    Callable.
+     * @return  \Hoa\Consistency\Xcallable
      */
-    protected function setCallable(Core\Consistency\Xcallable $callable)
+    protected function setCallable(Consistency\Xcallable $callable)
     {
         $old             = $this->_callable;
         $this->_callable = $callable;
@@ -252,7 +252,7 @@ abstract class AssertionChecker
     /**
      * Get callable.
      *
-     * @return  \Hoa\Core\Consistency\Xcallable
+     * @return  \Hoa\Consistency\Xcallable
      */
     public function getCallable()
     {
@@ -277,4 +277,4 @@ abstract class AssertionChecker
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Praspel\AssertionChecker\AssertionChecker');
+Consistency::flexEntity('Hoa\Praspel\AssertionChecker\AssertionChecker');
