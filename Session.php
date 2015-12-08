@@ -36,7 +36,7 @@
 
 namespace Hoa\Session;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Event;
 use Hoa\Iterator;
 
@@ -723,4 +723,4 @@ class          Session
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Session\Session');
+Consistency::flexEntity('Hoa\Session\Session');

@@ -76,7 +76,7 @@ the session is empty:
 
 ```php
 event('hoa://Event/Session/user:expired')
-    ->attach(function (Hoa\Core\Event\Bucket $bucket) {
+    ->attach(function (Hoa\Event\Bucket $bucket) {
         echo 'expired', "\n";
     });
 
