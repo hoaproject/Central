@@ -162,6 +162,6 @@ namespace {
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Memory\Memory');
+Hoa\Consistency::flexEntity('Hoa\Memory\Memory');
 
 }
