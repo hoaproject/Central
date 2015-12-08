@@ -36,7 +36,7 @@
 
 namespace Hoa\Mail\Content\Encoder;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Interface \Hoa\Mail\Content\Encoder\Encoder.
@@ -70,4 +70,4 @@ interface Encoder
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Mail\Content\Encoder\Encoder');
+Consistency::flexEntity('Hoa\Mail\Content\Encoder\Encoder');

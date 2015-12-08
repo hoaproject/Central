@@ -36,7 +36,7 @@
 
 namespace Hoa\Mail\Content;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Mail;
 
 /**
@@ -286,4 +286,4 @@ abstract class Content implements \ArrayAccess
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Mail\Content\Content');
+Consistency::flexEntity('Hoa\Mail\Content\Content');

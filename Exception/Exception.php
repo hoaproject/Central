@@ -36,7 +36,7 @@
 
 namespace Hoa\Mail\Exception;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Exception as HoaException;
 
 /**
@@ -54,4 +54,4 @@ class Exception extends HoaException
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Mail\Exception\Exception');
+Consistency::flexEntity('Hoa\Mail\Exception\Exception');
