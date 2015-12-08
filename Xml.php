@@ -36,7 +36,7 @@
 
 namespace Hoa\Xml;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Stream;
 
 /**
@@ -663,4 +663,4 @@ abstract class Xml
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Xml\Xml');
+Consistency::flexEntity('Hoa\Xml\Xml');

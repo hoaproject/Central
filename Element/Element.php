@@ -36,7 +36,7 @@
 
 namespace Hoa\Xml\Element;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Interface \Hoa\Xml\Element.
@@ -53,4 +53,4 @@ interface Element
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Xml\Element\Element');
+Consistency::flexEntity('Hoa\Xml\Element\Element');

@@ -36,7 +36,6 @@
 
 namespace Hoa\Xml;
 
-use Hoa\Core;
 use Hoa\Event;
 use Hoa\Stream;
 
