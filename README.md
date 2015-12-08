@@ -211,9 +211,10 @@ The `_send` method gives an implementation of “sending one message”, which i
 the basis. Because the `_run` method does not start an infinite loop, we have
 more flexibility (see the next section).
 
-We can add listeners (with `Hoa\Core\Event`, please see the [`Hoa\Core`
-library](http://central.hoa-project.net/Resource/Library/Core)) to interact with
-the server, something like `$server->on('message', function ( … ) { … });` etc.
+We can add listeners (please see the [`Hoa\Event`
+library](http://central.hoa-project.net/Resource/Library/Event)) to
+interact with the server, something like `$server->on('message', function ( … )
+{ … });` etc.
 
 ### Merging connections
 
@@ -242,7 +243,7 @@ $group[]   = $irc;
 
 $websocket->on(
     'message',
-    function (Hoa\Core\Event\Bucket $bucket) use ($irc) {
+    function (Hoa\Event\Bucket $bucket) use ($irc) {
         $data = $bucket->getData();
         $irc->say($data['message']);
 

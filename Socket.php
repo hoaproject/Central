@@ -36,7 +36,7 @@
 
 namespace Hoa\Socket;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Socket.
@@ -351,4 +351,4 @@ class Socket
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Socket\Socket');
+Consistency::flexEntity('Hoa\Socket\Socket');

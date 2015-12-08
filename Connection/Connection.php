@@ -36,7 +36,7 @@
 
 namespace Hoa\Socket\Connection;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Socket;
 use Hoa\Stream;
 
@@ -991,4 +991,4 @@ abstract class Connection
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Socket\Connection\Connection');
+Consistency::flexEntity('Hoa\Socket\Connection\Connection');
