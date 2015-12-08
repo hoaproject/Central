@@ -99,7 +99,7 @@ class          ReadWrite
         );
 
         if (true === $autoSave) {
-            event(
+            Event::getEvent(
                 'hoa://Event/Stream/' . $stream->getStreamName() .
                 ':close-before'
             )->attach(xcallable($this, '_close'));

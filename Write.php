@@ -72,7 +72,7 @@ class Write extends Xml implements Stream\IStream\Out
             $entityResolver
         );
 
-        event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
+        Event::getEvent('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
             ->attach(xcallable($this, '_close'));
 
         return;
