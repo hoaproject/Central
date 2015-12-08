@@ -36,7 +36,7 @@
 
 namespace Hoa\Promise;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Promise\Promise.
@@ -241,4 +241,4 @@ class Promise
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Promise\Promise');
+Consistency::flexEntity('Hoa\Promise\Promise');
