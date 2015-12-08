@@ -36,6 +36,7 @@
 
 namespace Hoa\Dispatcher;
 
+use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Router;
 use Hoa\View;
@@ -197,4 +198,4 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Dispatcher\Dispatcher');
+Consistency::flexEntity('Hoa\Dispatcher\Dispatcher');
