@@ -36,6 +36,7 @@
 
 namespace Hoa\Stringbuffer;
 
+use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Stream;
 
@@ -276,7 +277,7 @@ class _Protocol extends Core\Protocol
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Stringbuffer\Stringbuffer');
+Consistency::flexEntity('Hoa\Stringbuffer\Stringbuffer');
 
 /**
  * Add the hoa://Library/Stringbuffer component. Help to know to real path of a
