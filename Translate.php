@@ -36,7 +36,7 @@
 
 namespace Hoa\Translate;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Stream;
 
 /**
@@ -161,4 +161,4 @@ abstract class Translate implements \IteratorAggregate
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Translate\Translate');
+Consistency::flexEntity('Hoa\Translate\Translate');
