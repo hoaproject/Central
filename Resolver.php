@@ -36,7 +36,6 @@
 
 namespace Hoa\Dns;
 
-use Hoa\Core;
 use Hoa\Event;
 use Hoa\Socket;
 
