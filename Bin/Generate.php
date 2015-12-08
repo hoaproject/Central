@@ -39,7 +39,7 @@ namespace Hoa\Test\Bin;
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '.autoload.atoum.php';
 
 use Hoa\Console;
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Event;
 use Hoa\File;
 use Hoa\Ustring;
@@ -148,9 +148,9 @@ class Generate extends Console\Dispatcher\Kit
                     : '');
         });
 
-        $phpBinary = Core::getPHPBinary() ?: Console\Processus::localte('php');
+        $phpBinary = Consistency::getPHPBinary() ?: Console\Processus::localte('php');
 
-        $envVariable   = '__HOA_ATOUM_PRASPEL_EXTENSION_' . md5(Core::uuid());
+        $envVariable   = '__HOA_ATOUM_PRASPEL_EXTENSION_' . md5(Consistency::uuid());
         $reflection    = null;
         $buffer        = null;
         $reflectionner = new Console\Processus($phpBinary);
