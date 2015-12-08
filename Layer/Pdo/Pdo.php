@@ -36,7 +36,7 @@
 
 namespace Hoa\Database\Layer\Pdo;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Database;
 
 /**
@@ -363,4 +363,4 @@ class Pdo implements Database\IDal\Wrapper
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Database\Layer\Pdo\Pdo');
+Consistency::flexEntity('Hoa\Database\Layer\Pdo\Pdo');

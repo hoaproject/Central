@@ -36,7 +36,7 @@
 
 namespace Hoa\Database\Query;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Database\Query.
@@ -195,4 +195,4 @@ class Query
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Database\Query\Query');
+Consistency::flexEntity('Hoa\Database\Query\Query');
