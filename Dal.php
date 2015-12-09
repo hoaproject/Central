@@ -36,6 +36,7 @@
 
 namespace Hoa\Database;
 
+use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Event;
 
@@ -296,10 +297,12 @@ class Dal implements Core\Parameter\Parameterizable, Event\Source
             $dsn = 'sqlite:' . resolve($matches[1]);
         }
 
-        $this->setDal(dnew(
-            '\Hoa\Database\Layer\\' . $dalName,
-            [$dsn, $username, $password, $driverOptions]
-        ));
+        $this->setDal(
+            Consistency\Autoloader::dnew(
+                'Hoa\Database\Layer\\' . $dalName,
+                [$dsn, $username, $password, $driverOptions]
+            )
+        );
 
         $id = $this->getId();
         Event::notify(
