@@ -25,7 +25,7 @@
   <code>Hoa\Router</code></a> si des détails sont nécessaires).</p>
   <div id="processus" class="verbatim schema"></div>
   <script>
-  Hoa.Document.onReady(function ( ) {
+  Hoa.Document.onReady(function () {
 
       var paper      = Hoa.Graph(Hoa.$('#processus'), 800, 150);
       var grid       = paper.grid(0, 0, 800, 150, 5, 1);
@@ -82,17 +82,13 @@
   variables <code>controller</code> et <code>action</code>, qui sont des aliases
   sémantiques. Ainsi, nous allons écrire une règle sur un routeur et transmettre
   les données extraites sur une fonction :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Router.Http')
--> import('Dispatcher.Basic');
-
-function login ( $id ) {
-
+  <pre><code class="language-php">function login($id)
+{
     echo 'Hello ', $id, "\n";
 }
 
-function logout ( $id ) {
-
+function logout($id)
+{
     echo 'Bye bye ', $id, "\n";
 }
 
