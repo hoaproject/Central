@@ -36,6 +36,7 @@
 
 namespace Hoa\Socket;
 
+use Hoa\Consistency;
 use Hoa\Stream;
 
 /**
@@ -315,7 +316,7 @@ class Server extends Connection
                 $m      = array_search($socket, $this->_masters, true);
                 $server = $this->_servers[$m];
                 $id     = $this->getNodeId($client);
-                $node   = dnew(
+                $node   = Consistency\Autoloader::dnew(
                     $server->getNodeName(),
                     [$id, $client, $server]
                 );
