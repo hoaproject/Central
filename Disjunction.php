@@ -184,8 +184,8 @@ class          Disjunction
             }
 
             try {
-                $handle = dnew(
-                    '(Hoathis or Hoa)\Realdom\\' . $name,
+                $handle = Consistency\Autoloader::dnew(
+                    'Hoa\Realdom\\' . $name,
                     $arguments
                 );
             } catch (Exception $e) {
