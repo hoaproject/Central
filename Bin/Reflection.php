@@ -130,10 +130,10 @@ class Reflection extends Console\Dispatcher\Kit
         $arguments  = $_arguments->getValue($object);
 
         echo
-            'Realdom ', $realdom, ' {', "\n\n",
+            'Realdom ', $realdom, "\n", '{', "\n",
             '    Implementation ', $class->getName(), ';', "\n\n",
             '    Parent ', $class->getParentClass()->getName(), ';', "\n\n",
-            '    Interfaces {', "\n\n";
+            '    Interfaces', "\n", '    {', "\n";
 
         $interfaces = $class->getInterfaces();
         usort($interfaces, function ($a, $b) {
@@ -158,7 +158,7 @@ class Reflection extends Console\Dispatcher\Kit
 
         echo
             '    }', "\n\n",
-            '    Parameters {', "\n\n";
+            '    Parameters', "\n", '    {', "\n";
 
         $i = 0;
 
