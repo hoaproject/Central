@@ -37,7 +37,6 @@
 namespace Hoa\Consistency\Test\Unit;
 
 use Hoa\Consistency\Autoloader as SUT;
-use Hoa\Consistency as LUT;
 use Hoa\Test;
 
 /**
@@ -160,39 +159,6 @@ class Autoloader extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_load_flex_entity()
-    {
-        $this
-            ->given(
-                $autoloader = new \Mock\Hoa\Consistency\Autoloader(),
-                $this->function->spl_autoload_call = function ($entity) use (&$called) {
-                    $called = true;
-
-                    return 'Foo\bar\Baz\Qux\Qux' === $entity;
-                },
-                $autoloader->addNamespace('Foo\Bar\\', 'Source/Foo/Bar/'),
-                $autoloader->register()
-            )
-            ->when($result = $autoloader->load('Foo\Bar\Baz\Qux'))
-            ->then
-                ->boolean($called)
-                    ->isTrue();
-    }
-
-    public function case_load_unknown_entity()
-    {
-        $this
-            ->given(
-                $autoloader = new \Mock\Hoa\Consistency\Autoloader(),
-                $autoloader->addNamespace('Foo\Bar\\', 'Source/Foo/Bar/'),
-                $this->function->spl_autoload_call = false
-            )
-            ->when($result = $autoloader->load('Foo\Bar\Baz\Qux'))
-            ->then
-                ->boolean($result)
-                    ->isFalse();
-    }
-
     public function case_require_existing_file()
     {
         $this
@@ -204,7 +170,7 @@ class Autoloader extends Test\Unit\Suite
                 $constantName = 'HOA_TEST_' . uniqid(),
                 $filename     = 'hoa://Test/Vfs/Foo?type=file',
 
-                file_put_contents($filename, '<?php define("' . $constantName. '", "BAR");')
+                file_put_contents($filename, '<?php define("' . $constantName . '", "BAR");')
             )
             ->when($result = $autoloader->requireFile($filename))
             ->then
