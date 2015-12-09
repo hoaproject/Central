@@ -124,7 +124,7 @@ class Basic extends Dispatcher
             $kitname = $this->getKitName();
 
             if (!empty($kitname)) {
-                $kit = Consistency::dnew($this->getKitName(), $rtv);
+                $kit = Consistency\Autoloader::dnew($this->getKitName(), $rtv);
 
                 if (!($kit instanceof Kit)) {
                     throw new Exception(
