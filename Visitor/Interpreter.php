@@ -36,17 +36,15 @@
 
 namespace Hoa\Praspel\Visitor;
 
+use Hoa\Consistency;
 use Hoa\Praspel;
 use Hoa\Realdom;
 use Hoa\Ustring;
 use Hoa\Visitor;
 
-from('Hoa')
-
-/**
- * \Hoa\Realdom\Disjunction
- */
--> import('Realdom.Disjunction', true);
+if (false === Consistency::entityExists('Hoa\Realdom\Disjunction')) {
+    Consistency\Autoloader::load('Hoa\Realdom\Disjunction');
+}
 
 /**
  * Class \Hoa\Praspel\Visitor\Interpreter.

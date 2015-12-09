@@ -93,18 +93,21 @@ class Shell extends Console\Dispatcher\Kit
         $interpreter = new Praspel\Visitor\Interpreter();
         $dump        = new Praspel\Visitor\Compiler();
         $interpreter->visit($compiler->parse('@requires;'));
-        $words       = [];
 
-        from('Hoathis or Hoa')
-        -> foreachImport('Realdom.*', function ($classname) use (&$words) {
-            $class = new \ReflectionClass($classname);
+        $iterator = new \RegexIterator(
+            new \DirectoryIterator('hoa://Library/Realdom'),
+            '/\.php$/'
+        );
+        $words = [];
+
+        foreach ($iterator as $file) {
+            $classname = 'Hoa\Realdom\\' . substr($file->getFilename(), 0, -4);
+            $class     = new \ReflectionClass($classname);
 
             if ($class->isSubclassOf('\Hoa\Realdom')) {
                 $words[] = $classname::NAME;
             }
-
-            return;
-        });
+        }
 
         $readline = new Console\Readline();
         $readline->setAutocompleter(
