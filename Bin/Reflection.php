@@ -88,18 +88,20 @@ class Reflection extends Console\Dispatcher\Kit
             }
         }
 
+        $iterator = new \RegexIterator(
+            new \DirectoryIterator('hoa://Library/Realdom'),
+            '/\.php$/'
+        );
         $matches = [];
 
-        from('Hoathis or Hoa')
-        -> foreachImport('Realdom.*', function ($classname) use (&$matches) {
-            $class = new \ReflectionClass($classname);
+        foreach ($iterator as $file) {
+            $classname = 'Hoa\Realdom\\' . substr($file->getFilename(), 0, -4);
+            $class     = new \ReflectionClass($classname);
 
             if ($class->isSubclassOf('\Hoa\Realdom')) {
                 $matches[$classname::NAME] = $class;
             }
-
-            return;
-        });
+        }
 
         if (true === $list) {
             echo implode("\n", array_keys($matches)), "\n";
