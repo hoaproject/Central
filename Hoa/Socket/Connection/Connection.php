@@ -370,7 +370,7 @@ abstract class Connection
                     'The transport registered for scheme “%s” is not valid: ' .
                     'It must return a valid Hoa\Socket\Socket instance.',
                     0,
-                    $scheme
+                    $transport
                 );
             }
         }
