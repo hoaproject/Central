@@ -40,6 +40,7 @@ use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Event;
 use Hoa\Locale;
+use Hoa\Protocol;
 use Hoa\Router;
 use Hoa\Stream;
 use Hoa\Translate;
@@ -351,7 +352,7 @@ class          Xyl
         }
 
         $this->useNamespace(self::NAMESPACE_ID);
-        $protocol              = Core::getInstance()->getProtocol();
+        $protocol              = Protocol::getInstance();
         $protocol['Library'][] = new _Protocol(
             'Xyl[' . $this->_i . ']',
             'Xyl' . DS . 'Interpreter' . DS . $this->_interpreter->getResourcePath()
@@ -1937,7 +1938,7 @@ class          Xyl
      */
     public function __destruct()
     {
-        $protocol = Core::getInstance()->getProtocol();
+        $protocol = Protocol::getInstance();
         unset($protocol['Library']['Xyl[' . $this->_i . ']']);
 
         return;
@@ -1947,12 +1948,12 @@ class          Xyl
 /**
  * Class \Hoa\Xyl\_Protocol.
  *
- * hoa://Library/Xyl component.
+ * The `hoa://Library/Xyl` node.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class _Protocol extends Core\Protocol
+class _Protocol extends Protocol\Node
 {
 }
 
