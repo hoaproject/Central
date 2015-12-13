@@ -82,8 +82,8 @@ if (!defined('HOA')) {
         require_once
             dirname(__DIR__) . DIRECTORY_SEPARATOR .
             '..' . DIRECTORY_SEPARATOR .
-            'Consistency' . DIRECTORY_SEPARATOR .
-            'Consistency.php';
+            'Protocol' . DIRECTORY_SEPARATOR .
+            'Wrapper.php';
     }
 }
 
