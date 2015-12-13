@@ -20,6 +20,11 @@ else {
         dirname(__DIR__) . DIRECTORY_SEPARATOR .
         'Consistency' . DIRECTORY_SEPARATOR .
         'Prelude.php';
+
+    require_once
+        dirname(__DIR__) . DIRECTORY_SEPARATOR .
+        'Protocol' . DIRECTORY_SEPARATOR .
+        'Wrapper.php';
 }
 
 if (isset($_SERVER['HOA_ATOUM_PRASPEL_EXTENSION'])) {

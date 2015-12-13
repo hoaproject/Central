@@ -37,7 +37,7 @@
 namespace Hoa\Test\Unit;
 
 use atoum;
-use Hoa\Core;
+use Hoa\Protocol;
 use Hoa\Test;
 
 /**
@@ -55,8 +55,8 @@ class Suite extends atoum\test
         $this->setMethodPrefix('case');
         parent::__construct();
 
-        $protocol                = Core::getInstance()->getProtocol();
-        $protocol['Test']        = new Core\Protocol\Generic('Test', null);
+        $protocol                = Protocol::getInstance();
+        $protocol['Test']        = new Protocol\Node('Test', null);
         $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
 
         $constantMocker = new Test\Mocker\Constant($this->getPhpFunctionMocker());
