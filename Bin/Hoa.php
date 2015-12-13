@@ -102,7 +102,7 @@ try {
         'main',
         [
             'vendor'  => 'hoa',
-            'library' => 'core',
+            'library' => 'cli',
             'command' => 'welcome'
         ]
     );
