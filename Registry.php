@@ -37,7 +37,7 @@
 namespace Hoa\Registry;
 
 use Hoa\Consistency;
-use Hoa\Core;
+use Hoa\Protocol;
 
 /**
  * Class \Hoa\Registry.
@@ -154,12 +154,12 @@ class Registry extends \ArrayObject
 /**
  * Class \Hoa\Registry\_Protocol.
  *
- * hoa://Library/Registry component.
+ * The `hoa://Library/Registry` node.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class _Protocol extends Core\Protocol
+class _Protocol extends Protocol\Node
 {
     /**
      * Component's name.
@@ -188,8 +188,8 @@ class _Protocol extends Core\Protocol
 Consistency::flexEntity('Hoa\Registry\Registry');
 
 /**
- * Add the hoa://Library/Registry component. Should be use to reach/get an entry
- * in the \Hoa\Registry, e.g.: resolve('hoa://Library/Registry#AnID').
+ * Add the `hoa://Library/Registry` node. Should be use to reach/get an entry
+ * in the registry, e.g.: resolve('hoa://Library/Registry#AnID')`.
  */
-$protocol              = Core::getInstance()->getProtocol();
+$protocol              = Protocol::getInstance();
 $protocol['Library'][] = new _Protocol();
