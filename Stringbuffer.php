@@ -37,7 +37,7 @@
 namespace Hoa\Stringbuffer;
 
 use Hoa\Consistency;
-use Hoa\Core;
+use Hoa\Protocol;
 use Hoa\Stream;
 
 /**
@@ -236,12 +236,12 @@ abstract class Stringbuffer
 /**
  * Class \Hoa\Stringbuffer\_Protocol.
  *
- * hoa://Library/Stringbuffer component.
+ * The `hoa://Library/Stringbuffer` node.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class _Protocol extends Core\Protocol
+class _Protocol extends Protocol\Node
 {
     /**
      * Component's name.
@@ -280,8 +280,8 @@ class _Protocol extends Core\Protocol
 Consistency::flexEntity('Hoa\Stringbuffer\Stringbuffer');
 
 /**
- * Add the hoa://Library/Stringbuffer component. Help to know to real path of a
+ * Add the `hoa://Library/Stringbuffer` node. Help to know the real path of a
  * stringbuffer.
  */
-$protocol              = Core::getInstance()->getProtocol();
+$protocol              = Protocol::getInstance();
 $protocol['Library'][] = new _Protocol();
