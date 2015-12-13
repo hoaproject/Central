@@ -60,196 +60,196 @@ class          Response
      *
      * @const string
      */
-    const STATUS_CONTINUE                          = '100 Continue';
+    const STATUS_CONTINUE                        = '100 Continue';
 
     /**
      * Switching protocols (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_SWITCHING_PROTOCOLS               = '101 Switching Protocols';
+    const STATUS_SWITCHING_PROTOCOLS             = '101 Switching Protocols';
 
     /**
      * Processing (please, see RFC2518).
      *
      * @const string
      */
-    const STATUS_PROCESSING                        = '102 Processing';
+    const STATUS_PROCESSING                      = '102 Processing';
 
     /**
      * OK (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_OK                                = '200 Ok';
+    const STATUS_OK                              = '200 Ok';
 
     /**
      * Created (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_CREATED                           = '201 Created';
+    const STATUS_CREATED                         = '201 Created';
 
     /**
      * Accepted (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_ACCEPTED                          = '202 Accepted';
+    const STATUS_ACCEPTED                        = '202 Accepted';
 
     /**
      * Non-authoritative information (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_NON_AUTHORITATIVE_INFORMATION     = '203 Non Authoritative Information';
+    const STATUS_NON_AUTHORITATIVE_INFORMATION   = '203 Non Authoritative Information';
 
     /**
      * No content (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_NO_CONTENT                        = '204 No Content';
+    const STATUS_NO_CONTENT                      = '204 No Content';
 
     /**
      * Reset content (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_RESET_CONTENT                     = '205 Reset Content';
+    const STATUS_RESET_CONTENT                   = '205 Reset Content';
 
     /**
      * Partial content (please, see RFC7233).
      *
      * @const string
      */
-    const STATUS_PARTIAL_CONTENT                   = '206 Partial Content';
+    const STATUS_PARTIAL_CONTENT                 = '206 Partial Content';
 
     /**
      * Multi-status (please, see RFC4918).
      *
      * @const string
      */
-    const STATUS_MULTI_STATUS                      = '207 Multi-Status';
+    const STATUS_MULTI_STATUS                    = '207 Multi-Status';
 
     /**
      * Already Reported (please, see RFC5842).
      *
      * @const string
      */
-    const STATUS_ALREADY_REPORTED                  = '208 Already Reported';
+    const STATUS_ALREADY_REPORTED                = '208 Already Reported';
 
     /**
      * IM used (please, see RFC3229).
      *
      * @const string
      */
-    const STATUS_IM_USED                           = '226 IM Used';
+    const STATUS_IM_USED                         = '226 IM Used';
 
     /**
      * Multiple choices (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_MULTIPLE_CHOICES                  = '300 Multiple Choices';
+    const STATUS_MULTIPLE_CHOICES                = '300 Multiple Choices';
 
     /**
      * Moved permanently (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_MOVED_PERMANENTLY                 = '301 Moved Permanently';
+    const STATUS_MOVED_PERMANENTLY               = '301 Moved Permanently';
 
     /**
      * Found (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_FOUND                             = '302 Found';
+    const STATUS_FOUND                           = '302 Found';
 
     /**
      * See other (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_SEE_OTHER                         = '303 See Other';
+    const STATUS_SEE_OTHER                       = '303 See Other';
 
     /**
      * Not modified (please, see RFC7232).
      *
      * @const string
      */
-    const STATUS_NOT_MODIFIED                      = '304 Not Modified';
+    const STATUS_NOT_MODIFIED                    = '304 Not Modified';
 
     /**
      * Use proxy (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_USE_PROXY                         = '305 Use Proxy';
+    const STATUS_USE_PROXY                       = '305 Use Proxy';
 
     /**
      * Temporary redirect (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_TEMPORARY_REDIRECT                = '307 Temporary Redirect';
+    const STATUS_TEMPORARY_REDIRECT              = '307 Temporary Redirect';
 
     /**
      * Permanent redirect (please, see RFC7238).
      *
      * @const string
      */
-    const STATUS_PERMANENT_REDIRECT                = '308 Permanent Redirect';
+    const STATUS_PERMANENT_REDIRECT              = '308 Permanent Redirect';
 
     /**
      * Bad request (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_BAD_REQUEST                       = '400 Bad Request';
+    const STATUS_BAD_REQUEST                     = '400 Bad Request';
 
     /**
      * Unauthorized (please, see RFC7235).
      *
      * @const string
      */
-    const STATUS_UNAUTHORIZED                      = '401 Unauthorized';
+    const STATUS_UNAUTHORIZED                    = '401 Unauthorized';
 
     /**
      * Payment required (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_PAYMENT_REQUIRED                  = '402 Payment Required';
+    const STATUS_PAYMENT_REQUIRED                = '402 Payment Required';
 
     /**
      * Forbidden (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_FORBIDDEN                         = '403 Forbidden';
+    const STATUS_FORBIDDEN                       = '403 Forbidden';
 
     /**
      * Not found (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_NOT_FOUND                         = '404 Not Found';
+    const STATUS_NOT_FOUND                       = '404 Not Found';
 
     /**
      * Method not allowed (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_METHOD_NOT_ALLOWED                = '405 Method Not Allowed';
+    const STATUS_METHOD_NOT_ALLOWED              = '405 Method Not Allowed';
 
     /**
      * Not acceptable (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_NOT_ACCEPTABLE                    = '406 Not Acceptable';
+    const STATUS_NOT_ACCEPTABLE                  = '406 Not Acceptable';
 
     /**
      * Proxy authentication required (please, see RFC7235).
@@ -263,196 +263,196 @@ class          Response
      *
      * @const string
      */
-    const STATUS_REQUEST_TIME_OUT                  = '408 Request Timeout';
+    const STATUS_REQUEST_TIME_OUT                = '408 Request Timeout';
 
     /**
      * Conflict (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_CONFLICT                          = '409 Conflict';
+    const STATUS_CONFLICT                        = '409 Conflict';
 
     /**
      * Gone (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_GONE                              = '410 Gone';
+    const STATUS_GONE                            = '410 Gone';
 
     /**
      * Length required (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_LENGTH_REQUIRED                   = '411 Length Required';
+    const STATUS_LENGTH_REQUIRED                 = '411 Length Required';
 
     /**
      * Precondition failed (please, see RFC7232).
      *
      * @const string
      */
-    const STATUS_PRECONDITION_FAILED               = '412 Precondition Failed';
+    const STATUS_PRECONDITION_FAILED             = '412 Precondition Failed';
 
     /**
      * Request entity too large (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_REQUEST_ENTITY_TOO_LARGE          = '413 Request Entity Too Large';
+    const STATUS_REQUEST_ENTITY_TOO_LARGE        = '413 Request Entity Too Large';
 
     /**
      * Request URI too large (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_REQUEST_URI_TOO_LARGE             = '414 Request URI Too Large';
+    const STATUS_REQUEST_URI_TOO_LARGE           = '414 Request URI Too Large';
 
     /**
      * Unsupported media type (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_UNSUPPORTED_MEDIA_TYPE            = '415 Unsupported Media Type';
+    const STATUS_UNSUPPORTED_MEDIA_TYPE          = '415 Unsupported Media Type';
 
     /**
      * Requested range not satisfiable (please, see RFC7233).
      *
      * @const string
      */
-    const STATUS_REQUESTED_RANGE_NOT_SATISFIABLE   = '416 Requested Range Not Satisfiable';
+    const STATUS_REQUESTED_RANGE_NOT_SATISFIABLE = '416 Requested Range Not Satisfiable';
 
     /**
      * Expectation failed (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_EXPECTATION_FAILED                = '417 Expectation Failed';
+    const STATUS_EXPECTATION_FAILED              = '417 Expectation Failed';
 
     /**
      * I'm a teapot (see RFC2324, April Fool's joke).
      *
      * @const string
      */
-    const STATUS_IM_A_TEAPOT                       = '418 I\'m a teapot';
+    const STATUS_IM_A_TEAPOT                     = '418 I\'m a teapot';
 
     /**
      * Unprocessable Entity (please, see RFC4918).
      *
      * @const string
      */
-    const STATUS_UNPROCESSABLE_ENTITY              = '422 Unprocessable Entity';
+    const STATUS_UNPROCESSABLE_ENTITY            = '422 Unprocessable Entity';
 
     /**
      * Locked (please, see RFC4918).
      *
      * @const string
      */
-    const STATUS_LOCKED                            = '423 Locked';
+    const STATUS_LOCKED                          = '423 Locked';
 
     /**
      * Failed Dependency (please, see RFC4918).
      *
      * @const string
      */
-    const STATUS_FAILED_DEPENDENCY                 = '424 Failed Dependency';
+    const STATUS_FAILED_DEPENDENCY               = '424 Failed Dependency';
 
     /**
      * Upgrade required (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_UPGRADE_REQUIRED                  = '426 Upgrade Required';
+    const STATUS_UPGRADE_REQUIRED                = '426 Upgrade Required';
 
     /**
      * Precondition Required (please, see RFC6585).
      *
      * @const string
      */
-    const STATUS_PRECONDITION_REQUIRED             = '428 Precondition Required';
+    const STATUS_PRECONDITION_REQUIRED           = '428 Precondition Required';
 
     /**
      * Too Many Requests (please, see RFC6585).
      *
      * @const string
      */
-    const STATUS_TOO_MANY_REQUESTS                 = '429 Too Many Requests';
+    const STATUS_TOO_MANY_REQUESTS               = '429 Too Many Requests';
 
     /**
      * Request Header Fields Too Large (please, see RFC6585).
      *
      * @const string
      */
-    const STATUS_REQUEST_HEADER_FIELDS_TOO_LARGE   = '431 Request Header Fields Too Large';
+    const STATUS_REQUEST_HEADER_FIELDS_TOO_LARGE = '431 Request Header Fields Too Large';
 
     /**
      * Internal server error (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_INTERNAL_SERVER_ERROR             = '500 Internal Server Error';
+    const STATUS_INTERNAL_SERVER_ERROR           = '500 Internal Server Error';
 
     /**
      * Not implemented (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_NOT_IMPLEMENTED                   = '501 Not Implemented';
+    const STATUS_NOT_IMPLEMENTED                 = '501 Not Implemented';
 
     /**
      * Bad gateway (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_BAD_GATEWAY                       = '502 Bad Gateway';
+    const STATUS_BAD_GATEWAY                     = '502 Bad Gateway';
 
     /**
      * Service unavailable (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_SERVICE_UNAVAILABLE               = '503 Service Unavailable';
+    const STATUS_SERVICE_UNAVAILABLE             = '503 Service Unavailable';
 
     /**
      * Gateway time-out (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_GATEWAY_TIME_OUT                  = '504 Gateway Time Out';
+    const STATUS_GATEWAY_TIME_OUT                = '504 Gateway Time Out';
 
     /**
      * HTTP version not supported (please, see RFC7231).
      *
      * @const string
      */
-    const STATUS_HTTP_VERSION_NOT_SUPPORTED        = '505 HTTP Version Not Supported';
+    const STATUS_HTTP_VERSION_NOT_SUPPORTED      = '505 HTTP Version Not Supported';
 
     /**
      * Variant Also Negotiates (please, see RFC2295).
      *
      * @const string
      */
-    const STATUS_VARIANT_ALSO_NEGOTIATES           = '506 Variant Also Negotiates';
+    const STATUS_VARIANT_ALSO_NEGOTIATES         = '506 Variant Also Negotiates';
 
     /**
      * Insufficient Storage (please, see RFC4918).
      *
      * @const string
      */
-    const STATUS_INSUFFICIENT_STORAGE              = '507 Insufficient Storage';
+    const STATUS_INSUFFICIENT_STORAGE            = '507 Insufficient Storage';
 
     /**
      * Loop Detected (please, see RFC5842).
      *
      * @const string
      */
-    const STATUS_LOOP_DETECTED                     = '508 Loop Detected';
+    const STATUS_LOOP_DETECTED                   = '508 Loop Detected';
 
     /**
      * Not Extended (please, see RFC2774).
      *
      * @const string
      */
-    const STATUS_NOT_EXTENDED                      = '510 Not Extended';
+    const STATUS_NOT_EXTENDED                    = '510 Not Extended';
 
     /**
      * Network Authentication Required (please, see RFC6585).
