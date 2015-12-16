@@ -52,6 +52,7 @@ cloak on IRC, etc.
   * Matthieu Napoli (mnapoli)
   * Cosmin Nitu (ncosmin2001)
   * Rémi Parpaillon (rparpa)
+  * Benjamin Perche (lovenunu)
   * Grégoire Pineau (lyrixx)
   * Rogerio Prado de Jesus (rogeriopradoj)
   * ➜ Stéphane Py (stephpy)
