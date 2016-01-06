@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Model {
+namespace Hoa\Model;
+
+use Hoa\Exception as HoaException;
 
 /**
  * Class \Hoa\Model\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Model {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Exception\Exception { }
-
-}
+class Exception extends HoaException { }

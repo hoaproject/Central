@@ -34,23 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Model;
 
-from('Hoa')
-
-/**
- * \Hoa\Model\Exception
- */
--> import('Model.Exception')
-
-/**
- * \Hoa\Praspel
- */
--> import('Praspel.~');
-
-}
-
-namespace Hoa\Model {
+use Hoa\Consistency;
+use Hoa\Praspel;
+use Hoa\Xyl;
 
 /**
  * Class \Hoa\Model\Exception.
@@ -63,7 +51,7 @@ namespace Hoa\Model {
  */
 
 abstract class Model
-    implements \Hoa\Xyl\Data\Datable,
+    implements Xyl\Data\Datable,
                \ArrayAccess,
                \IteratorAggregate,
                \Countable {
@@ -258,7 +246,7 @@ abstract class Model
                 43, $name);
 
         if(null === $attribute['contract'])
-            $attribute['contract'] = \Hoa\Praspel::interpret($attribute['comment']);
+            $attribute['contract'] = Praspel::interpret($attribute['comment']);
 
         $realdom   = $attribute['contract']
                          ->getClause('invariant')
@@ -365,7 +353,7 @@ abstract class Model
         if(false !== $attribute['comment']) {
 
             if(null === $attribute['contract'])
-                $attribute['contract'] = \Hoa\Praspel::interpret($attribute['comment']);
+                $attribute['contract'] = Praspel::interpret($attribute['comment']);
 
             $verdict = $attribute['contract']
                            ->getClause('invariant')
@@ -476,7 +464,7 @@ abstract class Model
         if(false !== $attribute['comment']) {
 
             if(null === $attribute['contract'])
-                $attribute['contract'] = \Hoa\Praspel::interpret($attribute['comment']);
+                $attribute['contract'] = Praspel::interpret($attribute['comment']);
 
             $verdict = $attribute['contract']
                            ->getClause('invariant')
@@ -687,13 +675,7 @@ abstract class Model
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Consistency::flexEntity('Hoa\Model\Model');
-
-}
+Consistency::flexEntity('Hoa\Model\Model');
