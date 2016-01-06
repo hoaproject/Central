@@ -73,7 +73,7 @@ class Kit
     /**
      * Data from the view.
      *
-     * @var \Hoa\Core\Data
+     * @var mixed
      */
     public $data       = null;
 
