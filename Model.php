@@ -63,7 +63,7 @@ namespace Hoa\Model {
  */
 
 abstract class Model
-    implements \Hoa\Core\Data\Datable,
+    implements \Hoa\Xyl\Data\Datable,
                \ArrayAccess,
                \IteratorAggregate,
                \Countable {
