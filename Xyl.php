@@ -320,7 +320,7 @@ class          Xyl
         }
 
         $this->_i           = self::$_ci++;
-        $this->_data        = new Core\Data();
+        $this->_data        = new Data();
         $this->_out         = $out;
         $this->_interpreter = $interpreter;
         $this->_router      = $router;
@@ -378,7 +378,7 @@ class          Xyl
     /**
      * Get data.
      *
-     * @return  \Hoa\Core\Data
+     * @return  \Hoa\Xyl\Data
      */
     public function getData()
     {
