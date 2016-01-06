@@ -49,10 +49,8 @@
   <p>Et c'est tout ! Pour être plus précis, voici les retours attendus pour
   chacune de ces méthodes :</p>
   <ul>
-    <li><code>getData</code> doit préférablement retourner un objet
-    <code>Hoa\Core\Data</code> (voir <a href="@hack:chapter=Core">la
-    bibliothèque <code>Hoa\Core</code></a>) ; il est néanmoins possible de
-    retourner un objet quelconque ;</li>
+    <li><code>getData</code> retourne un objet quelconque représentant des
+    données ;</li>
     <li><code>getRouter</code> doit retourner un routeur de type
     <code>Hoa\Router\Router</code> (voir <a href="@hack:chapter=Router">la
     bibliothèque <code>Hoa\Router</code></a>) ;</li>

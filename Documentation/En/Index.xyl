@@ -47,10 +47,7 @@
   <p>And that's all! To be more accurate, here are the expected returned values
   for each method:</p>
   <ul>
-    <li><code>getData</code> should preferably return a
-    <code>Hoa\Core\Data</code> object (see <a href="@hack:chapter=Core">the
-    <code>Hoa\Core</code> library</a>); nevertheless, it is possible to return
-    any kind of objects,</li>
+    <li><code>getData</code> return any kind of objects representing data,</li>
     <li><code>getRouter</code> must return a router of kind
     <code>Hoa\Router\Router</code> (see <a href="@hack:chapter=Router">the
     <code>Hoa\Router</code> library</a>),</li>

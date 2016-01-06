@@ -54,7 +54,7 @@ interface Viewable
 
     /**
      * @description 'Get the data holded by the view.';
-     * @ensures \result: \Hoa\Core\Data;
+     * @ensures \result: \Hoa\Xyl\Data;
      */
     public function getData();
 
