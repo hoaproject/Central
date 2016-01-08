@@ -39,6 +39,7 @@ namespace Hoa\Router\Http;
 use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Router;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Router\Http.
@@ -48,7 +49,7 @@ use Hoa\Router;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Http extends Router\Generic implements Core\Parameter\Parameterizable
+class Http extends Router\Generic implements Zformat\Parameterizable
 {
     /**
      * Secure connection.
@@ -67,7 +68,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected $_parameters      = null;
 
@@ -138,7 +139,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
      */
     public function __construct(Array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             $this,
             [],
             [
@@ -189,7 +190,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {

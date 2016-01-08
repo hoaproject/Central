@@ -37,6 +37,7 @@
 namespace Hoa\Router;
 
 use Hoa\Core;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Router\Cli.
@@ -46,12 +47,12 @@ use Hoa\Core;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Cli extends Generic implements Core\Parameter\Parameterizable
+class Cli extends Generic implements Zformat\Parameterizable
 {
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected $_parameters     = null;
 
@@ -73,7 +74,7 @@ class Cli extends Generic implements Core\Parameter\Parameterizable
      */
     public function __construct(Array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             $this,
             [],
             [
@@ -113,7 +114,7 @@ class Cli extends Generic implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
