@@ -56,7 +56,7 @@ class Dispatcher extends Test\Unit\Suite
             ->when($result = $dispatcher->getParameters())
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Core\Parameter');
+                    ->isInstanceOf('Hoa\Zformat\Parameter');
     }
 
     public function case_kitname()
@@ -109,7 +109,7 @@ class Dispatcher extends Test\Unit\Suite
                 ->variable($routedView)
                     ->isNull()
                 ->object($routedParameters)
-                    ->isInstanceOf('Hoa\Core\Parameter')
+                    ->isInstanceOf('Hoa\Zformat\Parameter')
 
                 ->object($dispatcher->getParameters())
                     ->isIdenticalTo($parameters)
@@ -163,7 +163,7 @@ class Dispatcher extends Test\Unit\Suite
                 ->variable($routedView)
                     ->isNull()
                 ->object($routedParameters)
-                    ->isInstanceOf('Hoa\Core\Parameter')
+                    ->isInstanceOf('Hoa\Zformat\Parameter')
 
                 ->object($dispatcher->getParameters())
                     ->isIdenticalTo($parameters)

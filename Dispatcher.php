@@ -40,6 +40,7 @@ use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Router;
 use Hoa\View;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Dispatcher.
@@ -49,12 +50,12 @@ use Hoa\View;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-abstract class Dispatcher implements Core\Parameter\Parameterizable
+abstract class Dispatcher implements Zformat\Parameterizable
 {
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected $_parameters  = null;
 
@@ -82,7 +83,7 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable
      */
     public function __construct(Array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             __CLASS__,
             [
                 'call' => 'main',
@@ -110,7 +111,7 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
