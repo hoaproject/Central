@@ -39,6 +39,7 @@ namespace Hoa\Database;
 use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Event;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Database\Dal.
@@ -48,7 +49,7 @@ use Hoa\Event;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Dal implements Core\Parameter\Parameterizable, Event\Source
+class Dal implements Zformat\Parameterizable, Event\Source
 {
     /**
      * Abstract layer: DBA.
@@ -109,7 +110,7 @@ class Dal implements Core\Parameter\Parameterizable, Event\Source
     /**
      * Parameter of \Hoa\Database\Dal.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected static $_parameters    = null;
 
@@ -150,7 +151,7 @@ class Dal implements Core\Parameter\Parameterizable, Event\Source
      */
     public static function initializeParameters(Array $parameters = [])
     {
-        self::$_parameters = new Core\Parameter(
+        self::$_parameters = new Zformat\Parameter(
             __CLASS__,
             [],
             [
@@ -270,7 +271,7 @@ class Dal implements Core\Parameter\Parameterizable, Event\Source
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
