@@ -39,6 +39,7 @@ namespace Hoa\Mime;
 use Hoa\Consistency;
 use Hoa\Core;
 use Hoa\Stream;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Mime.
@@ -49,7 +50,7 @@ use Hoa\Stream;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Mime implements Core\Parameter\Parameterizable
+class Mime implements Zformat\Parameterizable
 {
     /**
      * Structure: media/type part.
@@ -82,7 +83,7 @@ class Mime implements Core\Parameter\Parameterizable
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     private $_parameters        = null;
 
@@ -144,7 +145,7 @@ class Mime implements Core\Parameter\Parameterizable
      */
     public function __construct(Stream $stream, Array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             $this,
             [],
             [
@@ -174,7 +175,7 @@ class Mime implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
