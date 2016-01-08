@@ -38,6 +38,7 @@ namespace Hoa\Cache;
 
 use Hoa\Consistency;
 use Hoa\Core;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Cache.
@@ -46,7 +47,7 @@ use Hoa\Core;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-abstract class Cache implements Core\Parameter\Parameterizable
+abstract class Cache implements Zformat\Parameterizable
 {
     /**
      * Clean all entries.
@@ -72,7 +73,7 @@ abstract class Cache implements Core\Parameter\Parameterizable
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     private $_parameters  = null;
 
@@ -93,7 +94,7 @@ abstract class Cache implements Core\Parameter\Parameterizable
      */
     public function __construct(Array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             __CLASS__,
             [
                 'id' => null
@@ -143,7 +144,7 @@ abstract class Cache implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
