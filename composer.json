@@ -26,7 +26,6 @@
         "atoum/ruler-extension"  : "~1.0, >=1.0.2",
         "hoa/cli"                : "~1.0",
         "hoa/consistency"        : "~0.0",
-        "hoa/core"               : "~2.0",
         "hoa/devtools"           : "~0.0",
         "hoa/file"               : "~0.0",
         "hoa/protocol"           : "~0.0",
