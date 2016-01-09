@@ -37,7 +37,6 @@
 namespace Hoa\Database;
 
 use Hoa\Consistency;
-use Hoa\Core;
 use Hoa\Event;
 use Hoa\Zformat;
 
