@@ -37,7 +37,6 @@
 namespace Hoa\Dispatcher;
 
 use Hoa\Consistency;
-use Hoa\Core;
 use Hoa\Router;
 use Hoa\View;
 use Hoa\Zformat;
