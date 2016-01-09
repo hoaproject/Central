@@ -37,7 +37,6 @@
 namespace Hoa\Xyl;
 
 use Hoa\Consistency;
-use Hoa\Core;
 use Hoa\Event;
 use Hoa\Locale;
 use Hoa\Protocol;
