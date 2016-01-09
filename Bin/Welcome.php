@@ -145,7 +145,7 @@ class Welcome extends Console\Dispatcher\Kit
                 continue;
             }
 
-            if ('core' === $lib && 'hoa' === $bin) {
+            if ('cli' === $lib && 'hoa' === $bin) {
                 continue;
             }
 
