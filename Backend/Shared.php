@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -67,7 +67,7 @@ use Hoa\Zombie;
  * When the shared worker is stopped, the associated .wid file (if exists) is
  * removed.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Shared implements Event\Listenable
@@ -272,7 +272,7 @@ class Shared implements Event\Listenable
      * @param   array   $fastcgiParameters  Additional parameters for FastCGI.
      * @return  bool
      */
-    public static function start($socket, $workerPath, Array $fastcgiParameters = [])
+    public static function start($socket, $workerPath, array $fastcgiParameters = [])
     {
         $server = new Fastcgi\Responder(
             new Socket\Client($socket)
