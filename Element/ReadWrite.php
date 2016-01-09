@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,7 +45,7 @@ use Hoa\Xml;
  *
  * Read/write a XML element.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class          ReadWrite
@@ -307,7 +307,7 @@ class          ReadWrite
      * @return  mixed
      * @TODO    readArray does not return attributes and so…
      */
-    public function writeArray(Array $array)
+    public function writeArray(array $array)
     {
         $document = $this->readDOM()->ownerDocument;
 
@@ -430,7 +430,7 @@ class          ReadWrite
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function writeAttributes(Array $attributes)
+    public function writeAttributes(array $attributes)
     {
         foreach ($attributes as $name => $value) {
             $this->writeAttribute($name, $value);
@@ -465,7 +465,7 @@ class          ReadWrite
      *                            uvw => xyz).
      * @return  void
      */
-    public function writeCustomAttributes($set, Array $pairs)
+    public function writeCustomAttributes($set, array $pairs)
     {
         foreach ($pairs as $attribute => $value) {
             $this->writeAttribute($set . '-' . $attribute, $value);
