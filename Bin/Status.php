@@ -37,7 +37,7 @@
 namespace Hoa\Worker\Bin;
 
 use Hoa\Console;
-use Hoa\Core;
+use Hoa\Protocol;
 use Hoa\Worker;
 
 /**
@@ -92,10 +92,10 @@ class Status extends Console\Dispatcher\Kit
             }
         }
 
-        $run = resolve($run);
-        Core::getInstance()->initialize([
-            'protocol.Data/Variable/Run' => "\r" . $run . DS
-        ]);
+        $run      = resolve($run);
+        $protocol = Protocol::getInstance();
+        $protocol['Data']['Variable']['Run']->setReach("\r" . $run . DS);
+
         $outi = [['ID', 'PID', 'Socket', 'Uptime', 'Messages', 'Last']];
         $outm = [];
         $now  = new \DateTime();

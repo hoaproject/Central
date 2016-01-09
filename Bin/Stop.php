@@ -37,7 +37,7 @@
 namespace Hoa\Worker\Bin;
 
 use Hoa\Console;
-use Hoa\Core;
+use Hoa\Protocol;
 use Hoa\Worker;
 
 /**
@@ -96,11 +96,10 @@ class Stop extends Console\Dispatcher\Kit
             return $this->usage();
         }
 
+        $run      = resolve($run);
+        $protocol = Protocol::getInstance();
+        $protocol['Data']['Variable']['Run']->setReach("\r" . $run . DS);
 
-        $run  = resolve($run);
-        Core::getInstance()->initialize([
-            'protocol.Data/Variable/Run' => "\r" . $run . DS
-        ]);
         $password = $this->readPassword('Password: ');
         $sw       = new Worker\Backend\Shared($workerId, $password);
         $sw->stop();

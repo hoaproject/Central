@@ -89,10 +89,8 @@ $worker->run();</code></pre>
   <code>hoa://Data/Variable/Run/<em>workerId</em>.wid</code>. Attention à
   vérifier que ce chemin est bien défini, par exemple en choisissant le dossier
   <code>/path/to/wid/directory</code> :</p>
-  <pre><code class="language-php">Hoa\Core\Core::getInstance()->setProtocol(
-    'hoa://Data/Variable/Run',
-    '/path/to/wid/directory'
-);
+  <pre><code class="language-php">$protocol = Hoa\Protocol\Protocol::getInstance();
+$protocol['Data']['Variable']['Run']->setReach("\r" .  '/path/to/wid/directory);
 var_dump(resolve('hoa://Data/Variable/Run'));
 
 /**
