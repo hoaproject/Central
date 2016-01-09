@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ use Hoa\Database;
  *
  * Wrap PDO.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Pdo implements Database\IDal\Wrapper
@@ -72,7 +72,7 @@ class Pdo implements Database\IDal\Wrapper
         $dsn,
         $username,
         $password,
-        Array $driverOptions = []
+        array $driverOptions = []
     ) {
         if (false === extension_loaded('pdo')) {
             throw new Database\Exception(
@@ -191,7 +191,7 @@ class Pdo implements Database\IDal\Wrapper
      * @return  \Hoa\Database\Layer\Pdo\Statement
      * @throws  \Hoa\Database\Exception
      */
-    public function prepare($statement, Array $options = [])
+    public function prepare($statement, array $options = [])
     {
         $handle = $this->getConnection()->prepare($statement);
 
@@ -289,7 +289,7 @@ class Pdo implements Database\IDal\Wrapper
      * @return  array
      * @throws  \Hoa\Database\Exception
      */
-    public function setAttributes(Array $attributes)
+    public function setAttributes(array $attributes)
     {
         $out = true;
 

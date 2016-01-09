@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@ namespace Hoa\Database\IDal;
  *
  * Interface of a DAL statement wrapper.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 interface WrapperStatement
@@ -54,7 +54,7 @@ interface WrapperStatement
      * @return  \Hoa\Database\IDal\WrapperStatement
      * @throws  \Hoa\Database\Exception
      */
-    public function execute(Array $bindParameters = []);
+    public function execute(array $bindParameters = []);
 
     /**
      * Bind a parameter to te specified variable name.

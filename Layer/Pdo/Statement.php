@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Database;
  *
  * Wrap PDOStatement.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Statement implements Database\IDal\WrapperStatement
@@ -102,7 +102,7 @@ class Statement implements Database\IDal\WrapperStatement
      * @return  \Hoa\Database\Layer\Pdo\Statement
      * @throws  \Hoa\Database\Exception
      */
-    public function execute(Array $bindParameters = null)
+    public function execute(array $bindParameters = null)
     {
         if (false === $this->getStatement()->execute($bindParameters)) {
             throw new Database\Exception(
