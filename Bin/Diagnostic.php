@@ -37,7 +37,6 @@
 namespace Hoa\Devtools\Bin;
 
 use Hoa\Console;
-use Hoa\Core;
 
 /**
  * Class \Hoa\Devtools\Bin\Diagnostic.
@@ -142,7 +141,7 @@ class Diagnostic extends Console\Dispatcher\Kit
         $store(
             'bin',
             'hoa',
-            Core::getInstance()->getParameters()->getFormattedParameter('root.hoa')
+            resolve('hoa://Library/Cli/Bin')
         );
         $store(
             'bin',
