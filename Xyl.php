@@ -46,6 +46,7 @@ use Hoa\Stream;
 use Hoa\Translate;
 use Hoa\View;
 use Hoa\Xml;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Xyl.
@@ -59,7 +60,7 @@ class          Xyl
     extends    Xml
     implements Element,
                View\Viewable,
-               Core\Parameter\Parameterizable
+               Zformat\Parameterizable
 {
     /**
      * XYL's namespace.
@@ -127,7 +128,7 @@ class          Xyl
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected static $_parameters = null;
 
@@ -307,7 +308,7 @@ class          Xyl
         }
 
         if (null === self::$_parameters) {
-            self::$_parameters = new Core\Parameter(
+            self::$_parameters = new Zformat\Parameter(
                 $this,
                 [
                     'theme' => 'classic'
@@ -368,7 +369,7 @@ class          Xyl
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {

@@ -35,7 +35,8 @@
         "hoa/router"      : "~2.0",
         "hoa/stringbuffer": "~0.0",
         "hoa/view"        : "~2.0",
-        "hoa/xml"         : "~0.0"
+        "hoa/xml"         : "~0.0",
+        "hoa/zformat"     : "~0.0"
     },
     "autoload": {
         "psr-4": {
