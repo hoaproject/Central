@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,8 +38,8 @@ namespace Hoa\Test\Bin;
 
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '.autoload.atoum.php';
 
-use Hoa\Console;
 use Hoa\Consistency;
+use Hoa\Console;
 use Hoa\Event;
 use Hoa\File;
 use Hoa\Ustring;
@@ -49,7 +49,7 @@ use Hoa\Ustring;
  *
  * Automatically generate test suites.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Generate extends Console\Dispatcher\Kit
