@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,7 +47,7 @@ use Hoa\Xyl;
  * This class represents the top-XYL-element. It manages data binding, value
  * computing etc.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Concrete extends Xml\Element\Concrete implements Element
@@ -159,7 +159,7 @@ abstract class Concrete extends Xml\Element\Concrete implements Element
      * @param   array   &$parent    Parent.
      * @return  void
      */
-    public function computeDataBinding(Array &$data, Array &$parent = null)
+    public function computeDataBinding(array &$data, array &$parent = null)
     {
         $executable = $this instanceof Executable;
         $bindable   = $this->abstract->attributeExists('bind');
@@ -254,7 +254,7 @@ abstract class Concrete extends Xml\Element\Concrete implements Element
      * @param   array      &$bucket       Bucket.
      * @return  string
      */
-    protected function selectData($expression, Array &$bucket)
+    protected function selectData($expression, array &$bucket)
     {
         switch (Xyl::getSelector($expression, $matches)) {
             case Xyl::SELECTOR_PATH:
@@ -522,7 +522,7 @@ abstract class Concrete extends Xml\Element\Concrete implements Element
 
             $value  = preg_replace_callback(
                 '#\(\?(?:p(?:ath)?:)?([^\)]+)\)#',
-                function (Array $matches) use (&$data) {
+                function (array $matches) use (&$data) {
                     if (!is_array($data) || !isset($data[$matches[1]])) {
                         return '';
                     }

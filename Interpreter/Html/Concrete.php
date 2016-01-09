@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Xyl;
  *
  * Parent of all XYL components for this interpreter.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Concrete extends Xyl\Element\Concrete
@@ -123,7 +123,7 @@ abstract class Concrete extends Xyl\Element\Concrete
      * @param   array                      &$mapped    Mapped attributes.
      * @return  void
      */
-    private static function _mapAttributes($self, $parent, Array &$mapped)
+    private static function _mapAttributes($self, $parent, array &$mapped)
     {
         if (!isset($parent::$_attributesMapping) ||
             !isset($parent::$_attributes)) {
@@ -314,7 +314,7 @@ abstract class Concrete extends Xyl\Element\Concrete
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function writeAttributes(Array $attributes)
+    public function writeAttributes(array $attributes)
     {
         foreach ($attributes as $name => $value) {
             $this->writeAttribute($name, $value);
@@ -349,7 +349,7 @@ abstract class Concrete extends Xyl\Element\Concrete
      *                            uvw => xyz).
      * @return  void
      */
-    public function writeCustomAttributes($set, Array $pairs)
+    public function writeCustomAttributes($set, array $pairs)
     {
         foreach ($pairs as $attribute => $value) {
             $this->writeAttribute($set . '-' . $attribute, $value);

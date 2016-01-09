@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -52,7 +52,7 @@ use Hoa\Zformat;
  *
  * XYL documents handler.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class          Xyl
@@ -289,7 +289,7 @@ class          Xyl
         Interpreter $interpreter,
         Router\Http $router = null,
         $entityResolver     = null,
-        Array $parameters   = []
+        array $parameters   = []
     ) {
         parent::__construct(
             '\Hoa\Xyl\Element\Basic',
@@ -912,7 +912,7 @@ class          Xyl
     private function _computeOverlay(
         \DOMElement $from,
         \DOMElement $to,
-        Array &$overlays
+        array &$overlays
     ) {
         if (false === $to->hasAttribute('id')) {
             return $this->_computeOverlayPosition($from, $to, $overlays);
@@ -994,7 +994,7 @@ class          Xyl
     private function _computeOverlayPosition(
         \DOMElement $from,
         \DOMElement $to,
-        Array       &$overlays
+        array       &$overlays
     ) {
         if (false === $to->hasAttribute('position')) {
             $from->appendChild($to);
@@ -1281,7 +1281,7 @@ class          Xyl
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function addMeta(Array $attributes)
+    public function addMeta(array $attributes)
     {
         $handle = null;
 
@@ -1328,7 +1328,7 @@ class          Xyl
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function addLink(Array $attributes)
+    public function addLink(array $attributes)
     {
         $handle = null;
 
@@ -1950,7 +1950,7 @@ class          Xyl
  *
  * The `hoa://Library/Xyl` node.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class _Protocol extends Protocol\Node
