@@ -70,12 +70,6 @@ if (!defined('HOA')) {
         require_once
             dirname(__DIR__) . DIRECTORY_SEPARATOR .
             '..' . DIRECTORY_SEPARATOR .
-            'Core' . DIRECTORY_SEPARATOR .
-            'Core.php';
-
-        require_once
-            dirname(__DIR__) . DIRECTORY_SEPARATOR .
-            '..' . DIRECTORY_SEPARATOR .
             'Consistency' . DIRECTORY_SEPARATOR .
             'Prelude.php';
 
