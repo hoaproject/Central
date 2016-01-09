@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,69 +45,66 @@ use Hoa\Xyl;
  *
  * Represent a model/document with attributes and relations.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-
 abstract class Model
     implements Xyl\Data\Datable,
                \ArrayAccess,
                \IteratorAggregate,
-               \Countable {
-
+               \Countable
+{
     /**
      * Whether we should check Praspel and validate*().
      *
-     * @var \Hoa\Model bool
+     * @var bool
      */
     private $__validation            = true;
 
     /**
      * Bucket of all model attributes.
      *
-     * @var \Hoa\Model array
+     * @var array
      */
-    private $__attributes            = array();
+    private $__attributes            = [];
 
     /**
      * Current attribute in an array access.
      *
-     * @var \Hoa\Model string
+     * @var string
      */
     private $__currentAccess         = null;
 
     /**
      * Mapping layers.
      *
-     * @var \Hoa\Model array
+     * @var array
      */
-    protected static $__mappingLayer = array('_default' => null);
+    protected static $__mappingLayer = ['_default' => null];
 
 
 
     /**
      * Initialize the model.
      *
-     * @access  public
      * @return  void
      */
-    final public function __construct ( ) {
-
+    final public function __construct()
+    {
         $class   = new \ReflectionClass($this);
-        $ucfirst = function ( Array $matches ) {
+        $ucfirst = function (array $matches) {
 
             return ucfirst($matches[1]);
         };
         $default = $class->getDefaultProperties();
 
-        foreach($class->getProperties() as $property) {
-
+        foreach ($class->getProperties() as $property) {
             $_name = $property->getName();
 
-            if(   '_' !== $_name[0]
-               || '_' === $_name[1])
+            if ('_' !== $_name[0]
+               || '_' === $_name[1]) {
                 continue;
+            }
 
             $name      = substr($_name, 1);
             $comment   = $property->getDocComment();
@@ -121,7 +118,7 @@ abstract class Model
                 strtolower($name)
             ));
 
-            $this->__attributes[$name] = array(
+            $this->__attributes[$name] = [
                 'comment'   => $comment ?: false,
                 'name'      => $name,
                 '_name'     => $_name,
@@ -132,10 +129,11 @@ abstract class Model
                 'default'   => $default[$_name],
                 'value'     => &$this->$_name,
                 'relation'  => $relation
-            );
+            ];
 
-            if(true === $relation && empty($this->$_name))
-                $this->$_name = array();
+            if (true === $relation && empty($this->$_name)) {
+                $this->$_name = [];
+            }
         }
 
         $this->construct();
@@ -146,76 +144,74 @@ abstract class Model
     /**
      * User constructor.
      *
-     * @access  protected
      * @return  void
      */
-    protected function construct ( ) {
-
+    protected function construct()
+    {
         return;
     }
 
     /**
      * Open many documents.
      *
-     * @access  public
      * @param   array  $constraints    Contraints.
      * @return  void
      */
-    public function openMany ( Array $constraints = array() ) {
-
+    public function openMany(array $constraints = [])
+    {
         return;
     }
 
     /**
      * Open one document.
      *
-     * @access  public
      * @param   array  $constraints    Contraints.
      * @return  void
      */
-    public function open ( Array $constraints = array() ) {
-
+    public function open(array $constraints = [])
+    {
         return;
     }
 
     /**
      * Save the document.
      *
-     * @access  public
      * @return  void
      */
-    public function save ( ) {
-
+    public function save()
+    {
         return;
     }
 
     /**
      * Map data to attributes.
      *
-     * @access  public
      * @param   array  $data    Data.
      * @param   array  $map     Map: data name to attribute name.
      * @return  \Hoa\Model
      */
-    protected function map ( Array $data, Array $map = null ) {
-
-        if(null !== $this->__currentAccess)
+    protected function map(array $data, array $map = null)
+    {
+        if (null !== $this->__currentAccess) {
             return $this->mapRelation(
                 substr($this->__currentAccess, 1),
                 $data,
                 $map
             );
+        }
 
-        if(empty($map))
+        if (empty($map)) {
             $map = array_combine($handle = array_keys($data), $handle);
+        }
 
-        foreach($data as $name => $value) {
-
-            if(array_key_exists($name, $map))
+        foreach ($data as $name => $value) {
+            if (array_key_exists($name, $map)) {
                 $name = $map[$name];
+            }
 
-            if($value == $this->$name)
+            if ($value == $this->$name) {
                 continue;
+            }
 
             $this->$name = $value;
         }
@@ -226,27 +222,29 @@ abstract class Model
     /**
      * Map data to a relation attribute.
      *
-     * @access  public
      * @param   array  $name    Relation name.
      * @param   array  $data    Data.
      * @param   array  $map     Map: data name to attribute name.
      * @return  \Hoa\Model
      */
-    protected function mapRelation ( $name, Array $data, Array $map = null ) {
-
-        if(!isset($this->$name))
+    protected function mapRelation($name, array $data, array $map = null)
+    {
+        if (!isset($this->$name)) {
             throw new Exception(
                 'Cannot map relation %s because it does not exist.', 42, $name);
+        }
 
         $attribute = &$this->getAttribute($name);
 
-        if(true !== $attribute['relation'])
+        if (true !== $attribute['relation']) {
             throw new Exception(
                 'Cannot map relation %s because it is not a relation.',
                 43, $name);
+        }
 
-        if(null === $attribute['contract'])
+        if (null === $attribute['contract']) {
             $attribute['contract'] = Praspel::interpret($attribute['comment']);
+        }
 
         $realdom   = $attribute['contract']
                          ->getClause('invariant')
@@ -256,8 +254,7 @@ abstract class Model
         $classname = $realdom['classname']->getConstantValue();
         $_name     = '_' . $name;
 
-        foreach($data as $i => $d) {
-
+        foreach ($data as $i => $d) {
             $this->__currentAccess = $_name;
             $class                 = new $classname();
             $this->offsetSet($i, $class->map($d, $map));
@@ -273,19 +270,20 @@ abstract class Model
      * values. We could include the default values if the only argument is set
      * to true.
      *
-     * @access  public
      * @param   bool  $defaultValues    Whether we include default values.
      * @return  array
      */
-    protected function getConstraints ( $defaultValues = false ) {
+    protected function getConstraints($defaultValues = false)
+    {
+        $out = [];
 
-        $out = array();
-
-        foreach($this->__attributes as $name => $attribute)
-            if(   false                 === $attribute['relation']
+        foreach ($this->__attributes as $name => $attribute) {
+            if (false                 === $attribute['relation']
                && (true                 === $defaultValues
-               || $attribute['default'] !== $attribute['value']))
+               || $attribute['default'] !== $attribute['value'])) {
                 $out[$name] = $attribute['value'];
+            }
+        }
 
         return $out;
     }
@@ -293,84 +291,85 @@ abstract class Model
     /**
      * Check if an attribute exists and is set.
      *
-     * @access  public
      * @param   string  $name    Attribute name.
      * @return  bool
      */
-    public function __isset ( $name ) {
-
+    public function __isset($name)
+    {
         return array_key_exists($name, $this->__attributes);
     }
 
     /**
      * Set a value to an attribute.
      *
-     * @access  public
      * @param   string  $name     Name.
      * @param   mixed   $value    Value.
      * @return  void
-     * @throw   \Hoa\Model\Exception
+     * @throws  \Hoa\Model\Exception
      */
-    public function __set ( $name, $value) {
-
-        if(!isset($this->$name))
+    public function __set($name, $value)
+    {
+        if (!isset($this->$name)) {
             return null;
+        }
 
         $_name     = '_' . $name;
         $attribute = &$this->getAttribute($name);
 
-        if(true === $attribute['relation']) {
-
-            if(!is_array($value))
-                $value = array($value);
+        if (true === $attribute['relation']) {
+            if (!is_array($value)) {
+                $value = [$value];
+            }
 
             $this->__currentAccess = $_name;
 
-            foreach($value as $k => $v)
+            foreach ($value as $k => $v) {
                 $this->offsetSet($k, $v);
+            }
 
             $this->__currentAccess = null;
 
             return;
         }
 
-        if(is_numeric($value)) {
-
-            if($value == $_value = (int) $value)
+        if (is_numeric($value)) {
+            if ($value == $_value = (int) $value) {
                 $value = $_value;
-            else
+            } else {
                 $value = (float) $value;
+            }
         }
 
-        if(false === $this->isValidationEnabled()) {
-
+        if (false === $this->isValidationEnabled()) {
             $old          = $this->$_name;
             $this->$_name = $value;
 
             return $old;
         }
 
-        if(false !== $attribute['comment']) {
-
-            if(null === $attribute['contract'])
+        if (false !== $attribute['comment']) {
+            if (null === $attribute['contract']) {
                 $attribute['contract'] = Praspel::interpret($attribute['comment']);
+            }
 
             $verdict = $attribute['contract']
                            ->getClause('invariant')
                            ->getVariable($name)
                            ->predicate($value);
 
-            if(false === $verdict)
+            if (false === $verdict) {
                 throw new Exception(
                     'Try to set the %s attribute with an invalid data.',
                     0, $name);
+            }
         }
 
-        if(   (null  !== $validator = $attribute['validator'])
-           &&  false === $this->{$validator}($value))
+        if ((null  !== $validator = $attribute['validator'])
+           &&  false === $this->{$validator}($value)) {
             throw new Exception(
                 'Try to set the %s attribute with an invalid data.',
                 1, $name);
+        }
 
         $old          = $this->$_name;
         $this->$_name = $value;
@@ -381,25 +380,24 @@ abstract class Model
     /**
      * Get an attribute value.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  mixed
      */
-    public function __get ( $name ) {
-
-        if(!isset($this->$name))
+    public function __get($name)
+    {
+        if (!isset($this->$name)) {
             return null;
+        }
 
         $attribute = &$this->getAttribute($name);
 
-        if(true === $attribute['relation']) {
-
+        if (true === $attribute['relation']) {
             $this->__currentAccess = '_' . $name;
 
             return $this;
-        }
-        elseif(null !== $this->__currentAccess)
+        } elseif (null !== $this->__currentAccess) {
             $this->__currentAccess = null;
+        }
 
         return $this->{'_' . $name};
     }
@@ -407,14 +405,14 @@ abstract class Model
     /**
      * Check if an offset exists on an attribute.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  bool
      */
-    private function _offsetExists ( $offset ) {
-
-        if(null === $this->__currentAccess)
+    private function _offsetExists($offset)
+    {
+        if (null === $this->__currentAccess) {
             return false;
+        }
 
         return array_key_exists($offset, $this->{$this->__currentAccess});
     }
@@ -422,12 +420,11 @@ abstract class Model
     /**
      * Check if an offset exists on an attribute.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  bool
      */
-    public function offsetExists ( $offset ) {
-
+    public function offsetExists($offset)
+    {
         $out                   = $this->_offsetExists($offset);
         $this->__currentAccess = null;
 
@@ -437,16 +434,14 @@ abstract class Model
     /**
      * Set a value to a specific offset of the current attribute.
      *
-     * @access  public
      * @param   int    $offset    Offset.
      * @param   mixed  $value     Value.
      * @return  bool
-     * @throw   \Hoa\Model\Exception
+     * @throws  \Hoa\Model\Exception
      */
-    public function offsetSet ( $offset, $value ) {
-
-        if(false === $this->isValidationEnabled()) {
-
+    public function offsetSet($offset, $value)
+    {
+        if (false === $this->isValidationEnabled()) {
             $this->{$this->__currentAccess}[$offset] = $value;
 
             return null;
@@ -461,35 +456,35 @@ abstract class Model
         $name      = substr($this->__currentAccess, 1);
         $attribute = &$this->getAttribute($name);
 
-        if(false !== $attribute['comment']) {
-
-            if(null === $attribute['contract'])
+        if (false !== $attribute['comment']) {
+            if (null === $attribute['contract']) {
                 $attribute['contract'] = Praspel::interpret($attribute['comment']);
+            }
 
             $verdict = $attribute['contract']
                            ->getClause('invariant')
                            ->getVariable($name)
                            ->predicate($this->{$this->__currentAccess});
-        }
-        else
+        } else {
             $verdict = true;
+        }
 
-        if(false === $verdict) {
-
-            if(null !== $oldOffset)
+        if (false === $verdict) {
+            if (null !== $oldOffset) {
                 $this->{$this->__currentAccess}[$offset] = $oldOffset;
-            else
+            } else {
                 unset($this->{$this->__currentAccess}[$offset]);
+            }
 
             throw new Exception(
                 'Try to set the %s attribute with an invalid data.', 2, $name);
         }
 
-        if(   (null  !== $validator = $attribute['validator'])
+        if ((null  !== $validator = $attribute['validator'])
            &&  false === $this->{$validator}($value)) {
-
-            if(null !== $oldOffset)
+            if (null !== $oldOffset) {
                 $this->{$this->__currentAccess}[$offset] = $oldOffset;
+            }
 
             throw new Exception(
                 'Try to set the %s attribute with an invalid data.',
@@ -502,14 +497,14 @@ abstract class Model
     /**
      * Get a value from a specific offset of the current attribute.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  mixed
      */
-    public function offsetGet ( $offset ) {
-
-        if(false === $this->_offsetExists($offset))
+    public function offsetGet($offset)
+    {
+        if (false === $this->_offsetExists($offset)) {
             return $this->__currentAccess = null;
+        }
 
         $out                   = &$this->{$this->__currentAccess}[$offset];
         $this->__currentAccess = null;
@@ -520,14 +515,14 @@ abstract class Model
     /**
      * Unset a specific offset of the current attribute.
      *
-     * @access  public
      * @param   int  $offset    Offset.
      * @return  void
      */
-    public function offsetUnset ( $offset ) {
-
-        if(false !== $this->_offsetExists($offset))
+    public function offsetUnset($offset)
+    {
+        if (false !== $this->_offsetExists($offset)) {
             unset($this->__currentAccess[$offset]);
+        }
 
         $this->__currentAccess = null;
 
@@ -537,13 +532,13 @@ abstract class Model
     /**
      * Iterate a relation.
      *
-     * @access  public
      * @return  \ArrayIterator
      */
-    public function getIterator ( ) {
-
-        if(null === $this->__currentAccess)
+    public function getIterator()
+    {
+        if (null === $this->__currentAccess) {
             return null;
+        }
 
         return new \ArrayIterator($this->{$this->__currentAccess});
     }
@@ -551,13 +546,13 @@ abstract class Model
     /**
      * Count number of attributes.
      *
-     * @access  public
      * @return  int
      */
-    public function count ( ) {
-
-        if(null === $this->__currentAccess)
+    public function count()
+    {
+        if (null === $this->__currentAccess) {
             return count($this->__attributes);
+        }
 
         $out                   = count($this->{$this->__currentAccess});
         $this->__currentAccess = null;
@@ -568,14 +563,12 @@ abstract class Model
     /**
      * Get an attribute in the bucket.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  array
      */
-    private function &getAttribute ( $name ) {
-
-        if(!isset($this->$name)) {
-
+    private function &getAttribute($name)
+    {
+        if (!isset($this->$name)) {
             $out = null;
 
             return $out;
@@ -587,12 +580,11 @@ abstract class Model
     /**
      * Enable validation or not (i.e. execute Praspel and validate*() methods).
      *
-     * @access  public
      * @param   bool  $enable    Enable or not.
      * @return  bool
      */
-    public function setEnableValidation ( $enable ) {
-
+    public function setEnableValidation($enable)
+    {
         $old                = $this->__validation;
         $this->__validation = $enable;
 
@@ -602,28 +594,27 @@ abstract class Model
     /**
      * Check if validation is enabled or not.
      *
-     * @access  public
      * @return  bool
      */
-    public function isValidationEnabled ( ) {
-
+    public function isValidationEnabled()
+    {
         return $this->__validation;
     }
 
     /**
      * Set a mapping layer.
      *
-     * @access  public
      * @param   object  $layer    Layer (e.g. \Hoa\Database\Dal).
      * @param   string  $name     Name.
      * @return  object
      */
-    protected static function setMappingLayer ( $layer, $name = '_default' ) {
-
+    protected static function setMappingLayer($layer, $name = '_default')
+    {
         $old = null;
 
-        if(array_key_exists($name, static::$__mappingLayer))
+        if (array_key_exists($name, static::$__mappingLayer)) {
             $old = static::$__mappingLayer[$name];
+        }
 
         static::$__mappingLayer[$name] = $layer;
 
@@ -633,14 +624,14 @@ abstract class Model
     /**
      * Get a mapping layer.
      *
-     * @access  public
      * @param   string  $name    Name.
      * @return  object
      */
-    public static function getMappingLayer ( $name = '_default' ) {
-
-        if(!array_key_exists($name, static::$__mappingLayer))
+    public static function getMappingLayer($name = '_default')
+    {
+        if (!array_key_exists($name, static::$__mappingLayer)) {
             return null;
+        }
 
         return static::$__mappingLayer[$name];
     }
@@ -648,26 +639,27 @@ abstract class Model
     /**
      * Transform data as an array.
      *
-     * @access  public
      * @return  array
      */
-    public function toArray ( ) {
+    public function toArray()
+    {
+        if (null === $this->__currentAccess) {
+            $out = [];
 
-        if(null === $this->__currentAccess) {
-
-            $out = array();
-
-            foreach($this->__attributes as $attribute)
-                if(false === $attribute['relation'])
+            foreach ($this->__attributes as $attribute) {
+                if (false === $attribute['relation']) {
                     $out[$attribute['name']] = $attribute['value'];
+                }
+            }
 
             return $out;
         }
 
-        $out = array();
+        $out = [];
 
-        foreach($this->{$this->__currentAccess} as $i => $value)
+        foreach ($this->{$this->__currentAccess} as $i => $value) {
             $out[$i] = $value->toArray();
+        }
 
         $this->__currentAccess = null;
 
