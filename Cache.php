@@ -37,7 +37,6 @@
 namespace Hoa\Cache;
 
 use Hoa\Consistency;
-use Hoa\Core;
 use Hoa\Zformat;
 
 /**
