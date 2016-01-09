@@ -90,7 +90,7 @@ f();
 Then, we can run DTrace like this:
 
 ```sh
-$ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Execution.d --no-verbose`
+$ exed=`hoa protocol:resolve hoa://Library/Bench/Dtrace/Execution.d --no-verbose`
 $ sudo $exed -c "php Dtrace.php"
 Request start
      2ms ➜ f()        …/Dtrace.php:007

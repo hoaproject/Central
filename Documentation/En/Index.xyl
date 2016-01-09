@@ -221,7 +221,7 @@ f();</code></pre>
   DTrace program, namely
   <a href="@central_resource:path=Library/Bench/Dtrace/Execution.d"><code>hoa://Library/Bench/Dtrace/Execution.d</code></a>.
   Attention, we have to execute DTrace as a super-user; thus:</p>
-  <pre><code class="language-shell">$ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Execution.d`
+  <pre><code class="language-shell">$ exed=`hoa protocol:resolve hoa://Library/Bench/Dtrace/Execution.d`
 $ sudo $exed -c "php Dtrace.php"
 Request start
      2ms ➜ f()        …/Dtrace.php:007
@@ -265,7 +265,7 @@ Request end</code></pre>
   called functions and methods with their respective invocations number and the
   distribution of the execution time. For example, if we try with our first
   version of <code>Dtrace.php</code>, we will have:</p>
-  <pre><code class="language-shell">$ exed=`hoa core:resolve hoa://Library/Bench/Dtrace/Stat.d`
+  <pre><code class="language-shell">$ exed=`hoa protocol:resolve hoa://Library/Bench/Dtrace/Stat.d`
 $ sudo $exed -c "php Dtrace.php"
 Count calls:
   • h                                                                        2
