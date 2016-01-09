@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Praspel;
  *
  * Assertion checker: runtime (so-called RAC).
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Runtime extends AssertionChecker
@@ -308,7 +308,7 @@ class Runtime extends AssertionChecker
      */
     protected function getArgumentData(
         \ReflectionFunctionAbstract  $reflection,
-        Array                       &$data,
+        array                       &$data,
         &$numberOfRequiredArguments
     ) {
         $arguments                 = [];
@@ -387,7 +387,7 @@ class Runtime extends AssertionChecker
     protected function invoke(
         Consistency\Xcallable       &$callable,
         \ReflectionFunctionAbstract &$reflection,
-        Array &$arguments,
+        array &$arguments,
         $isConstructor
     ) {
         if ($reflection instanceof \ReflectionFunction) {
@@ -423,7 +423,7 @@ class Runtime extends AssertionChecker
      */
     protected function checkBehavior(
         Praspel\Model\Behavior &$behavior,
-        Array &$data,
+        array &$data,
         Praspel\Exception\Group $exceptions,
         $assign = false,
         $trace  = false
@@ -522,7 +522,7 @@ class Runtime extends AssertionChecker
      */
     protected function checkClause(
         Praspel\Model\Declaration $clause,
-        Array &$data,
+        array &$data,
         \Hoa\Praspel\Exception\Group $exceptions,
         $exception,
         $assign = false,
@@ -670,7 +670,7 @@ class Runtime extends AssertionChecker
      */
     protected function checkExceptionalClause(
         Praspel\Model\Throwable $clause,
-        Array &$data
+        array &$data
     ) {
         $verdict = false;
 

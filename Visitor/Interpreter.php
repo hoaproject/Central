@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -51,7 +51,7 @@ if (false === Consistency::entityExists('Hoa\Realdom\Disjunction')) {
  *
  * Compile Praspel to model.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Interpreter implements Visitor\Visit
@@ -104,8 +104,8 @@ class Interpreter implements Visitor\Visit
 
         switch ($id) {
             case '#specification':
-                $this->_clause =
-                    $this->_current =
+                $this->_clause       =
+                    $this->_current  =
                         $this->_root =
                             new Praspel\Model\Specification();
 
@@ -149,7 +149,7 @@ class Interpreter implements Visitor\Visit
                 $identifier    = $child0->accept($this, $handle, false);
                 $previous      = $this->_current;
 
-                $this->_clause =
+                $this->_clause      =
                     $this->_current =
                         $this
                             ->_current
@@ -165,9 +165,9 @@ class Interpreter implements Visitor\Visit
                 break;
 
             case '#default':
-                $children      = $element->getChildren();
-                $previous      = $this->_current;
-                $this->_clause =
+                $children           = $element->getChildren();
+                $previous           = $this->_current;
+                $this->_clause      =
                     $this->_current =
                         $this
                             ->_current
@@ -583,6 +583,7 @@ class Interpreter implements Visitor\Visit
                     case 'accepted':
                     case 'string':
                     case 'regex';
+
                         return $value;
 
                     default:
