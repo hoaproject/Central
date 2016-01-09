@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -54,54 +54,48 @@ namespace Hoa\Memory {
  * Please, read http://www.research.ibm.com/people/d/dfb/papers/Bacon03Pure.pdf
  * to know more about its behavior.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-
-class GarbageCollector {
-
+class GarbageCollector
+{
     /**
      * Active the garbage collector.
      *
-     * @access  public
      * @return  void
      */
-    public static function enable ( ) {
-
+    public static function enable()
+    {
         return gc_enable();
     }
 
     /**
      * Disactive the garbage collector.
      *
-     * @access  public
      * @return  void
      */
-    public static function disable ( ) {
-
+    public static function disable()
+    {
         return gc_disable();
     }
 
     /**
      * Return the circular reference collector status.
      *
-     * @access  public
      * @return  bool
      */
-    public static function isEnabled ( ) {
-
+    public static function isEnabled()
+    {
         return gc_enabled();
     }
 
     /**
      * Force collection of any existing garbage cycles.
      *
-     * @access  public
      * @return  int
      */
-    public static function collect ( ) {
-
+    public static function collect()
+    {
         return gc_collect_cycles();
     }
 }
