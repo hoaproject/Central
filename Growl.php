@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -62,38 +62,36 @@ namespace Hoa\Notification {
  *
  * Growl notification support.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-
-class Growl implements Notification {
-
+class Growl implements Notification
+{
     /**
      * Client.
      *
-     * @var \Hoa\Socket\Client object
+     * @var \Hoa\Socket\Client
      */
     protected $_client          = null;
 
     /**
      * Application name.
      *
-     * @var \Hoa\Notification\Growl string
+     * @var string
      */
     protected $_applicationName = null;
 
     /**
      * Application's password.
      *
-     * @var \Hoa\Notification\Growl string
+     * @var string
      */
     protected $_password        = null;
 
     /**
      * Notification's channel.
      *
-     * @var \Hoa\Notification\Growl string
+     * @var string
      */
     protected $_channel         = '_default';
 
@@ -101,29 +99,29 @@ class Growl implements Notification {
      * All notification's channels: name => boolean; whether handshake has
      * already been done.
      *
-     * @var \Hoa\Notification\Growl array
+     * @var array
      */
-    protected $_channels        = array('_default' => false);
+    protected $_channels        = ['_default' => false];
 
 
 
     /**
      * Construct a new notifier.
      *
-     * @access  public
      * @param   string              $applicationName    Application's name.
      * @param   \Hoa\Socket\Client  $client             Client.
      * @param   string              $password           Application's
      *                                                  password.
      * @return  void
-     * @throw   \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception
      */
-    public function __construct ( $applicationName           = 'Hoa',
+    public function __construct($applicationName           = 'Hoa',
                                   \Hoa\Socket\Client $client = null,
-                                  $password                  = '' ) {
-
-        if(null === $client)
+                                  $password                  = '')
+    {
+        if (null === $client) {
             $client = new \Hoa\Socket\Client('udp://localhost:9887');
+        }
 
         $this->_client = $client;
         $this->_client->connect();
@@ -136,19 +134,20 @@ class Growl implements Notification {
     /**
      * Select a specific channel.
      *
-     * @access  public
      * @param   string  $channel    Channel's name.
      * @return  \Hoa\Notification\Growl
      */
-    public function __get ( $channel ) {
-
-        if(false === $this->channelExists($channel))
+    public function __get($channel)
+    {
+        if (false === $this->channelExists($channel)) {
             $this->_channels[$channel] = false;
+        }
 
         $this->_channel = $channel;
 
-        if(false === $this->_channels[$channel])
+        if (false === $this->_channels[$channel]) {
             $this->handshake();
+        }
 
         return $this;
     }
@@ -156,11 +155,10 @@ class Growl implements Notification {
     /**
      * Do handshake.
      *
-     * @access  protected
      * @return  bool
      */
-    protected function handshake ( ) {
-
+    protected function handshake()
+    {
         $channel = $this->getChannel();
         $data    = pack(
                        'c2nc2',
@@ -187,17 +185,17 @@ class Growl implements Notification {
     /**
      * Send a notification.
      *
-     * @access  public
      * @param   string  $title      Title.
      * @param   string  $message    Message.
      * @return  \Hoa\Notification\Growl
      */
-    public function notify ( $title, $message ) {
-
+    public function notify($title, $message)
+    {
         $channel = $this->getChannel();
 
-        if(false === $this->_channels[$channel]) // _default
+        if (false === $this->_channels[$channel]) { // _default
             $this->handshake();
+        }
 
         $flags   = 0;
         $data    = pack(
@@ -209,7 +207,7 @@ class Growl implements Notification {
                        strlen($title),
                        strlen($message),
                        strlen($this->getApplicationName())
-                   ) . 
+                   ) .
                    $channel .
                    $title .
                    $message .
@@ -226,12 +224,11 @@ class Growl implements Notification {
     /**
      * Set application's name.
      *
-     * @access  protected
      * @param   string  $applicationName    Application's name.
      * @return  string
      */
-    protected function setApplicationName ( $applicationName ) {
-
+    protected function setApplicationName($applicationName)
+    {
         $old                    = $this->_applicationName;
         $this->_applicationName = $applicationName;
 
@@ -241,23 +238,21 @@ class Growl implements Notification {
     /**
      * Get application's name.
      *
-     * @access  public
      * @return  string
      */
-    public function getApplicationName ( ) {
-
+    public function getApplicationName()
+    {
         return $this->_applicationName;
     }
 
     /**
      * Set application's password.
      *
-     * @access  protected
      * @param   string  $password    Application's password.
      * @return  string
      */
-    protected function setPassword ( $password ) {
-
+    protected function setPassword($password)
+    {
         $old             = $this->_password;
         $this->_password = $password;
 
@@ -267,44 +262,40 @@ class Growl implements Notification {
     /**
      * Get application's password.
      *
-     * @access  public
      * @return  string
      */
-    public function getPassword ( ) {
-
+    public function getPassword()
+    {
         return $this->_password;
     }
 
     /**
      * Get current channel.
      *
-     * @access  public
      * @return  string
      */
-    public function getChannel ( ) {
-
+    public function getChannel()
+    {
         return $this->_channel;
     }
 
     /**
      * Get all channels.
      *
-     * @access  public
      * @return  array
      */
-    public function getChannels ( ) {
-
+    public function getChannels()
+    {
         return $this->_channels;
     }
 
     /**
      * Check if a channel exists.
      *
-     * @access  public
      * @return  string
      */
-    public function channelExists ( $channel ) {
-
+    public function channelExists($channel)
+    {
         return array_key_exists($channel, $this->getChannels());
     }
 }
