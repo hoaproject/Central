@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,7 +45,7 @@ use Hoa\Zformat;
  *
  * HTTP router.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Http extends Router\Generic implements Zformat\Parameterizable
@@ -136,7 +136,7 @@ class Http extends Router\Generic implements Zformat\Parameterizable
      *
      * @return  void
      */
-    public function __construct(Array $parameters = [])
+    public function __construct(array $parameters = [])
     {
         $this->_parameters = new Zformat\Parameter(
             $this,
@@ -213,11 +213,11 @@ class Http extends Router\Generic implements Zformat\Parameterizable
     protected function _addRule(
         $visibility,
         $id,
-        Array $methods,
+        array $methods,
         $pattern,
         $call,
         $able,
-        Array $variables
+        array $variables
     ) {
         if (true === $this->ruleExists($id)) {
             throw new Router\Exception(
@@ -465,7 +465,7 @@ class Http extends Router\Generic implements Zformat\Parameterizable
      */
     public function unroute(
         $id,
-        Array $variables = [],
+        array $variables = [],
         $secured = null,
         $prefix = null
     ) {
@@ -619,7 +619,7 @@ class Http extends Router\Generic implements Zformat\Parameterizable
     protected function _unroute(
         $id,
         $pattern,
-        Array $variables,
+        array $variables,
         $allowEmpty = true
     ) {
         $unusedVariables = [];
@@ -633,7 +633,7 @@ class Http extends Router\Generic implements Zformat\Parameterizable
         // (?<named>…)
         $out = preg_replace_callback(
             '#\(\?\<([^>]+)>[^\)]*\)[\?\*\+]{0,2}#',
-            function (Array $matches) use (&$id, &$variables, &$allowEmpty, &$unusedVariables) {
+            function (array $matches) use (&$id, &$variables, &$allowEmpty, &$unusedVariables) {
                 $m = strtolower($matches[1]);
 
                 if (!isset($variables[$m]) || '' === $variables[$m]) {

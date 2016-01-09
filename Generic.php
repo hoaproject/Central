@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@ namespace Hoa\Router;
  *
  * Generic router.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Generic implements Router
@@ -86,11 +86,11 @@ abstract class Generic implements Router
     abstract protected function _addRule(
         $visibility,
         $id,
-        Array $methods,
+        array $methods,
         $pattern,
         $call,
         $able,
-        Array $variables
+        array $variables
     );
 
     /**
@@ -107,11 +107,11 @@ abstract class Generic implements Router
      */
     public function addRule(
         $id,
-        Array $methods,
+        array $methods,
         $pattern,
         $call            = null,
         $able            = null,
-        Array $variables = []
+        array $variables = []
     ) {
         return $this->_addRule(
             Router::VISIBILITY_PUBLIC,
@@ -138,11 +138,11 @@ abstract class Generic implements Router
      */
     public function addPrivateRule(
         $id,
-        Array $methods,
+        array $methods,
         $pattern,
         $call            = null,
         $able            = null,
-        Array $variables = []
+        array $variables = []
     ) {
         return $this->_addRule(
             Router::VISIBILITY_PRIVATE,
