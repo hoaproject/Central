@@ -37,7 +37,6 @@
 namespace Hoa\Mime;
 
 use Hoa\Consistency;
-use Hoa\Core;
 use Hoa\Stream;
 use Hoa\Zformat;
 
