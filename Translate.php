@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ use Hoa\Stream;
  *
  * Generic class for translaters.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Translate implements \IteratorAggregate
@@ -108,7 +108,7 @@ abstract class Translate implements \IteratorAggregate
      * @param   array  $data    Data.
      * @return  array
      */
-    protected function setData(Array $data)
+    protected function setData(array $data)
     {
         $old         = $this->_data;
         $this->_data = $data;
