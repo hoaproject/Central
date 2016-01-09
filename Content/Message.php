@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ use Hoa\Mail;
  * This class represents a message, that can also be a content of another
  * message.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Message extends Content
@@ -176,7 +176,7 @@ class Message extends Content
      * @param   array   &$out    Out.
      * @return  void
      */
-    protected function _getRecipients($line, Array &$out)
+    protected function _getRecipients($line, array &$out)
     {
         $line = preg_replace_callback(
             '#("|\')[^\1]+\1#',
