@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Cache;
  *
  * Class catching system for frontend cache.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class AClass extends Frontend
@@ -95,7 +95,7 @@ class AClass extends Frontend
      * @return  mixed
      * @throws  \Hoa\Cache\Exception
      */
-    public function __call($method, Array $arguments)
+    public function __call($method, array $arguments)
     {
         $gc =
             is_string($this->_object)

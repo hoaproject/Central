@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Zformat;
  * Class \Hoa\Cache.
  *
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Cache implements Zformat\Parameterizable
@@ -91,7 +91,7 @@ abstract class Cache implements Zformat\Parameterizable
      * @param   array   $parameters    Parameters.
      * @return  void
      */
-    public function __construct(Array $parameters = [])
+    public function __construct(array $parameters = [])
     {
         $this->_parameters = new Zformat\Parameter(
             __CLASS__,
@@ -256,7 +256,7 @@ abstract class Cache implements Zformat\Parameterizable
      * @param   array   $array    Array to sort.
      * @return  array
      */
-    public function ksort(Array &$array)
+    public function ksort(array &$array)
     {
         ksort($array);
         foreach ($array as $key => $value) {
