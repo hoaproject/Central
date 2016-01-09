@@ -36,7 +36,6 @@
 
 namespace Hoa\Router;
 
-use Hoa\Core;
 use Hoa\Zformat;
 
 /**

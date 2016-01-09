@@ -37,7 +37,6 @@
 namespace Hoa\Router\Http;
 
 use Hoa\Consistency;
-use Hoa\Core;
 use Hoa\Router;
 use Hoa\Zformat;
 
