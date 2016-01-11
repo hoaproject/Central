@@ -1,3 +1,12 @@
+# 3.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T08:56:45+01:00)
+  * Documentation: Use `hoa protocol:resolve`. (Ivan Enderlin, 2016-01-09T08:37:41+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T07:58:29+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T10:51:08+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T07:07:21+01:00)
+
 # 2.15.10.21
 
   * Documentation: Fix typo. (Raphaël Emourgeon, 2015-09-14T21:15:43+02:00)

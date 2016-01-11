@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Bench;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Iterator;
 
 /**
@@ -47,7 +47,7 @@ use Hoa\Iterator;
  * The \Hoa\Bench class implements Iterator and Countable interfaces to iterate
  * marks, or count the number of marks.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Bench implements Iterator, \Countable
@@ -252,7 +252,7 @@ class Bench implements Iterator, \Countable
      * @param   array  $marks    The marks to resume.
      * @return  void
      */
-    public static function resume(Array $marks)
+    public static function resume(array $marks)
     {
         foreach ($marks as $mark) {
             $mark->start();
@@ -423,4 +423,4 @@ class Bench implements Iterator, \Countable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Bench\Bench');
+Consistency::flexEntity('Hoa\Bench\Bench');
