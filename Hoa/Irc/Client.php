@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,8 @@
 
 namespace Hoa\Irc;
 
-use Hoa\Core;
+use Hoa\Event;
+use Hoa\Exception;
 use Hoa\Socket;
 
 /**
@@ -44,19 +45,14 @@ use Hoa\Socket;
  *
  * An IRC client.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class          Client
     extends    Socket\Connection\Handler
-    implements Core\Event\Listenable
+    implements Event\Listenable
 {
-    /**
-     * Listeners.
-     *
-     * @var \Hoa\Core\Event\Listener
-     */
-    protected $_on = null;
+    use Event\Listens;
 
 
 
@@ -71,38 +67,25 @@ class          Client
     {
         parent::__construct($client);
         $this->getConnection()->setNodeName('\Hoa\Irc\Node');
-        $this->_on = new Core\Event\Listener(
-            $this,
-            [
-                'open',
-                'join',
-                'message',
-                'private-message',
-                'mention',
-                'other-message',
-                'ping',
-                'kick',
-                'invite',
-                'error'
-            ]
+        $this->setListener(
+            new Event\Listener(
+                $this,
+                [
+                    'open',
+                    'join',
+                    'message',
+                    'private-message',
+                    'mention',
+                    'other-message',
+                    'ping',
+                    'kick',
+                    'invite',
+                    'error'
+                ]
+            )
         );
 
         return;
-    }
-
-    /**
-     * Attach a callable to this listenable object.
-     *
-     * @param   string  $listenerId    Listener ID.
-     * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Irc\Client
-     * @throws  \Hoa\Core\Exception
-     */
-    public function on($listenerId, $callable)
-    {
-        $this->_on->attach($listenerId, $callable);
-
-        return $this;
     }
 
     /**
@@ -116,7 +99,7 @@ class          Client
     {
         if (false === $node->hasJoined()) {
             $node->setJoined(true);
-            $this->_on->fire('open', new Core\Event\Bucket());
+            $this->getListener()->fire('open', new Event\Bucket());
 
             return;
         }
@@ -224,11 +207,11 @@ class          Client
                     ];
             }
 
-            $this->_on->fire($listener, new Core\Event\Bucket($bucket));
-        } catch (Core\Exception\Idle $e) {
-            $this->_on->fire(
+            $this->getListener()->fire($listener, new Event\Bucket($bucket));
+        } catch (Exception\Idle $e) {
+            $this->getListener()->fire(
                 'error',
-                new Core\Event\Bucket([
+                new Event\Bucket([
                     'exception' => $e
                 ])
             );
