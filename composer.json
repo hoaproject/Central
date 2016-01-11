@@ -23,14 +23,15 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/compiler"   : "~2.0",
-        "hoa/consistency": "~0.0",
-        "hoa/exception"  : "~0.0",
+        "hoa/compiler"   : "~3.0",
+        "hoa/consistency": "~1.0",
+        "hoa/exception"  : "~1.0",
         "hoa/file"       : "~0.0",
-        "hoa/iterator"   : "~1.0",
+        "hoa/iterator"   : "~2.0",
+        "hoa/protocol"   : "~1.0",
         "hoa/realdom"    : "~0.0",
-        "hoa/ustring"    : "~3.0",
-        "hoa/visitor"    : "~1.0"
+        "hoa/ustring"    : "~4.0",
+        "hoa/visitor"    : "~2.0"
     },
     "require-dev": {
         "hoa/math": "~0.0"
