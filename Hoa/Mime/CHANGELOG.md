@@ -1,3 +1,12 @@
+# 3.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:05:27+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:20:11+01:00)
+  * Parameters: Use `Hoa\Zformat`. (Ivan Enderlin, 2016-01-08T17:13:20+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T11:23:05+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T12:57:07+01:00)
+
 # 2.15.10.29
 
   * Test: Specify file type with `hoa://Test/Vfs`. (Ivan Enderlin, 2015-10-29T22:26:00+01:00)

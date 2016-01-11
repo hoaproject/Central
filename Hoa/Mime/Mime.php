@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,8 +36,9 @@
 
 namespace Hoa\Mime;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Stream;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Mime.
@@ -45,10 +46,10 @@ use Hoa\Stream;
  * Get informations relative to MIME (media, type, extension, other extensions)
  * about a stream.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Mime implements Core\Parameter\Parameterizable
+class Mime implements Zformat\Parameterizable
 {
     /**
      * Structure: media/type part.
@@ -81,7 +82,7 @@ class Mime implements Core\Parameter\Parameterizable
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     private $_parameters        = null;
 
@@ -141,9 +142,9 @@ class Mime implements Core\Parameter\Parameterizable
      * @return  void
      * @throws  \Hoa\Mime\Exception
      */
-    public function __construct(Stream $stream, Array $parameters = [])
+    public function __construct(Stream $stream, array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             $this,
             [],
             [
@@ -173,7 +174,7 @@ class Mime implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
@@ -328,7 +329,7 @@ class Mime implements Core\Parameter\Parameterizable
     public static function getMimeFromExtension($extension)
     {
         $extension = strtolower($extension);
-        
+
         if (false === static::extensionExists($extension)) {
             return null;
         }
@@ -486,4 +487,4 @@ class Mime implements Core\Parameter\Parameterizable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Mime\Mime');
+Consistency::flexEntity('Hoa\Mime\Mime');
