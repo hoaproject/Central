@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -52,65 +52,59 @@ namespace Hoa\Memory {
  *
  * Work with memory.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-
-class Memory {
-
+class Memory
+{
     /**
      * Get the amount of memory allocated to PHP.
      *
-     * @access  public
      * @param   bool    $realUsage    Set this to true to get the real size of
      *                                memory allocated from system; if not set
      *                                or false, only the memory used by emalloc()
      *                                is reported.
      * @return  int
      */
-    public static function getUsage ( $realUsage = false ) {
-
+    public static function getUsage($realUsage = false)
+    {
         return memory_get_usage($realUsage);
     }
 
     /**
      * Get the peak of memory allocated by PHP.
      *
-     * @access  public
      * @param   bool    $realUsage    Set this to true to get the real size of
      *                                memory allocated from system; if not set
      *                                or false, only the memory used by emalloc()
      *                                is reported.
      * @return  int
      */
-    public static function getPeakUsage ( $realUsage = false ) {
-
+    public static function getPeakUsage($realUsage = false)
+    {
         return memory_get_peak_usage($realUsage);
     }
 
     /**
      * Set the memory limit.
      *
-     * @access  public
      * @param   mixed   $size    If an integer is given, the value is measured in
      *                           bytes. If a string is given, it must be a
      *                           shorthand notation (like '128M' for instance).
      * @return  mixed
      */
-    public static function setLimit ( $size) {
-
+    public static function setLimit($size)
+    {
         return ini_set('memory_limit', $size);
     }
 
     /**
      * Get the memory limit.
      *
-     * @access  public
      * @return  mixed
      */
-    public static function getLimit ( ) {
-
+    public static function getLimit()
+    {
         return ini_get('memory_limit');
     }
 
@@ -139,17 +133,17 @@ class Memory {
      * Please, see your system's man page on getrusage(2) to get more
      * informations. It is very interesting.
      *
-     * @access  public
      * @param   int     $who    If set to 1, it will be called with
      *                          RUSAGE_CHILDREN.
      * @return  array
-     * @throw   \Hoa\Memory\Exception
+     * @throws  \Hoa\Memory\Exception
      */
-    public static function getRUsage ( $who = 0 ) {
-
-        if(OS_WIN)
+    public static function getRUsage($who = 0)
+    {
+        if (OS_WIN) {
             throw new Exception(
                 'Cannot get the current resource usages on Windows.', 0);
+        }
 
         return getrusage($who);
     }
@@ -162,6 +156,6 @@ namespace {
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Memory\Memory');
+Hoa\Consistency::flexEntity('Hoa\Memory\Memory');
 
 }
