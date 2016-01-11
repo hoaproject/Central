@@ -21,7 +21,7 @@ dependencies, you need to require
 ```json
 {
     "require": {
-        "hoa/router": "~2.0"
+        "hoa/router": "~3.0"
     }
 }
 ```
