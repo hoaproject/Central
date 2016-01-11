@@ -18,7 +18,7 @@ dependencies, you need to require
 ```json
 {
     "require": {
-        "hoa/fastcgi": "~2.0"
+        "hoa/fastcgi": "~3.0"
     }
 }
 ```
