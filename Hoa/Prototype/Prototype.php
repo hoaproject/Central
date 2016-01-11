@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -52,13 +52,11 @@ namespace Hoa\Prototype {
  *
  * Enable to do a Prototype-based programming.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-
-class Prototype {
-
+class Prototype
+{
     /**
      * Where user believes to set its prototype.
      */
@@ -67,21 +65,21 @@ class Prototype {
     /**
      * Prototype instance.
      *
-     * @var \Hoa\Prototype object
+     * @var \Hoa\Prototype
      */
-    private  $_prototype   = null;
+    private $_prototype   = null;
 
     /**
      * Prototype class type.
      *
-     * @var \Hoa\Prototype string
+     * @var string
      */
     protected $_classType  = '';
 
     /**
      * Prototype object type.
      *
-     * @var \Hoa\Prototype string
+     * @var string
      */
     protected $_objectType = '';
 
@@ -90,48 +88,51 @@ class Prototype {
     /**
      * Set the prototype or attempt to set a prototype slot.
      *
-     * @access  public
      * @param   string  $name     'prototype' if want to set the prototype,
      *                            slot name else.
      * @param   mixed   $value    The prototype object or the slot value.
      * @return  mixed
-     * @throw   \Hoa\Prototype\Exception
+     * @throws  \Hoa\Prototype\Exception
      */
-    public function __set ( $name, $value ) {
-
-        if(true === property_exists($this, 'prototype'))
+    public function __set($name, $value)
+    {
+        if (true === property_exists($this, 'prototype')) {
             throw new Exception(
                 'You must not have a prototype attribute declared in your ' .
                 'class.', 0);
+        }
 
-        if(strtolower($name) == 'prototype') {
-
+        if (strtolower($name) == 'prototype') {
             $out = is_object($value);
 
-            if($out && $this->_objectType != '')
+            if ($out && $this->_objectType != '') {
                 $out  = $value instanceof $this->_objectType;
+            }
 
-            if($out && $this->_classType != '')
+            if ($out && $this->_classType != '') {
                 $out &=    strtolower(get_class($value))
                         == strtolower($this->_classType);
+            }
 
-            if(false === (bool) $out)
+            if (false === (bool) $out) {
                 throw new Exception(
                     'Cannot set the prototype %s; it must be an object of ' .
                     'type %s and a class of type %s.',
-                    1, array(
+                    1, [
                         get_class($value),
                         $this->_objectType,
                         $this->_classType
-                    ));
+                    ]);
+            }
 
             return $this->_prototype = $value;
         }
 
-        if(null === $this->_prototype)
+        if (null === $this->_prototype) {
             throw new Exception(
                 'Undefined property: %s::%s.',
-                2, array(get_class($this), $name));
+                2, [get_class($this), $name]);
+        }
 
         return $this->_prototype->$name = $value;
     }
@@ -139,32 +140,35 @@ class Prototype {
     /**
      * Get a prototype slot value.
      *
-     * @access  public
      * @param   string  $name    Slot name.
      * @return  mixed
-     * @throw   \Hoa\Prototype\Exception
+     * @throws  \Hoa\Prototype\Exception
      */
-    public function __get ( $name ) {
-
-        if(true === property_exists($this, 'prototype'))
+    public function __get($name)
+    {
+        if (true === property_exists($this, 'prototype')) {
             throw new Exception(
                 'You must not have a prototype attribute declared in your ' .
                 'class.', 3);
+        }
 
-        if(null === $this->_prototype)
+        if (null === $this->_prototype) {
             throw new Exception(
                 'Undefined property: %s::%s.',
-                4, array(get_class($this), $name));
+                4, [get_class($this), $name]);
+        }
 
-        if(true === property_exists($this->_prototype, $name))
+        if (true === property_exists($this->_prototype, $name)) {
             return $this->_prototype->$name;
+        }
 
-        if($this->_prototype instanceof Prototype)
+        if ($this->_prototype instanceof self) {
             return $this->_prototype->__get($name);
+        }
 
         throw new Exception(
             'Undefined property: %s::%s.',
-            5, array(get_class($this), $name));
+            5, [get_class($this), $name]);
     }
 
     /**
@@ -173,41 +177,42 @@ class Prototype {
      * between an attribute or a method, all is slot. But in PHP, there is a
      * difference. So __call and __get act in the same way.
      *
-     * @access  public
      * @param   string  $name         Slot name.
      * @param   array   $arguments    Slot arguments.
      * @return  mixed
-     * @throw   \Hoa\Prototype\Exception
+     * @throws  \Hoa\Prototype\Exception
      */
-    public function __call ( $name, Array $arguments ) {
-
-        if(null === $this->_prototype)
+    public function __call($name, array $arguments)
+    {
+        if (null === $this->_prototype) {
             throw new Exception(
                 'Call to undefined property: %s::%s().',
-                6, array(get_class($this), $name));
+                6, [get_class($this), $name]);
+        }
 
-        $callback = array($this->_prototype, $name);
+        $callback = [$this->_prototype, $name];
 
-        if(is_callable($callback))
+        if (is_callable($callback)) {
             return call_user_func_array($callback, $arguments);
+        }
 
-        if($this->_prototype instanceof Prototype)
+        if ($this->_prototype instanceof self) {
             return $this->_prototype->__call($name, $arguments);
+        }
 
         throw new Exception(
             'Call to uncallable method %s::%s().', 7,
-            array(get_class($this), $name));
+            [get_class($this), $name]);
     }
 
     /**
      * Set the prototype class type.
      *
-     * @access  protected
      * @param   string     $type    Prototype class type.
      * @return  string
      */
-    protected function setPrototypeClassType ( $type ) {
-
+    protected function setPrototypeClassType($type)
+    {
         $old              = $this->_classType;
         $this->_classType = $type;
 
@@ -217,12 +222,11 @@ class Prototype {
     /**
      * Set the prototype object type.
      *
-     * @access  protected
      * @param   string     $type    Prototype object type.
      * @return  string
      */
-    protected function setPrototypeObjectType ( $type ) {
-
+    protected function setPrototypeObjectType($type)
+    {
         $old               = $this->_objectType;
         $this->_objectType = $type;
 
@@ -232,22 +236,20 @@ class Prototype {
     /**
      * Disable the prototype class type.
      *
-     * @access  protected
      * @return  string
      */
-    protected function disablePrototypeClassType ( ) {
-
+    protected function disablePrototypeClassType()
+    {
         return $this->setPrototypeClassType(null);
     }
 
     /**
      * Disable the prototype object type.
      *
-     * @access  protected
      * @return  string
      */
-    protected function disablePrototypeObjectType ( ) {
-
+    protected function disablePrototypeObjectType()
+    {
         return $this->setPrototypeObjectType(null);
     }
 }
@@ -259,6 +261,6 @@ namespace {
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Prototype\Prototype');
+Hoa\Consistency::flexEntity('Hoa\Prototype\Prototype');
 
 }
