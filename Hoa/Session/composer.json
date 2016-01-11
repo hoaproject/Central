@@ -22,9 +22,11 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"    : "~2.0",
-        "hoa/iterator": "~1.0",
-        "ext-session" : "*"
+        "hoa/consistency": "~1.0",
+        "hoa/event"      : "~1.0",
+        "hoa/exception"  : "~1.0",
+        "hoa/iterator"   : "~2.0",
+        "ext-session"    : "*"
     },
     "autoload": {
         "psr-4": {

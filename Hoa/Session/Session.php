@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,8 @@
 
 namespace Hoa\Session;
 
-use Hoa\Core;
+use Hoa\Consistency;
+use Hoa\Event;
 use Hoa\Iterator;
 
 /**
@@ -46,11 +47,11 @@ use Hoa\Iterator;
  * global array.
  * Class represents some useful operations (or aliases) on sessions.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class          Session
-    implements Core\Event\Source,
+    implements Event\Source,
                \ArrayAccess,
                \Countable,
                Iterator\Aggregate
@@ -197,12 +198,12 @@ class          Session
         $channel = static::EVENT_CHANNEL . $namespace;
         $expired = $channel . ':expired';
 
-        if (false === Core\Event::eventExists($channel)) {
-            Core\Event::register($channel, 'Hoa\Session');
+        if (false === Event::eventExists($channel)) {
+            Event::register($channel, 'Hoa\Session');
         }
 
-        if (false === Core\Event::eventExists($expired)) {
-            Core\Event::register($expired, 'Hoa\Session');
+        if (false === Event::eventExists($expired)) {
+            Event::register($expired, 'Hoa\Session');
         }
 
         if (true === $this->isExpired()) {
@@ -388,7 +389,7 @@ class          Session
         $expired = static::EVENT_CHANNEL . $namespace . ':expired';
 
         if (true  === $exception &&
-            false === event($expired)->isListened()) {
+            false === Event::getEvent($expired)->isListened()) {
             throw new Exception\Expired(
                 'Namespace %s has expired. All data belonging to this ' .
                 'namespace are lost.',
@@ -397,10 +398,10 @@ class          Session
             );
         }
 
-        Core\Event::notify(
+        Event::notify(
             $expired,
             $this,
-            new Core\Event\Bucket()
+            new Event\Bucket()
         );
 
         return;
@@ -649,8 +650,8 @@ class          Session
         $channel   = static::EVENT_CHANNEL . $namespace;
         $this->hasExpired(false);
         unset($_SESSION[static::TOP_NAMESPACE][$namespace]);
-        Core\Event::unregister($channel);
-        Core\Event::unregister($channel . ':expired');
+        Event::unregister($channel);
+        Event::unregister($channel . ':expired');
         static::$_lock[$namespace] = true;
 
         return;
@@ -722,4 +723,4 @@ class          Session
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Session\Session');
+Consistency::flexEntity('Hoa\Session\Session');
