@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Worker\Backend;
 
-use Hoa\Core;
+use Hoa\Event;
 use Hoa\Fastcgi;
 use Hoa\Socket;
 use Hoa\Worker;
@@ -67,11 +67,13 @@ use Hoa\Zombie;
  * When the shared worker is stopped, the associated .wid file (if exists) is
  * removed.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Shared implements Core\Event\Listenable
+class Shared implements Event\Listenable
 {
+    use Event\Listens;
+
     /**
      * Message type: stop.
      *
@@ -106,13 +108,6 @@ class Shared implements Core\Event\Listenable
      * @var string
      */
     protected $_wid         = null;
-
-    /**
-     * Listeners.
-     *
-     * @var \Hoa\Core\Event\Listener
-     */
-    protected $_on          = null;
 
     /**
      * Worker's password (needed to stop the worker).
@@ -176,27 +171,12 @@ class Shared implements Core\Event\Listenable
 
         set_time_limit(0);
 
-        $this->_socket    = $workerId;
-        $this->_on        = new Core\Event\Listener($this, ['message']);
+        $this->_socket = $workerId;
+        $this->setListener(new Event\Listener($this, ['message']));
         $this->_password  = sha1($password);
         $this->_startTime = microtime(true);
 
         return;
-    }
-
-    /**
-     * Attach a callable to this listenable object.
-     *
-     * @param   string  $listenerId    Listener ID.
-     * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Worker\Backend\Shared
-     * @throws  \Hoa\Core\Exception
-     */
-    public function on($listenerId, $callable)
-    {
-        $this->_on->attach($listenerId, $callable);
-
-        return $this;
     }
 
     /**
@@ -230,9 +210,9 @@ class Shared implements Core\Event\Listenable
 
                 switch ($request['r']) {
                     case static::TYPE_MESSAGE:
-                        $this->_on->fire(
+                        $this->getListener()->fire(
                             'message',
-                            new Core\Event\Bucket([
+                            new Event\Bucket([
                                 'message' => $message
                             ])
                         );
@@ -292,7 +272,7 @@ class Shared implements Core\Event\Listenable
      * @param   array   $fastcgiParameters  Additional parameters for FastCGI.
      * @return  bool
      */
-    public static function start($socket, $workerPath, Array $fastcgiParameters = [])
+    public static function start($socket, $workerPath, array $fastcgiParameters = [])
     {
         $server = new Fastcgi\Responder(
             new Socket\Client($socket)
