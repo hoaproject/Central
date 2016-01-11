@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\File\Link;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\File;
 
 /**
@@ -44,7 +44,7 @@ use Hoa\File;
  *
  * Link handler.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Link extends File
@@ -194,4 +194,4 @@ class Link extends File
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\File\Link\Link');
+Consistency::flexEntity('Hoa\File\Link\Link');
