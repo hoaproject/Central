@@ -1,3 +1,12 @@
+# 3.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:27+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:11:32+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:32:32+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T22:17:17+01:00)
+  * Event: Use `Hoa\Event`. (Ivan Enderlin, 2015-11-23T22:29:35+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T20:25:35+01:00)
+
 # 2.15.08.17
 
   * Fix a typo in the French documentation. (Ivan Enderlin, 2015-08-14T16:30:26+02:00)
