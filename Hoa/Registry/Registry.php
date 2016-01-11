@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,14 +36,15 @@
 
 namespace Hoa\Registry;
 
-use Hoa\Core;
+use Hoa\Consistency;
+use Hoa\Protocol;
 
 /**
  * Class \Hoa\Registry.
  *
  * Hold a register of something.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Registry extends \ArrayObject
@@ -153,12 +154,12 @@ class Registry extends \ArrayObject
 /**
  * Class \Hoa\Registry\_Protocol.
  *
- * hoa://Library/Registry component.
+ * The `hoa://Library/Registry` node.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class _Protocol extends Core\Protocol
+class _Protocol extends Protocol\Node
 {
     /**
      * Component's name.
@@ -184,11 +185,11 @@ class _Protocol extends Core\Protocol
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Registry\Registry');
+Consistency::flexEntity('Hoa\Registry\Registry');
 
 /**
- * Add the hoa://Library/Registry component. Should be use to reach/get an entry
- * in the \Hoa\Registry, e.g.: resolve('hoa://Library/Registry#AnID').
+ * Add the `hoa://Library/Registry` node. Should be use to reach/get an entry
+ * in the registry, e.g.: resolve('hoa://Library/Registry#AnID')`.
  */
-$protocol              = Core::getInstance()->getProtocol();
+$protocol              = Protocol::getInstance();
 $protocol['Library'][] = new _Protocol();
