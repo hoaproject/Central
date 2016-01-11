@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Stream;
  *
  * GetText format reader.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Gettext extends Translate
@@ -434,7 +434,7 @@ class Gettext extends Translate
      * @param   array  $headers    Headers.
      * @return  array
      */
-    protected function setHeaders(Array $headers)
+    protected function setHeaders(array $headers)
     {
         $old            = $this->_headers;
         $this->_headers = $headers;
