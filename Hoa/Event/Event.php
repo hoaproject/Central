@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Event;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Event\Event.
@@ -45,7 +45,7 @@ use Hoa\Core;
  * receive a bucket) and useful to largely spread data through components
  * without any known connection between them.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Event
@@ -96,7 +96,7 @@ class Event
      * attachments.
      *
      * @param   string  $eventId    Event ID.
-     * @return  \Hoa\Core\Event
+     * @return  \Hoa\Event\Event
      */
     public static function getEvent($eventId)
     {
@@ -132,7 +132,7 @@ class Event
 
         if (is_object($source) && !($source instanceof Source)) {
             throw new Exception(
-                'The source must implement \Hoa\Core\Event\Source ' .
+                'The source must implement \Hoa\Event\Source ' .
                 'interface; given %s.',
                 1,
                 get_class($source)
@@ -142,7 +142,7 @@ class Event
 
             if (false === $reflection->implementsInterface('\Hoa\Event\Source')) {
                 throw new Exception(
-                    'The source must implement \Hoa\Core\Event\Source ' .
+                    'The source must implement \Hoa\Event\Source ' .
                     'interface; given %s.',
                     2,
                     $source
@@ -181,10 +181,10 @@ class Event
     /**
      * Attach an object to an event.
      * It can be a callable or an accepted callable form (please, see the
-     * \Hoa\Core\Consistency\Xcallable class).
+     * \Hoa\Consistency\Xcallable class).
      *
      * @param   mixed   $callable    Callable.
-     * @return  \Hoa\Core\Event
+     * @return  \Hoa\Event\Event
      */
     public function attach($callable)
     {
@@ -264,4 +264,4 @@ class Event
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Event\Event');
+Consistency::flexEntity('Hoa\Event\Event');
