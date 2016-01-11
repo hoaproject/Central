@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,18 +36,19 @@
 
 namespace Hoa\Router\Http;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Router;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Router\Http.
  *
  * HTTP router.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Http extends Router\Generic implements Core\Parameter\Parameterizable
+class Http extends Router\Generic implements Zformat\Parameterizable
 {
     /**
      * Secure connection.
@@ -66,7 +67,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected $_parameters      = null;
 
@@ -135,9 +136,9 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
      *
      * @return  void
      */
-    public function __construct(Array $parameters = [])
+    public function __construct(array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             $this,
             [],
             [
@@ -188,7 +189,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
@@ -212,11 +213,11 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
     protected function _addRule(
         $visibility,
         $id,
-        Array $methods,
+        array $methods,
         $pattern,
         $call,
         $able,
-        Array $variables
+        array $variables
     ) {
         if (true === $this->ruleExists($id)) {
             throw new Router\Exception(
@@ -464,7 +465,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
      */
     public function unroute(
         $id,
-        Array $variables = [],
+        array $variables = [],
         $secured = null,
         $prefix = null
     ) {
@@ -618,7 +619,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
     protected function _unroute(
         $id,
         $pattern,
-        Array $variables,
+        array $variables,
         $allowEmpty = true
     ) {
         $unusedVariables = [];
@@ -632,7 +633,7 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
         // (?<named>…)
         $out = preg_replace_callback(
             '#\(\?\<([^>]+)>[^\)]*\)[\?\*\+]{0,2}#',
-            function (Array $matches) use (&$id, &$variables, &$allowEmpty, &$unusedVariables) {
+            function (array $matches) use (&$id, &$variables, &$allowEmpty, &$unusedVariables) {
                 $m = strtolower($matches[1]);
 
                 if (!isset($variables[$m]) || '' === $variables[$m]) {
@@ -1017,4 +1018,4 @@ class Http extends Router\Generic implements Core\Parameter\Parameterizable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Router\Http\Http');
+Consistency::flexEntity('Hoa\Router\Http\Http');

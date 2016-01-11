@@ -790,7 +790,7 @@ Array
 </code></pre>
   <p>Rien de plus simple avec <code>Hoa\Router\Cli</code>. Nous pouvons toujours
   regarder le script <code>hoa</code> (dans
-  <a href="@central_resource:path=Library/Core/Bin/Hoa.php"><code>hoa://Library/Core/Bin/Hoa.php</code></a>)
+  <a href="@central_resource:path=Library/Cli/Bin/Hoa.php"><code>hoa://Library/Cli/Bin/Hoa.php</code></a>)
   pour avoir un exemple concret.</p>
 
   <h2 id="Continuer_avec_un_dispatcheur" for="main-toc">Continuer avec un

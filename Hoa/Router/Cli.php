@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,22 +36,22 @@
 
 namespace Hoa\Router;
 
-use Hoa\Core;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Router\Cli.
  *
  * CLI router.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Cli extends Generic implements Core\Parameter\Parameterizable
+class Cli extends Generic implements Zformat\Parameterizable
 {
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected $_parameters     = null;
 
@@ -71,9 +71,9 @@ class Cli extends Generic implements Core\Parameter\Parameterizable
      *
      * @return  void
      */
-    public function __construct(Array $parameters = [])
+    public function __construct(array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             $this,
             [],
             [
@@ -113,7 +113,7 @@ class Cli extends Generic implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
@@ -137,10 +137,10 @@ class Cli extends Generic implements Core\Parameter\Parameterizable
     protected function _addRule(
         $visibility,
         $id,
-        Array $methods,
+        array $methods,
         $pattern,
         $call, $able,
-        Array $variables
+        array $variables
     ) {
         if (true === $this->ruleExists($id)) {
             throw new Exception(
@@ -272,14 +272,14 @@ class Cli extends Generic implements Core\Parameter\Parameterizable
      * @param   array   $variables    Variables.
      * @return  string
      */
-    public function unroute($id, Array $variables = [])
+    public function unroute($id, array $variables = [])
     {
         $rule      = $this->getRule($id);
         $pattern   = $rule[Router::RULE_PATTERN];
         $variables = array_merge($rule[Router::RULE_VARIABLES], $variables);
         $out       = preg_replace_callback(
             '#\(\?\<([^>]+)>[^\)]*\)[\?\*\+]{0,2}#',
-            function (Array $matches) use (&$variables) {
+            function (array $matches) use (&$variables) {
                 $m = strtolower($matches[1]);
 
                 if (!isset($variables[$m])) {
