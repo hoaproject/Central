@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,21 +36,22 @@
 
 namespace Hoa\Compiler\Exception;
 
-use Hoa\Core;
+use Hoa\Consistency;
+use Hoa\Exception as HoaException;
 
 /**
  * Class \Hoa\Compiler\Exception.
  *
- * Extending the \Hoa\Core\Exception class.
+ * Extending the \Hoa\Exception\Exception class.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Exception extends Core\Exception
+class Exception extends HoaException
 {
 }
 
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Compiler\Exception\Exception');
+Consistency::flexEntity('Hoa\Compiler\Exception\Exception');

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,6 +37,7 @@
 namespace Hoa\Compiler\Bin;
 
 use Hoa\Compiler;
+use Hoa\Consistency;
 use Hoa\Console;
 use Hoa\File;
 
@@ -45,7 +46,7 @@ use Hoa\File;
  *
  * Play with PP.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Pp extends Console\Dispatcher\Kit
@@ -152,7 +153,7 @@ class Pp extends Console\Dispatcher\Kit
         }
 
         if (null !== $visitor) {
-            $visitor = dnew($visitor);
+            $visitor = Consistency\Autoloader::dnew($visitor);
             echo $visitor->visit($ast);
         }
 
