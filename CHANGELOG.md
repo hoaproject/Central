@@ -1,3 +1,12 @@
+# 3.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:08:14+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:23:46+01:00)
+  * Parameters: Use `Hoa\Zformat`. (Ivan Enderlin, 2016-01-08T17:15:09+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T21:47:38+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T13:09:03+01:00)
+
 # 2.15.10.21
 
   * Documentation: Fix typographical error(s) (orthographic-pedant, 2015-10-07T14:45:46-04:00)
