@@ -390,7 +390,7 @@ class Snapshot extends Console\Dispatcher\Kit
                     $step(
                         'tag',
                         'update the README.md file',
-                        function () use ($currentMCN) {
+                        function () use ($currentMCN, $repositoryRoot) {
                             echo 'The installation Section must invite the ',
                                  'user to install the version ',
                                  '`~', $currentMCN, '.0`.', "\n";
@@ -398,7 +398,7 @@ class Snapshot extends Console\Dispatcher\Kit
                             $this->readLine('Press Enter when it is done (or Ctrl-C to abort).');
 
                             Console\Chrome\Editor::open(
-                                $repository . DS . 'README.md'
+                                $repositoryRoot . DS . 'README.md'
                             );
                         }
                     );
@@ -406,7 +406,7 @@ class Snapshot extends Console\Dispatcher\Kit
                     $step(
                         'tag',
                         'commit the composer.json and README.md files',
-                        function () use ($currentMCN) {
+                        function () use ($currentMCN, $repositoryRoot) {
                             echo Console\Processus::execute(
                                 'git --git-dir=' . $repositoryRoot . '/.git ' .
                                     'add ' .
