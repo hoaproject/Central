@@ -362,7 +362,7 @@ class Snapshot extends Console\Dispatcher\Kit
                     $step(
                         'tag',
                         'update the composer.json file',
-                        function () use ($currentMCN) {
+                        function () use ($currentMCN, $repositoryRoot) {
                             echo 'The `extra.branch-alias.dev-master` value ',
                                  'must be set to `',
                                  $currentMCN, '.x-dev`', "\n";
@@ -370,7 +370,7 @@ class Snapshot extends Console\Dispatcher\Kit
                             $this->readLine('Press Enter to edit the file.');
 
                             Console\Chrome\Editor::open(
-                                $repository . DS . 'composer.json'
+                                $repositoryRoot . DS . 'composer.json'
                             );
                         }
                     );
