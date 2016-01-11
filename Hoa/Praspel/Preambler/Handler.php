@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Praspel\Preambler;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Praspel;
 
 /**
@@ -44,7 +44,7 @@ use Hoa\Praspel;
  *
  * Handle a class and ease to run a preamble.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Handler
@@ -52,7 +52,7 @@ class Handler
     /**
      * Callable to validate and verify.
      *
-     * @var \Hoa\Core\Consistency\Xcallable
+     * @var \Hoa\Consistency\Xcallable
      */
     protected $__callable = null;
 
@@ -61,10 +61,10 @@ class Handler
     /**
      * Construct.
      *
-     * @param   \Hoa\Core\Consistency\Xcallable   $callable    Callable.
+     * @param   \Hoa\Consistency\Xcallable   $callable    Callable.
      * @return  void
      */
-    public function __construct(Core\Consistency\Xcallable  $callable)
+    public function __construct(Consistency\Xcallable  $callable)
     {
         $this->__setCallable($callable);
 
@@ -158,10 +158,10 @@ class Handler
     /**
      * Set callable.
      *
-     * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
-     * @return  \Hoa\Core\Consistency\Xcallable
+     * @param   \Hoa\Consistency\Xcallable  $callable    Callable.
+     * @return  \Hoa\Consistency\Xcallable
      */
-    public function __setCallable(Core\Consistency\Xcallable $callable)
+    public function __setCallable(Consistency\Xcallable $callable)
     {
         $old              = $this->__callable;
         $this->__callable = $callable;
@@ -172,7 +172,7 @@ class Handler
     /**
      * Get callable.
      *
-     * @return  \Hoa\Core\Consistency\Xcallable
+     * @return  \Hoa\Consistency\Xcallable
      */
     public function __getCallable()
     {

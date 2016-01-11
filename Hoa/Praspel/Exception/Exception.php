@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,14 +36,14 @@
 
 namespace Hoa\Praspel\Exception;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Interface \Hoa\Praspel\Exception.
  *
  * Interface representing Hoa\Praspel exceptions.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 interface Exception
@@ -53,4 +53,4 @@ interface Exception
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Praspel\Exception\Exception');
+Consistency::flexEntity('Hoa\Praspel\Exception\Exception');

@@ -1,3 +1,12 @@
+# 0.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:06:35+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:20:36+01:00)
+  * Consistency: Remove `from` calls. (Ivan Enderlin, 2015-12-09T17:18:59+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T21:39:21+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T13:00:53+01:00)
+
 # 0.15.09.08
 
   * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:41:34+02:00)

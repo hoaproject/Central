@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Praspel\Exception\Failure;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Praspel;
 
 /**
@@ -44,7 +44,7 @@ use Hoa\Praspel;
  *
  * Extending the \Hoa\Praspel\Exception\AssertionChecker class.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Failure extends Praspel\Exception\AssertionChecker
@@ -54,4 +54,4 @@ class Failure extends Praspel\Exception\AssertionChecker
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Praspel\Exception\Failure\Failure');
+Consistency::flexEntity('Hoa\Praspel\Exception\Failure\Failure');

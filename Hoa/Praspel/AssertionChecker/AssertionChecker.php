@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Praspel\AssertionChecker;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Praspel;
 
 /**
@@ -44,7 +44,7 @@ use Hoa\Praspel;
  *
  * Generic assertion checker.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class AssertionChecker
@@ -73,7 +73,7 @@ abstract class AssertionChecker
     /**
      * Callable to validate and verify.
      *
-     * @var \Hoa\Core\Consistency\Xcallable
+     * @var \Hoa\Consistency\Xcallable
      */
     protected $_callable       = null;
 
@@ -83,13 +83,13 @@ abstract class AssertionChecker
      * Construct.
      *
      * @param   \Hoa\Praspel\Model\Specification  $specification    Specification.
-     * @param   \Hoa\Core\Consistency\Xcallable   $callable         Callable.
+     * @param   \Hoa\Consistency\Xcallable        $callable         Callable.
      * @param   bool                              $genrateData      Generate data.
      * @return  void
      */
     public function __construct(
         Praspel\Model\Specification $specification,
-        Core\Consistency\Xcallable  $callable,
+        Consistency\Xcallable       $callable,
         $generateData = false
     ) {
         $this->setSpecification($specification);
@@ -217,7 +217,7 @@ abstract class AssertionChecker
      * @param   array  $data    Data.
      * @return  array
      */
-    public function setData(Array $data)
+    public function setData(array $data)
     {
         $old         = $this->_data;
         $this->_data = $data;
@@ -238,10 +238,10 @@ abstract class AssertionChecker
     /**
      * Set callable.
      *
-     * @param   \Hoa\Core\Consistency\Xcallable  $callable    Callable.
-     * @return  \Hoa\Core\Consistency\Xcallable
+     * @param   \Hoa\Consistency\Xcallable  $callable    Callable.
+     * @return  \Hoa\Consistency\Xcallable
      */
-    protected function setCallable(Core\Consistency\Xcallable $callable)
+    protected function setCallable(Consistency\Xcallable $callable)
     {
         $old             = $this->_callable;
         $this->_callable = $callable;
@@ -252,7 +252,7 @@ abstract class AssertionChecker
     /**
      * Get callable.
      *
-     * @return  \Hoa\Core\Consistency\Xcallable
+     * @return  \Hoa\Consistency\Xcallable
      */
     public function getCallable()
     {
@@ -277,4 +277,4 @@ abstract class AssertionChecker
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Praspel\AssertionChecker\AssertionChecker');
+Consistency::flexEntity('Hoa\Praspel\AssertionChecker\AssertionChecker');
