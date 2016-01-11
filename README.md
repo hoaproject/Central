@@ -16,7 +16,7 @@ dependencies, you need to require
 ```json
 {
     "require": {
-        "hoa/dns": "~2.0"
+        "hoa/dns": "~3.0"
     }
 }
 ```
