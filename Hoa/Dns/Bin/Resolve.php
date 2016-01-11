@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,8 +37,8 @@
 namespace Hoa\Dns\Bin;
 
 use Hoa\Console;
-use Hoa\Core;
 use Hoa\Dns;
+use Hoa\Event;
 use Hoa\Socket;
 
 /**
@@ -46,7 +46,7 @@ use Hoa\Socket;
  *
  * Quick DNS resolver.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Resolve extends Console\Dispatcher\Kit
@@ -119,7 +119,7 @@ class Resolve extends Console\Dispatcher\Kit
         }
 
         $dns = new Dns\Resolver(new Socket\Server('udp://' . $listen));
-        $dns->on('query', function (Core\Event\Bucket $bucket) use (&$redirections) {
+        $dns->on('query', function (Event\Bucket $bucket) use (&$redirections) {
 
             $data = $bucket->getData();
             echo

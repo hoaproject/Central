@@ -16,7 +16,7 @@ dependencies, you need to require
 ```json
 {
     "require": {
-        "hoa/dns": "~2.0"
+        "hoa/dns": "~3.0"
     }
 }
 ```
@@ -66,7 +66,7 @@ file:
 $dns = new Hoa\Dns\Resolver(
     new Hoa\Socket\Server('udp://127.0.0.1:57005')
 );
-$dns->on('query', function (Hoa\Core\Event\Bucket $bucket) {
+$dns->on('query', function (Hoa\Event\Bucket $bucket) {
     $data = $bucket->getData();
 
     echo

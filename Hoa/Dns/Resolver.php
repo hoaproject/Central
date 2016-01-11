@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Dns;
 
-use Hoa\Core;
+use Hoa\Event;
 use Hoa\Socket;
 
 /**
@@ -45,17 +45,12 @@ use Hoa\Socket;
  * Provide a DNS resolution server.
  * Please, see RFC6195, RFC1035 and RFC1034 for an overview.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Resolver implements Core\Event\Listenable
+class Resolver implements Event\Listenable
 {
-    /**
-     * Listeners.
-     *
-     * @var \Hoa\Core\Event\Listener
-     */
-    protected $_on             = null;
+    use Event\Listens;
 
     /**
      * Socket.
@@ -173,24 +168,9 @@ class Resolver implements Core\Event\Listenable
         set_time_limit(0);
 
         $this->_server = $server;
-        $this->_on     = new Core\Event\Listener($this, ['query']);
+        $this->setListener(new Event\Listener($this, ['query']));
 
         return;
-    }
-
-    /**
-     * Attach a callable to this listenable object.
-     *
-     * @param   string  $listenerId    Listener ID.
-     * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Dns\Resolver
-     * @throws  \Hoa\Core\Exception
-     */
-    public function on($listenerId, $callable)
-    {
-        $this->_on->attach($listenerId, $callable);
-
-        return $this;
     }
 
     /**
@@ -239,7 +219,7 @@ class Resolver implements Core\Event\Listenable
             $qclass  = (int) (string) ord($handle[$i]);
             $class   = array_search($qclass, static::$_classes) ?: $qclass;
 
-            $ips     = $this->_on->fire('query', new Core\Event\Bucket([
+            $ips     = $this->getListener()->fire('query', new Event\Bucket([
                 'domain' => $domain,
                 'type'   => $type,
                 'class'  => $class
