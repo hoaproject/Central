@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,14 +36,14 @@
 
 namespace Hoa\Stream\Wrapper\IWrapper;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Interface \Hoa\Stream\Wrapper\IWrapper.
  *
  * Interface for stream wrapper class.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 interface IWrapper extends File, Stream
@@ -60,4 +60,4 @@ interface IWrapper extends File, Stream
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Stream\Wrapper\IWrapper\IWrapper');
+Consistency::flexEntity('Hoa\Stream\Wrapper\IWrapper\IWrapper');
