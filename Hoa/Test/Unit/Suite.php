@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,7 +37,7 @@
 namespace Hoa\Test\Unit;
 
 use atoum;
-use Hoa\Core;
+use Hoa\Protocol;
 use Hoa\Test;
 
 /**
@@ -45,7 +45,7 @@ use Hoa\Test;
  *
  * Represent a unit test suite.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Suite extends atoum\test
@@ -55,11 +55,11 @@ class Suite extends atoum\test
         $this->setMethodPrefix('case');
         parent::__construct();
 
-        $protocol                = Core::getInstance()->getProtocol();
-        $protocol['Test']        = new Core\Protocol\Generic('Test', null);
+        $protocol                = Protocol::getInstance();
+        $protocol['Test']        = new Protocol\Node('Test', null);
         $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
 
-        $constantMocker = new Test\Mocker\Constant($this->getPhpMocker());
+        $constantMocker = new Test\Mocker\Constant($this->getPhpFunctionMocker());
         $this->getAssertionManager()->setPropertyHandler(
             'constant',
             function () use ($constantMocker) {
@@ -93,7 +93,7 @@ class Suite extends atoum\test
             strrpos($testedClassName, '\\')
         );
 
-        $this->getPhpMocker()->setDefaultNamespace($testedNamespace);
+        $this->getPhpFunctionMocker()->setDefaultNamespace($testedNamespace);
 
         return $out;
     }

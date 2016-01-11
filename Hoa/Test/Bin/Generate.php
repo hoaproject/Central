@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -38,8 +38,9 @@ namespace Hoa\Test\Bin;
 
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . '.autoload.atoum.php';
 
+use Hoa\Consistency;
 use Hoa\Console;
-use Hoa\Core;
+use Hoa\Event;
 use Hoa\File;
 use Hoa\Ustring;
 
@@ -48,7 +49,7 @@ use Hoa\Ustring;
  *
  * Automatically generate test suites.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Generate extends Console\Dispatcher\Kit
@@ -147,13 +148,13 @@ class Generate extends Console\Dispatcher\Kit
                     : '');
         });
 
-        $phpBinary = Core::getPHPBinary() ?: Console\Processus::localte('php');
+        $phpBinary = Consistency::getPHPBinary() ?: Console\Processus::localte('php');
 
-        $envVariable   = '__HOA_ATOUM_PRASPEL_EXTENSION_' . md5(Core::uuid());
+        $envVariable   = '__HOA_ATOUM_PRASPEL_EXTENSION_' . md5(Consistency::uuid());
         $reflection    = null;
         $buffer        = null;
         $reflectionner = new Console\Processus($phpBinary);
-        $reflectionner->on('input', function (Core\Event\Bucket $bucket) use ($envVariable) {
+        $reflectionner->on('input', function (Event\Bucket $bucket) use ($envVariable) {
             $bucket->getSource()->writeAll(
                 '<?php' . "\n" .
                 'require_once \'' . dirname(__DIR__) . DS . '.bootstrap.atoum.php\';' . "\n" .
@@ -167,7 +168,7 @@ class Generate extends Console\Dispatcher\Kit
 
             return false;
         });
-        $reflectionner->on('output', function (Core\Event\Bucket $bucket) use (&$buffer) {
+        $reflectionner->on('output', function (Event\Bucket $bucket) use (&$buffer) {
             $data    = $bucket->getData();
             $buffer .= $data['line'] . "\n";
 

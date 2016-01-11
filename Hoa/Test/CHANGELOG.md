@@ -1,3 +1,17 @@
+# 2.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:27+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:10:25+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:25:59+01:00)
+  * Protocol: Use `Hoa\Protocol`. (Ivan Enderlin, 2015-12-13T23:03:31+01:00)
+  * Atoum: Remove consistency err. & excep. handlers. (Ivan Enderlin, 2015-12-10T10:26:34+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-09T07:03:21+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-12-09T07:03:08+01:00)
+  * Consistency: Update `getPHPBinary` and `uuid`. (Ivan Enderlin, 2015-12-08T23:47:48+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T22:04:18+01:00)
+  * Event: Use `Hoa\Event`. (Ivan Enderlin, 2015-11-23T22:19:34+01:00)
+  * Mock: Add ability to mock constant. (Ivan Enderlin, 2015-11-10T09:33:02+01:00)
+
 # 1.15.10.29
 
   * Documentation: Update VFS and `type` query string. (Ivan Enderlin, 2015-10-29T22:44:36+01:00)
