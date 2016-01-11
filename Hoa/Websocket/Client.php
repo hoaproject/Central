@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,8 @@
 
 namespace Hoa\Websocket;
 
-use Hoa\Core;
+use Hoa\Consistency;
+use Hoa\Event;
 use Hoa\Http;
 use Hoa\Socket;
 
@@ -45,7 +46,7 @@ use Hoa\Socket;
  *
  * A cross-protocol Websocket client.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Client extends Connection
@@ -155,7 +156,7 @@ class Client extends Connection
         $connection->setStreamBlocking(true);
 
         $key =
-            substr(base64_encode(Core::uuid()), 0, 21) .
+            substr(base64_encode(Consistency::uuid()), 0, 21) .
             $_tail[mt_rand(0, 3)] . '==';
 
         $expected = base64_encode(sha1($key . Protocol\Rfc6455::GUID, true));
@@ -206,9 +207,9 @@ class Client extends Connection
         $currentNode->setHandshake(SUCCEED);
         $currentNode->setProtocolImplementation(new Protocol\Rfc6455($connection));
 
-        $this->_on->fire(
+        $this->getListener()->fire(
             'open',
-            new Core\Event\Bucket()
+            new Event\Bucket()
         );
 
         return;

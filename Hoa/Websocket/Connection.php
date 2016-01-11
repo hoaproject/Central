@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,8 @@
 
 namespace Hoa\Websocket;
 
-use Hoa\Core;
+use Hoa\Event;
+use Hoa\Exception as HoaException;
 use Hoa\Socket;
 
 /**
@@ -44,13 +45,15 @@ use Hoa\Socket;
  *
  * A cross-protocol Websocket connection.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Connection
     extends    Socket\Connection\Handler
-    implements Core\Event\Listenable
+    implements Event\Listenable
 {
+    use Event\Listens;
+
     /**
      * Opcode: continuation frame.
      *
@@ -178,14 +181,6 @@ abstract class Connection
     const CLOSE_TLS                 = 1015;
 
 
-    /**
-     * Listeners.
-     *
-     * @var \Hoa\Core\Event\Listener
-     */
-    protected $_on      = null;
-
-
 
     /**
      * Create a websocket connection.
@@ -200,31 +195,21 @@ abstract class Connection
     {
         parent::__construct($connection);
         $this->getConnection()->setNodeName('\Hoa\Websocket\Node');
-        $this->_on = new Core\Event\Listener($this, [
-            'open',
-            'message',
-            'binary-message',
-            'ping',
-            'close',
-            'error'
-        ]);
+        $this->setListener(
+            new Event\Listener(
+                $this,
+                [
+                    'open',
+                    'message',
+                    'binary-message',
+                    'ping',
+                    'close',
+                    'error'
+                ]
+            )
+        );
 
         return;
-    }
-
-    /**
-     * Attach a callable to this listenable object.
-     *
-     * @param   string  $listenerId    Listener ID.
-     * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Websocket\Server
-     * @throws  \Hoa\Core\Exception
-     */
-    public function on($listenerId, $callable)
-    {
-        $this->_on->attach($listenerId, $callable);
-
-        return $this;
     }
 
     /**
@@ -238,9 +223,9 @@ abstract class Connection
         try {
             if (FAILED === $node->getHandshake()) {
                 $this->doHandshake();
-                $this->_on->fire(
+                $this->getListener()->fire(
                     'open',
-                    new Core\Event\Bucket()
+                    new Event\Bucket()
                 );
 
                 return;
@@ -286,9 +271,9 @@ abstract class Connection
 
                         if (true === $fromBinary) {
                             $fromBinary = false;
-                            $this->_on->fire(
+                            $this->getListener()->fire(
                                 'binary-message',
-                                new Core\Event\Bucket([
+                                new Event\Bucket([
                                     'message' => $frame['message']
                                 ])
                             );
@@ -302,9 +287,9 @@ abstract class Connection
                             break;
                         }
 
-                        $this->_on->fire(
+                        $this->getListener()->fire(
                             'message',
-                            new Core\Event\Bucket([
+                            new Event\Bucket([
                                 'message' => $frame['message']
                             ])
                         );
@@ -340,9 +325,9 @@ abstract class Connection
                         $node->clearFragmentation();
 
                         if (true === $isBinary) {
-                            $this->_on->fire(
+                            $this->getListener()->fire(
                                 'binary-message',
-                                new Core\Event\Bucket([
+                                new Event\Bucket([
                                     'message' => $message
                                 ])
                             );
@@ -356,9 +341,9 @@ abstract class Connection
                             break;
                         }
 
-                        $this->_on->fire(
+                        $this->getListener()->fire(
                             'message',
-                            new Core\Event\Bucket([
+                            new Event\Bucket([
                                 'message' => $message
                             ])
                         );
@@ -386,9 +371,9 @@ abstract class Connection
                             true
                         );
 
-                    $this->_on->fire(
+                    $this->getListener()->fire(
                         'ping',
-                        new Core\Event\Bucket([
+                        new Event\Bucket([
                             'message' => $message
                         ])
                     );
@@ -443,9 +428,9 @@ abstract class Connection
                     }
 
                     $this->close(self::CLOSE_NORMAL);
-                    $this->_on->fire(
+                    $this->getListener()->fire(
                         'close',
-                        new Core\Event\Bucket([
+                        new Event\Bucket([
                             'code'   => $code,
                             'reason' => $reason
                         ])
@@ -456,13 +441,13 @@ abstract class Connection
                 default:
                     $this->close(self::CLOSE_PROTOCOL_ERROR);
             }
-        } catch (Core\Exception\Idle $e) {
+        } catch (HoaException\Idle $e) {
             try {
                 $this->close(self::CLOSE_SERVER_ERROR);
                 $exception = $e;
-            } catch (Core\Exception\Idle $ee) {
+            } catch (HoaException\Idle $ee) {
                 $this->getConnection()->disconnect();
-                $exception = new Core\Exception\Group(
+                $exception = new HoaException\Group(
                     'An exception has been thrown. We have tried to close ' .
                     'the connection but another exception has been thrown.',
                     42
@@ -471,9 +456,9 @@ abstract class Connection
                 $exception[] = $ee;
             }
 
-            $this->_on->fire(
+            $this->getListener()->fire(
                 'error',
-                new Core\Event\Bucket([
+                new Event\Bucket([
                     'exception' => $exception
                 ])
             );
