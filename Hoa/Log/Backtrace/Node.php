@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,42 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Log\Backtrace;
 
-from('Hoa')
-
-/**
- * \Hoa\Tree\ITree\Node
- */
--> import('Tree.I~.Node');
-
-}
-
-namespace Hoa\Log\Backtrace {
+use Hoa\Tree;
 
 /**
  * Class \Hoa\Log\Backtrace\Node.
  *
  * Node for the backtrace tree.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-
-class Node implements \Hoa\Tree\ITree\Node {
-
+class Node implements Tree\ITree\Node
+{
     /**
      * Node ID.
      *
-     * @var \Hoa\Log\Backtrace\Node string
+     * @var string
      */
     protected $_id    = null;
 
     /**
      * Node value.
      *
-     * @var \Hoa\Log\Backtrace\Node array
+     * @var array
      */
     protected $_value = null;
 
@@ -78,12 +67,11 @@ class Node implements \Hoa\Tree\ITree\Node {
     /**
      * Build a node.
      *
-     * @access  public
      * @param   array   $trace    The trace.
      * @return  void
      */
-    public function __construct ( Array $trace = array() ) {
-
+    public function __construct(array $trace = [])
+    {
         $this->setId(md5(serialize($trace)));
         $this->setValue($trace);
     }
@@ -91,12 +79,11 @@ class Node implements \Hoa\Tree\ITree\Node {
     /**
      * Set node ID.
      *
-     * @access  protected
      * @param   string     $id    The node ID.
      * @return  string
      */
-    protected function setId ( $id ) {
-
+    protected function setId($id)
+    {
         $old       = $this->_id;
         $this->_id = $id;
 
@@ -106,12 +93,11 @@ class Node implements \Hoa\Tree\ITree\Node {
     /**
      * Set node value.
      *
-     * @access  public
      * @param   array   $value    The node value.
      * @return  string
      */
-    public function setValue ( Array $value = array() ) {
-
+    public function setValue(array $value = [])
+    {
         $old          = $this->_value;
         $this->_value = $value;
 
@@ -121,103 +107,92 @@ class Node implements \Hoa\Tree\ITree\Node {
     /**
      * Get node ID, must be implement because of interface.
      *
-     * @access  public
      * @return  string
      */
-    public function getId ( ) {
-
+    public function getId()
+    {
         return $this->_id;
     }
 
     /**
      * Get the function name in the trace.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getFunction ( ) {
-
+    public function getFunction()
+    {
         return @$this->_value['function'];
     }
 
     /**
      * Get the line number in the trace.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getLine ( ) {
-
+    public function getLine()
+    {
         return @$this->_value['line'];
     }
 
     /**
      * Get the filename in the trace.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getFilename ( ) {
-
+    public function getFilename()
+    {
         return @$this->_value['file'];
     }
 
     /**
      * Get the classname in the trace.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getClassname ( ) {
-
+    public function getClassname()
+    {
         return @$this->_value['class'];
     }
 
     /**
      * Get the object in the trace.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getObject ( ) {
-
+    public function getObject()
+    {
         return @$this->_value['object'];
     }
 
     /**
      * Get the type in the trace.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getType ( ) {
-
+    public function getType()
+    {
         return @$this->_value['type'];
     }
 
     /**
      * Get the function or method arguments in the trace.
      *
-     * @access  public
      * @return  mixed
      */
-    public function getArguments ( ) {
-
+    public function getArguments()
+    {
         return @$this->_value['args'];
     }
 
     /**
      * Get the node string representation.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         return $this->getClassname() .
                $this->getType() .
                $this->getFunction();
     }
-}
-
 }

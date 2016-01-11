@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,41 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Log;
 
-from('Hoa')
-
-/**
- * \Hoa\Log\Exception
- */
--> import('Log.Exception')
-
-/**
- * \Hoa\Log\Backtrace
- */
--> import('Log.Backtrace.~')
-
-/**
- * \Hoa\Tree\Visitor\Dump
- */
--> import('Tree.Visitor.Dump');
-
-}
-
-namespace Hoa\Log {
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Log.
  *
  * Propose a log system.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-
-class Log implements \Hoa\Core\Event\Source {
-
+class Log implements Event\Source
+{
     /**
      * Priority: emergency, system is unusable.
      * (Note: priorities from “The BSD Syslog Protocol” (RFC 3164, 4.1.1 PRI
@@ -172,83 +151,82 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Multiton.
      *
-     * @var \Hoa\Log array
+     * @var array
      */
     private static $_instances = null;
 
     /**
      * Current singleton index.
      *
-     * @var \Hoa\Log string
+     * @var string
      */
     private static $_currentId = null;
 
     /**
      * Logs stack.
      *
-     * @var \Hoa\Log array
+     * @var array
      */
-    protected $_stack          = array();
+    protected $_stack          = [];
 
     /**
      * Backtrace.
      *
-     * @var \Hoa\Log\Backtrace object
+     * @var \Hoa\Log\Backtrace
      */
     protected $_backtrace      = null;
 
     /**
      * Filters (combination of priorities constants, null means all).
      *
-     * @var \Hoa\Log int
+     * @var int
      */
     protected $_filters        = null;
 
     /**
      * Extra stack informations.
      *
-     * @var \Hoa\Log array
+     * @var array
      */
-    protected $_stackInfos     = array();
+    protected $_stackInfos     = [];
 
 
 
     /**
      * Build a new log system.
      *
-     * @access  private
      * @return  void
      */
-    private function __construct ( ) {
-
+    private function __construct()
+    {
         return;
     }
 
     /**
      * Make a multiton.
      *
-     * @access  public
      * @param   string      $id        Channel ID (i.e. singleton ID)
      * @return  \Hoa\Log
-     * @throw   \Hoa\Log\Exception
+     * @throws  \Hoa\Log\Exception
      */
-    public static function getChannel ( $id = null ) {
-
-        if(null === self::$_currentId && null === $id)
+    public static function getChannel($id = null)
+    {
+        if (null === self::$_currentId && null === $id) {
             throw new Exception(
                 'Must precise a singleton index once.', 0);
+        }
 
-        if(!isset(self::$_instances[$id])) {
-
+        if (!isset(self::$_instances[$id])) {
             self::$_instances[$id] = new self();
-            \Hoa\Core\Event::register(
+            Event::register(
                 'hoa://Event/Log/' . $id,
                 self::$_instances[$id]
             );
         }
 
-        if(null !== $id)
+        if (null !== $id) {
             self::$_currentId = $id;
+        }
 
         $handle = self::$_instances[self::$_currentId];
 
@@ -258,14 +236,14 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Accept a type of log on the outputstream.
      *
-     * @access  public
      * @param   int     $filter    A filter (please, see the class constants).
      * @return  int
      */
-    public function accept ( $filter ) {
-
-        if(null === $this->_filters)
+    public function accept($filter)
+    {
+        if (null === $this->_filters) {
             return $this->_filters = $filter;
+        }
 
         $old            = $this->_filters;
         $this->_filters = $old | $filter;
@@ -276,11 +254,10 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Accept all types of logs on the outputstream.
      *
-     * @access  public
      * @return  int
      */
-    public function acceptAll ( ) {
-
+    public function acceptAll()
+    {
         $old            = $this->_filters;
         $this->_filters = null;
 
@@ -290,12 +267,11 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Set filters directly.
      *
-     * @access  public
      * @param   int     $filter    A filter (please, see the class constants).
      * @return  int
      */
-    public function setFilter ( $filter ) {
-
+    public function setFilter($filter)
+    {
         $old            = $this->_filters;
         $this->_filters = $filter;
 
@@ -305,12 +281,11 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Drop a type of log on the outputstream.
      *
-     * @access  public
      * @param   int     $filter    A filter (please, see the class constants).
      * @return  int
      */
-    public function drop ( $filter ) {
-
+    public function drop($filter)
+    {
         $old            = $this->_filters;
         $this->_filters = $old & ~$filter;
 
@@ -320,11 +295,10 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Drop all type of logs on the outputstreams.
      *
-     * @access  public
      * @return  int
      */
-    public function dropAll ( ) {
-
+    public function dropAll()
+    {
         $old            = $this->_filters;
         $this->_filters =   self::EMERGENCY
                           & self::ALERT
@@ -342,14 +316,14 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Add extra stack informations.
      *
-     * @access  public
      * @param   array   $stackInfos    Stack informations.
      * @return  array
      */
-    public function addStackInformations ( Array $stackInfos ) {
-
-        foreach($stackInfos as $key => $value)
+    public function addStackInformations(array $stackInfos)
+    {
+        foreach ($stackInfos as $key => $value) {
             $this->addStackInformation($key, $value);
+        }
 
         return $this->getAddedStackInformations();
     }
@@ -357,13 +331,12 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Add an extra stack information.
      *
-     * @access  public
      * @param   string  $key      Information name.
      * @param   string  $value    Information value.
      * @return  array
      */
-    public function addStackInformation ( $key, $value ) {
-
+    public function addStackInformation($key, $value)
+    {
         $this->_stackInfos[$key] = $value;
 
         return $this->getAddedStackInformations();
@@ -372,53 +345,52 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Get extra stack informations.
      *
-     * @access  public
      * @return  array
      */
-    public function getAddedStackInformations ( ) {
-
+    public function getAddedStackInformations()
+    {
         return $this->_stackInfos;
     }
 
     /**
      * Log a message with a type.
      *
-     * @access  public
      * @param   string  $message    The log message.
      * @param   int     $type       Type of message (please, see the class
      *                              constants).
      * @param   array   $extra      Extra dynamic informations.
      * @return  void
      */
-    public function log ( $message, $type = self::DEBUG, $extra = array() ) {
-
+    public function log($message, $type = self::DEBUG, $extra = [])
+    {
         $filters = $this->getFilters();
 
-        if(null !== $filters && !($type & $filters))
+        if (null !== $filters && !($type & $filters)) {
             return;
+        }
 
         $handle = $this->_stack[] = array_merge(
-            array(
+            [
                 self::STACK_TIMESTAMP   => microtime(true),
                 self::STACK_MESSAGE     => $message,
                 self::STACK_PRIORITY    => $type,
                 self::STACK_MEMORY      => memory_get_usage(),
                 self::STACK_MEMORY_PEAK => memory_get_peak_usage()
-            ),
+            ],
             $this->getAddedStackInformations(),
             $extra
         );
 
-        \Hoa\Core\Event::notify(
+        Event::notify(
             'hoa://Event/Log/' . self::$_currentId,
             $this,
-            new \Hoa\Core\Event\Bucket(array('log' => $handle))
+            new Event\Bucket(['log' => $handle])
         );
 
-        if($type & self::DEBUG) {
-
-            if(null === $this->_backtrace)
+        if ($type & self::DEBUG) {
+            if (null === $this->_backtrace) {
                 $this->_backtrace = new Backtrace();
+            }
 
             $this->_backtrace->debug();
         }
@@ -429,77 +401,81 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Get filters.
      *
-     * @access  protected
      * @return  int
      */
-    public function getFilters ( ) {
-
+    public function getFilters()
+    {
         return $this->_filters;
     }
 
     /**
      * Get the backtrace tree.
      *
-     * @access  public
      * @return  array
      */
-    public function getBacktrace ( ) {
-
+    public function getBacktrace()
+    {
         return $this->_backtrace;
     }
 
     /**
      * Get the log stack.
      *
-     * @access  public
      * @return  array
      */
-    public function getLogStack ( ) {
-
+    public function getLogStack()
+    {
         return $this->_stack;
     }
 
     /**
      * Transform a log type into a string.
      *
-     * @access  public
      * @param   int     $type    Log type (please, see the class constants).
      * @return  string
      */
-    public function typeAsString ( $type ) {
-
-        switch($type) {
+    public function typeAsString($type)
+    {
+        switch ($type) {
 
             case self::EMERGENCY:
                 return 'EMERGENCY';
+
               break;
 
             case self::ALERT:
                 return 'ALERT';
+
               break;
 
             case self::CRITICAL:
                 return 'CRITICAL';
+
               break;
 
             case self::ERROR:
                 return 'ERROR';
+
               break;
 
             case self::WARNING:
                 return 'WARNING';
+
               break;
 
             case self::NOTICE:
                 return 'NOTICE';
+
               break;
 
             case self::INFORMATIONAL:
                 return 'INFORMATIONAL';
+
               break;
 
             case self::DEBUG:
                 return 'DEBUG';
+
               break;
 
             default:
@@ -510,42 +486,15 @@ class Log implements \Hoa\Core\Event\Source {
     /**
      * Transform the log into a string.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
+    public function __toString()
+    {
         return $this->getBacktrace()->__toString();
     }
 }
 
-}
-
-namespace {
-
-/**
- * Alias of \Hoa\Log::getInstance()->log().
- *
- * @access  public
- * @param   string  $message    The log message.
- * @param   int     $type       Type of message (please, see the class
- *                              constants).
- * @param   array   $extra      Extra dynamic informations.
- * @return  void
- */
-if(!function_exists('hlog')) {
-function hlog ( $message, $type = \Hoa\Log::DEBUG, $extra = array() ) {
-
-    return \Hoa\Log::getChannel()->log($message, $type, $extra);
-}}
-
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Log\Log');
-
-}
+Consistency::flexEntity('Hoa\Log\Log');

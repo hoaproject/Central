@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,28 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Log\Backtrace;
 
-from('Hoa')
-
-/**
- * \Hoa\Tree
- */
--> import('Tree.~')
-
-/**
- * \Hoa\Log\Backtrace\Node
- */
--> import('Log.Backtrace.Node')
-
-/**
- * \Hoa\Tree\Visitor\Dot
- */
--> import('Tree.Visitor.Dot');
-
-}
-
-namespace Hoa\Log\Backtrace {
+use Hoa\Consistency;
+use Hoa\Tree;
 
 /**
  * Class \Hoa\Log\Backtrace.
@@ -64,17 +46,15 @@ namespace Hoa\Log\Backtrace {
  * attributes to well-understand.
  * A DOT output is available.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-
-class Backtrace {
-
+class Backtrace
+{
     /**
      * Backtrace tree.
      *
-     * @var \Hoa\Tree object
+     * @var \Hoa\Tree
      */
     protected $_tree = null;
 
@@ -83,13 +63,12 @@ class Backtrace {
     /**
      * Build an empty backtrace tree, and set the root.
      *
-     * @access  public
      * @return  void
      */
-    public function __construct ( ) {
-
-        $this->_tree = new \Hoa\Tree(
-            new Node(array(
+    public function __construct()
+    {
+        $this->_tree = new Tree(
+            new Node([
                 'function' => 'Bootstrap',
                 'line'     => 42,
                 'file'     => 'BigBlackHole',
@@ -97,7 +76,7 @@ class Backtrace {
                 'object'   => null,
                 'type'     => null,
                 'args'     => null
-            ))
+            ])
         );
 
         return;
@@ -106,25 +85,22 @@ class Backtrace {
     /**
      * Compute the tree with a backtrace stack.
      *
-     * @access  protected
      * @param   array      $array    Backtrace stack.
      * @return  void
      */
-    protected function computeTree ( Array $array = array() ) {
-
+    protected function computeTree(array $array = [])
+    {
         $node        = null;
         $child       = null;
         $currentNode = $this->_tree;
 
-        foreach($array as $i => $trace) {
-
+        foreach ($array as $i => $trace) {
             $node = new Node($trace);
 
-            if(true === $currentNode->childExists($node->getId()))
+            if (true === $currentNode->childExists($node->getId())) {
                 $currentNode = $currentNode->getChild($node->getId());
-            else {
-
-                $child       = new \Hoa\Tree($node);
+            } else {
+                $child       = new Tree($node);
                 $currentNode->insert($child);
                 $currentNode = $child;
             }
@@ -136,19 +112,16 @@ class Backtrace {
     /**
      * Run a debug trace, i.e. build a new branche in the backtrace tree.
      *
-     * @access  public
      * @return  void
      */
-    public function debug ( ) {
-
+    public function debug()
+    {
         $array = debug_backtrace();
         array_shift($array); // \Hoa\Log\Backtrace::debug().
 
-        if(isset($array[0]['class']) && $array[0]['class'] == 'Hoa\Log\Log')
-            array_shift($array); // Hoa\Log::log().
-
-        if(isset($array[0]['function']) && $array[0]['function'] == 'hlog')
-            array_shift($array); // hlog().
+        if (isset($array[0]['class']) && $array[0]['class'] == 'Hoa\Log\Log') {
+            array_shift($array);
+        } // Hoa\Log::log().
 
         $this->computeTree(array_reverse($array));
 
@@ -158,35 +131,27 @@ class Backtrace {
     /**
      * Get the backtrace tree.
      *
-     * @access  public
      * @return  array
      */
-    public function getTree ( ) {
-
+    public function getTree()
+    {
         return $this->_tree;
     }
 
     /**
      * Print the tree in DOT language.
      *
-     * @access  public
      * @return  string
      */
-    public function __toString ( ) {
-
-        $out = new \Hoa\Tree\Visitor\Dot();
+    public function __toString()
+    {
+        $out = new Tree\Visitor\Dot();
 
         return $out->visit($this->getTree());
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Log\Backtrace\Backtrace');
-
-}
+Consistency::flexEntity('Hoa\Log\Backtrace\Backtrace');
