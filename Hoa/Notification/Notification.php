@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2013, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,22 +41,40 @@ namespace Hoa\Notification {
  *
  * Notification interface.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-
-interface Notification {
+interface Notification
+{
+    /**
+     * Register an application.
+     *
+     * @param   string  $application    Application name.
+     * @param   string  $password       Password.
+     * @param   string  $icon           Icon.
+     * @return  \Hoa\Notification
+     */
+    public function register($application, $password = null, $icon = null);
 
     /**
      * Send a notification.
      *
-     * @access  public
      * @param   string  $title      Title.
      * @param   string  $message    Message.
+     * @param   string  $icon       Icon.
+     * @param   string  $sticky     Whether the notification is sticked or not.
      * @return  \Hoa\Notification
      */
-    public function notify ( $title, $message );
+    public function notify($title, $message, $icon = null, $sticky = false);
 }
+
+}
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Consistency::flexEntity('Hoa\Notification\Notification');
 
 }
