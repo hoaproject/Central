@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Xml;
 
-use Hoa\Core;
+use Hoa\Event;
 use Hoa\Stream;
 
 /**
@@ -44,7 +44,7 @@ use Hoa\Stream;
  *
  * Write into a XML element.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Write extends Xml implements Stream\IStream\Out
@@ -72,7 +72,7 @@ class Write extends Xml implements Stream\IStream\Out
             $entityResolver
         );
 
-        event('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
+        Event::getEvent('hoa://Event/Stream/' . $stream->getStreamName() . ':close-before')
             ->attach(xcallable($this, '_close'));
 
         return;
@@ -84,10 +84,10 @@ class Write extends Xml implements Stream\IStream\Out
      * It transforms the XML tree as a XML string, truncates the stream to zero
      * and writes all this string into the stream.
      *
-     * @param   \Hoa\Core\Event\Bucket  $bucket    Event's bucket.
+     * @param   \Hoa\Event\Bucket  $bucket    Event's bucket.
      * @return  void
      */
-    public function _close(Core\Event\Bucket $bucket)
+    public function _close(Event\Bucket $bucket)
     {
         $handle = $this->getStream()->selectRoot()->asXML();
 
@@ -172,7 +172,7 @@ class Write extends Xml implements Stream\IStream\Out
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray(Array $array)
+    public function writeArray(array $array)
     {
         return $this->getStream()->writeArray($array);
     }
@@ -227,7 +227,7 @@ class Write extends Xml implements Stream\IStream\Out
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function writeAttributes(Array $attributes)
+    public function writeAttributes(array $attributes)
     {
         return $this->getStream()->writeAttributes($attributes);
     }

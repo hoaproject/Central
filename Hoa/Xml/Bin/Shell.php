@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,7 +37,7 @@
 namespace Hoa\Xml\Bin;
 
 use Hoa\Console;
-use Hoa\Core;
+use Hoa\Exception;
 use Hoa\File;
 
 /**
@@ -45,7 +45,7 @@ use Hoa\File;
  *
  * Interactive XML shell.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Shell extends Console\Dispatcher\Kit
@@ -246,7 +246,7 @@ class Shell extends Console\Dispatcher\Kit
                             echo 'Command ', $command, ' not found.', "\n";
                         }
                 }
-            } catch (Core\Exception $e) {
+            } catch (Exception\Exception $e) {
                 echo $e->getMessage(), "\n";
 
                 continue;
