@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Mail\Content;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Mail;
 
 /**
@@ -44,7 +44,7 @@ use Hoa\Mail;
  *
  * Abstract message content.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Content implements \ArrayAccess
@@ -215,14 +215,14 @@ abstract class Content implements \ArrayAccess
      * @param   array  $headers    Headers.
      * @return  string
      */
-    public static function formatHeaders(Array $headers)
+    public static function formatHeaders(array $headers)
     {
         $out = null;
 
         foreach ($headers as $header => $value) {
             $value = preg_replace_callback(
                 '#(?<value>[^<]+)(?<tail><[^>]+>)#',
-                function (Array $matches) {
+                function (array $matches) {
                     return
                         Encoder\QuotedPrintable::encode($matches['value'], true) .
                         $matches['tail'];
@@ -286,4 +286,4 @@ abstract class Content implements \ArrayAccess
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Mail\Content\Content');
+Consistency::flexEntity('Hoa\Mail\Content\Content');

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@ namespace Hoa\Mail\Content;
  *
  * Represent an alternative content.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Alternative extends Message
@@ -61,7 +61,7 @@ class Alternative extends Message
      * @param   array  $contents    Alternative contents.
      * @return  void
      */
-    public function __construct(Array $contents = [])
+    public function __construct(array $contents = [])
     {
         foreach ($contents as $content) {
             $this->addContent($content);
