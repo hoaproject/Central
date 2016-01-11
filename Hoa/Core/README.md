@@ -18,6 +18,17 @@ fundamental algorithms, paradigms and mechanisms, organized as follows:
   * Event: adds support of events and listeners;
   * Data: adds support of polymorphic data with high performance.
 
+## Warning
+
+This library is deprecated. It has been splitted into:
+  * [`Hoa\Consistency`](http://central.hoa-project.net/Resource/Library/Consistency),
+  * [`Hoa\Event`](http://central.hoa-project.net/Resource/Library/Event),
+  * [`Hoa\Exception`](http://central.hoa-project.net/Resource/Library/Exception),
+  * [`Hoa\Protocol`](http://central.hoa-project.net/Resource/Library/Protocol),
+  * [`Hoa\Zformat`](http://central.hoa-project.net/Resource/Library/Zformat).
+
+This library is no longer used.
+
 ## Installation
 
 The core can be placed where you want. We recommand `/usr/local/lib/Hoa` for
