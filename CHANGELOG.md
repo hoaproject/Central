@@ -1,3 +1,18 @@
+# 0.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:27+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:12:35+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:33:27+01:00)
+  * Parameters: Use `Hoa\Zformat`. (Ivan Enderlin, 2016-01-09T07:12:25+01:00)
+  * Data: Split from `Hoa\Core`. (Ivan Enderlin, 2016-01-06T09:06:36+01:00)
+  * Protocol: Use `Hoa\Protocol`. (Ivan Enderlin, 2015-12-13T23:05:22+01:00)
+  * Event: Remove `event` calls. (Ivan Enderlin, 2015-12-08T23:29:53+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T22:21:56+01:00)
+  * Event: Use `Hoa\Event`. (Ivan Enderlin, 2015-11-23T22:32:14+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T20:29:12+01:00)
+  * HTML: Add the `<canvas />` component. (Ivan Enderlin, 2015-12-08T09:14:59+01:00)
+  * Add the canvas tag (Dupont Yohann, 2015-12-03T15:29:18+01:00)
+
 # 0.15.11.09
 
   * Add `<?xyl-link?>` support. (Ivan Enderlin, 2015-11-02T08:46:28+01:00)
