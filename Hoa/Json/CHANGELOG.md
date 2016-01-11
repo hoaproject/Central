@@ -1,3 +1,10 @@
+# 2.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:03:28+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:18:21+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T11:17:14+01:00)
+
 # 1.15.08.25
 
   * Show datum and JSON error on test case failure. (Ivan Enderlin, 2015-08-13T09:13:45+02:00)
