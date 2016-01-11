@@ -13,11 +13,6 @@ if (file_exists($composer)) {
 else {
     require_once
         dirname(__DIR__) . DIRECTORY_SEPARATOR .
-        'Core' . DIRECTORY_SEPARATOR .
-        'Core.php';
-
-    require_once
-        dirname(__DIR__) . DIRECTORY_SEPARATOR .
         'Consistency' . DIRECTORY_SEPARATOR .
         'Prelude.php';
 
