@@ -34,32 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Xyl\Interpreter\Html;
+namespace Hoa\Xyl\Data;
 
 /**
- * Class \Hoa\Xyl\Interpreter\Html\Mod.
+ * Interface \Hoa\Xyl\Data\Datable.
  *
- * The <ins /> or <del /> components.
+ * Polymorphic data interface (for transformation, ensures fun for other data
+ * providers).
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Mod extends GenericPhrasing
+interface Datable
 {
     /**
-     * Attributes description.
+     * Transform data as an array.
      *
-     * @var array
+     * @return  array
      */
-    protected static $_attributes        = [
-        'cite'     => parent::ATTRIBUTE_TYPE_NORMAL,
-        'datetime' => parent::ATTRIBUTE_TYPE_NORMAL
-    ];
-
-    /**
-     * Attributes mapping between XYL and HTML.
-     *
-     * @var array
-     */
-    protected static $_attributesMapping = …;
+    public function toArray();
 }

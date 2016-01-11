@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,27 +36,30 @@
 
 namespace Hoa\Xyl;
 
-use Hoa\Core;
+use Hoa\Consistency;
+use Hoa\Event;
 use Hoa\Locale;
+use Hoa\Protocol;
 use Hoa\Router;
 use Hoa\Stream;
 use Hoa\Translate;
 use Hoa\View;
 use Hoa\Xml;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Xyl.
  *
  * XYL documents handler.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class          Xyl
     extends    Xml
     implements Element,
                View\Viewable,
-               Core\Parameter\Parameterizable
+               Zformat\Parameterizable
 {
     /**
      * XYL's namespace.
@@ -124,7 +127,7 @@ class          Xyl
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected static $_parameters = null;
 
@@ -286,7 +289,7 @@ class          Xyl
         Interpreter $interpreter,
         Router\Http $router = null,
         $entityResolver     = null,
-        Array $parameters   = []
+        array $parameters   = []
     ) {
         parent::__construct(
             '\Hoa\Xyl\Element\Basic',
@@ -304,7 +307,7 @@ class          Xyl
         }
 
         if (null === self::$_parameters) {
-            self::$_parameters = new Core\Parameter(
+            self::$_parameters = new Zformat\Parameter(
                 $this,
                 [
                     'theme' => 'classic'
@@ -317,7 +320,7 @@ class          Xyl
         }
 
         $this->_i           = self::$_ci++;
-        $this->_data        = new Core\Data();
+        $this->_data        = new Data();
         $this->_out         = $out;
         $this->_interpreter = $interpreter;
         $this->_router      = $router;
@@ -349,7 +352,7 @@ class          Xyl
         }
 
         $this->useNamespace(self::NAMESPACE_ID);
-        $protocol              = Core::getInstance()->getProtocol();
+        $protocol              = Protocol::getInstance();
         $protocol['Library'][] = new _Protocol(
             'Xyl[' . $this->_i . ']',
             'Xyl' . DS . 'Interpreter' . DS . $this->_interpreter->getResourcePath()
@@ -365,7 +368,7 @@ class          Xyl
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
@@ -375,7 +378,7 @@ class          Xyl
     /**
      * Get data.
      *
-     * @return  \Hoa\Core\Data
+     * @return  \Hoa\Xyl\Data
      */
     public function getData()
     {
@@ -909,7 +912,7 @@ class          Xyl
     private function _computeOverlay(
         \DOMElement $from,
         \DOMElement $to,
-        Array &$overlays
+        array &$overlays
     ) {
         if (false === $to->hasAttribute('id')) {
             return $this->_computeOverlayPosition($from, $to, $overlays);
@@ -991,7 +994,7 @@ class          Xyl
     private function _computeOverlayPosition(
         \DOMElement $from,
         \DOMElement $to,
-        Array       &$overlays
+        array       &$overlays
     ) {
         if (false === $to->hasAttribute('position')) {
             $from->appendChild($to);
@@ -1278,7 +1281,7 @@ class          Xyl
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function addMeta(Array $attributes)
+    public function addMeta(array $attributes)
     {
         $handle = null;
 
@@ -1325,7 +1328,7 @@ class          Xyl
      * @param   array   $attributes    Attributes.
      * @return  void
      */
-    public function addLink(Array $attributes)
+    public function addLink(array $attributes)
     {
         $handle = null;
 
@@ -1935,7 +1938,7 @@ class          Xyl
      */
     public function __destruct()
     {
-        $protocol = Core::getInstance()->getProtocol();
+        $protocol = Protocol::getInstance();
         unset($protocol['Library']['Xyl[' . $this->_i . ']']);
 
         return;
@@ -1945,19 +1948,19 @@ class          Xyl
 /**
  * Class \Hoa\Xyl\_Protocol.
  *
- * hoa://Library/Xyl component.
+ * The `hoa://Library/Xyl` node.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class _Protocol extends Core\Protocol
+class _Protocol extends Protocol\Node
 {
 }
 
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Xyl\Xyl');
+Consistency::flexEntity('Hoa\Xyl\Xyl');
 
-event('hoa://Event/Exception')
+Event::getEvent('hoa://Event/Exception')
     ->attach(xcallable('Hoa\Xyl\Interpreter\Common\Debug', 'receiveException'));
