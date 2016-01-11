@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ use Hoa\File;
  *
  * Assistant to create a snapshot.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Snapshot extends Console\Dispatcher\Kit
@@ -362,7 +362,7 @@ class Snapshot extends Console\Dispatcher\Kit
                     $step(
                         'tag',
                         'update the composer.json file',
-                        function () use ($currentMCN) {
+                        function () use ($currentMCN, $repositoryRoot) {
                             echo 'The `extra.branch-alias.dev-master` value ',
                                  'must be set to `',
                                  $currentMCN, '.x-dev`', "\n";
@@ -370,7 +370,7 @@ class Snapshot extends Console\Dispatcher\Kit
                             $this->readLine('Press Enter to edit the file.');
 
                             Console\Chrome\Editor::open(
-                                $repository . DS . 'composer.json'
+                                $repositoryRoot . DS . 'composer.json'
                             );
                         }
                     );
@@ -390,7 +390,7 @@ class Snapshot extends Console\Dispatcher\Kit
                     $step(
                         'tag',
                         'update the README.md file',
-                        function () use ($currentMCN) {
+                        function () use ($currentMCN, $repositoryRoot) {
                             echo 'The installation Section must invite the ',
                                  'user to install the version ',
                                  '`~', $currentMCN, '.0`.', "\n";
@@ -398,7 +398,7 @@ class Snapshot extends Console\Dispatcher\Kit
                             $this->readLine('Press Enter when it is done (or Ctrl-C to abort).');
 
                             Console\Chrome\Editor::open(
-                                $repository . DS . 'README.md'
+                                $repositoryRoot . DS . 'README.md'
                             );
                         }
                     );
@@ -406,7 +406,7 @@ class Snapshot extends Console\Dispatcher\Kit
                     $step(
                         'tag',
                         'commit the composer.json and README.md files',
-                        function () use ($currentMCN) {
+                        function () use ($currentMCN, $repositoryRoot) {
                             echo Console\Processus::execute(
                                 'git --git-dir=' . $repositoryRoot . '/.git ' .
                                     'add ' .

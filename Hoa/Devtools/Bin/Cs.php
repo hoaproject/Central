@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,14 +37,14 @@
 namespace Hoa\Devtools\Bin;
 
 use Hoa\Console;
-use Hoa\Core;
+use Hoa\Event;
 
 /**
  * Class \Hoa\Devtools\Bin\Cs.
  *
  * Wrapper around `php-cs-fixer`.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Cs extends Console\Dispatcher\Kit
@@ -128,7 +128,7 @@ class Cs extends Console\Dispatcher\Kit
         $processus->on('input', function () {
             return false;
         });
-        $processus->on('output', function (Core\Event\Bucket $bucket) {
+        $processus->on('output', function (Event\Bucket $bucket) {
             echo $bucket->getData()['line'], "\n";
 
             return;
