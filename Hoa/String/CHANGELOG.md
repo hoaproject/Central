@@ -1,3 +1,8 @@
+# 2.16.01.11
+
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:09:39+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T21:55:50+01:00)
+
 # 2.15.07.28
 
   * Extend `Hoa\Ustring` and mark library as deprecated. (Metalaka, 2015-06-27T19:20:06+02:00)
