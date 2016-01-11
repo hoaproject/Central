@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -35,12 +35,12 @@
  */
 
 use Hoa\Console;
-use Hoa\Core;
 use Hoa\Dispatcher;
+use Hoa\Exception;
 use Hoa\Router;
 
 /**
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  */
 if (!defined('HOA')) {
     $composer = [
@@ -70,13 +70,19 @@ if (!defined('HOA')) {
         require_once
             dirname(__DIR__) . DIRECTORY_SEPARATOR .
             '..' . DIRECTORY_SEPARATOR .
-            'Core' . DIRECTORY_SEPARATOR .
-            'Core.php';
+            'Consistency' . DIRECTORY_SEPARATOR .
+            'Prelude.php';
+
+        require_once
+            dirname(__DIR__) . DIRECTORY_SEPARATOR .
+            '..' . DIRECTORY_SEPARATOR .
+            'Protocol' . DIRECTORY_SEPARATOR .
+            'Wrapper.php';
     }
 }
 
-Core::enableErrorHandler();
-Core::enableExceptionHandler();
+Exception\Error::enableErrorHandler();
+Exception::enableUncaughtHandler();
 
 /**
  * Here we go!
@@ -90,7 +96,7 @@ try {
         'main',
         [
             'vendor'  => 'hoa',
-            'library' => 'core',
+            'library' => 'cli',
             'command' => 'welcome'
         ]
     );
@@ -103,7 +109,7 @@ try {
     ]);
     $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
     exit((int) $dispatcher->dispatch($router));
-} catch (Core\Exception $e) {
+} catch (Exception $e) {
     $message = $e->raise(true);
     $code    = 1;
 } catch (\Exception $e) {

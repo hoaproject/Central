@@ -1,3 +1,15 @@
+# 2.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T08:57:19+01:00)
+  * Bin: Skip the current bin while listing. (Ivan Enderlin, 2016-01-09T08:39:12+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:02:37+01:00)
+  * Protocol: Use `Hoa\Protocol`. (Ivan Enderlin, 2015-12-13T23:25:36+01:00)
+  * Consistency: Load the prelude. (Ivan Enderlin, 2015-12-13T23:25:13+01:00)
+  * Bin: Restore the welcome screen. (Ivan Enderlin, 2015-12-13T23:24:49+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T10:54:14+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T07:13:14+01:00)
+
 # 1.15.09.03
 
   * Add the `bin` property in `composer.json`. (Ivan Enderlin, 2015-09-03T10:22:01+02:00)
