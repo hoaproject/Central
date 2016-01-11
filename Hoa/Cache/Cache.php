@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,16 +36,17 @@
 
 namespace Hoa\Cache;
 
-use Hoa\Core;
+use Hoa\Consistency;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Cache.
  *
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-abstract class Cache implements Core\Parameter\Parameterizable
+abstract class Cache implements Zformat\Parameterizable
 {
     /**
      * Clean all entries.
@@ -71,7 +72,7 @@ abstract class Cache implements Core\Parameter\Parameterizable
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     private $_parameters  = null;
 
@@ -90,9 +91,9 @@ abstract class Cache implements Core\Parameter\Parameterizable
      * @param   array   $parameters    Parameters.
      * @return  void
      */
-    public function __construct(Array $parameters = [])
+    public function __construct(array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             __CLASS__,
             [
                 'id' => null
@@ -142,7 +143,7 @@ abstract class Cache implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
@@ -255,7 +256,7 @@ abstract class Cache implements Core\Parameter\Parameterizable
      * @param   array   $array    Array to sort.
      * @return  array
      */
-    public function ksort(Array &$array)
+    public function ksort(array &$array)
     {
         ksort($array);
         foreach ($array as $key => $value) {
@@ -271,4 +272,4 @@ abstract class Cache implements Core\Parameter\Parameterizable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Cache\Cache');
+Consistency::flexEntity('Hoa\Cache\Cache');

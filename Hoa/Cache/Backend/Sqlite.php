@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,7 +45,7 @@ use Hoa\File as HoaFile;
  * SQLite backend manager.
  * SQLite is an extension, take care that SQLite is loaded.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Sqlite extends Backend
@@ -66,7 +66,7 @@ class Sqlite extends Backend
      * @return  void
      * @throws  \Hoa\Cache\Exception
      */
-    public function __construct(Array $parameters = [])
+    public function __construct(array $parameters = [])
     {
         if (!extension_loaded('sqlite')) {
             throw new Cache\Exception(
