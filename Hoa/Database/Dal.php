@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,17 +36,19 @@
 
 namespace Hoa\Database;
 
-use Hoa\Core;
+use Hoa\Consistency;
+use Hoa\Event;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Database\Dal.
  *
  * The higher class of the Database Abstract Layer. It wrappes all DAL.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
+class Dal implements Zformat\Parameterizable, Event\Source
 {
     /**
      * Abstract layer: DBA.
@@ -107,7 +109,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
     /**
      * Parameter of \Hoa\Database\Dal.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected static $_parameters    = null;
 
@@ -127,15 +129,15 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      * @param   array   $connectionParameters    The layer connection parameter.
      * @return  void
      */
-    private function __construct(Array $connectionParameters)
+    private function __construct(array $connectionParameters)
     {
         $this->_connectionParameters = $connectionParameters;
 
         $id    = $this->__id = self::$_id;
         $event = 'hoa://Event/Database/' . $id;
 
-        Core\Event::register($event . ':opened', $this);
-        Core\Event::register($event . ':closed', $this);
+        Event::register($event . ':opened', $this);
+        Event::register($event . ':closed', $this);
 
         return;
     }
@@ -146,9 +148,9 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      * @param   array  $parameters    Parameters.
      * @return  void
      */
-    public static function initializeParameters(Array $parameters = [])
+    public static function initializeParameters(array $parameters = [])
     {
-        self::$_parameters = new Core\Parameter(
+        self::$_parameters = new Zformat\Parameter(
             __CLASS__,
             [],
             [
@@ -187,7 +189,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
         $dsn                 = null,
         $username            = null,
         $password            = null,
-        Array $driverOptions = []
+        array $driverOptions = []
     ) {
         if (null === self::$_parameters) {
             self::initializeParameters();
@@ -268,7 +270,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
@@ -295,16 +297,18 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
             $dsn = 'sqlite:' . resolve($matches[1]);
         }
 
-        $this->setDal(dnew(
-            '\Hoa\Database\Layer\\' . $dalName,
-            [$dsn, $username, $password, $driverOptions]
-        ));
+        $this->setDal(
+            Consistency\Autoloader::dnew(
+                'Hoa\Database\Layer\\' . $dalName,
+                [$dsn, $username, $password, $driverOptions]
+            )
+        );
 
         $id = $this->getId();
-        Core\Event::notify(
+        Event::notify(
             'hoa://Event/Database/' . $id . ':opened',
             $this,
-            new Core\Event\Bucket([
+            new Event\Bucket([
                 'id'            => $id,
                 'dsn'           => $dsn,
                 'username'      => $username,
@@ -329,14 +333,14 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
         self::$_id    = null;
         unset(self::$_instance[$id]);
 
-        Core\Event::notify(
+        Event::notify(
             $event . ':closed',
             $this,
-            new Core\Event\Bucket(['id' => $id])
+            new Event\Bucket(['id' => $id])
         );
 
-        Core\Event::unregister($event . ':opened');
-        Core\Event::unregister($event . ':closed');
+        Event::unregister($event . ':opened');
+        Event::unregister($event . ':closed');
 
         return true;
     }
@@ -429,7 +433,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      * @return  \Hoa\Database\DalStatement
      * @throws  \Hoa\Database\Exception
      */
-    public function prepare($statement, Array $options = [])
+    public function prepare($statement, array $options = [])
     {
         return new DalStatement(
             $this->getDal()->prepare(
@@ -513,7 +517,7 @@ class Dal implements Core\Parameter\Parameterizable, Core\Event\Source
      * @return  array
      * @throws  \Hoa\Database\Exception
      */
-    public function setAttributes(Array $attributes)
+    public function setAttributes(array $attributes)
     {
         return $this->getDal()->setAttributes($attributes);
     }

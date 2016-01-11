@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@ namespace Hoa\Database\IDal;
  *
  * Interface of a DAL wrapper.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 interface Wrapper
@@ -60,7 +60,7 @@ interface Wrapper
         $dsn,
         $username,
         $password,
-        Array $driverOptions = []
+        array $driverOptions = []
     );
 
     /**
@@ -107,7 +107,7 @@ interface Wrapper
      * @return  \Hoa\Database\IDal\WrapperStatement
      * @throws  \Hoa\Database\Exception
      */
-    public function prepare($statement, Array $options = []);
+    public function prepare($statement, array $options = []);
 
     /**
      * Quote a string for use in a query.
@@ -163,7 +163,7 @@ interface Wrapper
      * @return  array
      * @throws  \Hoa\Database\Exception
      */
-    public function setAttributes(Array $attributes);
+    public function setAttributes(array $attributes);
 
     /**
      * Set a specific attribute.

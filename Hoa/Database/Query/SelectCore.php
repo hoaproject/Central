@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@ namespace Hoa\Database\Query;
  *
  * Core of the SELECT query.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class SelectCore extends Where
@@ -91,7 +91,7 @@ abstract class SelectCore extends Where
      * @param   array  $columns    Columns.
      * @return  void
      */
-    public function __construct(Array $columns = [])
+    public function __construct(array $columns = [])
     {
         $this->_columns = $columns;
 
