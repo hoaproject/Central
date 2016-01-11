@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,14 +36,14 @@
 
 namespace Hoa\Http;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Http.
  *
  * Generic class to manage HTTP headers (parse, set, get) only.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
@@ -131,7 +131,7 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param   array  $headers    Headers to parse and distribute.
      * @return  array
      */
-    protected function _parse(Array $headers)
+    protected function _parse(array $headers)
     {
         unset($this->_headers);
         $this->_headers = [];
@@ -291,4 +291,4 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Http\Http');
+Consistency::flexEntity('Hoa\Http\Http');

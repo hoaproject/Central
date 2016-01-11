@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Http\Response;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Http;
 use Hoa\Stream;
 
@@ -47,7 +47,7 @@ use Hoa\Stream;
  *
  * @TODO Follow http://tools.ietf.org/html/draft-nottingham-http-new-status-03.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class          Response
@@ -854,7 +854,7 @@ class          Response
      * @param   array   $array    Array.
      * @return  mixed
      */
-    public function writeArray(Array $array)
+    public function writeArray(array $array)
     {
         echo var_export($array, true);
 
@@ -954,4 +954,4 @@ class          Response
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Http\Response\Response');
+Consistency::flexEntity('Hoa\Http\Response\Response');
