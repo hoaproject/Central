@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,8 @@
 
 namespace Hoa\Realdom {
 
-use Hoa\Core;
+use Hoa\Consistency;
+use Hoa\Exception as HoaException;
 use Hoa\Math;
 use Hoa\Visitor;
 
@@ -45,7 +46,7 @@ use Hoa\Visitor;
  *
  * Represent a disjunction of realistic domains.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class          Disjunction
@@ -166,7 +167,7 @@ class          Disjunction
      * @return  \Hoa\Realdom\Disjunction
      * @throws  \Hoa\Realdom\Exception
      */
-    public function __call($name, Array $arguments)
+    public function __call($name, array $arguments)
     {
         $name = ucfirst(strtolower($name));
 
@@ -178,18 +179,18 @@ class          Disjunction
         } elseif ('Variable' === $name) {
             $handle = new Crate\Variable($arguments[0]);
         } else {
-            if (Core\Consistency::isKeyword($name)) {
+            if (Consistency::isKeyword($name)) {
                 $name = 'Realdom' . $name;
             }
 
             try {
-                $handle = dnew(
-                    '(Hoathis or Hoa)\Realdom\\' . $name,
+                $handle = Consistency\Autoloader::dnew(
+                    'Hoa\Realdom\\' . $name,
                     $arguments
                 );
             } catch (Exception $e) {
                 throw $e;
-            } catch (Core\Exception $e) {
+            } catch (HoaException\Exception $e) {
                 throw new Exception(
                     'Realistic domain %s() does not exist (or something ' .
                     'wrong happened).',
@@ -212,7 +213,7 @@ class          Disjunction
      * @param   array   $arguments    Arguments.
      * @return  \Hoa\Realdom\Disjunction
      */
-    public function _call($name, Array $arguments = [])
+    public function _call($name, array $arguments = [])
     {
         return $this->__call($name, $arguments);
     }

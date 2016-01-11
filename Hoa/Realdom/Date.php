@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Math;
  *
  * Realistic domain: date.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Date extends Realdom
@@ -90,7 +90,7 @@ class Date extends Realdom
         $constants               = &static::$_constants;
         $this['format']['value'] = preg_replace_callback(
             '#__(\w+)__#',
-            function (Array $matches) use (&$constants) {
+            function (array $matches) use (&$constants) {
                 $c = $matches[1];
 
                 if (!isset($constants[$c])) {

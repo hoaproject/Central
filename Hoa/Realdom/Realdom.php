@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Realdom;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Math;
 use Hoa\Praspel;
 use Hoa\Visitor;
@@ -46,7 +46,7 @@ use Hoa\Visitor;
  *
  * Abstract-top-super realistic domain :-).
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Realdom
@@ -363,7 +363,7 @@ abstract class Realdom
      * @param   \Hoa\Realdom  $self          Self (if we auto-box arguments).
      * @return  void
      */
-    public static function autoBoxing(Array &$arguments, Realdom $self = null)
+    public static function autoBoxing(array &$arguments, Realdom $self = null)
     {
         if (is_object($self) &&
             (get_class($self) === 'Hoa\Realdom\Constarray' ||
@@ -750,7 +750,7 @@ abstract class Realdom
      * @param   array  &$constraints    Contraints.
      * @return  \Hoa\Realdom
      */
-    public function setConstraints(Array &$constraints)
+    public function setConstraints(array &$constraints)
     {
         $this->_constraints = &$constraints;
 
@@ -793,7 +793,7 @@ abstract class Realdom
     protected function _propagateConstraints(
         $type,
         $index,
-        Array &$constraints
+        array &$constraints
     ) {
         return;
     }
@@ -911,4 +911,4 @@ abstract class Realdom
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Realdom\Realdom');
+Consistency::flexEntity('Hoa\Realdom\Realdom');

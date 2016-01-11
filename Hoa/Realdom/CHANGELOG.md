@@ -1,3 +1,14 @@
+# 0.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:07:40+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:22:39+01:00)
+  * Bin: Update output of `realdom:reflection`. (Ivan Enderlin, 2015-12-09T16:58:49+01:00)
+  * Consistency: Remove `from`/`foreachImport` call. (Ivan Enderlin, 2015-12-09T16:58:19+01:00)
+  * Consistency: Update `dnew` call. (Ivan Enderlin, 2015-12-09T07:05:58+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T21:43:49+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T13:04:35+01:00)
+
 # 0.15.09.08
 
   * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:43:30+02:00)

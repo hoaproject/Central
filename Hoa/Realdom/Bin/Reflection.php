@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Console;
  *
  * Show informations about a realistic domain.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Reflection extends Console\Dispatcher\Kit
@@ -88,18 +88,20 @@ class Reflection extends Console\Dispatcher\Kit
             }
         }
 
+        $iterator = new \RegexIterator(
+            new \DirectoryIterator('hoa://Library/Realdom'),
+            '/\.php$/'
+        );
         $matches = [];
 
-        from('Hoathis or Hoa')
-        -> foreachImport('Realdom.*', function ($classname) use (&$matches) {
-            $class = new \ReflectionClass($classname);
+        foreach ($iterator as $file) {
+            $classname = 'Hoa\Realdom\\' . substr($file->getFilename(), 0, -4);
+            $class     = new \ReflectionClass($classname);
 
             if ($class->isSubclassOf('\Hoa\Realdom')) {
                 $matches[$classname::NAME] = $class;
             }
-
-            return;
-        });
+        }
 
         if (true === $list) {
             echo implode("\n", array_keys($matches)), "\n";
@@ -128,10 +130,10 @@ class Reflection extends Console\Dispatcher\Kit
         $arguments  = $_arguments->getValue($object);
 
         echo
-            'Realdom ', $realdom, ' {', "\n\n",
+            'Realdom ', $realdom, "\n", '{', "\n",
             '    Implementation ', $class->getName(), ';', "\n\n",
             '    Parent ', $class->getParentClass()->getName(), ';', "\n\n",
-            '    Interfaces {', "\n\n";
+            '    Interfaces', "\n", '    {', "\n";
 
         $interfaces = $class->getInterfaces();
         usort($interfaces, function ($a, $b) {
@@ -156,7 +158,7 @@ class Reflection extends Console\Dispatcher\Kit
 
         echo
             '    }', "\n\n",
-            '    Parameters {', "\n\n";
+            '    Parameters', "\n", '    {', "\n";
 
         $i = 0;
 
