@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Graph;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Class \Hoa\Graph.
@@ -46,7 +46,7 @@ use Hoa\Core;
  * \Hoa\Graph\AdjacencyList) extends this class. It is like an abstract
  * factory…
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 abstract class Graph
@@ -137,7 +137,7 @@ abstract class Graph
         $arguments = func_get_args();
         array_shift($arguments);
 
-        return dnew('Hoa\Graph\\' . $type, $arguments);
+        return Consistency\Autoloader::dnew('Hoa\Graph\\' . $type, $arguments);
     }
 
     /**
@@ -258,4 +258,4 @@ abstract class Graph
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Graph\Graph');
+Consistency::flexEntity('Hoa\Graph\Graph');
