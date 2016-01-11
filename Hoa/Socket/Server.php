@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,6 +36,7 @@
 
 namespace Hoa\Socket;
 
+use Hoa\Consistency;
 use Hoa\Stream;
 
 /**
@@ -43,7 +44,7 @@ use Hoa\Stream;
  *
  * Established a server connection.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Server extends Connection
@@ -129,7 +130,7 @@ class Server extends Connection
      * @param   string  $context    Context ID (please, see the
      *                              \Hoa\Stream\Context class).
      * @return  void
-     * @throws  \Hoa\Core\Exception
+     * @throws  \Hoa\Socket\Exception
      */
     public function __construct(
         $socket,
@@ -315,7 +316,7 @@ class Server extends Connection
                 $m      = array_search($socket, $this->_masters, true);
                 $server = $this->_servers[$m];
                 $id     = $this->getNodeId($client);
-                $node   = dnew(
+                $node   = Consistency\Autoloader::dnew(
                     $server->getNodeName(),
                     [$id, $client, $server]
                 );

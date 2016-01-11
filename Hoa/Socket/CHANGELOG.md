@@ -1,3 +1,18 @@
+# 0.16.01.11
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:09:13+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:24:58+01:00)
+  * Consistency: Update `dnew` calls. (Ivan Enderlin, 2015-12-09T16:48:36+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T21:53:44+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T13:15:06+01:00)
+  * Connection: Fix an exception message variable. (Ivan Enderlin, 2015-12-12T18:38:04+01:00)
+  * Fix CS. (Ivan Enderlin, 2015-12-06T23:29:26+01:00)
+  * Socket: Add a security flag. (Stéphane HULARD, 2015-07-23T00:22:53+02:00)
+  * Test: Write test suite of `Hoa\Socket\Transport`. (Ivan Enderlin, 2015-07-27T15:55:08+02:00)
+  * Transport: Introduce vendor schemes. (Stéphane HULARD, 2015-07-23T00:22:14+02:00)
+  * Fix phpDoc. (Metalaka, 2015-11-01T21:24:37+01:00)
+
 # 0.15.09.08
 
   * Introduce read flags (PEEK and OOB). (Ivan Enderlin, 2015-08-28T09:52:51+02:00)
