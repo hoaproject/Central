@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,18 +36,21 @@
 
 namespace Hoa\Console;
 
-use Hoa\Core;
+use Hoa\Consistency;
+use Hoa\Event;
 
 /**
  * Class \Hoa\Console\Mouse.
  *
  * Allow to listen the mouse.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Mouse implements Core\Event\Listenable
+class Mouse implements Event\Listenable
 {
+    use Event\Listens;
+
     /**
      * Pointer code for left button.
      *
@@ -104,13 +107,6 @@ class Mouse implements Core\Event\Listenable
      */
     protected static $_enabled  = false;
 
-    /**
-     * Listeners.
-     *
-     * @var \Hoa\Core\Event\Listener
-     */
-    protected $_on              = null;
-
 
 
     /**
@@ -120,12 +116,17 @@ class Mouse implements Core\Event\Listenable
      */
     private function __construct()
     {
-        $this->_on = new Core\Event\Listener($this, [
-            'mouseup',
-            'mousedown',
-            'wheelup',
-            'wheeldown',
-        ]);
+        $this->setListener(
+            new Event\Listener(
+                $this,
+                [
+                    'mouseup',
+                    'mousedown',
+                    'wheelup',
+                    'wheeldown',
+                ]
+            )
+        );
 
         return;
     }
@@ -216,25 +217,25 @@ class Mouse implements Core\Event\Listenable
 
             switch ($cb) {
                 case static::WHEEL_UP:
-                    $instance->_on->fire(
+                    $instance->getListener()->fire(
                         'wheelup',
-                        new Core\Event\Bucket($bucket)
+                        new Event\Bucket($bucket)
                     );
 
                     break;
 
                 case static::WHEEL_DOWN:
-                    $instance->_on->fire(
+                    $instance->getListener()->fire(
                         'wheeldown',
-                        new Core\Event\Bucket($bucket)
+                        new Event\Bucket($bucket)
                     );
 
                     break;
 
                 case static::BUTTON_RELEASE:
-                    $instance->_on->fire(
+                    $instance->getListener()->fire(
                         'mouseup',
-                        new Core\Event\Bucket($bucket)
+                        new Event\Bucket($bucket)
                     );
                     $bucket['button'] = null;
 
@@ -252,9 +253,9 @@ class Mouse implements Core\Event\Listenable
                         continue 2;
                     }
 
-                    $instance->_on->fire(
+                    $instance->getListener()->fire(
                         'mousedown',
-                        new Core\Event\Bucket($bucket)
+                        new Event\Bucket($bucket)
                     );
             }
         }
@@ -282,21 +283,6 @@ class Mouse implements Core\Event\Listenable
 
         return;
     }
-
-    /**
-     * Attach a callable to a listenable component.
-     *
-     * @param   string  $listenerId    Listener ID.
-     * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Core\Event\Listenable
-     * @throws  \Hoa\Core\Exception
-     */
-    public function on($listenerId, $callable)
-    {
-        $this->_on->attach($listenerId, $callable);
-
-        return $this;
-    }
 }
 
 /**
@@ -307,4 +293,4 @@ Console::advancedInteraction();
 /**
  * Untrack mouse.
  */
-Core::registerShutdownFunction('\Hoa\Console\Mouse', 'untrack');
+Consistency::registerShutdownFunction(xcallable('Hoa\Console\Mouse::untrack'));

@@ -17,7 +17,7 @@ dependencies, you need to require
 ```json
 {
     "require": {
-        "hoa/console": "~2.0"
+        "hoa/console": "~3.0"
     }
 }
 ```
@@ -181,8 +181,8 @@ window is resized by listening the `hoa://Event/Console/Window:resize` event
 channel:
 
 ```php
-event('hoa://Event/Console/Window:resize')
-    ->attach(function (Hoa\Core\Event\Bucket $bucket) {
+Hoa\Event\Event::getEvent('hoa://Event/Console/Window:resize')
+    ->attach(function (Hoa\Event\Bucket $bucket) {
         $data = $bucket->getData();
         $size = $data['size'];
 
@@ -297,7 +297,7 @@ etc. This is very classical.
 
 ```php
 $processus = new Hoa\Console\Processus('ls');
-$processus->on('output', function (Hoa\Core\Event\Bucket $bucket) {
+$processus->on('output', function (Hoa\Event\Bucket $bucket) {
     $data = $bucket->getData();
     echo '> ', $data['line'], "\n";
 });
@@ -384,9 +384,9 @@ library](http://central.hoa-project.net/Resource/Library/Router) and the
 library](http://central.hoa-project.net/Resource/Library/Dispatcher) (with its
 dedicated kit `Hoa\Console\Dispatcher\Kit`), we are able to build commands
 easily. Please, see all `Bin/` directories in different libraries (for example
-[`Hoa\Core\Bin\Resolve`](http://central.hoa-project.net/Resource/Library/Core/Bin/Resolve.php))
+[`Hoa\Cli\Bin\Resolve`](http://central.hoa-project.net/Resource/Library/Cli/Bin/Resolve.php))
 and
-[`Hoa/Core/Bin/Hoa.php`](http://central.hoa-project.net/Resource/Library/Core/Bin/Hoa.php)
+[`Hoa/Cli/Bin/Hoa.php`](http://central.hoa-project.net/Resource/Library/Cli/Bin/Hoa.php)
 to learn more.
 
 ## Awecode

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,8 +36,8 @@
 
 namespace Hoa\Console\Readline;
 
+use Hoa\Consistency;
 use Hoa\Console;
-use Hoa\Core;
 use Hoa\Ustring;
 
 /**
@@ -45,7 +45,7 @@ use Hoa\Ustring;
  *
  * Read, edit, bind… a line from the input.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Readline
@@ -284,7 +284,7 @@ class Readline
      * @param   array  $mappings    Mappings.
      * @return  void
      */
-    public function addMappings(Array $mappings)
+    public function addMappings(array $mappings)
     {
         foreach ($mappings as $key => $mapping) {
             $this->addMapping($key, $mapping);
@@ -1192,4 +1192,4 @@ Console::advancedInteraction();
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Console\Readline\Readline');
+Consistency::flexEntity('Hoa\Console\Readline\Readline');

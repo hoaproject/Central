@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Console;
 
-use Hoa\Core;
+use Hoa\Event;
 use Hoa\Stream;
 
 /**
@@ -44,7 +44,7 @@ use Hoa\Stream;
  *
  * Manipulate a processus as a stream.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class          Processus
@@ -347,10 +347,10 @@ class          Processus
      */
     public function __construct(
         $command,
-        Array $options     = null,
-        Array $descriptors = null,
+        array $options     = null,
+        array $descriptors = null,
         $cwd               = null,
-        Array $environment = null,
+        array $environment = null,
         $timeout           = 30
     ) {
         $this->setCommand($command);
@@ -384,7 +384,7 @@ class          Processus
 
         $this->setTimeout($timeout);
         parent::__construct($this->getCommandLine(), null, true);
-        $this->_on->addIds(['input', 'output', 'timeout', 'start', 'stop']);
+        $this->getListener()->addIds(['input', 'output', 'timeout', 'start', 'stop']);
 
         return;
     }
@@ -452,7 +452,7 @@ class          Processus
             ));
         }
 
-        $this->_on->fire('start', new Core\Event\Bucket());
+        $this->getListener()->fire('start', new Event\Bucket());
 
         $_read   = [];
         $_write  = [];
@@ -504,7 +504,7 @@ class          Processus
             $select = stream_select($read, $write, $except, $this->getTimeout());
 
             if (0 === $select) {
-                $this->_on->fire('timeout', new Core\Event\Bucket());
+                $this->getListener()->fire('timeout', new Event\Bucket());
 
                 break;
             }
@@ -516,9 +516,9 @@ class          Processus
                 if (false === $line) {
                     $result = [false];
                 } else {
-                    $result = $this->_on->fire(
+                    $result = $this->getListener()->fire(
                         'output',
-                        new Core\Event\Bucket([
+                        new Event\Bucket([
                             'pipe' => $pipe,
                             'line' => $line
                         ])
@@ -534,9 +534,9 @@ class          Processus
             }
 
             foreach ($write as $j => $_w) {
-                $result = $this->_on->fire(
+                $result = $this->getListener()->fire(
                     'input',
-                    new Core\Event\Bucket([
+                    new Event\Bucket([
                         'pipe' => array_search($_w, $this->_pipes)
                     ])
                 );
@@ -552,7 +552,7 @@ class          Processus
             }
         }
 
-        $this->_on->fire('stop', new Core\Event\Bucket());
+        $this->getListener()->fire('stop', new Event\Bucket());
 
         return;
     }
@@ -835,7 +835,7 @@ class          Processus
      * @param   int     $pipe     Pipe descriptor.
      * @return  mixed
      */
-    public function writeArray(Array $array, $pipe = 0)
+    public function writeArray(array $array, $pipe = 0)
     {
         $array = var_export($array, true);
 
@@ -979,7 +979,7 @@ class          Processus
      * @param   array  $options    Options (option => value, or input).
      * @return  array
      */
-    protected function setOptions(Array $options)
+    protected function setOptions(array $options)
     {
         foreach ($options as &$option) {
             $option = escapeshellarg($option);
@@ -1051,7 +1051,7 @@ class          Processus
      * @param   array  $environment    Environment.
      * @return  array
      */
-    protected function setEnvironment(Array $environment)
+    protected function setEnvironment(array $environment)
     {
         $old                = $this->_environment;
         $this->_environment = $environment;
