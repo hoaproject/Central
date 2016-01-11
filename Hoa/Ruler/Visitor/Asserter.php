@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,7 @@
 
 namespace Hoa\Ruler\Visitor;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Ruler;
 use Hoa\Visitor;
 
@@ -45,7 +45,7 @@ use Hoa\Visitor;
  *
  * Asserter: evaluate a model representing a rule.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Asserter implements Visitor\Visit
@@ -89,7 +89,7 @@ class Asserter implements Visitor\Visit
         $this->setOperator('>=',  function ($a, $b) { return $a >= $b; });
         $this->setOperator('<',   function ($a, $b) { return $a <  $b; });
         $this->setOperator('<=',  function ($a, $b) { return $a <= $b; });
-        $this->setOperator('in',  function ($a, Array $b) { return in_array($a, $b); });
+        $this->setOperator('in',  function ($a, array $b) { return in_array($a, $b); });
         $this->setOperator('sum', function () { return array_sum(func_get_args()); });
         $this->setOperator('matches', function ($subject, $pattern) {
             $escapedPattern = preg_replace('/(?<!\\\)`/', '\`', $pattern);
@@ -299,7 +299,7 @@ class Asserter implements Visitor\Visit
      */
     protected function visitContextArray(
         &$contextPointer,
-        Array $dimension,
+        array $dimension,
         $dimensionNumber,
         $elementId,
         &$handle = null,
@@ -346,7 +346,7 @@ class Asserter implements Visitor\Visit
      */
     protected function visitContextAttribute(
         &$contextPointer,
-        Array $dimension,
+        array $dimension,
         $dimensionNumber,
         $elementId,
         &$handle = null,
@@ -391,7 +391,7 @@ class Asserter implements Visitor\Visit
      */
     protected function visitContextMethod(
         &$contextPointer,
-        Array $dimension,
+        array $dimension,
         $dimensionNumber,
         $elementId,
         &$handle = null,
@@ -496,7 +496,7 @@ class Asserter implements Visitor\Visit
 
         $handle = &$this->_operators[$operator];
 
-        if (!($handle instanceof Core\Consistency\Xcallable)) {
+        if (!($handle instanceof Consistency\Xcallable)) {
             $handle = xcallable($handle);
         }
 
@@ -511,7 +511,7 @@ class Asserter implements Visitor\Visit
     public function getOperators()
     {
         foreach ($this->_operators as &$operator) {
-            if (!($operator instanceof Core\Consistency\Xcallable)) {
+            if (!($operator instanceof Consistency\Xcallable)) {
                 $operator = xcallable($operator);
             }
         }
