@@ -1,3 +1,7 @@
+# 3.16.01.15
+
+  * Composer: Forget to add a new stable library. (Ivan Enderlin, 2016-01-14T22:31:09+01:00)
+
 # 3.16.01.14
 
   * Composer: New stable library. (Ivan Enderlin, 2016-01-14T22:03:06+01:00)
