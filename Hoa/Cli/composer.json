@@ -23,7 +23,7 @@
     "require": {
         "hoa/consistency": "~1.0",
         "hoa/console"    : "~3.0",
-        "hoa/dispatcher" : "~0.0",
+        "hoa/dispatcher" : "~1.0",
         "hoa/exception"  : "~1.0",
         "hoa/protocol"   : "~1.0",
         "hoa/router"     : "~3.0"
