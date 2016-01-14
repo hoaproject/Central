@@ -1,3 +1,8 @@
+# 1.16.01.15
+
+  * Composer: New stable libraries. (Ivan Enderlin, 2016-01-14T21:47:44+01:00)
+  * CHANGELOG: Remove a snapshot. (Ivan Enderlin, 2016-01-14T19:15:54+01:00)
+
 # 1.16.01.14
 
   * Snapshot: Fix repository root. (Ivan Enderlin, 2016-01-11T09:26:50+01:00)
