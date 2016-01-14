@@ -24,7 +24,7 @@
     "require": {
         "hoa/consistency": "~1.0",
         "hoa/exception"  : "~1.0",
-        "hoa/stream"     : "~0.0"
+        "hoa/stream"     : "~1.0"
     },
     "require-dev": {
         "hoa/test": "~1.0"
