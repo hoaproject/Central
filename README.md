@@ -24,7 +24,7 @@ dependencies, you need to require
 ```json
 {
     "require": {
-        "hoa/socket": "~0.0"
+        "hoa/socket": "~1.0"
     }
 }
 ```
