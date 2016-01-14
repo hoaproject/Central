@@ -1,3 +1,7 @@
+# 2.16.01.14
+
+  * Composer: hoa/dispatcher is stable. (Ivan Enderlin, 2016-01-14T21:41:22+01:00)
+
 # 2.16.01.11
 
   * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
