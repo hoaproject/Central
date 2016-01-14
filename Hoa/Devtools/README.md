@@ -17,7 +17,7 @@ dependencies, you need to require
 ```json
 {
     "require": {
-        "hoa/devtools": "~0.0"
+        "hoa/devtools": "~1.0"
     }
 }
 ```
