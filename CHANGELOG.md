@@ -1,3 +1,14 @@
+# 1.16.01.14
+
+  * Snapshot: Fix repository root. (Ivan Enderlin, 2016-01-11T09:26:50+01:00)
+  * Snapshot: Fix a missing variable. (Ivan Enderlin, 2016-01-11T09:23:29+01:00)
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:00:28+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:13:33+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T11:04:13+01:00)
+  * Event: Use `Hoa\Event`. (Ivan Enderlin, 2015-11-23T21:58:49+01:00)
+  * Snapshot: Support no tag. (Ivan Enderlin, 2015-11-23T23:24:01+01:00)
+
 # 0.16.01.11
 
   * Snapshot: Fix repository root. (Ivan Enderlin, 2016-01-11T09:26:50+01:00)
