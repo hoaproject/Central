@@ -1,3 +1,8 @@
+# 2.16.01.14
+
+  * Composer: New stable release. (Ivan Enderlin, 2016-01-14T22:19:00+01:00)
+  * Autoload: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-11T11:27:37+01:00)
+
 # 2.16.01.11
 
   * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:27+01:00)
