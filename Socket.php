@@ -157,7 +157,7 @@ class Socket
         if (isset($matches['ipv6_']) && !empty($matches['ipv6_'])) {
             $this->_address     = $matches['ipv6_'];
             $this->_addressType = self::ADDRESS_IPV6;
-            $this->setPort($matches['ipv6_port']);
+            $this->setPort((int) $matches['ipv6_port']);
         } elseif (isset($matches['ipv6']) && !empty($matches['ipv6'])) {
             $this->_address     = $matches['ipv6'];
             $this->_addressType = self::ADDRESS_IPV6;
@@ -170,7 +170,7 @@ class Socket
             }
 
             if (isset($matches['ipv4_port'])) {
-                $this->setPort($matches['ipv4_port']);
+                $this->setPort((int) $matches['ipv4_port']);
             }
         } elseif (isset($matches['domain'])) {
             $this->_address = $matches['domain'];
@@ -182,7 +182,7 @@ class Socket
             }
 
             if (isset($matches['domain_port'])) {
-                $this->setPort($matches['domain_port']);
+                $this->setPort((int) $matches['domain_port']);
             }
         }
 
