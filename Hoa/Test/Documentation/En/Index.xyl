@@ -32,7 +32,7 @@
   </ol>
   <p>The values of the verdict are: <strong>Success</strong>,
   <strong>fail</strong> or <strong>inconclusive</strong>. “Success” means that
-  the results is what we expected, “fail” means that the result was not as
+  the result is what we expected, “fail” means that the result was not as
   expected and inconclusive means that it was not possible to determine if the
   result was either a success or failure. The important part is: <q>“what
   <em>we</em> expect”</q>. By extension, we understand a test does not check
