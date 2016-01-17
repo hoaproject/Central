@@ -170,9 +170,9 @@ class Client extends Connection
             }
         }
 
-        $this->_stack[]    = $connection;
-        $id                = $this->getNodeId($connection);
-        $this->_node       = Consistency\Autoloader::dnew(
+        $this->_stack[] = $connection;
+        $id             = $this->getNodeId($connection);
+        $this->_node    = Consistency\Autoloader::dnew(
             $this->getNodeName(),
             [$id, $connection, $this]
         );

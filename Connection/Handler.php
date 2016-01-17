@@ -135,7 +135,7 @@ abstract class Handler
      * The node dedicated part of the run() method.
      * A run is pretty simple, schematically:
      *
-     *     while(true) foreach($connection->select() as $node)
+     *     while (true) foreach ($connection->select() as $node)
      *         // body
      *
      * The body is given by this method.
@@ -162,28 +162,27 @@ abstract class Handler
 
         while (true) {
             foreach ($connection->select() as $node) {
+                // Connection has failed to detect the node, maybe it is a resource
+                // from a merged client in a server.
+                if (false === is_object($node)) {
+                    $socket = $node;
 
-            // Connection has failed to detect the node, maybe it is a resource
-            // from a merged client in a server.
-            if (false === is_object($node)) {
-                $socket = $node;
+                    foreach ($this->getMergedConnections() as $other) {
+                        $otherConnection = $other->getOriginalConnection();
 
-                foreach ($this->_connections as $other) {
-                    $otherConnection = $other->getOriginalConnection();
+                        if (!($otherConnection instanceof Socket\Client)) {
+                            continue;
+                        }
 
-                    if (!($otherConnection instanceof Socket\Client)) {
-                        continue;
-                    }
+                        $node = $otherConnection->getCurrentNode();
 
-                    $node = $otherConnection->getCurrentNode();
+                        if ($node->getSocket() === $socket) {
+                            $other->_run($node);
 
-                    if ($node->getSocket() === $socket) {
-                        $other->_run($node);
-
-                        continue 2;
+                            continue 2;
+                        }
                     }
                 }
-            }
 
                 foreach ($this->getMergedConnections() as $other) {
                     if (true === $connection->is($other->getOriginalConnection())) {
