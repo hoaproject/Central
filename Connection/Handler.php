@@ -122,6 +122,16 @@ abstract class Handler
     }
 
     /**
+     * Get all merged connections.
+     *
+     * @return  array
+     */
+    public function getMergedConnections()
+    {
+        return $this->_connections;
+    }
+
+    /**
      * The node dedicated part of the run() method.
      * A run is pretty simple, schematically:
      *
@@ -175,7 +185,7 @@ abstract class Handler
                 }
             }
 
-                foreach ($this->_connections as $other) {
+                foreach ($this->getMergedConnections() as $other) {
                     if (true === $connection->is($other->getOriginalConnection())) {
                         $other->_run($node);
 
