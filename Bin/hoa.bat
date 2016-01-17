@@ -8,7 +8,7 @@ REM * @license
 REM *
 REM * New BSD License
 REM *
-REM * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+REM * Copyright © 2007-2016, Hoa community. All rights reserved.
 REM *
 REM * Redistribution and use in source and binary forms, with or without
 REM * modification, are permitted provided that the following conditions are met:
@@ -35,7 +35,7 @@ REM * POSSIBILITY OF SUCH DAMAGE.
 REM **
 REM
 REM **
-REM * @copyright  Copyright © 2007-2015 Hoa community
+REM * @copyright  Copyright © 2007-2016 Hoa community
 REM * @license    New BSD License
 REM **
 
