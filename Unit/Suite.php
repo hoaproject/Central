@@ -59,14 +59,6 @@ class Suite extends atoum\test
         $protocol['Test']        = new Protocol\Node('Test', null);
         $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
 
-        $constantMocker = new Test\Mocker\Constant($this->getPhpFunctionMocker());
-        $this->getAssertionManager()->setPropertyHandler(
-            'constant',
-            function () use ($constantMocker) {
-                return $constantMocker;
-            }
-        );
-
         return;
     }
 
@@ -94,6 +86,7 @@ class Suite extends atoum\test
         );
 
         $this->getPhpFunctionMocker()->setDefaultNamespace($testedNamespace);
+        $this->getPhpConstantMocker()->setDefaultNamespace($testedNamespace);
 
         return $out;
     }
