@@ -160,7 +160,7 @@ abstract class Handler
             $connection->connect();
         }
 
-        while (true) {
+        do {
             foreach ($connection->select() as $node) {
                 // Connection has failed to detect the node, maybe it is a resource
                 // from a merged client in a server.
@@ -194,7 +194,7 @@ abstract class Handler
 
                 $this->_run($node);
             }
-        }
+        } while (SUCCEED);
 
         $connection->disconnect();
 
