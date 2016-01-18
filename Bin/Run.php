@@ -274,6 +274,10 @@ class Run extends Console\Dispatcher\Kit
             $command .= ' --php ' . $php;
         }
 
+        if (empty($directories) && empty($files) && empty($namespaces) && is_dir('Test')) {
+            $directories[] = 'Test';
+        }
+
         if (!empty($directories)) {
             $command .= ' --directories ' . implode(' ', $directories);
         } elseif (!empty($files)) {
