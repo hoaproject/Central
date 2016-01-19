@@ -23,7 +23,7 @@
     "require": {
         "atoum/atoum"            : "~2.5",
         "atoum/praspel-extension": "~0.16",
-        "atoum/ruler-extension"  : "~1.0, >=1.0.2",
+        "atoum/ruler-extension"  : "~1.2",
         "hoa/cli"                : "~2.0",
         "hoa/consistency"        : "~1.0",
         "hoa/devtools"           : "~1.0",
