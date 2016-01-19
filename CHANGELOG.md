@@ -1,3 +1,11 @@
+# 2.16.01.19
+
+  * atoum: Use the `visibility` extension. (Ivan Enderlin, 2016-01-19T12:44:10+01:00)
+  * Composer: Use `atoum/ruler-extension` new release. (Ivan Enderlin, 2016-01-19T12:38:52+01:00)
+  * CLI: Make `--directories` optional. (Ivan Enderlin, 2016-01-18T09:19:37+01:00)
+  * Mocker: Remove our constant mocker implementation. (Ivan Enderlin, 2016-01-18T08:07:35+01:00)
+  * Document: Fix a typo. (Ivan Enderlin, 2016-01-16T06:33:12+01:00)
+
 # 2.16.01.14
 
   * Composer: New stable release. (Ivan Enderlin, 2016-01-14T22:19:00+01:00)
