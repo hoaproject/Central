@@ -21,12 +21,3 @@ else {
         'Protocol' . DIRECTORY_SEPARATOR .
         'Wrapper.php';
 }
-
-if (isset($_SERVER['HOA_ATOUM_PRASPEL_EXTENSION'])) {
-    $autoloader = new Hoa\Consistency\Autoloader();
-    $autoloader->addNamespace(
-        'Atoum\\PraspelExtension\\',
-        $_SERVER['HOA_ATOUM_PRASPEL_EXTENSION'] . DS . 'Atoum' . DS . 'PraspelExtension' . DS
-    );
-    $autoloader->register();
-}
