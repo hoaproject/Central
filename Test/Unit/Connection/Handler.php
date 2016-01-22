@@ -69,13 +69,9 @@ class Handler extends Test\Unit\Suite
             ->given(
                 $this->mockGenerator->orphanize('__construct'),
                 $connection = new \Mock\Hoa\Socket\Connection(),
-                $handler    = new SUT($connection),
-
-                $class      = new \ReflectionObject($handler),
-                $method     = $class->getMethod('getOriginalConnection'),
-                $method->setAccessible(true)
+                $handler    = new SUT($connection)
             )
-            ->when($result = $method->invoke($handler))
+            ->when($result = $this->invoke($handler)->getOriginalConnection())
             ->then
                 ->object($result)
                     ->isIdenticalTo($connection);
@@ -93,13 +89,9 @@ class Handler extends Test\Unit\Suite
                 $handlerA    = new SUT($connectionA),
                 $connectionB = new \Mock\Hoa\Socket\Connection(),
                 $handlerB    = new SUT($connectionB),
-                $handlerA->merge($handlerB),
-
-                $class  = new \ReflectionObject($handlerA),
-                $method = $class->getMethod('getMergedConnections'),
-                $method->setAccessible(true)
+                $handlerA->merge($handlerB)
             )
-            ->when($result = $method->invoke($handlerA))
+            ->when($result = $this->invoke($handlerA)->getMergedConnections())
             ->then
                 ->array($result)
                     ->isEqualTo([$handlerB]);
