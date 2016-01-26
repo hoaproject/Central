@@ -310,17 +310,6 @@ abstract class Handler
         $connection    = $this->getConnection();
         $currentSocket = $this->getOriginalConnection()->getSocket();
 
-        if (1 === func_num_args()) {
-            foreach ($connection->getNodes() as $node) {
-                if (true === $predicate($node) &&
-                    $node->getConnection()->getSocket() === $currentSocket) {
-                    $this->send($message, $node);
-                }
-            }
-
-            return;
-        }
-
         $arguments = array_slice(func_get_args(), 2);
         array_unshift($arguments, $message, null);
         $callable  = [$this, 'send'];
