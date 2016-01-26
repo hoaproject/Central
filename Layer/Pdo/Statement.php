@@ -154,18 +154,7 @@ class Statement implements Database\IDal\WrapperStatement
     }
 
     /**
-     * Return an array containing all of the result set rows.
-     *
-     * @return  array
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchAll()
-    {
-        return $this->getStatement()->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Set the Iterator fetching style.
+     * Set the iterator fetching style.
      *
      * @param   int    $offset         This value must be one of the
      *                                 DalStatement::FROM_* constants or an
@@ -174,7 +163,7 @@ class Statement implements Database\IDal\WrapperStatement
      *                                 or DalStatement::BACKWARD constant.
      * @param   int    $style          This value must be one of the
      *                                 DalStatement::AS_* constants.
-     * @param   mixed  $arg1           For AS_CLASS: The Class name.
+     * @param   mixed  $arg1           For AS_CLASS: The class name.
      *                                 For AS_REUSABLE_OBJECT: An object.
      * @param   array  $arg2           For AS_CLASS: Constructor arguments.
      * @return  \Hoa\Database\Layer\Pdo\Statement
@@ -211,6 +200,17 @@ class Statement implements Database\IDal\WrapperStatement
             $this->getStatement(),
             $this->_style
         );
+    }
+
+    /**
+     * Return an array containing all of the result set rows.
+     *
+     * @return  array
+     * @throws  \Hoa\Database\Exception
+     */
+    public function fetchAll()
+    {
+        return $this->getStatement()->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**

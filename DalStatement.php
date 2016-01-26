@@ -77,7 +77,7 @@ class DalStatement
     /**
      * Specifies that the fetch method shall return each row as an object with
      * variable names that correspond to the column names returned in the result
-     * set. AS_LAZY_OBJECT creates the object variable names as they are
+     * set. `AS_LAZY_OBJECT` creates the object variable names as they are
      * accessed.
      *
      * @var int
@@ -87,7 +87,7 @@ class DalStatement
     /**
      * Specifies that the fetch method shall return each row as an array indexed
      * by column name as returned in the corresponding result set. If the result
-     * set contains multiple columns with the same name, AS_MAP returns only a
+     * set contains multiple columns with the same name, `AS_MAP` returns only a
      * single value per column name.
      *
      * @var int
@@ -115,7 +115,7 @@ class DalStatement
     /**
      * Specifies that the fetch method shall return a new instance of the
      * requested class, mapping the columns to named properties in the class.
-     * The magic __set method is called if the property doesn't exist in the
+     * The magic `__set` method is called if the property doesn't exist in the
      * requested class.
      *
      * @var int
@@ -133,8 +133,8 @@ class DalStatement
     /**
      * Specifies that the fetch method shall return each row as an array indexed
      * by column name as returned in the corresponding result set. If the result
-     * set contains multiple columns with the same name, AS_DEBUG_MAP returns an
-     * array of values per column name.
+     * set contains multiple columns with the same name, `AS_DEBUG_MAP` returns
+     * an array of values per column name.
      *
      * @var int
      */
@@ -162,21 +162,21 @@ class DalStatement
     const STYLE_MODE                  = 2;
 
     /**
-     * The class name for AS_CLASS.
+     * The class name for `AS_CLASS`.
      *
      * @var int
      */
     const STYLE_CLASS_NAME            = 3;
 
     /**
-     * The constructor arguments for AS_CLASS.
+     * The constructor arguments for `AS_CLASS`.
      *
      * @var int
      */
     const STYLE_CONSTRUCTOR_ARGUMENTS = 4;
 
     /**
-     * The reused object for AS_REUSABLE_OBJECT.
+     * The reused object for `AS_REUSABLE_OBJECT`.
      *
      * @var int
      */
@@ -297,7 +297,7 @@ class DalStatement
     }
 
     /**
-     * Set the Iterator fetching style.
+     * Set the iterator fetching style.
      *
      * @param   int    $offset         This value must be one of the
      *                                 DalStatement::FROM_* constants or an
@@ -306,7 +306,7 @@ class DalStatement
      *                                 or DalStatement::BACKWARD constant.
      * @param   int    $style          This value must be one of the
      *                                 DalStatement::AS_* constants.
-     * @param   mixed  $arg1           For AS_CLASS: The Class name.
+     * @param   mixed  $arg1           For AS_CLASS: The class name.
      *                                 For AS_REUSABLE_OBJECT: An object.
      * @param   array  $arg2           For AS_CLASS: Constructor arguments.
      * @return  \Hoa\Database\DalStatement

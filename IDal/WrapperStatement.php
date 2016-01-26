@@ -114,6 +114,7 @@ interface WrapperStatement extends Iterator\Aggregate
      * @return  mixed
      */
     public function fetchFirst($style = null);
+
     /**
      * Fetch the last row in the result set.
      *

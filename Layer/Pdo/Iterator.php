@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Database;
  *
  * Iterator Statement.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Iterator implements Database\IDal\WrapperIterator
@@ -88,7 +88,7 @@ class Iterator implements Database\IDal\WrapperIterator
 
         switch ($style[Database\DalStatement::STYLE_MODE]) {
             case Database\DalStatement::AS_CLASS:
-                $this->getStatement()->setFetchMode(
+                $this->_statement->setFetchMode(
                     $style[Database\DalStatement::STYLE_MODE],
                     $style[Database\DalStatement::STYLE_CLASS_NAME],
                     $style[Database\DalStatement::STYLE_CONSTRUCTOR_ARGUMENTS]
@@ -97,7 +97,7 @@ class Iterator implements Database\IDal\WrapperIterator
                 break;
 
             case Database\DalStatement::AS_REUSABLE_OBJECT:
-                $this->getStatement()->setFetchMode(
+                $this->_statement->setFetchMode(
                     $style[Database\DalStatement::STYLE_MODE],
                     $style[Database\DalStatement::STYLE_OBJECT]
                 );
@@ -105,7 +105,7 @@ class Iterator implements Database\IDal\WrapperIterator
                 break;
 
             default:
-                $this->getStatement()->setFetchMode(
+                $this->_statement->setFetchMode(
                     $style[Database\DalStatement::STYLE_MODE]
                 );
         }
