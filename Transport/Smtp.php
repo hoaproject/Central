@@ -242,6 +242,11 @@ class Smtp implements ITransport\Out
         $client->connect();
         $client->setStreamBlocking(true);
         $client->setStreamTimeout(5 * 60);
+        $port = $client->getSocket()->getPort();
+
+        if (465 === $port) {
+            $client->enableEncryption(true, $client::ENCRYPTION_TLS);
+        }
 
         $this->ifNot(
             220,
@@ -258,7 +263,7 @@ class Smtp implements ITransport\Out
             'The server timed out while answering to a `EHLO` command.'
         );
 
-        if (true === in_array('STARTTLS', $ehlo)) {
+        if (465 !== $port && true === in_array('STARTTLS', $ehlo)) {
             $client->writeAll('STARTTLS' . CRLF);
 
             $this->ifNot(
