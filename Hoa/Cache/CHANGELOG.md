@@ -1,3 +1,7 @@
+# 0.16.01.28
+
+  * Composer: Update hoa/zformat (Dupont Yohann, 2016-01-28T11:59:27+01:00)
+
 # 0.16.01.11
 
   * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
