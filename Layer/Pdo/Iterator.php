@@ -74,15 +74,11 @@ class Iterator implements Database\IDal\WrapperIterator
     /**
      * Create an iterator instance.
      *
-     * @param   \PDOStatement  $statement      The PDOStatement instance.
-     * @param   array          $style          An array of fetching style
-     *                                         options.
+     * @param   object  $statement    The underlying statement instance.
+     * @param   array   $style        An array of fetching style options.
      * @return  void
      */
-    public function __construct(
-        \PDOStatement $statement,
-        $style
-    ) {
+    public function __construct($statement, $style) {
         $this->_statement = $statement;
         $this->_style     = $style;
 

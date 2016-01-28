@@ -51,10 +51,9 @@ interface WrapperIterator extends Iterator\Iterator
     /**
      * Create an iterator instance.
      *
-     * @param   WrapperStatement  $statement      The PDOStatement instance.
-     * @param   array             $style          An array of fetching style
-     *                                            options.
+     * @param   object  $statement    The underlying statement instance.
+     * @param   array   $style        An array of fetching style options.
      * @return  void
      */
-    public function __construct(WrapperStatement $statement, $style);
+    public function __construct($statement, $style);
 }
