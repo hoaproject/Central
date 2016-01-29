@@ -185,7 +185,7 @@ class Arithmetic implements Visitor\Visit
                 if (null  === $parent ||
                     $type === $parent->getId()) {
                     $acc = function ($b) use ($a, $acc) {
-                        if (0 === $b) {
+                        if (0.0 === $b) {
                             throw new \RuntimeException(
                                 'Division by zero is not possible.'
                             );
