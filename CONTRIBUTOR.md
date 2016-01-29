@@ -32,6 +32,7 @@ cloak on IRC, etc.
   * Ben Getsug (bgetsug)
   * ➜ Alexis von Glasow (avonglasow)
   * ➜ Kévin Gomez (k-phoen)
+  * Marc Gratch (mgratch)
   * Kevin Gravier (mrkmg)
   * Nicolas Grekas (nicolas-grekas)
   * Sarah Haïm-Lubczanski (mere-teresa)
