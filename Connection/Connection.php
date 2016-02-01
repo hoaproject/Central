@@ -102,7 +102,7 @@ abstract class Connection
      *
      * @var string
      */
-    protected $_nodeName      = '\Hoa\Socket\Node';
+    protected $_nodeName      = 'Hoa\Socket\Node';
 
     /**
      * Current node.
@@ -243,7 +243,7 @@ abstract class Connection
      *
      * @return  \Hoa\Socket\Node
      */
-    //abstract public function current ( );
+    //abstract public function current();
 
     /**
      * Get the current selected connection index.
