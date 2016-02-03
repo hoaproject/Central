@@ -123,7 +123,7 @@ class Client extends Connection
         $flag    = self::CONNECT,
         $context = null
     ) {
-        parent::__construct($socket, $timeout, self::CONNECT & $flag, $context);
+        parent::__construct($socket, $timeout, self::CONNECT | $flag, $context);
 
         return;
     }
