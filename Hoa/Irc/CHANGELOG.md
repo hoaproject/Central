@@ -1,3 +1,7 @@
+# 0.16.02.03
+
+  * Composer: Update `hoa/socket`. (Dupont Yohann, 2016-02-03T08:37:19+01:00)
+
 # 0.16.01.11
 
   * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
