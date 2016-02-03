@@ -202,7 +202,7 @@ class Client extends Connection
      */
     public function select()
     {
-        $read   = $this->_stack;
+        $read   = $this->getStack();
         $write  = null;
         $except = null;
 
@@ -294,5 +294,15 @@ class Client extends Connection
     public function isPersistent()
     {
         return (bool) ($this->getFlag() & self::PERSISTENT);
+    }
+
+    /**
+     * Return internal node stack.
+     *
+     * @return  array
+     */
+    protected function getStack()
+    {
+        return $this->_stack;
     }
 }
