@@ -158,7 +158,7 @@ class Client extends Connection
         }
 
         if (false === $connection) {
-            if ($errno == 0) {
+            if ($errno === 0) {
                 throw new Exception('Client cannot join %s.', 0, $streamName);
             } else {
                 throw new Exception(
