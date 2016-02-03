@@ -39,107 +39,39 @@ namespace Hoa\Irc;
 use Hoa\Socket as HoaSocket;
 
 /**
- * Class \Hoa\Irc\Node.
+ * Class \Hoa\Irc\Socket.
  *
- * Describe a IRC node.
+ * Irc specific socket extension.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Node extends HoaSocket\Node
+class Socket extends HoaSocket
 {
     /**
-     * Whether this is basically the first message.
+     * Factory to create a valid instance from the given URI
      *
-     * @var bool
+     * @param string $socketUri URI of the socket to connect to.
+     * @return void
      */
-    protected $_joined   = false;
-
-    /**
-     * Username.
-     *
-     * @var string
-     */
-    protected $_username = null;
-
-    /**
-     * Channel.
-     *
-     * @var string
-     */
-    protected $_channel  = null;
-
-
-
-    /**
-     * Whether the client has already joined a channel or not.
-     *
-     * @param   bool  $joined    Joined or not.
-     * @return  bool
-     */
-    public function setJoined($joined)
+    public static function transportFactory($socketUri)
     {
-        $old           = $this->_joined;
-        $this->_joined = $joined;
+        $parsed = parse_url($socketUri);
+        if (false === $parsed) {
+            throw new Exception(
+                'URL %s seems syntactically invalid.',
+                0,
+                $socketUri
+            );
+        }
 
-        return $old;
-    }
+        $port = isset($parsed['port'])?$parsed['port']:6667;
 
-    /**
-     * Whether the client has already joined a channel or not.
-     *
-     * @return  bool
-     */
-    public function hasJoined()
-    {
-        return $this->_joined;
-    }
-
-    /**
-     * Set username.
-     *
-     * @param   string  $username    Username.
-     * @return  string
-     */
-    public function setUsername($username)
-    {
-        $old             = $this->_username;
-        $this->_username = $username;
-
-        return $old;
-    }
-
-    /**
-     * Get username.
-     *
-     * @return  string
-     */
-    public function getUsername()
-    {
-        return $this->_username;
-    }
-
-    /**
-     * Set current channel.
-     *
-     * @param   string  $channel    Channel.
-     * @return  string
-     */
-    public function setChannel($channel)
-    {
-        $old            = $this->_channel;
-        $this->_channel = $channel;
-
-        return $old;
-    }
-
-    /**
-     * Get current channel.
-     *
-     * @return  string
-     */
-    public function getChannel()
-    {
-        return $this->_channel;
+        return new static('tcp://' . $parsed['host'] . ':' . $port);
     }
 }
+
+/**
+ * Register socket wrappers
+ */
+HoaSocket\Transport::register('irc', ['Hoa\Irc\Socket', 'transportFactory']);
