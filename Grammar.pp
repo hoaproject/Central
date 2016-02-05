@@ -40,6 +40,8 @@
 //
 
 
+%pragma lexer.unicode   false
+
 %skip   space           [\x20\x09\x0a\x0d]+
 
 %token  true            true
