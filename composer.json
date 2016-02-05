@@ -2,7 +2,7 @@
     "name"       : "hoa/json",
     "description": "The Hoa\\Json library.",
     "type"       : "library",
-    "keywords"   : ["library", "json", "grammar"],
+    "keywords"   : ["library", "json", "grammar", "rfc4627", "rfc7159"],
     "homepage"   : "http://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [
