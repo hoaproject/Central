@@ -33,7 +33,7 @@
 //
 // Grammar \Hoa\Json\Grammar.
 //
-// Provide grammar for JSON. Please, see <http://json.org> or RFC4627.
+// Provide grammar for JSON. Please, see <http://json.org>, RFC4627 or RFC7159.
 //
 // @copyright  Copyright © 2007-2016 Hoa community.
 // @license    New BSD License
