@@ -53,7 +53,7 @@
 %token _bracket         \]
 %token  colon           :
 %token  comma           ,
-%token  number          \-?(0|[1-9]\d*)(\.\d+)?([eE][\+\-]?\d+)?
+%token  number          \-?(0|[1-9][0-9]*)(\.[0-9]+)?([eE][\+\-]?[0-9]+)?
 
 value:
     <true> | <false> | <null> | string() | object() | array() | number()
