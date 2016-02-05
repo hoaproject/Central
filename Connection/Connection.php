@@ -226,13 +226,23 @@ abstract class Connection
     abstract public function is(Connection $connection);
 
     /**
+     * Get iterator values.
+     *
+     * @return  array
+     */
+    protected function &getIteratorValues()
+    {
+        return $this->_iterator;
+    }
+
+    /**
      * Set the current selected connection.
      *
      * @return  resource
      */
     protected function _current()
     {
-        $current = current($this->_iterator);
+        $current = current($this->getIteratorValues());
         $this->_setStream($current);
 
         return $current;
@@ -252,7 +262,7 @@ abstract class Connection
      */
     public function key()
     {
-        return key($this->_iterator);
+        return key($this->getIteratorValues());
     }
 
     /**
@@ -263,7 +273,7 @@ abstract class Connection
      */
     public function next()
     {
-        return next($this->_iterator);
+        return next($this->getIteratorValues());
     }
 
     /**
@@ -273,7 +283,7 @@ abstract class Connection
      */
     public function rewind()
     {
-        return reset($this->_iterator);
+        return reset($this->getIteratorValues());
     }
 
     /**
@@ -284,20 +294,22 @@ abstract class Connection
      */
     public function valid()
     {
-        if (empty($this->_iterator)) {
+        $iteratorValues = &$this->getIteratorValues();
+
+        if (empty($iteratorValues)) {
             return false;
         }
 
-        $key    = key($this->_iterator);
-        $return = (bool) next($this->_iterator);
-        prev($this->_iterator);
+        $key    = key($iteratorValues);
+        $return = (bool) next($iteratorValues);
+        prev($iteratorValues);
 
         if (false === $return) {
-            end($this->_iterator);
-            if ($key === key($this->_iterator)) {
+            end($iteratorValues);
+            if ($key === key($iteratorValues)) {
                 $return = true;
             } else {
-                $this->_iterator = [];
+                $iteratorValues = [];
             }
         }
 
