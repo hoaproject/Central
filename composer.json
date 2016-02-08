@@ -25,6 +25,7 @@
         "hoa/consistency": "~1.0",
         "hoa/event"      : "~1.0",
         "hoa/exception"  : "~1.0",
+        "hoa/iterator"   : "~2.0",
         "hoa/zformat"    : "~1.0",
         "ext-pdo"        : "*"
     },
