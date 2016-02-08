@@ -156,7 +156,7 @@ class Server extends Connection
         } else {
             switch ($socket->getTransport()) {
                 case 'tcp':
-                    $flag &= self::LISTEN;
+                    $flag |= self::LISTEN;
 
                     break;
 
