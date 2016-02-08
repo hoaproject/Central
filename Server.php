@@ -395,7 +395,7 @@ class Server extends Connection
      */
     public function isBinding()
     {
-        return (bool) $this->getFlag() & self::BIND;
+        return (bool) ($this->getFlag() & self::BIND);
     }
 
     /**
@@ -405,6 +405,6 @@ class Server extends Connection
      */
     public function isListening()
     {
-        return (bool) $this->getFlag() & self::LISTEN;
+        return (bool) ($this->getFlag() & self::LISTEN);
     }
 }
