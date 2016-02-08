@@ -55,6 +55,17 @@ class Statement implements Database\IDal\WrapperStatement
      */
     protected $_statement = null;
 
+    /**
+     * The fetching style options.
+     *
+     * @var array
+     */
+    protected $_style     = [
+        Database\DalStatement::STYLE_OFFSET      => Database\DalStatement::FROM_START,
+        Database\DalStatement::STYLE_ORIENTATION => Database\DalStatement::FORWARD,
+        Database\DalStatement::STYLE_MODE        => Database\DalStatement::AS_MAP
+    ];
+
 
 
     /**
@@ -143,6 +154,55 @@ class Statement implements Database\IDal\WrapperStatement
     }
 
     /**
+     * Set the iterator fetching style.
+     *
+     * @param   int    $offset         This value must be one of the
+     *                                 DalStatement::FROM_* constants or an
+     *                                 arbitrary offset.
+     * @param   int    $orientation    This value must be DalStatement::FORWARD
+     *                                 or DalStatement::BACKWARD constant.
+     * @param   int    $style          This value must be one of the
+     *                                 DalStatement::AS_* constants.
+     * @param   mixed  $arg1           For AS_CLASS: The class name.
+     *                                 For AS_REUSABLE_OBJECT: An object.
+     * @param   array  $arg2           For AS_CLASS: Constructor arguments.
+     * @return  \Hoa\Database\Layer\Pdo\Statement
+     */
+    public function setFetchingStyle(
+        $offset      = Database\DalStatement::FROM_START,
+        $orientation = Database\DalStatement::FORWARD,
+        $style       = Database\DalStatement::AS_MAP,
+        $arg1        = null,
+        $arg2        = null
+    ) {
+        $this->_style[Database\DalStatement::STYLE_OFFSET]      = $offset;
+        $this->_style[Database\DalStatement::STYLE_ORIENTATION] = $orientation;
+        $this->_style[Database\DalStatement::STYLE_MODE]        = $style;
+
+        if (Database\DalStatement::AS_CLASS === $style) {
+            $this->_style[Database\DalStatement::STYLE_CLASS_NAME]            = $arg1;
+            $this->_style[Database\DalStatement::STYLE_CONSTRUCTOR_ARGUMENTS] = $arg2;
+        } elseif (Database\DalStatement::AS_REUSABLE_OBJECT === $style) {
+            $this->_style[Database\DalStatement::STYLE_OBJECT] = $arg1;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get an Iterator.
+     *
+     * @return  \Hoa\Database\Layer\Pdo\Iterator
+     */
+    public function getIterator()
+    {
+        return new Iterator(
+            $this->getStatement(),
+            $this->_style
+        );
+    }
+
+    /**
      * Return an array containing all of the result set rows.
      *
      * @return  array
@@ -154,63 +214,42 @@ class Statement implements Database\IDal\WrapperStatement
     }
 
     /**
-     * Fetch the next row in the result set.
-     *
-     * @param   int  $orientation    Must be one of the \PDO::FETCH_ORI_*
-     *                               constants.
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    protected function fetch($orientation = \PDO::FETCH_ORI_NEXT)
-    {
-        return $this->getStatement()->fetch(
-            \PDO::FETCH_ASSOC,
-            $orientation
-        );
-    }
-
-    /**
      * Fetch the first row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
-    public function fetchFirst()
+    public function fetchFirst($style = null)
     {
-        return $this->fetch(\PDO::FETCH_ORI_FIRST);
+        return $this->fetch($style, \PDO::FETCH_ORI_FIRST);
     }
 
     /**
      * Fetch the last row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
-    public function fetchLast()
+    public function fetchLast($style = null)
     {
-        return $this->fetch(\PDO::FETCH_ORI_LAST);
+        return $this->fetch($style, \PDO::FETCH_ORI_LAST);
     }
 
     /**
-     * Fetch the next row in the result set.
+     * Fetch a row in the result set.
      *
+     * @param   int  $style          Must be one of the DalStatement::AS_*
+     *                               constants.
+     * @param   int  $orientation    Must be one of the \PDO::FETCH_ORI_*
+     *                               constants.
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
-    public function fetchNext()
+    protected function fetch($style, $orientation)
     {
-        return $this->fetch(\PDO::FETCH_ORI_NEXT);
-    }
-
-    /**
-     * Fetch the previous row in the result set.
-     *
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchPrior()
-    {
-        return $this->fetch(\PDO::FETCH_ORI_PRIOR);
+        return $this->getStatement()->fetch(
+            $style ?: $this->_style,
+            $orientation
+        );
     }
 
     /**

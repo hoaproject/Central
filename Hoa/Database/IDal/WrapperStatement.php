@@ -36,6 +36,9 @@
 
 namespace Hoa\Database\IDal;
 
+use Hoa\Database;
+use Hoa\Iterator;
+
 /**
  * Interface \Hoa\Database\IDal\WrapperStatement.
  *
@@ -44,7 +47,7 @@ namespace Hoa\Database\IDal;
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-interface WrapperStatement
+interface WrapperStatement extends Iterator\Aggregate
 {
     /**
      * Execute a prepared statement.
@@ -82,36 +85,43 @@ interface WrapperStatement
     public function fetchAll();
 
     /**
+     * Set the Iterator fetching style.
+     *
+     * @param   int    $offset         This value must be one of the
+     *                                 DalStatement::FROM_* constants or an
+     *                                 arbitrary offset.
+     * @param   int    $orientation    This value must be DalStatement::FORWARD
+     *                                 or DalStatement::BACKWARD constant.
+     * @param   int    $style          This value must be one of the
+     *                                 DalStatement::AS_* constants.
+     * @param   mixed  $arg1           For AS_CLASS: The Class name.
+     *                                 For AS_REUSABLE_OBJECT: An object.
+     * @param   array  $arg2           For AS_CLASS: Constructor arguments.
+     * @return  \Hoa\Database\IDal\WrapperStatement
+     */
+    public function setFetchingStyle(
+        $offset      = Database\DalStatement::FROM_START,
+        $orientation = Database\DalStatement::FORWARD,
+        $style       = Database\DalStatement::AS_MAP,
+        $arg1        = null,
+        $arg2        = null
+    );
+
+    /**
      * Fetch the first row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
-    public function fetchFirst();
+    public function fetchFirst($style = null);
 
     /**
      * Fetch the last row in the result set.
      *
+     * @param   int  $style    Must be one of the DalStatement::AS_* constants.
      * @return  mixed
-     * @throws  \Hoa\Database\Exception
      */
-    public function fetchLast();
-
-    /**
-     * Fetch the next row in the result set.
-     *
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchNext();
-
-    /**
-     * Fetch the previous row in the result set.
-     *
-     * @return  mixed
-     * @throws  \Hoa\Database\Exception
-     */
-    public function fetchPrior();
+    public function fetchLast($style = null);
 
     /**
      * Return a single column from the next row of the result set or false if
