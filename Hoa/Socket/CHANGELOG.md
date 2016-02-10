@@ -1,3 +1,30 @@
+# 1.16.02.10
+
+  * Test: Write test suite of `Hoa\Socket\Server`. (Ivan Enderlin, 2016-02-08T21:13:22+01:00)
+  * Server: Add protected getters. (Ivan Enderlin, 2016-02-08T21:13:16+01:00)
+  * Server: Fix auto-LISTEN flag for TCP. (Ivan Enderlin, 2016-02-08T08:07:07+01:00)
+  * Server: `isBinding` & `isListening` return bools. (Ivan Enderlin, 2016-02-08T08:06:02+01:00)
+  * Connection: Add the `getIteratorValues` method. (Ivan Enderlin, 2016-02-05T08:25:29+01:00)
+  * Test: Write test suite of `Hoa\Socket\Client`. (Ivan Enderlin, 2016-02-03T08:14:54+01:00)
+  * Client: Add the protected `getStack` method. (Ivan Enderlin, 2016-02-03T08:14:19+01:00)
+  * Client: Strictly check connection error number. (Ivan Enderlin, 2016-02-03T08:12:42+01:00)
+  * Client: Fix auto-CONNECT flag. (Ivan Enderlin, 2016-02-03T08:12:31+01:00)
+  * Quality: Fix CS and simplify a class identifier. (Ivan Enderlin, 2016-02-01T10:58:04+01:00)
+  * Test: Write test suite of `…onnection\Connection`. (Ivan Enderlin, 2016-01-26T08:49:17+01:00)
+  * Handler: Remove dead code. (Ivan Enderlin, 2016-01-26T08:16:46+01:00)
+  * Test: Use the `atoum/visibility-extension`. (Ivan Enderlin, 2016-01-22T09:18:02+01:00)
+  * Test: Write test suite of `…t\Connection\Handler`. (Ivan Enderlin, 2016-01-18T18:02:37+01:00)
+  * Test: Reverse a `while` to a `do`/`while`. (Ivan Enderlin, 2016-01-18T08:24:49+01:00)
+  * Quality: Fix CS. (Ivan Enderlin, 2016-01-17T17:57:29+01:00)
+  * Handler: Add the `getMergedConnections` method. (Ivan Enderlin, 2016-01-17T17:56:54+01:00)
+  * Test: Write test suite of `…ket\Connection\Group`. (Ivan Enderlin, 2016-01-17T15:05:06+01:00)
+  * Quality: Run `devtools:cs`. (Ivan Enderlin, 2016-01-17T14:26:27+01:00)
+  * Test: Write test suite of `Hoa\Socket\Node`. (Ivan Enderlin, 2016-01-15T16:51:45+01:00)
+  * Composer: Update `hoa/test` dependency. (Ivan Enderlin, 2016-01-15T08:43:57+01:00)
+  * Test: Write test suite of `Hoa\Socket\Exception`. (Ivan Enderlin, 2016-01-15T08:40:17+01:00)
+  * Test: Write test suite of `Hoa\Socket\Socket`. (Ivan Enderlin, 2016-01-15T08:35:33+01:00)
+  * Socket: Port is always an integer. (Ivan Enderlin, 2016-01-15T08:35:23+01:00)
+
 # 1.16.01.15
 
   * Composer: New stable library. (Ivan Enderlin, 2016-01-14T22:14:42+01:00)
