@@ -28,13 +28,17 @@
         "hoa/socket"     : "~1.0",
         "hoa/http"       : "~1.0"
     },
+    "require-dev": {
+        "hoa/test": "~2.0"
+    },
     "suggest": {
         "ext-openssl": "To get a better security when exchanging messages."
     },
     "autoload": {
         "psr-4": {
             "Hoa\\Websocket\\": "."
-        }
+        },
+        "files": ["Socket.php"]
     },
     "extra": {
         "branch-alias": {

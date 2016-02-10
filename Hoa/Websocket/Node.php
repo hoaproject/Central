@@ -36,17 +36,17 @@
 
 namespace Hoa\Websocket;
 
-use Hoa\Socket;
+use Hoa\Socket as HoaSocket;
 
 /**
  * Class \Hoa\Websocket\Node.
  *
- * Describe a websocket node.
+ * Describe a WebSocket node.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Node extends Socket\Node
+class Node extends HoaSocket\Node
 {
     /**
      * Protocol implementation.
