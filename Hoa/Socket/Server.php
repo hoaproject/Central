@@ -156,7 +156,7 @@ class Server extends Connection
         } else {
             switch ($socket->getTransport()) {
                 case 'tcp':
-                    $flag &= self::LISTEN;
+                    $flag |= self::LISTEN;
 
                     break;
 
@@ -233,11 +233,12 @@ class Server extends Connection
     {
         $current = $this->getStream();
 
-        if (false === in_array($current, $this->_masters, true)) {
-            $i = array_search($current, $this->_stack);
+        if (false === in_array($current, $this->getMasters(), true)) {
+            $stack = &$this->getStack();
+            $i     = array_search($current, $stack);
 
             if (false !== $i) {
-                unset($this->_stack[$i]);
+                unset($stack[$i]);
             }
 
             // $this->_node is voluntary kept in memory until a new node will be
@@ -296,14 +297,16 @@ class Server extends Connection
      */
     public function select()
     {
-        $read   = $this->_stack;
+        $read   = $this->getStack();
         $write  = null;
         $except = null;
 
         @stream_select($read, $write, $except, $this->getTimeout(), 0);
 
         foreach ($read as $socket) {
-            if (true === in_array($socket, $this->_masters, true)) {
+            $masters = $this->getMasters();
+
+            if (true === in_array($socket, $masters, true)) {
                 $client = @stream_socket_accept($socket);
 
                 if (false === $client) {
@@ -313,7 +316,7 @@ class Server extends Connection
                     );
                 }
 
-                $m      = array_search($socket, $this->_masters, true);
+                $m      = array_search($socket, $masters, true);
                 $server = $this->_servers[$m];
                 $id     = $this->getNodeId($client);
                 $node   = Consistency\Autoloader::dnew(
@@ -368,7 +371,7 @@ class Server extends Connection
      */
     public function is(Connection $server)
     {
-        return $this->_node->getConnection() === $server;
+        return $this->getCurrentNode()->getConnection() === $server;
     }
 
     /**
@@ -395,7 +398,7 @@ class Server extends Connection
      */
     public function isBinding()
     {
-        return (bool) $this->getFlag() & self::BIND;
+        return (bool) ($this->getFlag() & self::BIND);
     }
 
     /**
@@ -405,6 +408,36 @@ class Server extends Connection
      */
     public function isListening()
     {
-        return (bool) $this->getFlag() & self::LISTEN;
+        return (bool) ($this->getFlag() & self::LISTEN);
+    }
+
+    /**
+     * Return internal considered servers.
+     *
+     * @return  array
+     */
+    protected function getServers()
+    {
+        return $this->_servers;
+    }
+
+    /**
+     * Return internal master connections.
+     *
+     * @return  array
+     */
+    protected function getMasters()
+    {
+        return $this->_masters;
+    }
+
+    /**
+     * Return internal node stack.
+     *
+     * @return  array
+     */
+    protected function &getStack()
+    {
+        return $this->_stack;
     }
 }

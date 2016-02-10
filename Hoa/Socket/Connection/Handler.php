@@ -122,10 +122,20 @@ abstract class Handler
     }
 
     /**
+     * Get all merged connections.
+     *
+     * @return  array
+     */
+    public function getMergedConnections()
+    {
+        return $this->_connections;
+    }
+
+    /**
      * The node dedicated part of the run() method.
      * A run is pretty simple, schematically:
      *
-     *     while(true) foreach($connection->select() as $node)
+     *     while (true) foreach ($connection->select() as $node)
      *         // body
      *
      * The body is given by this method.
@@ -150,32 +160,31 @@ abstract class Handler
             $connection->connect();
         }
 
-        while (true) {
+        do {
             foreach ($connection->select() as $node) {
+                // Connection has failed to detect the node, maybe it is a resource
+                // from a merged client in a server.
+                if (false === is_object($node)) {
+                    $socket = $node;
 
-            // Connection has failed to detect the node, maybe it is a resource
-            // from a merged client in a server.
-            if (false === is_object($node)) {
-                $socket = $node;
+                    foreach ($this->getMergedConnections() as $other) {
+                        $otherConnection = $other->getOriginalConnection();
 
-                foreach ($this->_connections as $other) {
-                    $otherConnection = $other->getOriginalConnection();
+                        if (!($otherConnection instanceof Socket\Client)) {
+                            continue;
+                        }
 
-                    if (!($otherConnection instanceof Socket\Client)) {
-                        continue;
-                    }
+                        $node = $otherConnection->getCurrentNode();
 
-                    $node = $otherConnection->getCurrentNode();
+                        if ($node->getSocket() === $socket) {
+                            $other->_run($node);
 
-                    if ($node->getSocket() === $socket) {
-                        $other->_run($node);
-
-                        continue 2;
+                            continue 2;
+                        }
                     }
                 }
-            }
 
-                foreach ($this->_connections as $other) {
+                foreach ($this->getMergedConnections() as $other) {
                     if (true === $connection->is($other->getOriginalConnection())) {
                         $other->_run($node);
 
@@ -185,7 +194,7 @@ abstract class Handler
 
                 $this->_run($node);
             }
-        }
+        } while (SUCCEED);
 
         $connection->disconnect();
 
@@ -300,17 +309,6 @@ abstract class Handler
     {
         $connection    = $this->getConnection();
         $currentSocket = $this->getOriginalConnection()->getSocket();
-
-        if (1 === func_num_args()) {
-            foreach ($connection->getNodes() as $node) {
-                if (true === $predicate($node) &&
-                    $node->getConnection()->getSocket() === $currentSocket) {
-                    $this->send($message, $node);
-                }
-            }
-
-            return;
-        }
 
         $arguments = array_slice(func_get_args(), 2);
         array_unshift($arguments, $message, null);

@@ -123,7 +123,7 @@ class Client extends Connection
         $flag    = self::CONNECT,
         $context = null
     ) {
-        parent::__construct($socket, $timeout, self::CONNECT & $flag, $context);
+        parent::__construct($socket, $timeout, self::CONNECT | $flag, $context);
 
         return;
     }
@@ -158,7 +158,7 @@ class Client extends Connection
         }
 
         if (false === $connection) {
-            if ($errno == 0) {
+            if ($errno === 0) {
                 throw new Exception('Client cannot join %s.', 0, $streamName);
             } else {
                 throw new Exception(
@@ -170,9 +170,9 @@ class Client extends Connection
             }
         }
 
-        $this->_stack[]    = $connection;
-        $id                = $this->getNodeId($connection);
-        $this->_node       = Consistency\Autoloader::dnew(
+        $this->_stack[] = $connection;
+        $id             = $this->getNodeId($connection);
+        $this->_node    = Consistency\Autoloader::dnew(
             $this->getNodeName(),
             [$id, $connection, $this]
         );
@@ -202,7 +202,7 @@ class Client extends Connection
      */
     public function select()
     {
-        $read   = $this->_stack;
+        $read   = $this->getStack();
         $write  = null;
         $except = null;
 
@@ -294,5 +294,15 @@ class Client extends Connection
     public function isPersistent()
     {
         return (bool) ($this->getFlag() & self::PERSISTENT);
+    }
+
+    /**
+     * Return internal node stack.
+     *
+     * @return  array
+     */
+    protected function getStack()
+    {
+        return $this->_stack;
     }
 }
