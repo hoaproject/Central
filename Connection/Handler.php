@@ -36,6 +36,7 @@
 
 namespace Hoa\Socket\Connection;
 
+use Hoa\Exception as HoaException;
 use Hoa\Socket;
 
 /**
@@ -263,8 +264,11 @@ abstract class Handler
             $self = $this;
 
             return function () use (&$send, &$old, &$self) {
-                $out = call_user_func_array($send, func_get_args());
-                $self->getConnection()->_setStream($old);
+                try {
+                    $out = call_user_func_array($send, func_get_args());
+                } finally {
+                    $self->getConnection()->_setStream($old);
+                }
 
                 return $out;
             };
@@ -304,6 +308,7 @@ abstract class Handler
      * @param   string    $message      Message.
      * @param   …         …             …
      * @return  void
+     * @throws  \Hoa\Exception\Group
      */
     public function broadcastIf(\Closure $predicate, $message)
     {
@@ -312,14 +317,23 @@ abstract class Handler
 
         $arguments = array_slice(func_get_args(), 2);
         array_unshift($arguments, $message, null);
-        $callable  = [$this, 'send'];
+        $callable   = [$this, 'send'];
+        $exceptions = new HoaException\Group('Message can\'t be send to some nodes.');
 
         foreach ($connection->getNodes() as $node) {
             if (true === $predicate($node) &&
                 $node->getConnection()->getSocket() === $currentSocket) {
                 $arguments[1] = $node;
-                call_user_func_array($callable, $arguments);
+                try {
+                    call_user_func_array($callable, $arguments);
+                } catch (Socket\Exception $e) {
+                    $exceptions[$node->getId()] = $e;
+                }
             }
+        }
+
+        if ($exceptions->count() > 0) {
+            throw $exceptions;
         }
 
         return;

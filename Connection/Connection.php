@@ -810,6 +810,7 @@ abstract class Connection
      * @param   int     $length    Length.
      * @return  mixed
      * @throws  \Hoa\Socket\Exception
+     * @throws  \Hoa\Socket\Exception\BrokenPipe
      */
     public function write($string, $length)
     {
@@ -850,7 +851,7 @@ abstract class Connection
         }
 
         if (-1 === $out) {
-            throw new Socket\Exception('Pipe is broken, cannot write data.', 5);
+            throw new Socket\Exception\BrokenPipe('Pipe is broken, cannot write data.', 5);
         }
 
         return $out;
