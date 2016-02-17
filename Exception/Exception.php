@@ -51,4 +51,7 @@ class Exception extends HoaException
 {
 }
 
+/**
+ * Flex entity.
+ */
 Consistency::flexEntity('Hoa\Socket\Exception\Exception');
