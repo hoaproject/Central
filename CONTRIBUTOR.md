@@ -58,6 +58,7 @@ cloak on IRC, etc.
   * Rogerio Prado de Jesus (rogeriopradoj)
   * ➜ Stéphane Py (stephpy)
   * ➜ Steven Rémot (stevenremot)
+  * Tom Rochette (tomzx)
   * Kim Sia Sim (simkimsia)
   * Mike Simonson (mikesimonson)
   * Mathias Strasser (mathiasstrasser)
