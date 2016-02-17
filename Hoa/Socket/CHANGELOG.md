@@ -1,3 +1,13 @@
+# 1.16.02.17
+
+  * Test: Ensure broken pipes are correcty handled. (Ivan Enderlin, 2016-02-17T09:50:04+01:00)
+  * Test: Ensure `…ection::write` throws `BrokenPipe`. (Ivan Enderlin, 2016-02-17T08:57:55+01:00)
+  * Test: Write test suite of `…Exception\BrokenPipe`. (Ivan Enderlin, 2016-02-17T08:55:36+01:00)
+  * Documentation: Complete API documentation. (Ivan Enderlin, 2016-02-17T08:49:51+01:00)
+  * Handler: Catch broken pipe earlier. (Ivan Enderlin, 2016-02-17T08:46:55+01:00)
+  * Quality: Fix CS. (Ivan Enderlin, 2016-02-17T08:46:48+01:00)
+  * Handler: Detect and handle broken pipes while sending or broadcasting messages. (Metalaka, 2016-02-15T20:50:13+01:00)
+
 # 1.16.02.10
 
   * Test: Write test suite of `Hoa\Socket\Server`. (Ivan Enderlin, 2016-02-08T21:13:22+01:00)
