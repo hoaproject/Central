@@ -444,6 +444,56 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
+    public function case_send_broken_pipe()
+    {
+        $self = $this;
+
+        $this
+            ->given(
+                $message   = 'foo',
+                $exception = new LUT\Exception\BrokenPipe('Foo', 0),
+
+                $this->mockGenerator->orphanize('__construct'),
+                $connection = new \Mock\Hoa\Socket\Connection(),
+                $handler    = new SUT($connection),
+
+                $this->mockGenerator->orphanize('__construct'),
+                $node = new \Mock\Hoa\Socket\Node(),
+
+                $oldResource = 7,
+                $resource    = 42,
+
+                $this->calling($connection)->_setStream[1] = function ($socket) use ($self, &$streamCalled0, $oldResource, $resource) {
+                    $streamCalled0 = true;
+
+                    $self
+                        ->variable($socket)
+                            ->isIdenticalTo($resource);
+
+                    return $oldResource;
+                },
+                $this->calling($connection)->_setStream[2] = function ($socket) use ($self, &$streamCalled1, $oldResource, $resource) {
+                    $streamCalled1 = true;
+
+                    $self
+                        ->variable($socket)
+                            ->isIdenticalTo($oldResource);
+
+                    return $resource;
+                },
+                $this->calling($node)->getSocket       = $resource,
+                $this->calling($handler)->_send->throw = $exception
+            )
+            ->exception(function () use ($handler, $message, $node) {
+                $handler->send($message, $node);
+            })
+                ->isIdenticalTo($exception)
+                ->boolean($streamCalled0)
+                    ->isTrue()
+                ->boolean($streamCalled1)
+                    ->isTrue();
+    }
+
     public function case_send()
     {
         $self = $this;
@@ -617,13 +667,58 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
+    public function case_broadcast_if_broken_pipe()
+    {
+        $self = $this;
+
+        $this
+            ->given(
+                $message   = 'foo',
+                $predicate = function (LUT\Node $node) use (&$nodeY, &$nodeZ) {
+                    return $node === $nodeY || $node === $nodeZ;
+                },
+                $exception = new LUT\Exception\BrokenPipe('Foo', 0),
+
+                $this->mockGenerator->orphanize('__construct'),
+                $resource   = 42,
+                $connection = new \Mock\Hoa\Socket\Connection(),
+                $handler    = new SUT($connection),
+
+                $this->mockGenerator->orphanize('__construct'),
+                $nodeX = new \Mock\Hoa\Socket\Node(),
+                $nodeY = new \Mock\Hoa\Socket\Node(),
+                $nodeZ = new \Mock\Hoa\Socket\Node(),
+
+                $this->calling($connection)->getSocket = $resource,
+                $this->calling($connection)->getNodes  = [$nodeX, $nodeY, $nodeZ],
+
+                $this->calling($nodeY)->getConnection = $connection,
+                $this->calling($nodeY)->getId         = 'nodeY',
+
+                $this->calling($nodeZ)->getConnection = $connection,
+                $this->calling($nodeZ)->getId         = 'nodeZ',
+
+                $this->calling($handler)->send->throw = $exception
+            )
+            ->exception(function () use ($handler, $predicate, $message) {
+                $handler->broadcastIf($predicate, $message, 'bar', 'baz');
+            })
+                ->isInstanceOf('Hoa\Exception\Group')
+                ->integer(count($this->exception))
+                    ->isEqualTo(2)
+                ->object($this->exception[$nodeY->getId()])
+                    ->isIdenticalTo($exception)
+                ->object($this->exception[$nodeZ->getId()])
+                    ->isIdenticalTo($exception);
+    }
+
     public function case_broadcast_if()
     {
         $self = $this;
 
         $this
             ->given(
-                $message = 'foo',
+                $message   = 'foo',
                 $predicate = function (LUT\Node $node) use (&$nodeY) {
                     return $node === $nodeY;
                 },
