@@ -34,18 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket;
-
-use Hoa\Exception as HoaException;
+namespace Hoa\Socket\Exception;
 
 /**
- * Class \Hoa\Socket\Exception.
+ * Class \Hoa\Socket\Exception\BrokenPipe.
  *
- * Extending the \Hoa\Exception\Exception class.
+ * Extending the \Hoa\Socket\Exception\Exception class.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Exception extends HoaException
+class BrokenPipe extends Exception
 {
 }

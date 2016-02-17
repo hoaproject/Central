@@ -34,27 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Test\Unit;
+namespace Hoa\Socket\Test\Unit\Exception;
 
-use Hoa\Socket\Exception as SUT;
+use Hoa\Socket\Exception\BrokenPipe as SUT;
 use Hoa\Test;
 
 /**
- * Class \Hoa\Socket\Test\Unit\Exception.
+ * Class \Hoa\Socket\Test\Unit\Exception\BrokenPipe.
  *
- * Test suite of the exception.
+ * Test suite of the broken pipe exception.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Exception extends Test\Unit\Suite
+class BrokenPipe extends Test\Unit\Suite
 {
-    public function case_hoa_exception()
+    public function case_hoa_socket_exception()
     {
         $this
             ->when($result = new SUT('foo', 0))
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Exception\Exception');
+                    ->isInstanceOf('Hoa\Socket\Exception\Exception');
     }
 }
