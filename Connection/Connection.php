@@ -851,7 +851,10 @@ abstract class Connection
         }
 
         if (-1 === $out) {
-            throw new Socket\Exception\BrokenPipe('Pipe is broken, cannot write data.', 5);
+            throw new Socket\Exception\BrokenPipe(
+                'Pipe is broken, cannot write data.',
+                5
+            );
         }
 
         return $out;

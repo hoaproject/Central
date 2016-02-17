@@ -302,7 +302,7 @@ abstract class Handler
     }
 
     /**
-     * Broadcast a message to a subset of nodes that respect a predicate.
+     * Broadcast a message to a subset of nodes that fulfill a predicate.
      *
      * @param   \Closure  $predicate    Predicate. Take a node in argument.
      * @param   string    $message      Message.
@@ -318,7 +318,9 @@ abstract class Handler
         $arguments = array_slice(func_get_args(), 2);
         array_unshift($arguments, $message, null);
         $callable   = [$this, 'send'];
-        $exceptions = new HoaException\Group('Message can\'t be send to some nodes.');
+        $exceptions = new HoaException\Group(
+            'Message cannot be sent to some nodes.'
+        );
 
         foreach ($connection->getNodes() as $node) {
             if (true === $predicate($node) &&
@@ -332,7 +334,7 @@ abstract class Handler
             }
         }
 
-        if ($exceptions->count() > 0) {
+        if (0 < $exceptions->count()) {
             throw $exceptions;
         }
 
