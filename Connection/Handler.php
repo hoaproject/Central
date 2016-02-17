@@ -257,8 +257,15 @@ abstract class Handler
             return null;
         }
 
-        $old  = $this->getConnection()->_setStream($node->getSocket());
-        $send = $this->_send($message, $node);
+        $old = $this->getConnection()->_setStream($node->getSocket());
+
+        try {
+            $send = $this->_send($message, $node);
+        } catch (\Exception $e) {
+            $this->getConnection()->_setStream($old);
+
+            throw $e;
+        }
 
         if ($send instanceof \Closure) {
             $self = $this;
