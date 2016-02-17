@@ -1038,7 +1038,7 @@ class Connection extends Test\Unit\Suite
             ->exception(function () use ($connection, $string, $length) {
                 $connection->write($string, $length);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf('Hoa\Socket\Exception\BrokenPipe');
     }
 
     public function case_write()
@@ -1107,7 +1107,7 @@ class Connection extends Test\Unit\Suite
             ->exception(function () use ($connection, $string, $length) {
                 $connection->write($string, $length);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf('Hoa\Socket\Exception\BrokenPipe');
     }
 
     public function case_base_name()
