@@ -54,42 +54,70 @@ class Server extends Connection
      *
      * @const int
      */
-    const BIND              = STREAM_SERVER_BIND;
+    const BIND               = STREAM_SERVER_BIND;
 
     /**
      * Tell a stream to start listening on the socket.
      *
      * @const int
      */
-    const LISTEN            = STREAM_SERVER_LISTEN;
+    const LISTEN             = STREAM_SERVER_LISTEN;
 
     /**
      * Encryption: SSLv2.
      *
      * @const int
      */
-    const ENCRYPTION_SSLv2  = STREAM_CRYPTO_METHOD_SSLv2_SERVER;
+    const ENCRYPTION_SSLv2   = STREAM_CRYPTO_METHOD_SSLv2_SERVER;
 
     /**
      * Encryption: SSLv3.
      *
      * @const int
      */
-    const ENCRYPTION_SSLv3  = STREAM_CRYPTO_METHOD_SSLv3_SERVER;
+    const ENCRYPTION_SSLv3   = STREAM_CRYPTO_METHOD_SSLv3_SERVER;
 
     /**
      * Encryption: SSLv2.3.
      *
      * @const int
      */
-    const ENCRYPTION_SSLv23 = STREAM_CRYPTO_METHOD_SSLv23_SERVER;
+    const ENCRYPTION_SSLv23  = STREAM_CRYPTO_METHOD_SSLv23_SERVER;
 
     /**
      * Encryption: TLS.
      *
      * @const int
      */
-    const ENCRYPTION_TLS    = STREAM_CRYPTO_METHOD_TLS_SERVER;
+    const ENCRYPTION_TLS     = STREAM_CRYPTO_METHOD_TLS_SERVER;
+
+    /**
+     * Encryption: TLSv1.0.
+     *
+     * @const int
+     */
+    const ENCRYPTION_TLSv1_0 = STREAM_CRYPTO_METHOD_TLSv1_0_SERVER;
+
+    /**
+     * Encryption: TLSv1.1.
+     *
+     * @const int
+     */
+    const ENCRYPTION_TLSv1_1 = STREAM_CRYPTO_METHOD_TLSv1_1_SERVER;
+
+    /**
+     * Encryption: TLSv1.2.
+     *
+     * @const int
+     */
+    const ENCRYPTION_TLSv1_2 = STREAM_CRYPTO_METHOD_TLSv1_2_SERVER;
+
+    /**
+     * Encryption: ANY
+     *
+     * @const int
+     */
+    const ENCRYPTION_ANY     = STREAM_CRYPTO_METHOD_ANY_SERVER;
 
     /**
      * Master connection.
