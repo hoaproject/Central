@@ -917,6 +917,16 @@ class          Response
     }
 
     /**
+     * Get the current stream.
+     *
+     * @return  resource
+     */
+    public function getStream()
+    {
+        return fopen('php://stdout', 'w');
+    }
+
+    /**
      * Get this object hash.
      *
      * @return  string
