@@ -38,22 +38,12 @@ namespace Hoa\Test\Report\Cli;
 
 final class Colors
 {
-    const PREFIX = "\033[";
-    const SUFFIX = 'm';
-
-    const FG = '38;';
-    const BG = '48;';
-
-    const BOLD = ';1';
-    const UNDERLINE = ';4';
-
-    const RESET  = '0';
-    const WHITE  = '5;255'; //#FFFFFF
-    const BLACK  = '5;236'; //#341d44
-    const VIOLET = '5;161'; //#D62988
-    const GREEN  = '5;71'; //#6CBE6C
-    const RED    = '5;131'; //#BD7573
-    const YELLOW = '5;185'; //#E0D95C
-    const BLUE   = '5;32'; //#E0D95C
-    const ORANGE = '5;136'; //#B27E28
+    const WHITE  = '#FFFFFF';
+    const GRAY   = '#CCCCCC';
+    const BLACK  = '#341d44';
+    const VIOLET = '#D62988';
+    const GREEN  = '#6CBE6C';
+    const RED    = '#BD7573';
+    const YELLOW = '#E0D95C';
+    const BLUE   = '#E0D95C';
 }

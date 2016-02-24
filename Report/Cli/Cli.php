@@ -48,10 +48,8 @@ class Cli extends atoum\reports\realtime
     {
         parent::__construct();
 
-        $this->addField(new Fields\Logo());
-
-        $defaultColorizer = new atoum\cli\colorizer(Colors::FG . Colors::WHITE);
-        $defaultPromptColorizer = new atoum\cli\colorizer(Colors::FG . Colors::RED);
+        $defaultColorizer = new Colorizer('foreground(' . Colors::BLACK . ') bold');
+        $defaultPromptColorizer = new Colorizer('foreground(' . Colors::GRAY . ')');
 
         $firstLevelPrompt  = new atoum\cli\prompt('> ', $defaultPromptColorizer);
         $secondLevelPrompt = new atoum\cli\prompt('=> ', $defaultPromptColorizer);
@@ -126,13 +124,13 @@ class Cli extends atoum\reports\realtime
 
         $runnerResultField = new Fields\Result();
         $runnerResultField
-            ->setSuccessColorizer(new atoum\cli\colorizer(Colors::BG . Colors::GREEN, Colors::FG . Colors::BLACK . Colors::BOLD))
-            ->setFailureColorizer(new atoum\cli\colorizer(Colors::BG . Colors::RED, Colors::FG . Colors::BLACK . Colors::BOLD))
+            ->setSuccessColorizer(new Colorizer('background(' . Colors::GREEN . ') foreground(' . Colors::WHITE . ') bold'))
+            ->setFailureColorizer(new Colorizer('background(' . Colors::RED . ') foreground(' . Colors::WHITE . ') bold'))
         ;
 
         $this->addField($runnerResultField);
 
-        $failureColorizer = new atoum\cli\colorizer(Colors::FG . Colors::RED . Colors::BOLD);
+        $failureColorizer = new Colorizer('foreground(' . Colors::RED . ')');
         $failureTitlePrompt = clone $firstLevelPrompt;
         $failureTitlePrompt->setColorizer($failureColorizer);
         $failurePrompt = clone $secondLevelPrompt;
@@ -156,7 +154,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerOutputsField);
 
-        $errorColorizer    = new atoum\cli\colorizer(Colors::FG . Colors::YELLOW . Colors::BOLD);
+        $errorColorizer = new Colorizer('foreground(' . Colors::YELLOW . ') bold');
         $errorTitlePrompt = clone $firstLevelPrompt;
         $errorTitlePrompt->setColorizer($errorColorizer);
         $errorMethodPrompt = clone $secondLevelPrompt;
@@ -174,7 +172,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerErrorsField);
 
-        $exceptionColorizer    = new atoum\cli\colorizer(Colors::FG . Colors::VIOLET . Colors::BOLD);
+        $exceptionColorizer = new Colorizer('foreground(' . Colors::VIOLET . ') bold');
         $exceptionTitlePrompt = clone $firstLevelPrompt;
         $exceptionTitlePrompt->setColorizer($exceptionColorizer);
         $exceptionMethodPrompt = clone $secondLevelPrompt;
@@ -192,7 +190,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerExceptionsField);
 
-        $uncompletedTestColorizer    = new atoum\cli\colorizer(Colors::FG . Colors::WHITE . Colors::BOLD);
+        $uncompletedTestColorizer = new Colorizer('foreground(' . Colors::GRAY . ') bold');
         $uncompletedTestTitlePrompt = clone $firstLevelPrompt;
         $uncompletedTestTitlePrompt->setColorizer($uncompletedTestColorizer);
         $uncompletedTestMethodPrompt = clone $secondLevelPrompt;
@@ -210,7 +208,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerUncompletedField);
 
-        $voidTestColorizer    = new atoum\cli\colorizer(Colors::FG . Colors::BLUE . Colors::BOLD);
+        $voidTestColorizer = new Colorizer('foreground(' . Colors::BLUE . ') bold');
         $voidTestTitlePrompt = clone $firstLevelPrompt;
         $voidTestTitlePrompt->setColorizer($voidTestColorizer);
         $voidTestMethodPrompt = clone $secondLevelPrompt;
@@ -225,7 +223,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerVoidField);
 
-        $skippedTestColorizer    = new atoum\cli\colorizer(Colors::FG . Colors::WHITE . Colors::BOLD);
+        $skippedTestColorizer = new Colorizer('foreground(' . Colors::GRAY . ') bold');
         $skippedTestMethodPrompt = clone $secondLevelPrompt;
         $skippedTestMethodPrompt->setColorizer($skippedTestColorizer);
 

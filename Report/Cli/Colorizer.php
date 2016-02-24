@@ -34,21 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Report\Cli\Fields;
+namespace Hoa\Test\Report\Cli;
 
-use Hoa\Test\Report\Cli\Colors;
-use atoum\report\fields;
+use atoum;
 
-class Logo extends fields\runner\atoum\cli
+class Colorizer extends atoum\cli\colorizer
 {
-    public function __toString()
+    private $style;
+
+    public function __construct($style)
     {
-        return Colors::PREFIX . Colors::FG . Colors::VIOLET . Colors::BOLD . Colors::SUFFIX .
-        '        _   _' . "\n" .
-        '       | | | | ___   __ _' . "\n" .
-        '       | |_| |/ _ \ / _` |' . "\n" .
-        '       |  _  | (_) | (_| |' . "\n" .
-        '       |_| |_|\___/ \__,_|' . "\n" .
-        Colors::PREFIX . Colors::RESET . Colors::SUFFIX  . PHP_EOL;
+        $this->style = $style;
+    }
+
+    public function colorize($message)
+    {
+        return \Hoa\Console\Chrome\Text::colorize($message, $this->style);
     }
 }

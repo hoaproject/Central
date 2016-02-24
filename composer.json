@@ -30,7 +30,8 @@
         "hoa/devtools"              : "~1.0",
         "hoa/file"                  : "~1.0",
         "hoa/protocol"              : "~1.0",
-        "hoa/ustring"               : "~4.0"
+        "hoa/ustring"               : "~4.0",
+        "hoa/console"               : "~1.0"
     },
     "autoload": {
         "psr-4": {
