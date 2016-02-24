@@ -64,6 +64,7 @@ class Output implements Stream\IStream\Out
     protected $_output              = null;
 
 
+
     /**
      * Wraps an `Hoa\Stream\IStream\Out` stream.
      *
@@ -74,6 +75,16 @@ class Output implements Stream\IStream\Out
         $this->_output = $output;
 
         return;
+    }
+
+    /**
+     * Get the real output stream.
+     *
+     * @return  \Hoa\Stream\IStream\Out
+     */
+    public function getStream()
+    {
+        return $this->_output;
     }
 
     /**
