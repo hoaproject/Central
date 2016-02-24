@@ -48,7 +48,7 @@ use Hoa\Protocol;
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-abstract class Stream implements Event\Listenable
+abstract class Stream implements IStream\Stream, Event\Listenable
 {
     use Event\Listens;
 
@@ -429,8 +429,8 @@ abstract class Stream implements Event\Listenable
     /**
      * Set the timeout period.
      *
-     * @param   int     $second    Timeout period in seconds.
-     * @param   int     $micro     Timeout period in microseconds.
+     * @param   int     $seconds         Timeout period in seconds.
+     * @param   int     $microseconds    Timeout period in microseconds.
      * @return  bool
      */
     public function setStreamTimeout($seconds, $microseconds = 0)
@@ -583,7 +583,6 @@ abstract class Stream implements Event\Listenable
             'code'        => $code,
             'severity'    => $severity,
             'message'     => $message,
-            'code'        => $code,
             'transferred' => $transferred,
             'max'         => $max
         ]));
