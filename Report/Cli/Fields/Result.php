@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,9 +44,9 @@ class Result extends fields\runner\result\cli
     {
         $string = $this->prompt;
 
-        if ($this->testNumber === null) {
+        if (null === $this->testNumber) {
             $string .= $this->locale->_('No test running.');
-        } elseif ($this->success) {
+        } elseif (true === $this->success) {
             $string .= $this->successColorizer->colorize(
                 sprintf(
                     $this->locale->_('Success (%s, %s, %s, %s, %s)!'),
@@ -56,8 +56,7 @@ class Result extends fields\runner\result\cli
                     sprintf($this->locale->__('%s skipped test case', '%s skipped test cases', $this->skippedMethodNumber), $this->skippedMethodNumber),
                     sprintf($this->locale->__('%s assertion', '%s assertions', $this->assertionNumber), $this->assertionNumber)
                 )
-            )
-            ;
+            );
         } else {
             $string .= $this->failureColorizer->colorize(
                 sprintf(
@@ -71,10 +70,9 @@ class Result extends fields\runner\result\cli
                     sprintf($this->locale->__('%s error', '%s errors', $this->errorNumber), $this->errorNumber),
                     sprintf($this->locale->__('%s exception', '%s exceptions', $this->exceptionNumber), $this->exceptionNumber)
                 )
-            )
-            ;
+            );
         }
 
-        return $string . PHP_EOL;
+        return $string . "\n";
     }
 }

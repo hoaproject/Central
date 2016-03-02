@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,20 +44,17 @@ class Uncompleted extends fields\runner\tests\uncompleted\cli
     {
         $string = '';
 
-        if ($this->runner !== null) {
-            $uncompletedMethods = $this->runner->getScore()->getUncompletedMethods();
-
+        if (null !== $this->runner) {
+            $uncompletedMethods      = $this->runner->getScore()->getUncompletedMethods();
             $sizeOfUncompletedMethod = sizeof($uncompletedMethods);
 
-            if ($sizeOfUncompletedMethod > 0) {
+            if (0 < $sizeOfUncompletedMethod) {
                 $string .=
                     $this->titlePrompt .
                     sprintf(
                         $this->locale->_('%s:'),
                         $this->titleColorizer->colorize(sprintf($this->locale->__('There is %d uncompleted test case', 'There are %d uncompleted test cases', $sizeOfUncompletedMethod), $sizeOfUncompletedMethod))
-                    ) .
-                    PHP_EOL
-                ;
+                    ) . "\n";
 
                 foreach ($uncompletedMethods as $uncompletedMethod) {
                     $string .=
@@ -65,19 +62,16 @@ class Uncompleted extends fields\runner\tests\uncompleted\cli
                         sprintf(
                             $this->locale->_('%s:'),
                             $this->methodColorizer->colorize(sprintf('%s::%s() with exit code %d', $uncompletedMethod['class'], $uncompletedMethod['method'], $uncompletedMethod['exitCode']))
-                        ) .
-                        PHP_EOL
-                    ;
+                        ) . "\n";
 
-                    $lines = explode(PHP_EOL, trim($uncompletedMethod['output']));
-
+                    $lines   = explode(PHP_EOL, trim($uncompletedMethod['output']));
                     $string .= $this->outputPrompt . 'output(' . strlen($uncompletedMethod['output']) . ') "' . array_shift($lines);
 
                     foreach ($lines as $line) {
-                        $string .= PHP_EOL . $this->outputPrompt . $line;
+                        $string .= "\n" . $this->outputPrompt . $line;
                     }
 
-                    $string .= '"' . PHP_EOL;
+                    $string .= '"' . "\n";
                 }
             }
         }

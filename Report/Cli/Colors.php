@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ final class Colors
     const BLACK  = '#341d44';
     const VIOLET = '#D62988';
     const GREEN  = '#6CBE6C';
-    const RED    = '#BD7573';
+    const RED    = '#FF0066';
     const YELLOW = '#E0D95C';
-    const BLUE   = '#E0D95C';
+    const BLUE   = '#01BBBC';
 }

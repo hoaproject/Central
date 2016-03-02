@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,12 +44,11 @@ class Void extends fields\runner\tests\void\cli
     {
         $string = '';
 
-        if ($this->runner !== null) {
-            $voidMethods = $this->runner->getScore()->getVoidMethods();
-
+        if (null !== $this->runner) {
+            $voidMethods      = $this->runner->getScore()->getVoidMethods();
             $sizeOfVoidMethod = sizeof($voidMethods);
 
-            if ($sizeOfVoidMethod > 0) {
+            if (0 < $sizeOfVoidMethod) {
                 $string .=
                     $this->titlePrompt .
                     sprintf(
@@ -64,13 +63,13 @@ class Void extends fields\runner\tests\void\cli
                                 $sizeOfVoidMethod
                             )
                         )
-                    ) .
-                    PHP_EOL;
+                    ) . "\n";
 
                 foreach ($voidMethods as $voidMethod) {
-                    $string .= $this->methodPrompt .
+                    $string .=
+                        $this->methodPrompt .
                         $this->methodColorizer->colorize(sprintf('%s::%s()', $voidMethod['class'], $voidMethod['method'])) .
-                        PHP_EOL;
+                        "\n";
                 }
             }
         }
