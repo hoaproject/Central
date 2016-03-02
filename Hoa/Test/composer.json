@@ -27,6 +27,7 @@
         "atoum/visibility-extension": "~1.0",
         "hoa/cli"                   : "~2.0",
         "hoa/consistency"           : "~1.0",
+        "hoa/console"               : "~3.0",
         "hoa/devtools"              : "~1.0",
         "hoa/file"                  : "~1.0",
         "hoa/protocol"              : "~1.0",
