@@ -50,10 +50,11 @@ class Cli extends atoum\reports\realtime
 
         $defaultColorizer       = new Colorizer('foreground(' . Colors::BLUE . ')');
         $defaultPromptColorizer = clone $defaultColorizer;
+        $defaultInfoColorizer   = new Colorizer('foreground(' . Colors::YELLOW . ')');
 
         $firstLevelPrompt  = new atoum\cli\prompt('> ', $defaultPromptColorizer);
-        $secondLevelPrompt = new atoum\cli\prompt('=> ', $defaultPromptColorizer);
-        $thirdLevelPrompt  = new atoum\cli\prompt('==> ', $defaultPromptColorizer);
+        $secondLevelPrompt = new atoum\cli\prompt('~> ', $defaultPromptColorizer);
+        $thirdLevelPrompt  = new atoum\cli\prompt('~~> ', $defaultPromptColorizer);
 
         $atoumPathField = new runner\atoum\path\cli();
         $atoumPathField
@@ -86,15 +87,15 @@ class Cli extends atoum\reports\realtime
 
         $runnerTestsDurationField = new runner\tests\duration\cli();
         $runnerTestsDurationField
-            ->setPrompt($firstLevelPrompt)
-            ->setTitleColorizer($defaultColorizer);
+            ->setPrompt(new atoum\cli\prompt("\n" . '> ', $defaultInfoColorizer))
+            ->setTitleColorizer($defaultInfoColorizer);
 
         $this->addField($runnerTestsDurationField);
 
         $runnerTestsMemoryField = new runner\tests\memory\cli();
         $runnerTestsMemoryField
-            ->setPrompt($firstLevelPrompt)
-            ->setTitleColorizer($defaultColorizer);
+            ->setPrompt(new atoum\cli\prompt('> ', $defaultInfoColorizer))
+            ->setTitleColorizer($defaultInfoColorizer);
 
         $this->addField($runnerTestsMemoryField);
 
@@ -109,8 +110,8 @@ class Cli extends atoum\reports\realtime
 
         $runnerDurationField = new runner\duration\cli();
         $runnerDurationField
-            ->setPrompt($firstLevelPrompt)
-            ->setTitleColorizer($defaultColorizer);
+            ->setPrompt(new atoum\cli\prompt('> ', $defaultInfoColorizer))
+            ->setTitleColorizer($defaultInfoColorizer);
 
         $this->addField($runnerDurationField);
 
@@ -122,7 +123,7 @@ class Cli extends atoum\reports\realtime
         $this->addField($runnerResultField);
 
         $failureColorizer   = new Colorizer('foreground(' . Colors::MAGENTA . ')');
-        $failureTitlePrompt = clone $firstLevelPrompt;
+        $failureTitlePrompt = new atoum\cli\prompt("\n");
         $failureTitlePrompt->setColorizer($failureColorizer);
         $failurePrompt = clone $secondLevelPrompt;
         $failurePrompt->setColorizer($failureColorizer);
@@ -144,7 +145,7 @@ class Cli extends atoum\reports\realtime
         $this->addField($runnerOutputsField);
 
         $errorColorizer   = new Colorizer('foreground(' . Colors::YELLOW . ')');
-        $errorTitlePrompt = clone $firstLevelPrompt;
+        $errorTitlePrompt = new atoum\cli\prompt("\n");
         $errorTitlePrompt->setColorizer($errorColorizer);
         $errorMethodPrompt = clone $secondLevelPrompt;
         $errorMethodPrompt->setColorizer($errorColorizer);
@@ -161,7 +162,7 @@ class Cli extends atoum\reports\realtime
         $this->addField($runnerErrorsField);
 
         $exceptionColorizer   = new Colorizer('foreground(' . Colors::YELLOW . ')');
-        $exceptionTitlePrompt = clone $firstLevelPrompt;
+        $exceptionTitlePrompt = new atoum\cli\prompt("\n");
         $exceptionTitlePrompt->setColorizer($exceptionColorizer);
         $exceptionMethodPrompt = clone $secondLevelPrompt;
         $exceptionMethodPrompt->setColorizer($exceptionColorizer);
@@ -178,7 +179,7 @@ class Cli extends atoum\reports\realtime
         $this->addField($runnerExceptionsField);
 
         $uncompletedTestColorizer   = new Colorizer('foreground(' . Colors::GRAY . ')');
-        $uncompletedTestTitlePrompt = clone $firstLevelPrompt;
+        $uncompletedTestTitlePrompt = new atoum\cli\prompt("\n");
         $uncompletedTestTitlePrompt->setColorizer($uncompletedTestColorizer);
         $uncompletedTestMethodPrompt = clone $secondLevelPrompt;
         $uncompletedTestMethodPrompt->setColorizer($uncompletedTestColorizer);
@@ -195,7 +196,7 @@ class Cli extends atoum\reports\realtime
         $this->addField($runnerUncompletedField);
 
         $voidTestColorizer   = new Colorizer('foreground(' . Colors::YELLOW . ')');
-        $voidTestTitlePrompt = clone $firstLevelPrompt;
+        $voidTestTitlePrompt = new atoum\cli\prompt("\n");
         $voidTestTitlePrompt->setColorizer($voidTestColorizer);
         $voidTestMethodPrompt = clone $secondLevelPrompt;
         $voidTestMethodPrompt->setColorizer($voidTestColorizer);
@@ -222,20 +223,20 @@ class Cli extends atoum\reports\realtime
 
         $testRunField = new test\run\cli();
         $testRunField
-            ->setPrompt($firstLevelPrompt)
+            ->setPrompt(new atoum\cli\prompt("\n" . 'Suite ', $defaultPromptColorizer))
             ->setColorizer($defaultColorizer);
 
         $this->addField($testRunField);
 
         $this->addField(new test\event\cli());
 
-        $testDurationField = new test\duration\cli();
+        $testDurationField = new Fields\Duration();
         $testDurationField
             ->setPrompt($secondLevelPrompt);
 
         $this->addField($testDurationField);
 
-        $testMemoryField = new test\memory\cli();
+        $testMemoryField = new Fields\Memory();
         $testMemoryField
             ->setPrompt($secondLevelPrompt);
 

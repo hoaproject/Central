@@ -42,7 +42,7 @@ class Result extends fields\runner\result\cli
 {
     public function __toString()
     {
-        $string = $this->prompt;
+        $string = "\n" . $this->prompt;
 
         if (null === $this->testNumber) {
             $string .= $this->locale->_('No test running.');
