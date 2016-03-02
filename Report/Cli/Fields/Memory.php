@@ -53,8 +53,8 @@ class Memory extends fields\test\memory\cli
                     $this->locale->_('unknown')
                     :
                     sprintf(
-                        $this->locale->_('%4.6f Mb'),
-                        $this->value / 1048576
+                        $this->locale->_('%4.3f Kb'),
+                        $this->value / 1024
                     )
                 )
             ) . "\n";
