@@ -38,12 +38,11 @@ namespace Hoa\Test\Report\Cli;
 
 final class Colors
 {
-    const WHITE  = '#FFFFFF';
-    const GRAY   = '#CCCCCC';
-    const BLACK  = '#341d44';
-    const VIOLET = '#D62988';
-    const GREEN  = '#6CBE6C';
-    const RED    = '#FF0066';
-    const YELLOW = '#E0D95C';
-    const BLUE   = '#01BBBC';
+    const WHITE   = '#FFFFFF';
+    const GRAY    = '#CCCCCC';
+    const BLACK   = '#341d44';
+    const GREEN   = '#6CBE6C';
+    const MAGENTA = '#FF0066';
+    const YELLOW  = '#FFBB2A';
+    const BLUE    = '#01BBBC';
 }

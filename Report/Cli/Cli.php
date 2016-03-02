@@ -48,8 +48,8 @@ class Cli extends atoum\reports\realtime
     {
         parent::__construct();
 
-        $defaultColorizer       = new Colorizer('foreground(' . Colors::BLACK . ') bold');
-        $defaultPromptColorizer = new Colorizer('foreground(' . Colors::GRAY . ')');
+        $defaultColorizer       = new Colorizer('foreground(' . Colors::BLUE . ')');
+        $defaultPromptColorizer = clone $defaultColorizer;
 
         $firstLevelPrompt  = new atoum\cli\prompt('> ', $defaultPromptColorizer);
         $secondLevelPrompt = new atoum\cli\prompt('=> ', $defaultPromptColorizer);
@@ -116,12 +116,12 @@ class Cli extends atoum\reports\realtime
 
         $runnerResultField = new Fields\Result();
         $runnerResultField
-            ->setSuccessColorizer(new Colorizer('background(' . Colors::GREEN . ') foreground(' . Colors::WHITE . ') bold'))
-            ->setFailureColorizer(new Colorizer('background(' . Colors::RED . ') foreground(' . Colors::WHITE . ') bold'));
+            ->setSuccessColorizer(new Colorizer('background(' . Colors::GREEN . ') foreground(' . Colors::WHITE . ')'))
+            ->setFailureColorizer(new Colorizer('background(' . Colors::MAGENTA . ') foreground(' . Colors::WHITE . ')'));
 
         $this->addField($runnerResultField);
 
-        $failureColorizer   = new Colorizer('foreground(' . Colors::RED . ')');
+        $failureColorizer   = new Colorizer('foreground(' . Colors::MAGENTA . ')');
         $failureTitlePrompt = clone $firstLevelPrompt;
         $failureTitlePrompt->setColorizer($failureColorizer);
         $failurePrompt = clone $secondLevelPrompt;
@@ -143,7 +143,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerOutputsField);
 
-        $errorColorizer   = new Colorizer('foreground(' . Colors::YELLOW . ') bold');
+        $errorColorizer   = new Colorizer('foreground(' . Colors::YELLOW . ')');
         $errorTitlePrompt = clone $firstLevelPrompt;
         $errorTitlePrompt->setColorizer($errorColorizer);
         $errorMethodPrompt = clone $secondLevelPrompt;
@@ -160,7 +160,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerErrorsField);
 
-        $exceptionColorizer   = new Colorizer('foreground(' . Colors::VIOLET . ') bold');
+        $exceptionColorizer   = new Colorizer('foreground(' . Colors::YELLOW . ')');
         $exceptionTitlePrompt = clone $firstLevelPrompt;
         $exceptionTitlePrompt->setColorizer($exceptionColorizer);
         $exceptionMethodPrompt = clone $secondLevelPrompt;
@@ -177,7 +177,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerExceptionsField);
 
-        $uncompletedTestColorizer   = new Colorizer('foreground(' . Colors::GRAY . ') bold');
+        $uncompletedTestColorizer   = new Colorizer('foreground(' . Colors::GRAY . ')');
         $uncompletedTestTitlePrompt = clone $firstLevelPrompt;
         $uncompletedTestTitlePrompt->setColorizer($uncompletedTestColorizer);
         $uncompletedTestMethodPrompt = clone $secondLevelPrompt;
@@ -194,7 +194,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerUncompletedField);
 
-        $voidTestColorizer   = new Colorizer('foreground(' . Colors::BLUE . ') bold');
+        $voidTestColorizer   = new Colorizer('foreground(' . Colors::YELLOW . ')');
         $voidTestTitlePrompt = clone $firstLevelPrompt;
         $voidTestTitlePrompt->setColorizer($voidTestColorizer);
         $voidTestMethodPrompt = clone $secondLevelPrompt;
@@ -208,7 +208,7 @@ class Cli extends atoum\reports\realtime
 
         $this->addField($runnerVoidField);
 
-        $skippedTestColorizer    = new Colorizer('foreground(' . Colors::GRAY . ') bold');
+        $skippedTestColorizer    = new Colorizer('foreground(' . Colors::GRAY . ')');
         $skippedTestMethodPrompt = clone $secondLevelPrompt;
         $skippedTestMethodPrompt->setColorizer($skippedTestColorizer);
 
