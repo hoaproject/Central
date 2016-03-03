@@ -1,3 +1,14 @@
+# 2.16.03.03
+
+  * Report: Memory unit is now kilo-bytes. (Ivan Enderlin, 2016-03-02T11:19:16+01:00)
+  * Report: Enhance fields. (Ivan Enderlin, 2016-03-02T11:07:45+01:00)
+  * Report: New colors. (Ivan Enderlin, 2016-03-02T10:24:22+01:00)
+  * Quality: Fix CS. (Ivan Enderlin, 2016-03-02T10:04:47+01:00)
+  * Composer: Fix `hoa/console` version. (Ivan Enderlin, 2016-03-02T09:33:28+01:00)
+  * Report: Use `hoa/console` colorizer. (jubianchi, 2016-02-24T14:57:58+01:00)
+  * Report: Added atoum version & path in CLI report. (jubianchi, 2015-10-25T10:39:43+01:00)
+  * Report: Add custom atoum report. (jubianchi, 2015-09-23T11:40:35+02:00)
+
 # 2.16.01.19
 
   * atoum: Use the `visibility` extension. (Ivan Enderlin, 2016-01-19T12:44:10+01:00)
