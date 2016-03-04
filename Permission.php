@@ -39,7 +39,7 @@ namespace Hoa\Acl;
 /**
  * Class \Hoa\Acl\Permission.
  *
- * Describe a permission profil.
+ * Describe a permission profile.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
@@ -51,22 +51,22 @@ class Permission
      *
      * @var mixed
      */
-    protected $permissionId    = null;
+    protected $_id    = null;
 
     /**
      * Permission label.
      *
      * @var string
      */
-    protected $permissionLabel = null;
+    protected $_label = null;
 
 
 
     /**
      * Built a new permission.
      *
-     * @param   mixed   $id       The permission ID.
-     * @param   string  $label    The permission label.
+     * @param   mixed   $id       Permission ID.
+     * @param   string  $label    Permission label.
      * @return  void
      */
     public function __construct($id, $label = null)
@@ -80,13 +80,13 @@ class Permission
     /**
      * Set permission ID.
      *
-     * @param   mixed  $id    The permission ID.
+     * @param   mixed  $id    Permission ID.
      * @return  mixed
      */
     public function setId($id)
     {
-        $old                = $this->permissionId;
-        $this->permissionId = $id;
+        $old       = $this->_id;
+        $this->_id = $id;
 
         return $old;
     }
@@ -94,13 +94,13 @@ class Permission
     /**
      * Set permission label.
      *
-     * @param   string  $label    The permission label.
+     * @param   string  $label    Permission label.
      * @return  string
      */
     public function setLabel($label)
     {
-        $old                   = $this->permissionLabel;
-        $this->permissionLabel = $label;
+        $old          = $this->_label;
+        $this->_label = $label;
 
         return $old;
     }
@@ -112,7 +112,7 @@ class Permission
      */
     public function getId()
     {
-        return $this->permissionId;
+        return $this->_id;
     }
 
     /**
@@ -122,6 +122,6 @@ class Permission
      */
     public function getLabel()
     {
-        return $this->permissionLabel;
+        return $this->_label;
     }
 }

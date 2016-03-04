@@ -51,21 +51,21 @@ class User
      *
      * @var mixed
      */
-    protected $userId    = null;
+    protected $_id     = null;
 
     /**
      * User label.
      *
      * @var string
      */
-    protected $userLabel = null;
+    protected $_label  = null;
 
     /**
      * Collections of all groups ID.
      *
      * @var array
      */
-    protected $groups    = [];
+    protected $_groups = [];
 
 
 
@@ -85,54 +85,60 @@ class User
     }
 
     /**
-     * Add group.
+     * Add groups.
      *
      * @param   array  $groups    Group to add.
-     * @return  array
+     * @return  \Hoa\Acl\User
+     * @throws  \Hoa\Acl\Exception
      */
-    public function addGroup($groups = [])
+    public function addGroups(array $groups = [])
     {
-        if (!is_array($groups)) {
-            $groups = [$groups];
-        }
-
         foreach ($groups as $group) {
-            if ($group instanceof Group) {
-                $group = $group->getId();
+            if (!($group instanceof Group)) {
+                throw new Exception(
+                    'Group %s must be an instance of Hoa\Acl\Group.',
+                    0,
+                    $group
+                );
             }
 
-            if (true === $this->groupExists($group)) {
+            $id = $group->getId();
+
+            if (true === $this->groupExists($id)) {
                 continue;
             }
 
-            $this->groups[$group] = true;
+            $this->_groups[$id] = true;
         }
 
-        return $this->getGroups();
+        return $this;
     }
 
     /**
-     * Delete group.
+     * Delete groups.
      *
      * @param   array  $groups    Group to add.
-     * @return  array
+     * @return  \Hoa\Acl\User
+     * @throws  \Hoa\Acl\Exception
      */
-    public function deleteGroup($groups = [])
+    public function deleteGroups(array $groups = [])
     {
-        if (!is_array($groups)) {
-            $groups = [$groups];
-        }
-
         foreach ($groups as $group) {
-            if ($group instanceof Group) {
-                $group = $group->getId();
+            if (!($group instanceof Group)) {
+                throw new Exception(
+                    'Group %s must be an instance of Hoa\Acl\Group.',
+                    1,
+                    $group
+                );
             }
 
-            if (false === $this->groupExists($group)) {
+            $id = $group->getId();
+
+            if (false === $this->groupExists($id)) {
                 continue;
             }
 
-            unset($this->groups[$group]);
+            unset($this->_groups[$id]);
         }
 
         return $this->getGroups();
@@ -141,16 +147,12 @@ class User
     /**
      * Check if a group exists.
      *
-     * @param   mixed  $groupId    The group ID.
+     * @param   mixed  $groupId    Group ID.
      * @return  bool
      */
     public function groupExists($groupId)
     {
-        if ($groupId instanceof Group) {
-            $groupId = $groupId->getId();
-        }
-
-        return isset($this->groups[$groupId]);
+        return isset($this->_groups[$groupId]);
     }
 
     /**
@@ -160,19 +162,19 @@ class User
      */
     public function getGroups()
     {
-        return array_keys($this->groups);
+        return $this->_groups;
     }
 
     /**
      * Set user ID.
      *
-     * @param   mixed  $id    The user ID.
+     * @param   mixed  $id    User ID.
      * @return  mixed
      */
     protected function setId($id)
     {
-        $old          = $this->userId;
-        $this->userId = $id;
+        $old       = $this->_id;
+        $this->_id = $id;
 
         return $old;
     }
@@ -180,13 +182,13 @@ class User
     /**
      * Set user label.
      *
-     * @param   string  $label    The user label.
+     * @param   string  $label    User label.
      * @return  string
      */
     public function setLabel($label)
     {
-        $old             = $this->userLabel;
-        $this->userLabel = $label;
+        $old          = $this->_label;
+        $this->_label = $label;
 
         return $old;
     }
@@ -198,7 +200,7 @@ class User
      */
     public function getId()
     {
-        return $this->userId;
+        return $this->_id;
     }
 
     /**
@@ -208,6 +210,6 @@ class User
      */
     public function getLabel()
     {
-        return $this->userLabel;
+        return $this->_label;
     }
 }

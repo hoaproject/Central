@@ -34,21 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl\IAcl;
+namespace Hoa\Acl;
 
 /**
- * Interface \Hoa\Acl\IAcl\Assert.
+ * Interface \Hoa\Acl\Assertable.
  *
  * Force to implement the assert method.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-interface Assert
+interface Assertable
 {
     /**
      * Write an assert.
-     * Must return a boolean, because the comparaison will be strict (using
+     * Must return a boolean, because the comparison will be strict (using
      * ===).
      *
      * @return  bool
