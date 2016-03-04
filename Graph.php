@@ -125,7 +125,7 @@ abstract class Graph
      */
     public static function getInstance($type = self::TYPE_ADJACENCYLIST)
     {
-        if ($type != self::TYPE_ADJACENCYLIST) {
+        if ($type !== self::TYPE_ADJACENCYLIST) {
             throw new Exception(
                 'Type %s is not supported. Only self:TYPE_ADJACENCYLIST is ' .
                 'supported.',
