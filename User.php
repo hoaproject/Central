@@ -108,7 +108,7 @@ class User
                 continue;
             }
 
-            $this->_groups[$id] = true;
+            $this->_groups[$id] = $group;
         }
 
         return $this;
@@ -141,7 +141,7 @@ class User
             unset($this->_groups[$id]);
         }
 
-        return $this->getGroups();
+        return $this;
     }
 
     /**
@@ -153,6 +153,26 @@ class User
     public function groupExists($groupId)
     {
         return isset($this->_groups[$groupId]);
+    }
+
+    /**
+     * Get a specific group.
+     *
+     * @param   mixed  $groupId    Group ID.
+     * @return  \Hoa\Acl\User
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function getGroup($groupId)
+    {
+        if (false === $this->groupExists($groupId)) {
+            throw new Exception(
+                'Group %s does not exist in the user %s.',
+                1,
+                [$groupId, $this->getLabel()]
+            );
+        }
+
+        return $this->_groups[$groupId];
     }
 
     /**

@@ -127,6 +127,14 @@ class Group implements Graph\IGraph\Node
     public function deletePermissions(array $permissions = [])
     {
         foreach ($permissions as $permission) {
+            if (!($permission instanceof Permission)) {
+                throw new Exception(
+                    'Permission %s must be an instance of Hoa\Acl\Permission.',
+                    1,
+                    $permission
+                );
+            }
+
             $id = $permission->getId();
 
             if (false === $this->permissionExists($id)) {
@@ -162,7 +170,7 @@ class Group implements Graph\IGraph\Node
         if (false === $this->permissionExists($permissionId)) {
             throw new Exception(
                 'Permission %s does not exist in the group %s.',
-                1,
+                2,
                 [$permissionId, $this->getLabel()]
             );
         }
