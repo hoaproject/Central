@@ -108,7 +108,7 @@ class Service
                 continue;
             }
 
-            $this->_users[$id] = true;
+            $this->_users[$id] = $user;
         }
 
         return $this;
@@ -138,7 +138,7 @@ class Service
                 continue;
             }
 
-            unset($this->_users[$user]);
+            unset($this->_users[$id]);
         }
 
         return $this;
