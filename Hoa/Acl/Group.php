@@ -41,8 +41,8 @@ use Hoa\Graph;
 /**
  * Class \Hoa\Acl\Group.
  *
- * Describe a group. A group is based on a graph (coding by adjacency list) to
- * set up the multi-inheritance of the group.
+ * Describe a group. A group is based on a graph to set up the multi-inheritance
+ * of the group.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
@@ -54,21 +54,21 @@ class Group implements Graph\IGraph\Node
      *
      * @var mixed
      */
-    protected $groupId     = null;
+    protected $_id          = null;
 
     /**
      * Group label.
      *
      * @var string
      */
-    protected $groupLabel  = null;
+    protected $_label       = null;
 
     /**
      * Collections of all permissions.
      *
      * @var array
      */
-    protected $permissions = [];
+    protected $_permissions = [];
 
 
 
@@ -88,74 +88,86 @@ class Group implements Graph\IGraph\Node
     }
 
     /**
-     * Add permission.
+     * Add permissions.
      *
-     * @param   array  $permissions    Permission to add.
-     * @return  array
+     * @param   array  $permissions    Permissions to add.
+     * @return  \Hoa\Acl\Group
      * @throws  \Hoa\Acl\Exception
      */
-    public function addPermission($permissions = [])
+    public function addPermissions(array $permissions = [])
     {
-        if (!is_array($permissions)) {
-            $permissions = [$permissions];
-        }
-
         foreach ($permissions as $permission) {
             if (!($permission instanceof Permission)) {
                 throw new Exception(
-                    'Permission %s must be an instance of \Hoa\Acl\Permission',
+                    'Permission %s must be an instance of Hoa\Acl\Permission.',
                     0,
                     $permission
                 );
             }
 
-            if (true === $this->permissionExists($permission->getId())) {
+            $id = $permission->getId();
+
+            if (true === $this->permissionExists($id)) {
                 continue;
             }
 
-            $this->permissions[$permission->getId()] = $permission;
+            $this->_permissions[$id] = $permission;
         }
 
-        return $this->getPermissions();
+        return $this;
     }
 
     /**
-     * Delete permission.
+     * Delete permissions.
      *
-     * @param   array  $permissions    Permission to add.
-     * @return  array
+     * @param   array  $permissions    Permissions to add.
+     * @return  \Hoa\Acl\Group
      * @throws  \Hoa\Acl\Exception
      */
-    public function deletePermission($permissions = [])
+    public function deletePermissions(array $permissions = [])
     {
-        if (!is_array($permissions)) {
-            $permissions = [$permissions];
-        }
-
         foreach ($permissions as $permission) {
-            if ($permission instanceof Permission) {
-                $permission = $permission->getId();
-            }
+            $id = $permission->getId();
 
-            if (false === $this->permissionExists($permission)) {
+            if (false === $this->permissionExists($id)) {
                 continue;
             }
 
-            unset($this->permissions[$permission]);
+            unset($this->_permissions[$id]);
         }
 
-        return $this->getPermissions();
+        return $this;
     }
 
     /**
      * Check if a permission exists.
      *
-     * @param   mixed  $permissionId    The permission ID.
+     * @param   mixed  $permissionId    Permission ID.
      * @return  bool
      */
     public function permissionExists($permissionId)
     {
-        return isset($this->permissions[$permissionId]);
+        return isset($this->_permissions[$permissionId]);
+    }
+
+    /**
+     * Get a specific permission.
+     *
+     * @param   mixed  $permissionId    Permission ID.
+     * @return  \Hoa\Acl\Permission
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function getPermission($permissionId)
+    {
+        if (false === $this->permissionExists($permissionId)) {
+            throw new Exception(
+                'Permission %s does not exist in the group %s.',
+                1,
+                [$permissionId, $this->getLabel()]
+            );
+        }
+
+        return $this->_permissions[$permissionId];
     }
 
     /**
@@ -165,19 +177,19 @@ class Group implements Graph\IGraph\Node
      */
     public function getPermissions()
     {
-        return $this->permissions;
+        return $this->_permissions;
     }
 
     /**
      * Set group ID.
      *
-     * @param   mixed  $id    The group ID.
+     * @param   mixed  $id    Group ID.
      * @return  mixed
      */
     protected function setId($id)
     {
-        $old           = $this->groupId;
-        $this->groupId = $id;
+        $old       = $this->_id;
+        $this->_id = $id;
 
         return $old;
     }
@@ -185,13 +197,13 @@ class Group implements Graph\IGraph\Node
     /**
      * Set group label.
      *
-     * @param   string  $label    The group label.
+     * @param   string  $label    Group label.
      * @return  string
      */
     public function setLabel($label)
     {
-        $old              = $this->groupLabel;
-        $this->groupLabel = $label;
+        $old          = $this->_label;
+        $this->_label = $label;
 
         return $old;
     }
@@ -203,7 +215,7 @@ class Group implements Graph\IGraph\Node
      */
     public function getId()
     {
-        return $this->groupId;
+        return $this->_id;
     }
 
     /**
@@ -213,12 +225,11 @@ class Group implements Graph\IGraph\Node
      */
     public function getLabel()
     {
-        return $this->groupLabel;
+        return $this->_label;
     }
 
     /**
-     * Get node ID, i.e. group ID as well (see
-     * \Hoa\Graph\IGraph\Node).
+     * Get node ID, i.e. group ID (see `Hoa\Graph\IGraph\Node`).
      *
      * @return  mixed
      */

@@ -3,7 +3,7 @@
     "description": "The Hoa\\Acl library.",
     "type"       : "library",
     "keywords"   : ["library", "acl", "access", "control", "list", "user",
-                    "group", "permission", "resource"],
+                    "group", "permission", "service", "resource"],
     "homepage"   : "http://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [

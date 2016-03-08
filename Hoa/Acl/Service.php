@@ -51,29 +51,29 @@ class Service
      *
      * @var mixed
      */
-    protected $serviceId    = null;
+    protected $_id    = null;
 
     /**
      * Service label.
      *
      * @var string
      */
-    protected $serviceLabel = null;
+    protected $_label = null;
 
     /**
      * Collections of all users ID.
      *
      * @var array
      */
-    protected $users        = [];
+    protected $_users = [];
 
 
 
     /**
      * Built a new service.
      *
-     * @param   mixed   $id       The service ID.
-     * @param   string  $label    The service label.
+     * @param   mixed   $id       Service ID.
+     * @param   string  $label    Service label.
      * @return  void
      */
     public function __construct($id, $label = null)
@@ -85,55 +85,63 @@ class Service
     }
 
     /**
-     * Add user.
+     * Add users.
      *
-     * @param   array  $users    User to add.
-     * @return  array
+     * @param   array  $users    Users to add.
+     * @return  \Hoa\Acl\Service
+     * @throws  \Hoa\Acl\Exception
      */
-    public function addUser($users = [])
+    public function addUsers(array $users = [])
     {
-        if (!is_array($users)) {
-            $users = [$users];
-        }
-
         foreach ($users as $user) {
-            if ($user instanceof User) {
-                $user = $user->getId();
+            if (!($user instanceof User)) {
+                throw new Exception(
+                    'User %s must be an instance of Hoa\Acl\User.',
+                    0,
+                    $user
+                );
             }
 
-            if (true === $this->userExists($user)) {
+            $id = $user->getId();
+
+            if (true === $this->userExists($id)) {
                 continue;
             }
 
-            $this->users[$user] = true;
+            $this->_users[$id] = true;
         }
 
-        return $this->getUsers();
+        return $this;
     }
 
     /**
-     * Delete user.
+     * Delete users.
      *
      * @param   array  $users    User to add.
-     * @return  array
+     * @return  \Hoa\Acl\Service
+     * @throws  \Hoa\Acl\Exception
      */
-    public function deleteUser($users = [])
+    public function deleteUsers(array $users = [])
     {
-        $users = (array) $users;
-
         foreach ($users as $user) {
-            if ($user instanceof User) {
-                $user = $user->getId();
+            if (!($user instanceof User)) {
+                throw new Exception(
+                    'User %s must be an instance of Hoa\Acl\User.',
+                    1,
+                    $user
+                );
             }
 
-            if (false === $this->userExists($user)) {
+            $id = $user->getId();
+
+            if (false === $this->userExists($id)) {
                 continue;
             }
 
-            unset($this->users[$user]);
+            unset($this->_users[$user]);
         }
 
-        return $this->getUsers();
+        return $this;
     }
 
     /**
@@ -144,11 +152,27 @@ class Service
      */
     public function userExists($userId)
     {
-        if ($userId instanceof User) {
-            $userId = $userId->getId();
+        return isset($this->_users[$userId]);
+    }
+
+    /**
+     * Get a specific user.
+     *
+     * @param   mixed  $userId    User ID.
+     * @return  \Hoa\Acl\User
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function getUser($userId)
+    {
+        if (false === $this->userExists($userId)) {
+            throw new Exception(
+                'User %s does not exist in the service %s.',
+                1,
+                [$userId, $this->getLabel()]
+            );
         }
 
-        return isset($this->users[$userId]);
+        return $this->_users[$userId];
     }
 
     /**
@@ -158,19 +182,19 @@ class Service
      */
     public function getUsers()
     {
-        return array_keys($this->users);
+        return $this->_users;
     }
 
     /**
      * Set service ID.
      *
-     * @param   mixed  $id    The service ID.
+     * @param   mixed  $id    Service ID.
      * @return  mixed
      */
     protected function setId($id)
     {
-        $old             = $this->serviceId;
-        $this->serviceId = $id;
+        $old       = $this->_id;
+        $this->_id = $id;
 
         return $old;
     }
@@ -178,13 +202,13 @@ class Service
     /**
      * Set service label.
      *
-     * @param   string  $label    The service label.
+     * @param   string  $label    Service label.
      * @return  string
      */
     public function setLabel($label)
     {
-        $old                = $this->serviceLabel;
-        $this->serviceLabel = $label;
+        $old          = $this->_label;
+        $this->_label = $label;
 
         return $old;
     }
@@ -196,7 +220,7 @@ class Service
      */
     public function getId()
     {
-        return $this->serviceId;
+        return $this->_id;
     }
 
     /**
@@ -206,6 +230,6 @@ class Service
      */
     public function getLabel()
     {
-        return $this->serviceLabel;
+        return $this->_label;
     }
 }
