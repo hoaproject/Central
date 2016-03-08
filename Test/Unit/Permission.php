@@ -88,7 +88,7 @@ class Permission extends Test\Unit\Suite
                 $permission = new SUT($oldId),
                 $id         = 'bar'
             )
-            ->when($result = $permission->setId($id))
+            ->when($result = $this->invoke($permission)->setId($id))
             ->then
                 ->string($result)
                     ->isEqualTo($oldId)

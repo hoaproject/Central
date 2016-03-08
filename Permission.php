@@ -83,7 +83,7 @@ class Permission
      * @param   mixed  $id    Permission ID.
      * @return  mixed
      */
-    public function setId($id)
+    protected function setId($id)
     {
         $old       = $this->_id;
         $this->_id = $id;
