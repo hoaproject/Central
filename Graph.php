@@ -242,7 +242,7 @@ abstract class Graph
      *
      * @return  bool
      */
-    public function isLoopAllow()
+    public function isLoopAllowed()
     {
         return $this->loop;
     }
