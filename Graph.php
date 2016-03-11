@@ -148,7 +148,7 @@ abstract class Graph
      * @return  void
      * @throws  \Hoa\Graph\Exception
      */
-    abstract public function addNode(IGraph\Node $node, $parent = []);
+    abstract public function addNode(IGraph\Node $node, array $parents = []);
 
     /**
      * Check if a node does already exist or not.
@@ -181,10 +181,10 @@ abstract class Graph
      * Get parent of a specific node.
      *
      * @param   mixed   $nodeId    The node ID or the node instance.
-     * @return  object
+     * @return  array
      * @throws  \Hoa\Graph\Exception
      */
-    abstract public function getParent($nodeId);
+    abstract public function getParents($nodeId);
 
     /**
      * Get child of a specific node.
