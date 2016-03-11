@@ -94,143 +94,319 @@ class Acl
      * @param   bool  $loop    Allow or not loop. Please, see the `Hoa\Graph`.
      * @return  void
      */
-    private function __construct($loop = Graph::DISALLOW_LOOP)
+    public function __construct($loop = Graph::DISALLOW_LOOP)
     {
-        $this->_groups = Graph::getInstance(Graph::TYPE_ADJACENCYLIST, $loop);
+        $this->_groups = new Graph\AdjacencyList($loop);
 
         return;
     }
 
     /**
-     * Add a user.
+     * Add users.
      *
-     * @param   \Hoa\Acl\User  $user    User to add.
-     * @return  void
+     * @param   array  $users    Users to add.
+     * @return  \Hoa\Acl\Service
      * @throws  \Hoa\Acl\Exception
      */
-    public function addUser(User $user)
+    public function addUsers(array $users = [])
     {
-        if (true === $this->userExists($user->getId())) {
-            throw new Exception(
-                'User %s is already registered, cannot add it.',
-                0,
-                $user->getId()
-            );
+        foreach ($users as $user) {
+            if (!($user instanceof User)) {
+                throw new Exception(
+                    'User %s must be an instance of Hoa\Acl\User.',
+                    0,
+                    $user
+                );
+            }
+
+            $id = $user->getId();
+
+            if (true === $this->userExists($id)) {
+                continue;
+            }
+
+            $this->_users[$id] = $user;
         }
 
-        $this->_users[$user->getId()] = $user;
-
-        return;
+        return $this;
     }
 
     /**
-     * Delete a user.
+     * Delete users.
      *
-     * @param   mixed  $userId    User ID (or instance).
-     * @return  void
+     * @param   array  $users    User to add.
+     * @return  \Hoa\Acl\Service
+     * @throws  \Hoa\Acl\Exception
      */
-    public function deleteUser($userId)
+    public function deleteUsers(array $users = [])
+    {
+        foreach ($users as $user) {
+            if (!($user instanceof User)) {
+                throw new Exception(
+                    'User %s must be an instance of Hoa\Acl\User.',
+                    1,
+                    $user
+                );
+            }
+
+            $id = $user->getId();
+
+            if (false === $this->userExists($id)) {
+                continue;
+            }
+
+            unset($this->_users[$id]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if a user exists or not.
+     *
+     * @param   muxed  $userId    User ID (or instance).
+     * @return  bool
+     */
+    public function userExists($userId)
     {
         if ($userId instanceof User) {
             $userId = $userId->getId();
         }
 
-        unset($this->_users[$userId]);
+        return isset($this->_users[$userId]);
+    }
 
-        return;
+    /**
+     * Get a specific user.
+     *
+     * @param   string  $userId    User ID.
+     * @return  \Hoa\Acl\User
+     * @throws  \Hoa\Acl\Exception
+     */
+    protected function getUser($userId)
+    {
+        if (false === $this->userExists($userId)) {
+            throw new Exception('User %s does not exist.', 5, $userId);
+        }
+
+        return $this->_users[$userId];
+    }
+
+    /**
+     * Get all users.
+     *
+     * @return  array
+     */
+    protected function getUsers()
+    {
+        return $this->_users;
     }
 
     /**
      * Add a group.
      *
      * @param   \Hoa\Acl\Group  $group      Group to add.
-     * @param   mixed           $inherit    If group inherits permission from
-     *                                      (should the group ID or the group
-     *                                      instance).
-     * @return  void
+     * @param   mixed           $parents    Parent groups (will inherit
+     *                                      permissions).
+     * @return  \Hoa\Acl\Acl
      * @throws  \Hoa\Acl\Exception
      */
-    public function addGroup(Group $group, array $inherit = [])
+    public function addGroup(Group $group, array $parents = [])
     {
-        foreach ($inherit as &$in) {
-            if ($in instanceof Group) {
-                $in = $in->getId();
+        $parentIds = [];
+
+        foreach ($parents as $parent) {
+            if (!($parent instanceof Group)) {
+                throw new Exception(
+                    'Group %s must be an instance of Hoa\Acl\Group.',
+                    1,
+                    $parent
+                );
             }
+
+            $parentIds[] = $parent->getId();
         }
 
         try {
-            $this->getGroups()->addNode($group, $inherit);
+            $this->getGroups()->addNode($group, $parentIds);
         } catch (Graph\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode());
         }
 
-        return;
+        return $this;
     }
 
     /**
      * Delete a group.
      *
-     * @param   mixed  $groupId      Group ID (or instance).
-     * @param   bool   $propagate    Propagate the erasure.
-     * @return  void
+     * @param   \Hoa\Acl\Group  $group        Group.
+     * @param   bool            $propagate    Propagate the erasure.
+     * @return  \Hoa\Acl\Acl
      * @throws  \Hoa\Acl\Exception
      */
-    public function deleteGroup($groupId, $propagate = self::DELETE_RESTRICT)
+    public function deleteGroup(Group $group, $propagate = self::DELETE_RESTRICT)
+    {
+        $id = $group->getId();
+
+        try {
+            $this->getGroups()->deleteNode($id, $propagate);
+        } catch (Graph\Exception $e) {
+            throw new Exception(
+                'Apparently it is not possible to delete the group %s, ' .
+                'probably because it has at least one child.',
+                42,
+                $id,
+                $e
+            );
+        }
+
+        foreach ($this->getUsers() as $user) {
+            $user->deleteGroup($id);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if a group exists or not.
+     *
+     * @param   mixed  $groupId    Group ID.
+     * @return  bool
+     */
+    public function groupExists($groupId)
     {
         if ($groupId instanceof Group) {
             $groupId = $groupId->getId();
         }
 
-        try {
-            $this->getGroups()->deleteNode($groupId, $propagate);
-        } catch (Graph\Exception $e) {
-            throw new Exception($e->getMessage(), $e->getCode());
-        }
-
-        foreach ($this->getUsers() as $user) {
-            $user->deleteGroup($groupId);
-        }
-
-        return;
+        return $this->getGroups()->nodeExists($groupId);
     }
 
     /**
-     * Add a service.
+     * Get a specific group.
      *
-     * @param   \Hoa\Acl\Service  $service    Service to add.
-     * @return  void
+     * @param   string  $groupId    The group ID.
+     * @return  \Hoa\Acl\Group
      * @throws  \Hoa\Acl\Exception
      */
-    public function addService(Service $service)
+    public function getGroup($groupId)
     {
-        if (true === $this->serviceExists($service->getId())) {
-            throw new Exception(
-                'Service %s is already registered, cannot add it.',
-                1,
-                $service->getId()
-            );
+        if (false === $this->groupExists($groupId)) {
+            throw new Exception('Group %s does not exist.', 6, $groupId);
         }
 
-        $this->_services[$service->getId()] = $service;
-
-        return;
+        return $this->getGroups()->getNode($groupId);
     }
 
     /**
-     * Delete a service.
+     * Get all groups, i.e. get the groups graph.
      *
-     * @param   mixed  $serviceId    Service ID (or instance).
-     * @return  void
+     * @return  \Hoa\Graph
      */
-    public function deleteService($serviceId)
+    protected function getGroups()
+    {
+        return $this->_groups;
+    }
+
+    /**
+     * Add services.
+     *
+     * @param   array  $services    Services to add.
+     * @return  \Hoa\Acl\Service
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function addServices(array $services = [])
+    {
+        foreach ($services as $service) {
+            if (!($service instanceof Service)) {
+                throw new Exception(
+                    'Service %s must be an instance of Hoa\Acl\Service.',
+                    0,
+                    $service
+                );
+            }
+
+            $id = $service->getId();
+
+            if (true === $this->serviceExists($id)) {
+                continue;
+            }
+
+            $this->_services[$id] = $service;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Delete services.
+     *
+     * @param   array  $services    Service to add.
+     * @return  \Hoa\Acl\Service
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function deleteServices(array $services = [])
+    {
+        foreach ($services as $service) {
+            if (!($service instanceof Service)) {
+                throw new Exception(
+                    'Service %s must be an instance of Hoa\Acl\Service.',
+                    1,
+                    $service
+                );
+            }
+
+            $id = $service->getId();
+
+            if (false === $this->serviceExists($id)) {
+                continue;
+            }
+
+            unset($this->_services[$id]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if a service exists or not.
+     *
+     * @param   muxed  $serviceId    Service ID (or instance).
+     * @return  bool
+     */
+    public function serviceExists($serviceId)
     {
         if ($serviceId instanceof Service) {
             $serviceId = $serviceId->getId();
         }
 
-        unset($this->_services[$serviceId]);
+        return isset($this->_services[$serviceId]);
+    }
 
-        return;
+    /**
+     * Get a specific service.
+     *
+     * @param   string  $serviceId    Service ID.
+     * @return  \Hoa\Acl\Service
+     * @throws  \Hoa\Acl\Exception
+     */
+    protected function getService($serviceId)
+    {
+        if (false === $this->serviceExists($serviceId)) {
+            throw new Exception('Service %s does not exist.', 5, $serviceId);
+        }
+
+        return $this->_services[$serviceId];
+    }
+
+    /**
+     * Get all services.
+     *
+     * @return  array
+     */
+    protected function getServices()
+    {
+        return $this->_services;
     }
 
     /**
@@ -383,129 +559,6 @@ class Acl
                 ->getGroups()
                 ->getNode($groupId)
                 ->permissionExists($permissionId);
-    }
-
-    /**
-     * Check if a user exists or not.
-     *
-     * @param   muxed  $userId    User ID (or instance).
-     * @return  bool
-     */
-    public function userExists($userId)
-    {
-        if ($userId instanceof User) {
-            $userId = $userId->getId();
-        }
-
-        return isset($this->_users[$userId]);
-    }
-
-    /**
-     * Check if a group exists or not.
-     *
-     * @param   mixed  $groupId    Group ID (or instance).
-     * @return  bool
-     */
-    public function groupExists($groupId)
-    {
-        if ($groupId instanceof Group) {
-            $groupId = $groupId->getId();
-        }
-
-        return $this->getGroups()->nodeExists($groupId);
-    }
-
-    /**
-     * Check if a service exists or not.
-     *
-     * @param   mixed  $serviceId    Service ID (or instance).
-     * @return  bool
-     */
-    public function serviceExists($serviceId)
-    {
-        if ($serviceId instanceof Service) {
-            $serviceId = $serviceId->getId();
-        }
-
-        return isset($this->_services[$serviceId]);
-    }
-
-    /**
-     * Get a specific user.
-     *
-     * @param   string  $userId    User ID.
-     * @return  \Hoa\Acl\User
-     * @throws  \Hoa\Acl\Exception
-     */
-    public function getUser($userId)
-    {
-        if (false === $this->userExists($userId)) {
-            throw new Exception('User %s does not exist.', 5, $userId);
-        }
-
-        return $this->_users[$userId];
-    }
-
-    /**
-     * Get all users.
-     *
-     * @return  array
-     */
-    protected function getUsers()
-    {
-        return $this->_users;
-    }
-
-    /**
-     * Get a specific group.
-     *
-     * @param   string  $groupId    The group ID.
-     * @return  \Hoa\Acl\Group
-     * @throws  \Hoa\Acl\Exception
-     */
-    public function getGroup($groupId)
-    {
-        if (false === $this->groupExists($groupId)) {
-            throw new Exception('Group %s does not exist.', 6, $groupId);
-        }
-
-        return $this->getGroups()->getNode($groupId);
-    }
-
-    /**
-     * Get all groups, i.e. get the groups graph.
-     *
-     * @return  \Hoa\Graph
-     */
-    protected function getGroups()
-    {
-        return $this->_groups;
-    }
-
-    /**
-     * Get a specific service.
-     *
-     * @param   string  $serviceId    The service ID.
-     * @return  \Hoa\Acl\Service
-     * @throws  \Hoa\Acl\Exception
-     */
-    public function getService($serviceId)
-    {
-        if (false === $this->serviceExists($serviceId)) {
-            throw new Exception('Service %s does not exist.', 7, $serviceId);
-        }
-
-        return $this->_services[$serviceId];
-    }
-
-    /**
-     * Get all services.
-     *
-     * @return  array
-     */
-    protected function getServices()
-    {
-        return $this->_services;
     }
 
     /**
