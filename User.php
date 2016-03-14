@@ -170,7 +170,7 @@ class User
     protected function getService($serviceId)
     {
         if (false === $this->serviceExists($serviceId)) {
-            throw new Exception('Service %s does not exist.', 5, $serviceId);
+            throw new Exception('Service %s does not exist.', 2, $serviceId);
         }
 
         return $this->_services[$serviceId];

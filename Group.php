@@ -189,7 +189,7 @@ class Group implements Graph\IGraph\Node
     public function getUser($userId)
     {
         if (false === $this->userExists($userId)) {
-            throw new Exception('User %s does not exist.', 5, $userId);
+            throw new Exception('User %s does not exist.', 2, $userId);
         }
 
         return $this->_users[$userId];
@@ -218,7 +218,7 @@ class Group implements Graph\IGraph\Node
             if (!($permission instanceof Permission)) {
                 throw new Exception(
                     'Permission %s must be an instance of Hoa\Acl\Permission.',
-                    0,
+                    3,
                     $permission
                 );
             }
@@ -248,7 +248,7 @@ class Group implements Graph\IGraph\Node
             if (!($permission instanceof Permission)) {
                 throw new Exception(
                     'Permission %s must be an instance of Hoa\Acl\Permission.',
-                    1,
+                    4,
                     $permission
                 );
             }
@@ -288,7 +288,7 @@ class Group implements Graph\IGraph\Node
         if (false === $this->permissionExists($permissionId)) {
             throw new Exception(
                 'Permission %s does not exist in the group %s.',
-                2,
+                5,
                 [$permissionId, $this->getLabel()]
             );
         }
@@ -319,7 +319,7 @@ class Group implements Graph\IGraph\Node
             if (!($service instanceof Service)) {
                 throw new Exception(
                     'Service %s must be an instance of Hoa\Acl\Service.',
-                    0,
+                    6,
                     $service
                 );
             }
@@ -349,7 +349,7 @@ class Group implements Graph\IGraph\Node
             if (!($service instanceof Service)) {
                 throw new Exception(
                     'Service %s must be an instance of Hoa\Acl\Service.',
-                    1,
+                    7,
                     $service
                 );
             }
@@ -391,7 +391,7 @@ class Group implements Graph\IGraph\Node
     protected function getService($serviceId)
     {
         if (false === $this->serviceExists($serviceId)) {
-            throw new Exception('Service %s does not exist.', 5, $serviceId);
+            throw new Exception('Service %s does not exist.', 8, $serviceId);
         }
 
         return $this->_services[$serviceId];
