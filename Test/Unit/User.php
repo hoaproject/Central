@@ -77,148 +77,148 @@ class User extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_add_groups()
+    public function case_add_services()
     {
         $this
             ->given(
-                $groups = [
-                    new LUT\Group('g1'),
-                    new LUT\Group('g2'),
-                    new LUT\Group('g3')
+                $services = [
+                    new LUT\Service('s1'),
+                    new LUT\Service('s2'),
+                    new LUT\Service('s3')
                 ],
                 $user     = new SUT('foo'),
-                $oldCount = count($user->getGroups())
+                $oldCount = count($this->invoke($user)->getServices())
             )
-            ->when($result = $user->addGroups($groups))
+            ->when($result = $user->addServices($services))
             ->then
                 ->object($result)
                     ->isIdenticalTo($user)
-                ->integer(count($result->getGroups()))
-                    ->isEqualTo($oldCount + count($groups))
-                ->boolean($result->groupExists('g1'))
+                ->integer(count($this->invoke($result)->getServices()))
+                    ->isEqualTo($oldCount + count($services))
+                ->boolean($result->serviceExists('s1'))
                     ->isTrue()
-                ->boolean($result->groupExists('g2'))
+                ->boolean($result->serviceExists('s2'))
                     ->isTrue()
-                ->boolean($result->groupExists('g3'))
+                ->boolean($result->serviceExists('s3'))
                     ->isTrue()
-                ->object($result->getGroup('g1'))
-                    ->isIdenticalTo($groups[0])
-                ->object($result->getGroup('g2'))
-                    ->isIdenticalTo($groups[1])
-                ->object($result->getGroup('g3'))
-                    ->isIdenticalTo($groups[2]);
+                ->object($this->invoke($result)->getService('s1'))
+                    ->isIdenticalTo($services[0])
+                ->object($this->invoke($result)->getService('s2'))
+                    ->isIdenticalTo($services[1])
+                ->object($this->invoke($result)->getService('s3'))
+                    ->isIdenticalTo($services[2]);
     }
 
-    public function case_add_groups_not_a_valid_object()
+    public function case_add_services_not_a_valid_object()
     {
         $this
             ->given($user = new SUT('foo'))
             ->exception(function () use ($user) {
-                $user->addGroups([null]);
+                $user->addServices([null]);
             })
                 ->isInstanceOf('Hoa\Acl\Exception');
     }
 
-    public function case_delete_groups()
+    public function case_delete_services()
     {
         $this
             ->given(
-                $groups = [
-                    new LUT\Group('g1'),
-                    new LUT\Group('g2'),
-                    new LUT\Group('g3')
+                $services = [
+                    new LUT\Service('s1'),
+                    new LUT\Service('s2'),
+                    new LUT\Service('s3')
                 ],
                 $user = new SUT('foo'),
-                $user->addGroups($groups),
-                $oldCount = count($user->getGroups()),
+                $user->addServices($services),
+                $oldCount = count($this->invoke($user)->getServices()),
 
-                $groupsToDelete = [
-                    $groups[0],
-                    $groups[2]
+                $servicesToDelete = [
+                    $services[0],
+                    $services[2]
                 ]
             )
-            ->when($result = $user->deleteGroups($groupsToDelete))
+            ->when($result = $user->deleteServices($servicesToDelete))
             ->then
                 ->object($result)
                     ->isIdenticalTo($user)
-                ->integer(count($result->getGroups()))
-                    ->isEqualTo($oldCount - count($groupsToDelete))
-                ->boolean($result->groupExists('g1'))
+                ->integer(count($this->invoke($result)->getServices()))
+                    ->isEqualTo($oldCount - count($servicesToDelete))
+                ->boolean($result->serviceExists('s1'))
                     ->isFalse()
-                ->boolean($result->groupExists('g2'))
+                ->boolean($result->serviceExists('s2'))
                     ->isTrue()
-                ->boolean($result->groupExists('g3'))
+                ->boolean($result->serviceExists('s3'))
                     ->isFalse()
-                ->object($result->getGroup('g2'))
-                    ->isIdenticalTo($groups[1]);
+                ->object($this->invoke($result)->getService('s2'))
+                    ->isIdenticalTo($services[1]);
     }
 
-    public function case_group_exists()
+    public function case_service_exists()
     {
         $this
             ->given(
                 $user = new SUT('foo'),
-                $user->addGroups([new LUT\Group('g1')])
+                $user->addServices([new LUT\Service('s1')])
             )
-            ->when($result = $user->groupExists('g1'))
+            ->when($result = $user->serviceExists('s1'))
             ->then
                 ->boolean($result)
                     ->isTrue();
     }
 
-    public function case_group_does_not_exist()
+    public function case_service_does_not_exist()
     {
         $this
             ->given($user = new SUT('foo'))
-            ->when($result = $user->groupExists('p1'))
+            ->when($result = $user->serviceExists('s1'))
             ->then
                 ->boolean($result)
                     ->isFalse();
     }
 
-    public function case_get_group()
+    public function case_get_service()
     {
         $this
             ->given(
-                $user  = new SUT('foo'),
-                $group = new LUT\Group('g1'),
-                $user->addGroups([$group])
+                $user    = new SUT('foo'),
+                $service = new LUT\Service('s1'),
+                $user->addServices([$service])
             )
-            ->when($result = $user->getGroup('g1'))
+            ->when($result = $this->invoke($user)->getService('s1'))
             ->then
                 ->object($result)
-                    ->isIdenticalTo($group);
+                    ->isIdenticalTo($service);
     }
 
-    public function case_get_undefined_group()
+    public function case_get_undefined_service()
     {
         $this
             ->given($user = new SUT('foo'))
             ->exception(function () use ($user) {
-                $user->getGroup('g1');
+                $this->invoke($user)->getService('s1');
             })
                 ->isInstanceOf('Hoa\Acl\Exception');
     }
 
-    public function case_get_groups()
+    public function case_get_services()
     {
         $this
             ->given(
-                $groups = [
-                    new LUT\Group('g1'),
-                    new LUT\Group('g2'),
-                    new LUT\Group('g3')
+                $services = [
+                    new LUT\Service('s1'),
+                    new LUT\Service('s2'),
+                    new LUT\Service('s3')
                 ],
                 $user = new SUT('foo'),
-                $user->addGroups($groups)
+                $user->addServices($services)
             )
-            ->when($result = $user->getGroups())
+            ->when($result = $this->invoke($user)->getServices())
             ->then
                 ->array($result)
                     ->isEqualTo([
-                        'g1' => $groups[0],
-                        'g2' => $groups[1],
-                        'g3' => $groups[2]
+                        's1' => $services[0],
+                        's2' => $services[1],
+                        's3' => $services[2]
                     ]);
     }
 

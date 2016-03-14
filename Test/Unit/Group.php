@@ -91,6 +91,151 @@ class Group extends Test\Unit\Suite
                     ->isNull();
     }
 
+    public function case_add_users()
+    {
+        $this
+            ->given(
+                $users = [
+                    new LUT\User('u1'),
+                    new LUT\User('u2'),
+                    new LUT\User('u3')
+                ],
+                $group    = new SUT('foo'),
+                $oldCount = count($group->getUsers())
+            )
+            ->when($result = $group->addUsers($users))
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($group)
+                ->integer(count($result->getUsers()))
+                    ->isEqualTo($oldCount + count($users))
+                ->boolean($result->userExists('u1'))
+                    ->isTrue()
+                ->boolean($result->userExists('u2'))
+                    ->isTrue()
+                ->boolean($result->userExists('u3'))
+                    ->isTrue()
+                ->object($result->getUser('u1'))
+                    ->isIdenticalTo($users[0])
+                ->object($result->getUser('u2'))
+                    ->isIdenticalTo($users[1])
+                ->object($result->getUser('u3'))
+                    ->isIdenticalTo($users[2]);
+    }
+
+    public function case_add_users_not_a_valid_object()
+    {
+        $this
+            ->given($group = new SUT('foo'))
+            ->exception(function () use ($group) {
+                $group->addUsers([null]);
+            })
+                ->isInstanceOf('Hoa\Acl\Exception');
+    }
+
+    public function case_delete_users()
+    {
+        $this
+            ->given(
+                $users = [
+                    new LUT\User('u1'),
+                    new LUT\User('u2'),
+                    new LUT\User('u3')
+                ],
+                $group = new SUT('foo'),
+                $group->addUsers($users),
+                $oldCount = count($group->getUsers()),
+
+                $usersToDelete = [
+                    $users[0],
+                    $users[2]
+                ]
+            )
+            ->when($result = $group->deleteUsers($usersToDelete))
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($group)
+                ->integer(count($result->getUsers()))
+                    ->isEqualTo($oldCount - count($usersToDelete))
+                ->boolean($result->userExists('u1'))
+                    ->isFalse()
+                ->boolean($result->userExists('u2'))
+                    ->isTrue()
+                ->boolean($result->userExists('u3'))
+                    ->isFalse()
+                ->object($result->getUser('u2'))
+                    ->isIdenticalTo($users[1]);
+    }
+
+    public function case_user_exists()
+    {
+        $this
+            ->given(
+                $group = new SUT('foo'),
+                $group->addUsers([new LUT\User('u1')])
+            )
+            ->when($result = $group->userExists('u1'))
+            ->then
+                ->boolean($result)
+                    ->isTrue();
+    }
+
+    public function case_user_does_not_exist()
+    {
+        $this
+            ->given($group = new SUT('foo'))
+            ->when($result = $group->userExists('u1'))
+            ->then
+                ->boolean($result)
+                    ->isFalse();
+    }
+
+    public function case_get_user()
+    {
+        $this
+            ->given(
+                $group = new SUT('foo'),
+                $user  = new LUT\User('u1'),
+                $group->addUsers([$user])
+            )
+            ->when($result = $group->getUser('u1'))
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($user);
+    }
+
+    public function case_get_undefined_user()
+    {
+        $this
+            ->given($group = new SUT('foo'))
+            ->exception(function () use ($group) {
+                $group->getUser('u1');
+            })
+                ->isInstanceOf('Hoa\Acl\Exception');
+    }
+
+    public function case_get_users()
+    {
+        $this
+            ->given(
+                $users = [
+                    new LUT\User('u1'),
+                    new LUT\User('u2'),
+                    new LUT\User('u3')
+                ],
+                $group = new SUT('foo'),
+                $group->addUsers($users)
+            )
+            ->when($result = $group->getUsers())
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        'u1' => $users[0],
+                        'u2' => $users[1],
+                        'u3' => $users[2]
+                    ]);
+    }
+
     public function case_add_permissions()
     {
         $this
@@ -233,6 +378,151 @@ class Group extends Test\Unit\Suite
                         'p1' => $permissions[0],
                         'p2' => $permissions[1],
                         'p3' => $permissions[2]
+                    ]);
+    }
+
+    public function case_add_services()
+    {
+        $this
+            ->given(
+                $services = [
+                    new LUT\Service('s1'),
+                    new LUT\Service('s2'),
+                    new LUT\Service('s3')
+                ],
+                $group    = new SUT('foo'),
+                $oldCount = count($this->invoke($group)->getServices())
+            )
+            ->when($result = $group->addServices($services))
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($group)
+                ->integer(count($this->invoke($result)->getServices()))
+                    ->isEqualTo($oldCount + count($services))
+                ->boolean($result->serviceExists('s1'))
+                    ->isTrue()
+                ->boolean($result->serviceExists('s2'))
+                    ->isTrue()
+                ->boolean($result->serviceExists('s3'))
+                    ->isTrue()
+                ->object($this->invoke($result)->getService('s1'))
+                    ->isIdenticalTo($services[0])
+                ->object($this->invoke($result)->getService('s2'))
+                    ->isIdenticalTo($services[1])
+                ->object($this->invoke($result)->getService('s3'))
+                    ->isIdenticalTo($services[2]);
+    }
+
+    public function case_add_services_not_a_valid_object()
+    {
+        $this
+            ->given($group = new SUT('foo'))
+            ->exception(function () use ($group) {
+                $group->addServices([null]);
+            })
+                ->isInstanceOf('Hoa\Acl\Exception');
+    }
+
+    public function case_delete_services()
+    {
+        $this
+            ->given(
+                $services = [
+                    new LUT\Service('s1'),
+                    new LUT\Service('s2'),
+                    new LUT\Service('s3')
+                ],
+                $group = new SUT('foo'),
+                $group->addServices($services),
+                $oldCount = count($this->invoke($group)->getServices()),
+
+                $servicesToDelete = [
+                    $services[0],
+                    $services[2]
+                ]
+            )
+            ->when($result = $group->deleteServices($servicesToDelete))
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($group)
+                ->integer(count($this->invoke($result)->getServices()))
+                    ->isEqualTo($oldCount - count($servicesToDelete))
+                ->boolean($result->serviceExists('s1'))
+                    ->isFalse()
+                ->boolean($result->serviceExists('s2'))
+                    ->isTrue()
+                ->boolean($result->serviceExists('s3'))
+                    ->isFalse()
+                ->object($this->invoke($result)->getService('s2'))
+                    ->isIdenticalTo($services[1]);
+    }
+
+    public function case_service_exists()
+    {
+        $this
+            ->given(
+                $group = new SUT('foo'),
+                $group->addServices([new LUT\Service('s1')])
+            )
+            ->when($result = $group->serviceExists('s1'))
+            ->then
+                ->boolean($result)
+                    ->isTrue();
+    }
+
+    public function case_service_does_not_exist()
+    {
+        $this
+            ->given($group = new SUT('foo'))
+            ->when($result = $group->serviceExists('s1'))
+            ->then
+                ->boolean($result)
+                    ->isFalse();
+    }
+
+    public function case_get_service()
+    {
+        $this
+            ->given(
+                $group   = new SUT('foo'),
+                $service = new LUT\Service('s1'),
+                $group->addServices([$service])
+            )
+            ->when($result = $this->invoke($group)->getService('s1'))
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($service);
+    }
+
+    public function case_get_undefined_service()
+    {
+        $this
+            ->given($group = new SUT('foo'))
+            ->exception(function () use ($group) {
+                $this->invoke($group)->getService('s1');
+            })
+                ->isInstanceOf('Hoa\Acl\Exception');
+    }
+
+    public function case_get_services()
+    {
+        $this
+            ->given(
+                $services = [
+                    new LUT\Service('s1'),
+                    new LUT\Service('s2'),
+                    new LUT\Service('s3')
+                ],
+                $group = new SUT('foo'),
+                $group->addServices($services)
+            )
+            ->when($result = $this->invoke($group)->getServices())
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        's1' => $services[0],
+                        's2' => $services[1],
+                        's3' => $services[2]
                     ]);
     }
 

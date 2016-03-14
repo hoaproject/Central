@@ -41,8 +41,11 @@ use Hoa\Graph;
 /**
  * Class \Hoa\Acl\Group.
  *
- * Describe a group. A group is based on a graph to set up the multi-inheritance
- * of the group.
+ * A group contains zero or more users, has zero or more permissions and owns
+ * zero or more services. Structurally, this is a node of a graph (please, see
+ * `Hoa\Graph`) and thus can inherit permissions from other groups. Users and
+ * services cannot be inherited. If a group owns a service, this is a shared
+ * service because several users can access to it.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
@@ -64,11 +67,25 @@ class Group implements Graph\IGraph\Node
     protected $_label       = null;
 
     /**
-     * Collections of all permissions.
+     * Users.
+     *
+     * @var array
+     */
+    protected $_users       = [];
+
+    /**
+     * Permissions.
      *
      * @var array
      */
     protected $_permissions = [];
+
+    /**
+     * Services.
+     *
+     * @var array
+     */
+    protected $_services    = [];
 
 
 
@@ -88,7 +105,108 @@ class Group implements Graph\IGraph\Node
     }
 
     /**
-     * Add permissions.
+     * Add users.
+     *
+     * @param   array  $users    Users to add.
+     * @return  \Hoa\Acl\Group
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function addUsers(array $users = [])
+    {
+        foreach ($users as $user) {
+            if (!($user instanceof User)) {
+                throw new Exception(
+                    'User %s must be an instance of Hoa\Acl\User.',
+                    0,
+                    $user
+                );
+            }
+
+            $id = $user->getId();
+
+            if (true === $this->userExists($id)) {
+                continue;
+            }
+
+            $this->_users[$id] = $user;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Delete users.
+     *
+     * @param   array  $users    User to add.
+     * @return  \Hoa\Acl\Group
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function deleteUsers(array $users = [])
+    {
+        foreach ($users as $user) {
+            if (!($user instanceof User)) {
+                throw new Exception(
+                    'User %s must be an instance of Hoa\Acl\User.',
+                    1,
+                    $user
+                );
+            }
+
+            $id = $user->getId();
+
+            if (false === $this->userExists($id)) {
+                continue;
+            }
+
+            unset($this->_users[$id]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if a user exists or not.
+     *
+     * @param   muxed  $userId    User ID (or instance).
+     * @return  bool
+     */
+    public function userExists($userId)
+    {
+        if ($userId instanceof User) {
+            $userId = $userId->getId();
+        }
+
+        return isset($this->_users[$userId]);
+    }
+
+    /**
+     * Get a specific user.
+     *
+     * @param   string  $userId    User ID.
+     * @return  \Hoa\Acl\User
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function getUser($userId)
+    {
+        if (false === $this->userExists($userId)) {
+            throw new Exception('User %s does not exist.', 5, $userId);
+        }
+
+        return $this->_users[$userId];
+    }
+
+    /**
+     * Get all users.
+     *
+     * @return  array
+     */
+    public function getUsers()
+    {
+        return $this->_users;
+    }
+
+    /**
+     * Add permissions in this group.
      *
      * @param   array  $permissions    Permissions to add.
      * @return  \Hoa\Acl\Group
@@ -118,7 +236,7 @@ class Group implements Graph\IGraph\Node
     }
 
     /**
-     * Delete permissions.
+     * Delete permissions in this group.
      *
      * @param   array  $permissions    Permissions to add.
      * @return  \Hoa\Acl\Group
@@ -148,7 +266,7 @@ class Group implements Graph\IGraph\Node
     }
 
     /**
-     * Check if a permission exists.
+     * Check if a permission exists in this group.
      *
      * @param   mixed  $permissionId    Permission ID.
      * @return  bool
@@ -159,7 +277,7 @@ class Group implements Graph\IGraph\Node
     }
 
     /**
-     * Get a specific permission.
+     * Get a specific permission of this group.
      *
      * @param   mixed  $permissionId    Permission ID.
      * @return  \Hoa\Acl\Permission
@@ -179,13 +297,114 @@ class Group implements Graph\IGraph\Node
     }
 
     /**
-     * Get all permissions, i.e. the permissions collection.
+     * Get permissions of this group.
      *
      * @return  array
      */
     public function getPermissions()
     {
         return $this->_permissions;
+    }
+
+    /**
+     * Add shared services.
+     *
+     * @param   array  $services    Services to add.
+     * @return  \Hoa\Acl\Group
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function addServices(array $services = [])
+    {
+        foreach ($services as $service) {
+            if (!($service instanceof Service)) {
+                throw new Exception(
+                    'Service %s must be an instance of Hoa\Acl\Service.',
+                    0,
+                    $service
+                );
+            }
+
+            $id = $service->getId();
+
+            if (true === $this->serviceExists($id)) {
+                continue;
+            }
+
+            $this->_services[$id] = $service;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Delete shared services.
+     *
+     * @param   array  $services    Service to add.
+     * @return  \Hoa\Acl\Group
+     * @throws  \Hoa\Acl\Exception
+     */
+    public function deleteServices(array $services = [])
+    {
+        foreach ($services as $service) {
+            if (!($service instanceof Service)) {
+                throw new Exception(
+                    'Service %s must be an instance of Hoa\Acl\Service.',
+                    1,
+                    $service
+                );
+            }
+
+            $id = $service->getId();
+
+            if (false === $this->serviceExists($id)) {
+                continue;
+            }
+
+            unset($this->_services[$id]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if a shared service exists or not.
+     *
+     * @param   muxed  $serviceId    Service ID (or instance).
+     * @return  bool
+     */
+    public function serviceExists($serviceId)
+    {
+        if ($serviceId instanceof Service) {
+            $serviceId = $serviceId->getId();
+        }
+
+        return isset($this->_services[$serviceId]);
+    }
+
+    /**
+     * Get a specific shared service.
+     *
+     * @param   string  $serviceId    Service ID.
+     * @return  \Hoa\Acl\Service
+     * @throws  \Hoa\Acl\Exception
+     */
+    protected function getService($serviceId)
+    {
+        if (false === $this->serviceExists($serviceId)) {
+            throw new Exception('Service %s does not exist.', 5, $serviceId);
+        }
+
+        return $this->_services[$serviceId];
+    }
+
+    /**
+     * Get all shared services.
+     *
+     * @return  array
+     */
+    protected function getServices()
+    {
+        return $this->_services;
     }
 
     /**
@@ -203,6 +422,16 @@ class Group implements Graph\IGraph\Node
     }
 
     /**
+     * Get group ID.
+     *
+     * @return  mixed
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    /**
      * Set group label.
      *
      * @param   string  $label    Group label.
@@ -214,16 +443,6 @@ class Group implements Graph\IGraph\Node
         $this->_label = $label;
 
         return $old;
-    }
-
-    /**
-     * Get group ID.
-     *
-     * @return  mixed
-     */
-    public function getId()
-    {
-        return $this->_id;
     }
 
     /**
