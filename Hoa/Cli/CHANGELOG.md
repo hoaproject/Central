@@ -1,3 +1,7 @@
+# 2.16.03.15
+
+  * Update copyright. (Ivan Enderlin, 2016-01-17T14:28:52+01:00)
+
 # 2.16.01.14
 
   * Composer: hoa/dispatcher is stable. (Ivan Enderlin, 2016-01-14T21:41:22+01:00)
