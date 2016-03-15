@@ -1,3 +1,8 @@
+# 3.16.03.15
+
+  * Update copyright. (Ivan Enderlin, 2016-01-17T14:12:35+01:00)
+  * README: Simplify an example. (Ivan Enderlin, 2016-01-17T14:02:47+01:00)
+
 # 3.16.01.11
 
   * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
