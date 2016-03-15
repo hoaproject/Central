@@ -50,7 +50,7 @@ use Hoa\Graph;
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Group implements Graph\IGraph\Node
+class Group implements Graph\Node
 {
     /**
      * Group ID.
