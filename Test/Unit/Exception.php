@@ -34,13 +34,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Test\Unit;
+namespace Hoa\Acl\Test\Unit;
 
 use Hoa\Acl\Exception as SUT;
 use Hoa\Test;
 
 /**
- * Class \Hoa\Socket\Test\Unit\Exception.
+ * Class \Hoa\Acl\Test\Unit\Exception.
  *
  * Test suite of the exception.
  *
