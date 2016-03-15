@@ -1,3 +1,8 @@
+# 0.16.03.15
+
+  * DAL: Introduce iterators over result sets! (Metalaka, 2016-02-08T09:12:39+01:00)
+  * use ~1.0 in zFormat and not and ~0.0 cause 0.0 not exist (camael24, 2016-02-07T12:14:30+01:00)
+
 # 0.16.01.11
 
   * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
