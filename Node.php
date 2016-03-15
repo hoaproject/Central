@@ -34,12 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Graph\IGraph;
+namespace Hoa\Graph;
 
 /**
- * Interface \Hoa\Graph\IGraph\Node.
+ * Interface \Hoa\Graph\Node.
  *
- * Force to implement a method: getNodeId.
+ * Force to implement a method: `getNodeId`.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
