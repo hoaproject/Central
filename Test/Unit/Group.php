@@ -38,6 +38,7 @@ namespace Hoa\Acl\Test\Unit;
 
 use Hoa\Acl as LUT;
 use Hoa\Acl\Group as SUT;
+use Hoa\Graph;
 use Hoa\Test;
 
 /**
@@ -60,8 +61,8 @@ class Group extends Test\Unit\Suite
             ->when($result = new SUT($id, $label))
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Acl\Group')
-                    ->isInstanceOf('Hoa\Graph\IGraph\Node');
+                    ->isInstanceOf(LUT\Group::class)
+                    ->isInstanceOf(Graph\Node::class);
     }
 
     public function case_constructor()
@@ -130,7 +131,7 @@ class Group extends Test\Unit\Suite
             ->exception(function () use ($group) {
                 $group->addUsers([null]);
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_delete_users()
@@ -211,7 +212,7 @@ class Group extends Test\Unit\Suite
             ->exception(function () use ($group) {
                 $group->getUser('u1');
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_get_users()
@@ -275,7 +276,7 @@ class Group extends Test\Unit\Suite
             ->exception(function () use ($group) {
                 $group->addPermissions([null]);
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_delete_permissions()
@@ -356,7 +357,7 @@ class Group extends Test\Unit\Suite
             ->exception(function () use ($group) {
                 $group->getPermission('p1');
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_get_permissions()
@@ -420,7 +421,7 @@ class Group extends Test\Unit\Suite
             ->exception(function () use ($group) {
                 $group->addServices([null]);
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_delete_services()
@@ -501,7 +502,7 @@ class Group extends Test\Unit\Suite
             ->exception(function () use ($group) {
                 $this->invoke($group)->getService('s1');
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_get_services()

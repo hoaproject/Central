@@ -116,7 +116,7 @@ class User extends Test\Unit\Suite
             ->exception(function () use ($user) {
                 $user->addServices([null]);
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_delete_services()
@@ -197,7 +197,7 @@ class User extends Test\Unit\Suite
             ->exception(function () use ($user) {
                 $this->invoke($user)->getService('s1');
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_get_services()

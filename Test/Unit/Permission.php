@@ -36,6 +36,7 @@
 
 namespace Hoa\Acl\Test\Unit;
 
+use Hoa\Acl as LUT;
 use Hoa\Acl\Permission as SUT;
 use Hoa\Test;
 
@@ -59,7 +60,7 @@ class Permission extends Test\Unit\Suite
             ->when($result = new SUT($id, $label))
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Acl\Permission')
+                    ->isInstanceOf(LUT\Permission::class)
                 ->string($result->getId())
                     ->isEqualTo($id)
                 ->string($result->getLabel())
@@ -73,7 +74,7 @@ class Permission extends Test\Unit\Suite
             ->when($result = new SUT($id))
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Acl\Permission')
+                    ->isInstanceOf(LUT\Permission::class)
                 ->string($result->getId())
                     ->isEqualTo($id)
                 ->variable($result->getLabel())

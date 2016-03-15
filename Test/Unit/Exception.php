@@ -37,6 +37,7 @@
 namespace Hoa\Acl\Test\Unit;
 
 use Hoa\Acl\Exception as SUT;
+use Hoa\Exception as HoaException;
 use Hoa\Test;
 
 /**
@@ -55,6 +56,6 @@ class Exception extends Test\Unit\Suite
             ->when($result = new SUT('foo', 0))
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Exception\Exception');
+                    ->isInstanceOf(HoaException::class);
     }
 }
