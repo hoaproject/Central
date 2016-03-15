@@ -37,79 +37,70 @@
 namespace Hoa\Graph;
 
 use Hoa\Consistency;
+use Hoa\Iterator;
 
 /**
  * Class \Hoa\Graph.
  *
- * Get instance of different graph type.
- * When getting an instance of a type of a graph, the graph type (e.g.
- * \Hoa\Graph\AdjacencyList) extends this class. It is like an abstract
- * factory…
+ * Abstract graph. One or more implementation of a graph may exists but the
+ * public API remains the same.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-abstract class Graph
+abstract class Graph implements Iterator\Aggregate
 {
     /**
-     * Graph type.
-     *
-     * @const string
-     */
-    const TYPE_ADJACENCYLIST = 'AdjacencyList';
-
-    /**
-     * Allow loop when building graph (when adding nodes).
+     * Allow loop inside the graph.
      *
      * @const bool
      */
-    const ALLOW_LOOP         = true;
+    const ALLOW_LOOP      = true;
 
     /**
-     * Disallow loop when building graph (when adding nodes).
+     * Disallow loop inside the graph.
      *
      * @const bool
      */
-    const DISALLOW_LOOP      = false;
+    const DISALLOW_LOOP   = false;
 
     /**
-     * Propagate delete.
+     * Propagate node delete to its children.
      *
      * @const bool
      */
-    const DELETE_CASCADE     = true;
+    const DELETE_CASCADE  = true;
 
     /**
-     * Restrict delete.
+     * Restrict node delete to the current node.
      *
      * @const bool
      */
-    const DELETE_RESTRICT    = false;
+    const DELETE_RESTRICT = false;
 
     /**
      * All nodes.
      *
      * @var array
      */
-    protected $nodes = [];
+    protected $_nodes = [];
 
     /**
-     * If allow loop when building graph, it is set to ALLOW_LOOP (true),
-     * DISALLOW_LOOP (false) else.
+     * Whether loops are allowed in the graph.
      *
      * @var bool
      */
-    protected $loop  = self::DISALLOW_LOOP;
+    protected $_loop  = self::DISALLOW_LOOP;
 
 
 
     /**
      * Get an empty graph.
      *
-     * @param   bool       $loop    Allow or not loop.
+     * @param   bool  $loop    Whether loops are allowed.
      * @return  void
      */
-    protected function __construct($loop = self::DISALLOW_LOOP)
+    public function __construct($loop = self::DISALLOW_LOOP)
     {
         $this->allowLoop($loop);
 
@@ -117,43 +108,19 @@ abstract class Graph
     }
 
     /**
-     * Make an instance of a specific graph.
-     *
-     * @param   string  $type    Type of graph needed.
-     * @return  \Hoa\Graph
-     * @throws  \Hoa\Graph\Exception
-     */
-    public static function getInstance($type = self::TYPE_ADJACENCYLIST)
-    {
-        if ($type !== self::TYPE_ADJACENCYLIST) {
-            throw new Exception(
-                'Type %s is not supported. Only self:TYPE_ADJACENCYLIST is ' .
-                'supported.',
-                0,
-                $type
-            );
-        }
-
-        $arguments = func_get_args();
-        array_shift($arguments);
-
-        return Consistency\Autoloader::dnew('Hoa\Graph\\' . $type, $arguments);
-    }
-
-    /**
      * Add a node.
      *
-     * @param   \Hoa\Graph\IGraph\Node  $node      Node to add.
-     * @param   mixed                   $parent    Parent of node.
-     * @return  void
+     * @param   \Hoa\Graph\Node  $node       Node to add.
+     * @param   array            $parents    Parents.
+     * @return  \Hoa\Graph\Graph
      * @throws  \Hoa\Graph\Exception
      */
-    abstract public function addNode(IGraph\Node $node, array $parents = []);
+    abstract public function addNode(Node $node, array $parents = []);
 
     /**
      * Check if a node does already exist or not.
      *
-     * @param   mixed   $nodeId    The node ID or the node instance.
+     * @param   mixed   $nodeId    Node ID.
      * @return  bool
      */
     abstract public function nodeExists($nodeId);
@@ -161,8 +128,8 @@ abstract class Graph
     /**
      * Get a node.
      *
-     * @param   mixed   $nodeId    The node ID or the node instance.
-     * @return  object
+     * @param   mixed   $nodeId    Node ID.
+     * @return  \Hoa\Graph\Node
      * @throws  \Hoa\Graph\Exception
      */
     abstract public function getNode($nodeId);
@@ -174,77 +141,77 @@ abstract class Graph
      */
     protected function getNodes()
     {
-        return $this->nodes;
+        return $this->_nodes;
     }
 
     /**
-     * Get parent of a specific node.
+     * Get parents of a specific node.
      *
-     * @param   mixed   $nodeId    The node ID or the node instance.
+     * @param   \Hoa\Graph\Node   $node    Node.
      * @return  array
      * @throws  \Hoa\Graph\Exception
      */
-    abstract public function getParents($nodeId);
+    abstract public function getParents(Node $node);
 
     /**
-     * Get child of a specific node.
+     * Get children of a specific node.
      *
-     * @param   mixed   $nodeId    The node ID or the node instance.
-     * @return  object
+     * @param   \Hoa\Graph\Node   $node    Node.
+     * @return  array
      * @throws  \Hoa\Graph\Exception
      */
-    abstract public function getChild($nodeId);
+    abstract public function getChildren(Node $node);
 
     /**
      * Delete a node.
      *
-     * @param   mixed   $nodeId       The node ID or the node instance.
-     * @param   bool    $propagate    Propagate the erasure.
-     * @return  void
+     * @param   \Hoa\Graph\Node  $node         Node.
+     * @param   bool             $propagate    Propagate the erasure.
+     * @return  \Hoa\Graph\Graph
      * @throws  \Hoa\Graph\Exception
      */
-    abstract public function deleteNode($nodeId, $propagate = self::DELETE_RESTRICT);
+    abstract public function deleteNode(Node $node, $propagate = self::DELETE_RESTRICT);
 
     /**
-     * Whether node is a leaf, i.e. does not have any child.
+     * Whether node is a leaf, i.e. if it does not have any child.
      *
-     * @param   mixed   $nodeId    The node ID or the node instance.
+     * @param   \Hoa\Graph\Node  $node    Node.
      * @return  bool
      * @throws  \Hoa\Graph\Exception
      */
-    abstract public function isLeaf($nodeId);
+    abstract public function isLeaf(Node $node);
 
     /**
-     * Whether node is a root, i.e. does not have any parent.
+     * Whether node is a root, i.e. if it does not have any parent.
      *
-     * @param   mixed   $nodeId    The node ID or the node instance.
+     * @param   \Hoa\Graph\Node  $node    Node.
      * @return  bool
      * @throws  \Hoa\Graph\Exception
      */
-    abstract public function isRoot($nodeId);
+    abstract public function isRoot(Node $node);
 
     /**
-     * Set the loop mode (self::ALLOW_LOOP or self::DISALLOW_LOOP).
+     * Set the loop mode (see `self::ALLOW_LOOP` and `self::DISALLOW_LOOP`).
      *
-     * @param   bool    $loop    Allow or not loop.
+     * @param   bool  $loop    Whether loops are allowed.
      * @return  bool
      */
-    public function allowLoop($loop = self::DISALLOW_LOOP)
+    public function allowLoop($loop = self::ALLOW_LOOP)
     {
-        $old        = $this->loop;
-        $this->loop = $loop;
+        $old         = $this->_loop;
+        $this->_loop = $loop;
 
         return $old;
     }
 
     /**
-     * Get the loop mode.
+     * Whether loops are allowed or not.
      *
      * @return  bool
      */
     public function isLoopAllowed()
     {
-        return $this->loop;
+        return $this->_loop;
     }
 
     /**
