@@ -323,21 +323,6 @@ class AdjacencyList extends Graph
         return 0 === count($this->getParents($node));
     }
 
-    public function getIterator()
-    {
-        $leaves = [];
-
-        foreach ($this->getNodes() as $node) {
-            if (true === $node->isLeaf()) {
-                $leaves[] = $node;
-            }
-        }
-
-        foreach ($leaves as $node) {
-            yield $node;
-        }
-    }
-
     /**
      * Print the graph in the DOT language.
      *

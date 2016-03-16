@@ -68,15 +68,6 @@ class Graph extends Test\Unit\Suite
                     ->isEqualTo($result::ALLOW_LOOP);
     }
 
-    public function case_is_an_iterator()
-    {
-        $this
-            ->when($result = new SUT())
-            ->then
-                ->object($result)
-                    ->isInstanceOf(Iterator\Aggregate::class);
-    }
-
     public function case_allow_loop()
     {
         $this

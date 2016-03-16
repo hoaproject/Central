@@ -48,7 +48,7 @@ use Hoa\Iterator;
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-abstract class Graph implements Iterator\Aggregate
+abstract class Graph
 {
     /**
      * Allow loop inside the graph.
