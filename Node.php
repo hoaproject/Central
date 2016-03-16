@@ -39,7 +39,7 @@ namespace Hoa\Graph;
 /**
  * Interface \Hoa\Graph\Node.
  *
- * Force to implement a method: `getNodeId`.
+ * Each implementor of this interface is a vertex in a graph.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
