@@ -34,94 +34,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Graph;
+namespace Hoa\Graph\Test\Unit;
+
+use Hoa\Iterator;
+use Hoa\Test;
+use Mock\Hoa\Graph as SUT;
 
 /**
- * Class \Hoa\Graph\SimpleNode.
+ * Class \Hoa\Graph\Test\Unit\Graph.
  *
- * A very simple node.
+ * Test suite of the graph abstract class.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class SimpleNode implements Node
+class Graph extends Test\Unit\Suite
 {
-    /**
-     * Node ID.
-     *
-     * @var string
-     */
-    protected $_id    = null;
-
-    /**
-     * Node value.
-     *
-     * @var string
-     */
-    protected $_value = null;
-
-
-
-    /**
-     * Build a node that contains a string.
-     *
-     * @param   string  $id       ID.
-     * @param   string  $value    Value.
-     * @return  void
-     */
-    public function __construct($id, $value = null)
+    public function case_constructor()
     {
-        $this->setNodeId($id);
-        $this->setNodeValue($value);
-
-        return;
+        $this
+            ->when($result = new SUT())
+            ->then
+                ->boolean($result->isLoopAllowed())
+                    ->isEqualTo($result::DISALLOW_LOOP);
     }
 
-    /**
-     * Set node ID.
-     *
-     * @param   string  $id    Node ID.
-     * @return  string
-     */
-    protected function setNodeId($id)
+    public function case_constructor_with_loop_allowed()
     {
-        $old       = $this->_id;
-        $this->_id = $id;
-
-        return $old;
+        $this
+            ->when($result = new SUT(SUT::ALLOW_LOOP))
+            ->then
+                ->boolean($result->isLoopAllowed())
+                    ->isEqualTo($result::ALLOW_LOOP);
     }
 
-    /**
-     * Get node ID.
-     *
-     * @return  string
-     */
-    public function getNodeId()
+    public function case_allow_loop()
     {
-        return $this->_id;
+        $this
+            ->given($graph = new SUT())
+            ->when($result = $graph->allowLoop())
+            ->then
+                ->boolean($graph->isLoopAllowed())
+                    ->isEqualTo($graph::ALLOW_LOOP);
     }
 
-    /**
-     * Set node value.
-     *
-     * @param   string  $value    Node value.
-     * @return  string
-     */
-    public function setNodeValue($value = null)
+    public function case_disallow_loop()
     {
-        $old          = $this->_value;
-        $this->_value = $value;
-
-        return $old;
-    }
-
-    /**
-     * Get node value.
-     *
-     * @return  string
-     */
-    public function getNodeValue()
-    {
-        return $this->_value;
+        $this
+            ->given($graph = new SUT(SUT::ALLOW_LOOP))
+            ->when($result = $graph->allowLoop($graph::DISALLOW_LOOP))
+            ->then
+                ->boolean($graph->isLoopAllowed())
+                    ->isEqualTo($graph::DISALLOW_LOOP);
     }
 }

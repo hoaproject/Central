@@ -37,91 +37,19 @@
 namespace Hoa\Graph;
 
 /**
- * Class \Hoa\Graph\SimpleNode.
+ * Interface \Hoa\Graph\Node.
  *
- * A very simple node.
+ * Force to implement a method: `getNodeId`.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class SimpleNode implements Node
+interface Node
 {
     /**
-     * Node ID.
+     * Get a node ID.
      *
-     * @var string
+     * @return  mixed
      */
-    protected $_id    = null;
-
-    /**
-     * Node value.
-     *
-     * @var string
-     */
-    protected $_value = null;
-
-
-
-    /**
-     * Build a node that contains a string.
-     *
-     * @param   string  $id       ID.
-     * @param   string  $value    Value.
-     * @return  void
-     */
-    public function __construct($id, $value = null)
-    {
-        $this->setNodeId($id);
-        $this->setNodeValue($value);
-
-        return;
-    }
-
-    /**
-     * Set node ID.
-     *
-     * @param   string  $id    Node ID.
-     * @return  string
-     */
-    protected function setNodeId($id)
-    {
-        $old       = $this->_id;
-        $this->_id = $id;
-
-        return $old;
-    }
-
-    /**
-     * Get node ID.
-     *
-     * @return  string
-     */
-    public function getNodeId()
-    {
-        return $this->_id;
-    }
-
-    /**
-     * Set node value.
-     *
-     * @param   string  $value    Node value.
-     * @return  string
-     */
-    public function setNodeValue($value = null)
-    {
-        $old          = $this->_value;
-        $this->_value = $value;
-
-        return $old;
-    }
-
-    /**
-     * Get node value.
-     *
-     * @return  string
-     */
-    public function getNodeValue()
-    {
-        return $this->_value;
-    }
+    public function getNodeId();
 }

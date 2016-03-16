@@ -34,22 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Graph\IGraph;
+namespace Hoa\Graph\Test\Unit;
+
+use Hoa\Exception as HoaException;
+use Hoa\Graph\Exception as SUT;
+use Hoa\Test;
 
 /**
- * Interface \Hoa\Graph\IGraph\Node.
+ * Class \Hoa\Graph\Test\Unit\Exception.
  *
- * Force to implement a method: getNodeId.
+ * Test suite of the exception.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-interface Node
+class Exception extends Test\Unit\Suite
 {
-    /**
-     * Get a node ID.
-     *
-     * @return  mixed
-     */
-    public function getNodeId();
+    public function case_hoa_exception()
+    {
+        $this
+            ->when($result = new SUT('foo', 0))
+            ->then
+                ->object($result)
+                    ->isInstanceOf(HoaException::class);
+    }
 }
