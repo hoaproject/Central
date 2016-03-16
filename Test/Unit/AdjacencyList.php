@@ -602,7 +602,7 @@ class AdjacencyList extends Graph
     {
         $this
             ->given(
-                $graph = new SUT(),
+                $graph = new SUT(SUT::ALLOW_LOOP),
                 $n1    = new LUT\SimpleNode('n1'),
                 $n2    = new LUT\SimpleNode('n2'),
                 $n3    = new LUT\SimpleNode('n3'),
@@ -610,8 +610,9 @@ class AdjacencyList extends Graph
                 $n5    = new LUT\SimpleNode('n5'),
                 $graph->addNode($n1),
                 $graph->addNode($n2, [$n1]),
-                $graph->addNode($n3, [$n1, $n2]),
+                $graph->addNode($n3, [$n1, $n2, $n3]),
                 $graph->addNode($n4, [$n3]),
+                $graph->addNode($n2, [$n4]),
                 $graph->addNode($n5)
             )
             ->when($result = $graph->__toString())
@@ -627,7 +628,9 @@ class AdjacencyList extends Graph
                         '    n1 -> n2;' . "\n" .
                         '    n1 -> n3;' . "\n" .
                         '    n2 -> n3;' . "\n" .
+                        '    n3 -> n3;' . "\n" .
                         '    n3 -> n4;' . "\n" .
+                        '    n4 -> n2;' . "\n" .
                         '}'
                     );
     }
