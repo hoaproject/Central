@@ -22,7 +22,8 @@
     },
     "require": {
         "hoa/consistency": "~1.0",
-        "hoa/exception"  : "~1.0"
+        "hoa/exception"  : "~1.0",
+        "hoa/iterator"   : "~2.0"
     },
     "require-dev": {
         "hoa/test": "~2.0"
