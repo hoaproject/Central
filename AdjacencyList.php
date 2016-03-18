@@ -117,7 +117,7 @@ class AdjacencyList extends Graph
                 throw new Exception(
                     'Cannot use %s as a parent node of %s ' .
                     'because it does exists.',
-                    1,
+                    3,
                     [$parentId, $id]
                 );
             }
@@ -155,7 +155,7 @@ class AdjacencyList extends Graph
         if (false === $this->nodeExists($nodeId)) {
             throw new Exception(
                 'Node %s does not exist, cannot get it.',
-                1,
+                4,
                 $nodeId
             );
         }
@@ -177,7 +177,7 @@ class AdjacencyList extends Graph
         if (false === $this->nodeExists($id)) {
             throw new Exception(
                 'Node %s does not exist, cannot get its parents.',
-                2,
+                5,
                 $id
             );
         }
@@ -207,7 +207,7 @@ class AdjacencyList extends Graph
         if (false === $this->nodeExists($id)) {
             throw new Exception(
                 'Node %s does not exist, cannot get its children.',
-                3,
+                6,
                 $id
             );
         }
@@ -242,7 +242,7 @@ class AdjacencyList extends Graph
                 throw new Exception(
                     'Cannot delete %s node in restrict delete mode, because ' .
                     'it has one or more children.',
-                    4,
+                    7,
                     $id
                 );
             }
@@ -292,7 +292,7 @@ class AdjacencyList extends Graph
             throw new Exception(
                 'Node %s does not exist, ' .
                 'cannot check if this is a leaf or not.',
-                5,
+                8,
                 $id
             );
         }
@@ -315,7 +315,7 @@ class AdjacencyList extends Graph
             throw new Exception(
                 'Node %s does not exist, ' .
                 'cannot check if this is a root or not.',
-                6,
+                9,
                 $id
             );
         }
