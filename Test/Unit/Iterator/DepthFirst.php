@@ -50,7 +50,7 @@ use Hoa\Test;
  */
 class DepthFirst extends Test\Unit\Suite
 {
-    public function case_post_ordering()
+    public function case_pre_ordering()
     {
         $this
             ->given(
@@ -79,18 +79,18 @@ class DepthFirst extends Test\Unit\Suite
                 ->array(iterator_to_array($result))
                     ->isEqualTo([
                         $n1,
-                        $n4,
-                        $n3,
-                        $n32,
-                        $n31,
                         $n2,
-                        $n23,
+                        $n21,
                         $n22,
-                        $n21
+                        $n23,
+                        $n3,
+                        $n31,
+                        $n32,
+                        $n4
                     ]);
     }
 
-    public function case_post_ordering_with_loop()
+    public function case_pre_ordering_with_loop()
     {
         $this
             ->given(
@@ -121,18 +121,18 @@ class DepthFirst extends Test\Unit\Suite
                 ->array(iterator_to_array($result))
                     ->isEqualTo([
                         $n1,
-                        $n4,
-                        $n3,
-                        $n32,
-                        $n31,
                         $n2,
-                        $n23,
+                        $n21,
                         $n22,
-                        $n21
+                        $n23,
+                        $n3,
+                        $n31,
+                        $n32,
+                        $n4
                     ]);
     }
 
-    public function case_post_ordering_with_reflexive_nodes()
+    public function case_pre_ordering_with_reflexive_nodes()
     {
         $this
             ->given(

@@ -69,7 +69,7 @@ class DepthFirst extends Generic implements Iterator\Aggregate
 
             $visited[$node->getNodeId()] = true;
 
-            foreach ($graph->getChildren($node) as $child) {
+            foreach (array_reverse($graph->getChildren($node)) as $child) {
                 $childId = $child->getNodeId();
 
                 if (!isset($stack[$childId]) && !isset($visited[$childId])) {
