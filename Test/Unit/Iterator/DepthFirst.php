@@ -150,4 +150,27 @@ class DepthFirst extends Test\Unit\Suite
                         $n2
                     ]);
     }
+
+    public function case_get_neighbours()
+    {
+        $this
+            ->given(
+                $graph = new LUT\AdjacencyList(),
+                $n1    = new LUT\SimpleNode('n1'),
+                $n2    = new LUT\SimpleNode('n2'),
+                $n3    = new LUT\SimpleNode('n3'),
+                $graph->addNode($n1),
+                $graph->addNode($n2, [$n1]),
+                $graph->addNode($n3, [$n1]),
+
+                $iterator = new SUT($graph, $n1)
+            )
+            ->when($result = $iterator->getNeighbours($n1))
+            ->then
+                ->array($result)
+                    ->isEqualTo([
+                        'n2' => $n2,
+                        'n3' => $n3
+                    ]);
+    }
 }
