@@ -69,7 +69,7 @@ class BreadthFirst extends Generic implements Iterator\Aggregate
         while (!empty($queue)) {
             $node = array_pop($queue);
 
-            foreach ($graph->getChildren($node) as $child) {
+            foreach ($this->getNeighbours($node) as $child) {
                 if (isset($visited[$child->getNodeId()])) {
                     continue;
                 }
@@ -80,5 +80,15 @@ class BreadthFirst extends Generic implements Iterator\Aggregate
                 array_unshift($queue, $child);
             }
         }
+    }
+
+    /**
+     * Get neighbours of a specific node.
+     *
+     * @return  array
+     */
+    public function getNeighbours(Graph\Node $node)
+    {
+        return $this->getGraph()->getChildren($node);
     }
 }

@@ -111,4 +111,13 @@ abstract class Generic
     {
         return $this->_node;
     }
+
+    /**
+     * Get neighbours of a specific node.
+     * For instance, by default, it might be the children, but in a backward
+     * iterator it might be the parents.
+     *
+     * @return  array
+     */
+    abstract public function getNeighbours(Graph\Node $node);
 }

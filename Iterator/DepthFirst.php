@@ -69,7 +69,7 @@ class DepthFirst extends Generic implements Iterator\Aggregate
 
             $visited[$node->getNodeId()] = true;
 
-            foreach (array_reverse($graph->getChildren($node)) as $child) {
+            foreach (array_reverse($this->getNeighbours($node)) as $child) {
                 $childId = $child->getNodeId();
 
                 if (!isset($stack[$childId]) && !isset($visited[$childId])) {
@@ -77,5 +77,15 @@ class DepthFirst extends Generic implements Iterator\Aggregate
                 }
             }
         }
+    }
+
+    /**
+     * Get neighbours of a specific node.
+     *
+     * @return  array
+     */
+    public function getNeighbours(Graph\Node $node)
+    {
+        return $this->getGraph()->getChildren($node);
     }
 }
