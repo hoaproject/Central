@@ -34,22 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Graph;
+namespace Hoa\Graph\Iterator;
+
+use Hoa\Graph;
+use Hoa\Iterator;
 
 /**
- * Interface \Hoa\Graph\Node.
+ * Class \Hoa\Graph\Iterator\BackwardBreadthFirst.
  *
- * Each implementor of this interface is a vertex in a graph.
+ * Iterate over the graph with the Backward Breadth-First search algorithm,
+ * starting from a specific node.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-interface Node
+class BackwardBreadthFirst extends BreadthFirst
 {
     /**
-     * Get a node ID.
+     * Get neighbours of a specific node.
      *
-     * @return  mixed
+     * @return  array
      */
-    public function getNodeId();
+    public function getNeighbours(Graph\Node $node)
+    {
+        return $this->getGraph()->getParents($node);
+    }
 }

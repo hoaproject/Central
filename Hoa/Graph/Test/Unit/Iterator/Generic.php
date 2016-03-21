@@ -34,22 +34,48 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Graph;
+namespace Hoa\Graph\Test\Unit\Iterator;
+
+use Hoa\Graph as LUT;
+use Mock\Hoa\Graph\Iterator\Generic as SUT;
+use Hoa\Test;
 
 /**
- * Interface \Hoa\Graph\Node.
+ * Class \Hoa\Graph\Test\Unit\Iterator\Generic.
  *
- * Each implementor of this interface is a vertex in a graph.
+ * Test suite of the generic iterator class.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-interface Node
+class Generic extends Test\Unit\Suite
 {
-    /**
-     * Get a node ID.
-     *
-     * @return  mixed
-     */
-    public function getNodeId();
+    public function case_constructor()
+    {
+        $this
+            ->given(
+                $graph = new LUT\AdjacencyList(),
+                $n1    = new LUT\SimpleNode('n1'),
+                $graph->addNode($n1)
+            )
+            ->when($result = new SUT($graph, $n1))
+            ->then
+                ->object($result->getGraph())
+                    ->isIdenticalTo($graph)
+                ->object($result->getStartingNode())
+                    ->isIdenticalTo($n1);
+    }
+
+    public function case_constructor_with_an_invalid_starting_node()
+    {
+        $this
+            ->given(
+                $graph = new LUT\AdjacencyList(),
+                $n1    = new LUT\SimpleNode('n1')
+            )
+            ->exception(function () use ($graph, $n1) {
+                new SUT($graph, $n1);
+            })
+                ->isInstanceOf(LUT\Exception::class);
+    }
 }

@@ -34,22 +34,58 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Graph;
+namespace Hoa\Graph\Iterator;
+
+use Hoa\Graph;
+use Hoa\Iterator;
 
 /**
- * Interface \Hoa\Graph\Node.
+ * Class \Hoa\Graph\Iterator\DepthFirst.
  *
- * Each implementor of this interface is a vertex in a graph.
+ * Iterate over the graph with the Depth-First Search algorithm, starting from a
+ * specific node.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-interface Node
+class DepthFirst extends Generic implements Iterator\Aggregate
 {
     /**
-     * Get a node ID.
+     * Iterator over the graph with the Depth-First Search algorithm.
      *
-     * @return  mixed
+     * @return  \Generator
      */
-    public function getNodeId();
+    public function getIterator()
+    {
+        $graph        = $this->getGraph();
+        $startingNode = $this->getStartingNode();
+        $stack        = [$startingNode->getNodeId() => $startingNode];
+        $visited      = [];
+
+        while (!empty($stack)) {
+            $node = array_pop($stack);
+
+            yield $node;
+
+            $visited[$node->getNodeId()] = true;
+
+            foreach (array_reverse($this->getNeighbours($node)) as $child) {
+                $childId = $child->getNodeId();
+
+                if (!isset($stack[$childId]) && !isset($visited[$childId])) {
+                    $stack[$childId] = $child;
+                }
+            }
+        }
+    }
+
+    /**
+     * Get neighbours of a specific node.
+     *
+     * @return  array
+     */
+    public function getNeighbours(Graph\Node $node)
+    {
+        return $this->getGraph()->getChildren($node);
+    }
 }
