@@ -56,14 +56,14 @@ class Acl
      *
      * @const bool
      */
-    const DELETE_CASCADE  = true;
+    const DELETE_CASCADE  = Graph::DELETE_CASCADE;
 
     /**
      * Restrict delete.
      *
      * @const bool
      */
-    const DELETE_RESTRICT = false;
+    const DELETE_RESTRICT = Graph::DELETE_RESTRICT;
 
     /**
      * All users.
