@@ -73,7 +73,7 @@ class Acl
     protected $_users    = [];
 
     /**
-     * Graph of groups.
+     * Underlying graph.
      *
      * @var \Hoa\Graph
      */
@@ -102,7 +102,7 @@ class Acl
     }
 
     /**
-     * Add a group.
+     * Add a group, i.e. add a node in the underlying graph.
      *
      * @param   \Hoa\Acl\Group  $group      Group to add.
      * @param   array           $parents    Parent groups (will inherit
@@ -112,8 +112,6 @@ class Acl
      */
     public function addGroup(Group $group, array $parents = [])
     {
-        $parentIds = [];
-
         foreach ($parents as $parent) {
             if (!($parent instanceof Group)) {
                 throw new Exception(
@@ -136,7 +134,7 @@ class Acl
     }
 
     /**
-     * Delete a group.
+     * Delete a group, i.e. delete a node in the underlying graph.
      *
      * @param   \Hoa\Acl\Group  $group        Group.
      * @param   bool            $propagate    Propagate the erasure.
@@ -163,7 +161,8 @@ class Acl
     }
 
     /**
-     * Check if a group exists or not.
+     * Check if a group exists or not, i.e. if a node in the underlying graph
+     * exists.
      *
      * @param   mixed  $groupId    Group ID.
      * @return  bool
@@ -174,9 +173,9 @@ class Acl
     }
 
     /**
-     * Get a specific group.
+     * Get a specific group, i.e. a specific node in the underlying graph.
      *
-     * @param   string  $groupId    The group ID.
+     * @param   string  $groupId    Group ID.
      * @return  \Hoa\Acl\Group
      * @throws  \Hoa\Acl\Exception
      */
