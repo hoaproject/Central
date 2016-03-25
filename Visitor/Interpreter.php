@@ -42,10 +42,6 @@ use Hoa\Realdom;
 use Hoa\Ustring;
 use Hoa\Visitor;
 
-if (false === Consistency::entityExists('Hoa\Realdom\Disjunction')) {
-    Consistency\Autoloader::load('Hoa\Realdom\Disjunction');
-}
-
 /**
  * Class \Hoa\Praspel\Visitor\Interpreter.
  *
@@ -667,4 +663,8 @@ class Interpreter implements Visitor\Visit
     {
         return $this->_classnameToBind;
     }
+}
+
+if (false === Consistency::entityExists('Hoa\Realdom\Disjunction', true)) {
+    throw new Praspel\Exception('Hoa\Realdom seems to not be loaded.');
 }
