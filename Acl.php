@@ -270,19 +270,20 @@ class Acl
             $permissionId = $permissionId->getId();
         }
 
-        $service = null;
-
-        if (null !== $serviceId) {
-            if ($serviceId instanceof Service) {
-                $serviceId = $serviceId->getId();
-            }
+        if ($serviceId instanceof Service)  {
+            $serviceId = $serviceId->getId();
         }
 
         $groups = [];
+        $user   = null;
 
         foreach ($this->getGroups() as $group) {
             if (true === $group->userExists($userId)) {
                 $groups[] = $group;
+
+                if (null === $user) {
+                    $user = $group->getUser($userId);
+                }
             }
         }
 
@@ -290,9 +291,15 @@ class Acl
             return false;
         }
 
-        $verdict = false;
+        $serviceIsOwned  = false;
+        $serviceIsShared = false;
+        $verdict         = false;
 
         foreach ($groups as $group) {
+            if (null !== $serviceId && false === $serviceIsShared) {
+                $serviceIsShared = $group->serviceExists($serviceId);
+            }
+
             $iterator = new Graph\Iterator\BackwardBreadthFirst(
                 $this->getGroups(),
                 $group
@@ -304,6 +311,15 @@ class Acl
 
                     break 2;
                 }
+            }
+        }
+
+        if (null !== $serviceId) {
+            $serviceIsOwned = $user->serviceExists($serviceId);
+
+            if (false === $serviceIsOwned &&
+                false === $serviceIsShared) {
+                $verdict = false;
             }
         }
 
