@@ -94,9 +94,9 @@ class Acl
      * @param   bool  $loop    Allow or not loop. Please, see the `Hoa\Graph`.
      * @return  void
      */
-    public function __construct($loop = Graph::DISALLOW_LOOP)
+    public function __construct()
     {
-        $this->_groups = new Graph\AdjacencyList($loop);
+        $this->_groups = new Graph\AdjacencyList(Graph\AdjacencyList::DISALLOW_LOOP);
 
         return;
     }
