@@ -241,6 +241,282 @@ class Acl extends Test\Unit\Suite
             ->exception(function () use ($acl) {
                 $this->invoke($acl)->getGroup('g1');
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
+    }
+
+    public function case_allow()
+    {
+        $this
+            ->given(
+                $group       = new LUT\Group('g1'),
+                $permissions = [
+                    new LUT\Permission('p1'),
+                    new LUT\Permission('p2'),
+                    new LUT\Permission('p3')
+                ],
+                $acl = new SUT('foo'),
+                $acl->addGroup($group)
+            )
+            ->when($result = $acl->allow($group, $permissions))
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($acl)
+                ->let($groups = $this->invoke($acl)->getGroups())
+                ->boolean($groups->nodeExists('g1'))
+                    ->isTrue()
+                ->let($g1 = $this->invoke($acl)->getGroup('g1'))
+                ->object($g1)
+                    ->isIdenticalTo($group)
+                ->array($g1->getPermissions())
+                    ->isEqualTo([
+                        'p1' => $permissions[0],
+                        'p2' => $permissions[1],
+                        'p3' => $permissions[2]
+                    ]);
+    }
+
+    public function case_allow_an_undeclared_group()
+    {
+        $this
+            ->given(
+                $group = new LUT\Group('g1'),
+                $acl   = new SUT('foo')
+            )
+            ->exception(function () use ($acl, $group) {
+                $acl->allow($group, []);
+            })
+                ->isInstanceOf(LUT\Exception::class);
+    }
+
+    public function case_deny()
+    {
+        $this
+            ->given(
+                $group       = new LUT\Group('g1'),
+                $permissions = [
+                    new LUT\Permission('p1'),
+                    new LUT\Permission('p2'),
+                    new LUT\Permission('p3')
+                ],
+                $acl = new SUT('foo'),
+                $acl->addGroup($group),
+                $acl->allow($group, $permissions)
+            )
+            ->when($result = $acl->deny($group, [$permissions[1]]))
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($acl)
+                ->let($groups = $this->invoke($acl)->getGroups())
+                ->boolean($groups->nodeExists('g1'))
+                    ->isTrue()
+                ->let($g1 = $this->invoke($acl)->getGroup('g1'))
+                ->object($g1)
+                    ->isIdenticalTo($group)
+                ->array($g1->getPermissions())
+                    ->isEqualTo([
+                        'p1' => $permissions[0],
+                        'p3' => $permissions[2]
+                    ]);
+    }
+
+    public function case_deny_an_undeclared_group()
+    {
+        $this
+            ->given(
+                $group = new LUT\Group('g1'),
+                $acl   = new SUT('foo')
+            )
+            ->exception(function () use ($acl, $group) {
+                $acl->deny($group, []);
+            })
+                ->isInstanceOf(LUT\Exception::class);
+    }
+
+    public function case_is_allowed_simple()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $p1  = new LUT\Permission('p1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+
+                $acl->allow($g1, [$p1]),
+
+                $g1->addUsers([$u1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1))
+            ->then
+                ->boolean($result)
+                    ->isTrue();
+    }
+
+    public function case_is_allowed_inherented_permission()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $g2  = new LUT\Group('g2'),
+                $g3  = new LUT\Group('g3'),
+                $g4  = new LUT\Group('g4'),
+                $p1  = new LUT\Permission('p1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+                $acl->addGroup($g2, [$g1]),
+                $acl->addGroup($g3, [$g2]),
+                $acl->addGroup($g4, [$g2]),
+
+                $acl->allow($g1, [$p1]),
+
+                $g3->addUsers([$u1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1))
+            ->then
+                ->boolean($result)
+                    ->isTrue();
+    }
+
+    public function case_is_allowed_user_in_multiple_groups()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $g2  = new LUT\Group('g2'),
+                $g3  = new LUT\Group('g3'),
+                $g4  = new LUT\Group('g4'),
+                $p1  = new LUT\Permission('p1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+                $acl->addGroup($g2, [$g1]),
+                $acl->addGroup($g3),
+                $acl->addGroup($g4, [$g3]),
+
+                $acl->allow($g1, [$p1]),
+
+                $g2->addUsers([$u1]),
+                $g4->addUsers([$u1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1))
+            ->then
+                ->boolean($result)
+                    ->isTrue();
+    }
+
+    public function case_is_allowed_user_in_multiple_groups_with_inherited_permission()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $g2  = new LUT\Group('g2'),
+                $g3  = new LUT\Group('g3'),
+                $p1  = new LUT\Permission('p1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+                $acl->addGroup($g2, [$g1]),
+                $acl->addGroup($g3, [$g1]),
+
+                $acl->allow($g1, [$p1]),
+
+                $g2->addUsers([$u1]),
+                $g3->addUsers([$u1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1))
+            ->then
+                ->boolean($result)
+                    ->isTrue();
+    }
+
+    public function case_is_not_allowed_no_user()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $g2  = new LUT\Group('g2'),
+                $p1  = new LUT\Permission('p1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+                $acl->addGroup($g2, [$g1]),
+
+                $acl->allow($g1, [$p1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1))
+            ->then
+                ->boolean($result)
+                    ->isFalse();
+    }
+
+    public function case_is_not_allowed_no_permission()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $p1  = new LUT\Permission('p1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1)
+            )
+            ->when($result = $acl->isAllowed($u1, $p1))
+            ->then
+                ->boolean($result)
+                    ->isFalse();
+    }
+
+    public function case_is_not_allowed_no_permission_inherited()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $g2  = new LUT\Group('g2'),
+                $g3  = new LUT\Group('g3'),
+                $p1  = new LUT\Permission('p1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+                $acl->addGroup($g2, [$g1]),
+                $acl->addGroup($g3),
+
+                $acl->allow($g1, [$p1]),
+
+                $g3->addUsers([$u1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1))
+            ->then
+                ->boolean($result)
+                    ->isFalse();
+    }
+
+    public function case_is_not_allowed_permission_only_in_children()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $g2  = new LUT\Group('g2'),
+                $p1  = new LUT\Permission('p1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+                $acl->addGroup($g2, [$g1]),
+
+                $acl->allow($g2, [$p1]),
+
+                $g1->addUsers([$u1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1))
+            ->then
+                ->boolean($result)
+                    ->isFalse();
     }
 }
