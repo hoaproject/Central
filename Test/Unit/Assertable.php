@@ -56,7 +56,7 @@ class Assertable extends Test\Unit\Suite
                 $assertable                         = new SUT(),
                 $this->calling($assertable)->assert = true
             )
-            ->when($result = $assertable->assert())
+            ->when($result = $assertable->assert('foo', 'bar', 'baz'))
             ->then
                 ->boolean($result)
                     ->isTrue();
