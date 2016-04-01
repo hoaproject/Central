@@ -353,7 +353,7 @@ class Acl extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_is_allowed_inherented_permission()
+    public function case_is_allowed_with_inherented_permission()
     {
         $this
             ->given(
@@ -380,7 +380,7 @@ class Acl extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_is_allowed_user_in_multiple_groups()
+    public function case_is_allowed_with_a_user_in_multiple_groups()
     {
         $this
             ->given(
@@ -408,7 +408,7 @@ class Acl extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_is_allowed_user_in_multiple_groups_with_inherited_permission()
+    public function case_is_allowed_with_a_user_in_multiple_groups_and_inherited_permission()
     {
         $this
             ->given(
@@ -434,7 +434,59 @@ class Acl extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_is_not_allowed_no_user()
+    public function case_is_allowed_with_an_owned_service()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $g2  = new LUT\Group('g2'),
+                $p1  = new LUT\Permission('p1'),
+                $s1  = new LUT\Service('s1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+                $acl->addGroup($g2, [$g1]),
+
+                $acl->allow($g1, [$p1]),
+
+                $g2->addUsers([$u1]),
+
+                $u1->addServices([$s1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1, $s1))
+            ->then
+                ->boolean($result)
+                    ->isTrue();
+    }
+
+    public function case_is_allowed_with_a_shared_service()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $g2  = new LUT\Group('g2'),
+                $p1  = new LUT\Permission('p1'),
+                $s1  = new LUT\Service('s1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+                $acl->addGroup($g2, [$g1]),
+
+                $acl->allow($g1, [$p1]),
+
+                $g2->addUsers([$u1]),
+
+                $g2->addServices([$s1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1, $s1))
+            ->then
+                ->boolean($result)
+                    ->isTrue();
+    }
+
+    public function case_is_not_allowed_with_no_user()
     {
         $this
             ->given(
@@ -455,7 +507,7 @@ class Acl extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_is_not_allowed_no_permission()
+    public function case_is_not_allowed_with_no_permission()
     {
         $this
             ->given(
@@ -464,7 +516,9 @@ class Acl extends Test\Unit\Suite
                 $p1  = new LUT\Permission('p1'),
                 $acl = new SUT(),
 
-                $acl->addGroup($g1)
+                $acl->addGroup($g1),
+
+                $g1->addUsers([$u1])
             )
             ->when($result = $acl->isAllowed($u1, $p1))
             ->then
@@ -472,7 +526,7 @@ class Acl extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_is_not_allowed_no_permission_inherited()
+    public function case_is_not_allowed_with_no_permission_inherited()
     {
         $this
             ->given(
@@ -497,7 +551,7 @@ class Acl extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_is_not_allowed_permission_only_in_children()
+    public function case_is_not_allowed_with_permission_only_in_children()
     {
         $this
             ->given(
@@ -515,6 +569,28 @@ class Acl extends Test\Unit\Suite
                 $g1->addUsers([$u1])
             )
             ->when($result = $acl->isAllowed($u1, $p1))
+            ->then
+                ->boolean($result)
+                    ->isFalse();
+    }
+
+    public function case_is_not_allowed_with_no_service()
+    {
+        $this
+            ->given(
+                $u1  = new LUT\User('u1'),
+                $g1  = new LUT\Group('g1'),
+                $p1  = new LUT\Permission('p1'),
+                $s1  = new LUT\Service('s1'),
+                $acl = new SUT(),
+
+                $acl->addGroup($g1),
+
+                $acl->allow($g1, [$p1]),
+
+                $g1->addUsers([$u1])
+            )
+            ->when($result = $acl->isAllowed($u1, $p1, $s1))
             ->then
                 ->boolean($result)
                     ->isFalse();
