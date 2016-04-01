@@ -51,6 +51,16 @@ use Hoa\Test;
  */
 class Acl extends Test\Unit\Suite
 {
+    public function case_shadowed_constants()
+    {
+        $this
+            ->then
+                ->variable(SUT::DELETE_CASCADE)
+                    ->isIdenticalTo(Graph::DELETE_CASCADE)
+                ->variable(SUT::DELETE_RESTRICT)
+                    ->isIdenticalTo(Graph::DELETE_RESTRICT);
+    }
+
     public function case_constructor()
     {
         $this
@@ -58,21 +68,9 @@ class Acl extends Test\Unit\Suite
             ->then
                 ->let($groups = $this->invoke($result)->getGroups())
                 ->object($groups)
-                    ->isInstanceOf('Hoa\Graph')
+                    ->isInstanceOf(Graph::class)
                 ->boolean($groups->isLoopAllowed())
                     ->isFalse();
-    }
-
-    public function case_constructor_with_allowed_loop()
-    {
-        $this
-            ->when($result = new SUT(Graph::ALLOW_LOOP))
-            ->then
-                ->let($groups = $this->invoke($result)->getGroups())
-                ->object($groups)
-                    ->isInstanceOf('Hoa\Graph')
-                ->boolean($groups->isLoopAllowed())
-                    ->isTrue();
     }
 
     public function case_add_group()
@@ -91,7 +89,7 @@ class Acl extends Test\Unit\Suite
                     ->isTrue()
                 ->object($groups->getNode($group->getId()))
                     ->isIdenticalTo($group)
-                ->array($groups->getParents($group->getId()))
+                ->array($groups->getParents($group))
                     ->isEmpty();
     }
 
@@ -123,14 +121,14 @@ class Acl extends Test\Unit\Suite
                     ->isIdenticalTo($g2)
                 ->object($groups->getNode($g3->getId()))
                     ->isIdenticalTo($g3)
-                ->array($groups->getParents($g1->getId()))
+                ->array($groups->getParents($g1))
                     ->isEqualTo([
                         'g2' => $g2,
                         'g3' => $g3
                     ])
-                ->array($groups->getParents($g2->getId()))
+                ->array($groups->getParents($g2))
                     ->isEmpty()
-                ->array($groups->getParents($g3->getId()))
+                ->array($groups->getParents($g3))
                     ->isEmpty();
     }
 
@@ -141,7 +139,7 @@ class Acl extends Test\Unit\Suite
             ->exception(function () use ($acl) {
                 $acl->addGroup(new LUT\Group('g1'), [null]);
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_delete_group()
@@ -174,7 +172,7 @@ class Acl extends Test\Unit\Suite
             ->exception(function () use ($acl, $g1) {
                 $acl->deleteGroup($g1);
             })
-                ->isInstanceOf('Hoa\Acl\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_delete_group_with_children()

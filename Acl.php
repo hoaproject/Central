@@ -120,12 +120,10 @@ class Acl
                     $parent
                 );
             }
-
-            $parentIds[] = $parent->getId();
         }
 
         try {
-            $this->getGroups()->addNode($group, $parentIds);
+            $this->getGroups()->addNode($group, $parents);
         } catch (Graph\Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode());
         }
@@ -143,16 +141,14 @@ class Acl
      */
     public function deleteGroup(Group $group, $propagate = self::DELETE_RESTRICT)
     {
-        $id = $group->getId();
-
         try {
-            $this->getGroups()->deleteNode($id, $propagate);
+            $this->getGroups()->deleteNode($group, $propagate);
         } catch (Graph\Exception $e) {
             throw new Exception(
                 'Apparently it is not possible to delete the group %s, ' .
                 'probably because it has at least one child.',
                 42,
-                $id,
+                $group->getId(),
                 $e
             );
         }
@@ -199,69 +195,59 @@ class Acl
     }
 
     /**
-     * Allow a group to make an action according to permissions.
+     * Attach one or more permissions to a group.
      *
-     * @param   mixed  $groupId        Group ID (or instance).
+     * @param   Group  $group          Group.
      * @param   array  $permissions    Collection of permissions.
-     * @return  bool
+     * @return  \Hoa\Acl\Acl
      * @throws  \Hoa\Acl\Exception
      */
-    public function allow($groupId, array $permissions = [])
+    public function allow(Group $group, array $permissions = [])
     {
-        if ($groupId instanceof Group) {
-            $groupId = $groupId->getId();
-        }
+        $id = $group->getId();
 
-        if (false === $this->groupExists($groupId)) {
+        if (false === $this->groupExists($id)) {
             throw new Exception(
-                'Group %s does not exist, cannot add permissions.',
+                'Group %s is not declared in the current ACL instance, ' .
+                'cannot add permissions.',
                 2,
-                $groupId
+                $id
             );
         }
 
-        $this->getGroups()->getNode($groupId)->addPermission($permissions);
+        $group->addPermissions($permissions);
 
-        foreach ($this->getGroups()->getChild($groupId) as $subGroupId => $_) {
-            $this->allow($subGroupId, $permissions);
-        }
-
-        return;
+        return $this;
     }
 
     /**
-     * Deny a group to make an action according to permissions.
+     * Detach one or more permission to a group.
      *
-     * @param   mixed  $groupId        Group ID (or instance).
+     * @param   Group  $group          Group.
      * @param   array  $permissions    Collection of permissions.
-     * @return  bool
+     * @return  \Hoa\Acl\Acl
      * @throws  \Hoa\Acl\Exception
      */
-    public function deny($groupId, array $permissions = [])
+    public function deny(Group $group, array $permissions = [])
     {
-        if ($groupId instanceof Group) {
-            $groupId = $groupId->getId();
-        }
+        $id = $group->getId();
 
-        if (false === $this->groupExists($groupId)) {
+        if (false === $this->groupExists($id)) {
             throw new Exception(
-                'Group %s does not exist, cannot delete permissions.',
+                'Group %s is not declared in the current ACL instance, ' .
+                'cannot delete permissions.',
                 3,
-                $groupId
+                $id
             );
         }
 
-        $this->getGroups()->getNode($groupId)->deletePermission($permissions);
+        $group->deletePermissions($permissions);
 
-        foreach ($this->getGroups()->getChild($groupId) as $subGroupId => $_) {
-            $this->deny($subGroupId, $permissions);
-        }
-
-        return;
+        return $this;
     }
 
     /**
-     * Check if a user is allowed to reach an action according to the permission.
+     * Check if a user is allowed to do something according to the permission.
      *
      * @param   mixed               $userId          User ID (or instance).
      * @param   mixed               $permissionId    Permission ID (or instance).
@@ -277,10 +263,7 @@ class Acl
         Assertable $assert = null
     ) {
         if ($userId instanceof User) {
-            $user   = $userId;
             $userId = $userId->getId();
-        } else {
-            $user = $this->getUser($userId);
         }
 
         if ($permissionId instanceof Permission) {
@@ -291,63 +274,48 @@ class Acl
 
         if (null !== $serviceId) {
             if ($serviceId instanceof Service) {
-                $service = $serviceId;
-            } else {
-                $service = $this->getService($serviceId);
-            }
-
-            if (false === $service->userExists($userId)) {
-                return false;
+                $serviceId = $serviceId->getId();
             }
         }
 
-        $out  = false;
+        $groups = [];
 
-        foreach ($user->getGroups() as $groupId) {
-            $out |= $this->isGroupAllowed($groupId, $permissionId);
+        foreach ($this->getGroups() as $group) {
+            if (true === $group->userExists($userId)) {
+                $groups[] = $group;
+            }
         }
 
-        $out = (bool) $out;
+        if (empty($groups)) {
+            return false;
+        }
+
+        $verdict = false;
+
+        foreach ($groups as $group) {
+            $iterator = new Graph\Iterator\BackwardBreadthFirst(
+                $this->getGroups(),
+                $group
+            );
+
+            foreach ($iterator as $_group) {
+                if (true === $_group->permissionExists($permissionId)) {
+                    $verdict = true;
+
+                    break 2;
+                }
+            }
+        }
+
+        if (false === $verdict) {
+            return false;
+        }
 
         if (null === $assert) {
-            return $out;
+            return true;
         }
 
-        return $out && $assert->assert();
-    }
-
-    /**
-     * Check if a group is allowed to reach an action according to the permission.
-     *
-     * @param   mixed  $groupId         Group ID (or instance).
-     * @param   mixed  $permissionId    Permission ID (or instance).
-     * @return  bool
-     * @throws  \Hoa\Acl\Exception
-     */
-    public function isGroupAllowed($groupId, $permissionId)
-    {
-        if ($groupId instanceof Group) {
-            $groupId = $groupId->getId();
-        }
-
-        if ($permissionId instanceof Permission) {
-            $permissionId = $permissionId->getId();
-        }
-
-        if (false === $this->groupExists($groupId)) {
-            throw new Exception(
-                'Group %s does not exist, cannot check if allowed to do ' .
-                'something.',
-                4,
-                $groupId
-            );
-        }
-
-        return
-            $this
-                ->getGroups()
-                ->getNode($groupId)
-                ->permissionExists($permissionId);
+        return $assert->assert($userId, $permissionId, $serviceId);
     }
 
     /**
