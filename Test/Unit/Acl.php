@@ -595,4 +595,52 @@ class Acl extends Test\Unit\Suite
                 ->boolean($result)
                     ->isFalse();
     }
+
+    public function case_is_allowed_asserter_is_true()
+    {
+        return $this->_case_is_allowed_asserter(true);
+    }
+
+    public function case_is_allowed_asserter_is_false()
+    {
+        return $this->_case_is_allowed_asserter(false);
+    }
+
+    protected function _case_is_allowed_asserter($return)
+    {
+        $self = $this;
+
+        $this
+            ->given(
+                $u1       = new LUT\User('u1'),
+                $g1       = new LUT\Group('g1'),
+                $p1       = new LUT\Permission('p1'),
+                $s1       = new LUT\Service('s1'),
+                $asserter = new \Mock\Hoa\Acl\Assertable(),
+                $acl      = new SUT(),
+
+                $acl->addGroup($g1),
+                $acl->allow($g1, [$p1]),
+                $g1->addUsers([$u1]),
+                $u1->addServices([$s1]),
+
+                $this->calling($asserter)->assert = function ($userId, $permissionId, $serviceId) use (&$called, $self, $u1, $p1, $s1, $return) {
+                    $called = true;
+
+                    $self
+                        ->string($userId)
+                            ->isEqualTo($u1->getId())
+                        ->string($permissionId)
+                            ->isEqualTo($p1->getId())
+                        ->string($serviceId)
+                            ->isEqualTo($s1->getId());
+
+                    return $return;
+                }
+            )
+            ->when($result = $acl->isAllowed($u1, $p1, $s1, $asserter))
+            ->then
+                ->boolean($result)
+                    ->isEqualTo($return);
+    }
 }
