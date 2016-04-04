@@ -39,7 +39,8 @@ namespace Hoa\Acl;
 /**
  * Class \Hoa\Acl\Service.
  *
- * Describe a service.
+ * A services is a document, a resource, something a user would like to
+ * access.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
@@ -60,13 +61,6 @@ class Service
      */
     protected $_label = null;
 
-    /**
-     * Collections of all users ID.
-     *
-     * @var array
-     */
-    protected $_users = [];
-
 
 
     /**
@@ -85,107 +79,6 @@ class Service
     }
 
     /**
-     * Add users.
-     *
-     * @param   array  $users    Users to add.
-     * @return  \Hoa\Acl\Service
-     * @throws  \Hoa\Acl\Exception
-     */
-    public function addUsers(array $users = [])
-    {
-        foreach ($users as $user) {
-            if (!($user instanceof User)) {
-                throw new Exception(
-                    'User %s must be an instance of Hoa\Acl\User.',
-                    0,
-                    $user
-                );
-            }
-
-            $id = $user->getId();
-
-            if (true === $this->userExists($id)) {
-                continue;
-            }
-
-            $this->_users[$id] = true;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Delete users.
-     *
-     * @param   array  $users    User to add.
-     * @return  \Hoa\Acl\Service
-     * @throws  \Hoa\Acl\Exception
-     */
-    public function deleteUsers(array $users = [])
-    {
-        foreach ($users as $user) {
-            if (!($user instanceof User)) {
-                throw new Exception(
-                    'User %s must be an instance of Hoa\Acl\User.',
-                    1,
-                    $user
-                );
-            }
-
-            $id = $user->getId();
-
-            if (false === $this->userExists($id)) {
-                continue;
-            }
-
-            unset($this->_users[$user]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Check if a user exists.
-     *
-     * @param   mixed  $userId    The user ID.
-     * @return  bool
-     */
-    public function userExists($userId)
-    {
-        return isset($this->_users[$userId]);
-    }
-
-    /**
-     * Get a specific user.
-     *
-     * @param   mixed  $userId    User ID.
-     * @return  \Hoa\Acl\User
-     * @throws  \Hoa\Acl\Exception
-     */
-    public function getUser($userId)
-    {
-        if (false === $this->userExists($userId)) {
-            throw new Exception(
-                'User %s does not exist in the service %s.',
-                1,
-                [$userId, $this->getLabel()]
-            );
-        }
-
-        return $this->_users[$userId];
-    }
-
-    /**
-     * Get all users, i.e. the users collection.
-     *
-     * @return  array
-     */
-    public function getUsers()
-    {
-        return $this->_users;
-    }
-
-    /**
      * Set service ID.
      *
      * @param   mixed  $id    Service ID.
@@ -200,6 +93,16 @@ class Service
     }
 
     /**
+     * Get service ID.
+     *
+     * @return  mixed
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    /**
      * Set service label.
      *
      * @param   string  $label    Service label.
@@ -211,16 +114,6 @@ class Service
         $this->_label = $label;
 
         return $old;
-    }
-
-    /**
-     * Get service ID.
-     *
-     * @return  mixed
-     */
-    public function getId()
-    {
-        return $this->_id;
     }
 
     /**

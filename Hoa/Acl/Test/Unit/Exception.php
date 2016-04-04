@@ -34,27 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl;
+namespace Hoa\Acl\Test\Unit;
+
+use Hoa\Acl\Exception as SUT;
+use Hoa\Exception as HoaException;
+use Hoa\Test;
 
 /**
- * Interface \Hoa\Acl\Assertable.
+ * Class \Hoa\Acl\Test\Unit\Exception.
  *
- * Force to implement the assert method.
+ * Test suite of the exception.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-interface Assertable
+class Exception extends Test\Unit\Suite
 {
-    /**
-     * Write an assert.
-     * Must return a boolean, because the comparison will be strict (using
-     * ===).
-     *
-     * @param   string  $userId          User ID.
-     * @param   string  $permissionId    Permission ID.
-     * @param   string  $serviceId       Service ID (can be null).
-     * @return  bool
-     */
-    public function assert($userId, $permissionId, $serviceId);
+    public function case_hoa_exception()
+    {
+        $this
+            ->when($result = new SUT('foo', 0))
+            ->then
+                ->object($result)
+                    ->isInstanceOf(HoaException::class);
+    }
 }

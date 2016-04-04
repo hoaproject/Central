@@ -39,7 +39,8 @@ namespace Hoa\Acl;
 /**
  * Class \Hoa\Acl\User.
  *
- * Describe a user.
+ * A user is a role —an actor— that can own zero or more services and can belong
+ * to zero or more groups.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
@@ -51,21 +52,21 @@ class User
      *
      * @var mixed
      */
-    protected $_id     = null;
+    protected $_id       = null;
 
     /**
      * User label.
      *
      * @var string
      */
-    protected $_label  = null;
+    protected $_label    = null;
 
     /**
-     * Collections of all groups ID.
+     * Services.
      *
      * @var array
      */
-    protected $_groups = [];
+    protected $_services = [];
 
 
 
@@ -85,84 +86,104 @@ class User
     }
 
     /**
-     * Add groups.
+     * Add services.
      *
-     * @param   array  $groups    Group to add.
+     * @param   array  $services    Services to add.
      * @return  \Hoa\Acl\User
      * @throws  \Hoa\Acl\Exception
      */
-    public function addGroups(array $groups = [])
+    public function addServices(array $services = [])
     {
-        foreach ($groups as $group) {
-            if (!($group instanceof Group)) {
+        foreach ($services as $service) {
+            if (!($service instanceof Service)) {
                 throw new Exception(
-                    'Group %s must be an instance of Hoa\Acl\Group.',
+                    'Service %s must be an instance of Hoa\Acl\Service.',
                     0,
-                    $group
+                    $service
                 );
             }
 
-            $id = $group->getId();
+            $id = $service->getId();
 
-            if (true === $this->groupExists($id)) {
+            if (true === $this->serviceExists($id)) {
                 continue;
             }
 
-            $this->_groups[$id] = true;
+            $this->_services[$id] = $service;
         }
 
         return $this;
     }
 
     /**
-     * Delete groups.
+     * Delete services.
      *
-     * @param   array  $groups    Group to add.
+     * @param   array  $services    Service to add.
      * @return  \Hoa\Acl\User
      * @throws  \Hoa\Acl\Exception
      */
-    public function deleteGroups(array $groups = [])
+    public function deleteServices(array $services = [])
     {
-        foreach ($groups as $group) {
-            if (!($group instanceof Group)) {
+        foreach ($services as $service) {
+            if (!($service instanceof Service)) {
                 throw new Exception(
-                    'Group %s must be an instance of Hoa\Acl\Group.',
+                    'Service %s must be an instance of Hoa\Acl\Service.',
                     1,
-                    $group
+                    $service
                 );
             }
 
-            $id = $group->getId();
+            $id = $service->getId();
 
-            if (false === $this->groupExists($id)) {
+            if (false === $this->serviceExists($id)) {
                 continue;
             }
 
-            unset($this->_groups[$id]);
+            unset($this->_services[$id]);
         }
 
-        return $this->getGroups();
+        return $this;
     }
 
     /**
-     * Check if a group exists.
+     * Check if a service exists or not.
      *
-     * @param   mixed  $groupId    Group ID.
+     * @param   muxed  $serviceId    Service ID (or instance).
      * @return  bool
      */
-    public function groupExists($groupId)
+    public function serviceExists($serviceId)
     {
-        return isset($this->_groups[$groupId]);
+        if ($serviceId instanceof Service) {
+            $serviceId = $serviceId->getId();
+        }
+
+        return isset($this->_services[$serviceId]);
     }
 
     /**
-     * Get all groups, i.e. the groups collection.
+     * Get a specific service.
+     *
+     * @param   string  $serviceId    Service ID.
+     * @return  \Hoa\Acl\Service
+     * @throws  \Hoa\Acl\Exception
+     */
+    protected function getService($serviceId)
+    {
+        if (false === $this->serviceExists($serviceId)) {
+            throw new Exception('Service %s does not exist.', 2, $serviceId);
+        }
+
+        return $this->_services[$serviceId];
+    }
+
+    /**
+     * Get all services.
      *
      * @return  array
      */
-    public function getGroups()
+    protected function getServices()
     {
-        return $this->_groups;
+        return $this->_services;
     }
 
     /**
@@ -180,6 +201,16 @@ class User
     }
 
     /**
+     * Get user ID.
+     *
+     * @return  mixed
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    /**
      * Set user label.
      *
      * @param   string  $label    User label.
@@ -191,16 +222,6 @@ class User
         $this->_label = $label;
 
         return $old;
-    }
-
-    /**
-     * Get user ID.
-     *
-     * @return  mixed
-     */
-    public function getId()
-    {
-        return $this->_id;
     }
 
     /**

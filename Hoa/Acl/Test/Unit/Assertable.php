@@ -34,27 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl;
+namespace Hoa\Acl\Test\Unit;
+
+use Mock\Hoa\Acl\Assertable as SUT;
+use Hoa\Test;
 
 /**
- * Interface \Hoa\Acl\Assertable.
+ * Class \Hoa\Acl\Test\Unit\Assertable.
  *
- * Force to implement the assert method.
+ * Test suite of the assertable interface.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-interface Assertable
+class Assertable extends Test\Unit\Suite
 {
-    /**
-     * Write an assert.
-     * Must return a boolean, because the comparison will be strict (using
-     * ===).
-     *
-     * @param   string  $userId          User ID.
-     * @param   string  $permissionId    Permission ID.
-     * @param   string  $serviceId       Service ID (can be null).
-     * @return  bool
-     */
-    public function assert($userId, $permissionId, $serviceId);
+    public function case_assert()
+    {
+        $this
+            ->given(
+                $assertable                         = new SUT(),
+                $this->calling($assertable)->assert = true
+            )
+            ->when($result = $assertable->assert('foo', 'bar', 'baz'))
+            ->then
+                ->boolean($result)
+                    ->isTrue();
+    }
 }

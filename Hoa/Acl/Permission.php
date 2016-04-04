@@ -39,7 +39,8 @@ namespace Hoa\Acl;
 /**
  * Class \Hoa\Acl\Permission.
  *
- * Describe a permission profile.
+ * A permission is a right. A group holds zero or more permissions that can be
+ * used to allow or disallow access to something.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
@@ -83,12 +84,22 @@ class Permission
      * @param   mixed  $id    Permission ID.
      * @return  mixed
      */
-    public function setId($id)
+    protected function setId($id)
     {
         $old       = $this->_id;
         $this->_id = $id;
 
         return $old;
+    }
+
+    /**
+     * Get permission ID.
+     *
+     * @return  mixed
+     */
+    public function getId()
+    {
+        return $this->_id;
     }
 
     /**
@@ -103,16 +114,6 @@ class Permission
         $this->_label = $label;
 
         return $old;
-    }
-
-    /**
-     * Get permission ID.
-     *
-     * @return  mixed
-     */
-    public function getId()
-    {
-        return $this->_id;
     }
 
     /**

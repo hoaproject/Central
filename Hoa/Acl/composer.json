@@ -26,6 +26,9 @@
         "hoa/exception"  : "~1.0",
         "hoa/graph"      : "~0.0"
     },
+    "require-dev": {
+        "hoa/test": "~2.0"
+    },
     "autoload": {
         "psr-4": {
             "Hoa\\Acl\\": "."
