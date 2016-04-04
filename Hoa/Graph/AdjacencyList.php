@@ -36,6 +36,8 @@
 
 namespace Hoa\Graph;
 
+use Hoa\Iterator;
+
 /**
  * Class \Hoa\Graph\AdjacencyList.
  *
@@ -321,6 +323,18 @@ class AdjacencyList extends Graph
         }
 
         return 0 === count($this->getParents($node));
+    }
+
+    /**
+     * Iterator over all nodes ordered by declarations.
+     *
+     * @return \Generator
+     */
+    public function getIterator()
+    {
+        foreach ($this->getNodes() as $nodeId => $nodeBucket) {
+            yield $nodeId => $nodeBucket[self::NODE_VALUE];
+        }
     }
 
     /**

@@ -615,6 +615,7 @@ class AdjacencyList extends Graph
                 $graph->addNode($n2, [$n4]),
                 $graph->addNode($n5)
             )
+            ->dump($graph. '')
             ->when($result = $graph->__toString())
             ->then
                 ->string($result)
@@ -633,5 +634,27 @@ class AdjacencyList extends Graph
                         '    n4 -> n2;' . "\n" .
                         '}'
                     );
+    }
+
+    public function case_get_iterator()
+    {
+        $this
+            ->given(
+                $graph = new SUT(),
+                $n1 = new LUT\SimpleNode('n1'),
+                $n2 = new LUT\SimpleNode('n2'),
+                $n3 = new LUT\SimpleNode('n3'),
+                $graph->addNode($n1),
+                $graph->addNode($n2),
+                $graph->addNode($n3)
+            )
+            ->when($result = $graph->getIterator())
+            ->then
+                ->array(iterator_to_array($result))
+                    ->isEqualTo([
+                        'n1' => $n1,
+                        'n2' => $n2,
+                        'n3' => $n3
+                    ]);
     }
 }
