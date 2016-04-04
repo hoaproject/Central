@@ -615,6 +615,7 @@ class AdjacencyList extends Graph
                 $graph->addNode($n2, [$n4]),
                 $graph->addNode($n5)
             )
+            ->dump($graph. '')
             ->when($result = $graph->__toString())
             ->then
                 ->string($result)
