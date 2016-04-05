@@ -436,4 +436,14 @@ class          Basic
 
         return self::$_cssToXPath;
     }
+
+    /**
+     * Get the current stream.
+     *
+     * @return  \SimpleXMLElement
+     */
+    public function getStream()
+    {
+        return $this;
+    }
 }
