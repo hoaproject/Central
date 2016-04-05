@@ -1,3 +1,8 @@
+# 0.16.04.05
+
+  * README: Complete the description and usage. (Ivan Enderlin, 2016-04-04T11:55:25+02:00)
+  * Graph: Add iterator over all nodes. (Ivan Enderlin, 2016-03-22T16:53:39+01:00)
+
 # 0.16.03.22
 
   * Test: Write test suite of `…BackwardBreadthFirst`. (Ivan Enderlin, 2016-03-21T17:27:28+01:00)
