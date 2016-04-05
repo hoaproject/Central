@@ -1,3 +1,7 @@
+# 1.16.04.05
+
+  * Element: Forget to implement the `getStream` method. (Ivan Enderlin, 2016-04-05T10:27:46+02:00)
+
 # 1.16.01.15
 
   * Composer: New stable libraries. (Ivan Enderlin, 2016-01-14T22:25:17+01:00)
