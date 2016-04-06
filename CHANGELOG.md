@@ -1,3 +1,7 @@
+# 0.16.04.06
+
+  * Dal: Fix a bad method call. (Ivan Enderlin, 2016-04-06T16:01:39+02:00)
+
 # 0.16.03.15
 
   * DAL: Introduce iterators over result sets! (Metalaka, 2016-02-08T09:12:39+01:00)
