@@ -28,6 +28,7 @@ cloak on IRC, etc.
   * ➜ Gérard Ernaelsten (maitrepylos)
   * ➜ Julian Espérat (savageman)
   * Baptiste Fedi (baptiste)
+  * Jeroen Franse (jroenf)
   * Aymeric Gerlier (skan)
   * Ben Getsug (bgetsug)
   * ➜ Alexis von Glasow (avonglasow)
