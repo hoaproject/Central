@@ -1,3 +1,7 @@
+# 1.16.04.06
+
+  * Finalizing `Hoa\Graph` \o/!
+
 # 0.16.04.05
 
   * README: Complete the description and usage. (Ivan Enderlin, 2016-04-04T11:55:25+02:00)
