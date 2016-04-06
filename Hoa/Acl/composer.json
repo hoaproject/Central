@@ -24,7 +24,7 @@
     "require": {
         "hoa/consistency": "~1.0",
         "hoa/exception"  : "~1.0",
-        "hoa/graph"      : "~0.0"
+        "hoa/graph"      : "~1.0"
     },
     "require-dev": {
         "hoa/test": "~2.0"
@@ -36,7 +36,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.x-dev"
+            "dev-master": "1.x-dev"
         }
     }
 }
