@@ -33,7 +33,7 @@ dependencies, you need to require
 ```json
 {
     "require": {
-        "hoa/acl": "~0.0"
+        "hoa/acl": "~1.0"
     }
 }
 ```
