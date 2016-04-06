@@ -206,7 +206,7 @@ class Dal implements Zformat\Parameterizable, Event\Source
             null === $username &&
             null === $password &&
             empty($driverOptions)) {
-            $list = self::$_parameters->unlinearizeBranche('connection.list');
+            $list = self::$_parameters->unlinearizeBranch('connection.list');
 
             if (!isset($list[$id])) {
                 throw new Exception(
