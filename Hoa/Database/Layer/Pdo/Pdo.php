@@ -116,7 +116,7 @@ class Pdo implements Database\IDal\Wrapper
     /**
      * Get the connection instance.
      *
-     * @return  PDO
+     * @return  \PDO
      * @throws  \Hoa\Database\Exception
      */
     protected function getConnection()
@@ -194,7 +194,13 @@ class Pdo implements Database\IDal\Wrapper
     public function prepare($statement, array $options = [])
     {
         if (!isset($options[\PDO::ATTR_CURSOR])) {
-            $options[\PDO::ATTR_CURSOR] = \PDO::CURSOR_SCROLL;
+            try {
+                $this->getConnection()->getAttribute(\PDO::ATTR_CURSOR);
+                $options[\PDO::ATTR_CURSOR] = \PDO::CURSOR_SCROLL;
+            } catch (\PDOException $e) {
+                // Cursors are not supported by the driver, see
+                // https://github.com/hoaproject/Database/issues/35.
+            }
         }
 
         $handle = $this->getConnection()->prepare($statement, $options);
