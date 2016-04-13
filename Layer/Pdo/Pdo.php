@@ -198,7 +198,8 @@ class Pdo implements Database\IDal\Wrapper
                 $this->getConnection()->getAttribute(\PDO::ATTR_CURSOR);
                 $options[\PDO::ATTR_CURSOR] = \PDO::CURSOR_SCROLL;
             } catch (\PDOException $e) {
-                // Cursors isn't supported by the driver, see issue #35.
+                // Cursors are not supported by the driver, see
+                // https://github.com/hoaproject/Database/issues/35.
             }
         }
 
