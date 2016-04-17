@@ -45,7 +45,7 @@ providing helps and usages.
 
 To provide a command from a library, create a class inside the `Bin/` directory.
 For instance, for a potential `Hoa\Foo` library, the `bar` command will be
-described by the `Hoa\Foo\Bin\Bar` class, located inside the `Foo/Bin/bar.php`
+described by the `Hoa\Foo\Bin\Bar` class, located inside the `Foo/Bin/Bar.php`
 file.
 
 ## Documentation
