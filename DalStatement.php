@@ -44,7 +44,7 @@ namespace Hoa\Database;
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class DalStatement
+class DalStatement implements IDal\WrapperStatement
 {
     /**
      * Start at the first offset.
