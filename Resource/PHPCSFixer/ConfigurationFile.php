@@ -40,6 +40,7 @@ $fixers = [
     'ControlFlowStatement',
     'Copyright',
     'NoBlankLinesBeforeEntity',
+    'PhpdocConstructorReturn',
     'PhpdocThrows',
     'PhpdocVar'
 ];
@@ -79,6 +80,7 @@ return
         'control_flow_statement',
         'copyright',
         'no_blank_lines_before_entity',
+        'phpdoc_constructor_return',
         'phpdoc_throws',
         'phpdoc_var'
     ]);
