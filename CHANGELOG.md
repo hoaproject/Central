@@ -1,3 +1,8 @@
+# 1.16.05.09
+
+  * Disjunction: Fix autoloading. (Alexis von Glasow, 2016-03-25T09:33:25+01:00)
+  * Grammar: Update copyright. (Ivan Enderlin, 2016-01-17T14:20:01+01:00)
+
 # 1.16.01.16
 
   * Composer: Forget to add a new stable library. (Ivan Enderlin, 2016-01-14T22:33:50+01:00)
