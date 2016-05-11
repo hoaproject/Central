@@ -90,8 +90,6 @@ class Acl
 
     /**
      * Built an access control list.
-     *
-     * @param   bool  $loop    Allow or not loop. Please, see the `Hoa\Graph`.
      */
     public function __construct()
     {
