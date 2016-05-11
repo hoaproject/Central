@@ -1,3 +1,7 @@
+# 1.16.05.11
+
+  * Add use missing for `Hoa\Consistency` (Alexis von Glasow, 2016-05-10T00:23:40+02:00)
+
 # 1.16.05.09
 
   * Disjunction: Fix autoloading. (Alexis von Glasow, 2016-03-25T09:33:25+01:00)
