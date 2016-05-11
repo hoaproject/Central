@@ -36,6 +36,7 @@
 
 namespace Hoa\Praspel\AssertionChecker;
 
+use Hoa\Consistency;
 use Hoa\Praspel;
 
 /**
