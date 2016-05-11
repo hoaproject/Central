@@ -36,7 +36,6 @@
 
 namespace Hoa\Acl\Test\Unit;
 
-use Hoa\Acl as LUT;
 use Hoa\Acl\Service as SUT;
 use Hoa\Test;
 

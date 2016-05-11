@@ -68,7 +68,6 @@ class Permission
      *
      * @param   mixed   $id       Permission ID.
      * @param   string  $label    Permission label.
-     * @return  void
      */
     public function __construct($id, $label = null)
     {

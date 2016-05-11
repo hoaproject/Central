@@ -36,8 +36,8 @@
 
 namespace Hoa\Acl\Test\Unit;
 
-use Mock\Hoa\Acl\Assertable as SUT;
 use Hoa\Test;
+use Mock\Hoa\Acl\Assertable as SUT;
 
 /**
  * Class \Hoa\Acl\Test\Unit\Assertable.
