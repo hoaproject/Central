@@ -202,6 +202,8 @@ class DalStatement implements IDal\WrapperStatement
     public function __construct(IDal\WrapperStatement $statement)
     {
         $this->setStatement($statement);
+
+        return;
     }
 
     /**
