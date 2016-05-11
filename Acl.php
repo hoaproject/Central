@@ -92,7 +92,6 @@ class Acl
      * Built an access control list.
      *
      * @param   bool  $loop    Allow or not loop. Please, see the `Hoa\Graph`.
-     * @return  void
      */
     public function __construct()
     {
@@ -270,7 +269,7 @@ class Acl
             $permissionId = $permissionId->getId();
         }
 
-        if ($serviceId instanceof Service)  {
+        if ($serviceId instanceof Service) {
             $serviceId = $serviceId->getId();
         }
 

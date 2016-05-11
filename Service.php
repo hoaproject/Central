@@ -68,7 +68,6 @@ class Service
      *
      * @param   mixed   $id       Service ID.
      * @param   string  $label    Service label.
-     * @return  void
      */
     public function __construct($id, $label = null)
     {

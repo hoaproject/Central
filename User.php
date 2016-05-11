@@ -75,7 +75,6 @@ class User
      *
      * @param   mixed   $id       The user ID.
      * @param   string  $label    The user label.
-     * @return  void
      */
     public function __construct($id, $label = null)
     {

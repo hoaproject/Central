@@ -94,7 +94,6 @@ class Group implements Graph\Node
      *
      * @param   mixed   $id       The group ID.
      * @param   string  $label    The group label.
-     * @return  void
      */
     public function __construct($id, $label = null)
     {
