@@ -1,3 +1,8 @@
+# 0.16.05.24
+
+  * Composer: Fix dependencies. (Ivan Enderlin, 2016-05-24T10:06:31+02:00)
+  * SMTP: Support SMTPS. (Ivan Enderlin, 2016-01-27T10:31:26+01:00)
+
 # 0.16.01.11
 
   * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
