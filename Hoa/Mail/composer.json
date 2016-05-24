@@ -25,10 +25,11 @@
     "require": {
         "hoa/consistency": "~1.0",
         "hoa/exception"  : "~1.0",
-        "hoa/mime"       : "~3.0"
+        "hoa/mime"       : "~3.0",
+        "hoa/socket"     : "~1.0"
     },
     "require-dev": {
-        "hoa/file": "~0.0",
+        "hoa/file": "~1.0",
         "hoa/test": "~2.0"
     },
     "autoload": {
