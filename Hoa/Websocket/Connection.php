@@ -194,7 +194,7 @@ abstract class Connection
     public function __construct(HoaSocket\Connection $connection)
     {
         parent::__construct($connection);
-        $this->getConnection()->setNodeName('\Hoa\Websocket\Node');
+        $this->getConnection()->setNodeName(Node::class);
         $this->setListener(
             new Event\Listener(
                 $this,
@@ -271,12 +271,22 @@ abstract class Connection
 
                         if (true === $fromBinary) {
                             $fromBinary = false;
-                            $this->getListener()->fire(
-                                'binary-message',
-                                new Event\Bucket([
-                                    'message' => $frame['message']
-                                ])
-                            );
+
+                            try {
+                                $this->getListener()->fire(
+                                    'binary-message',
+                                    new Event\Bucket([
+                                        'message' => $frame['message']
+                                    ])
+                                );
+                            } catch (\Exception $e) {
+                                $this->getListener()->fire(
+                                    'error',
+                                    new Event\Bucket([
+                                        'exception' => $e
+                                    ])
+                                );
+                            }
 
                             break;
                         }
@@ -294,7 +304,7 @@ abstract class Connection
                                     'message' => $frame['message']
                                 ])
                             );
-                        } catch (HoaException\Group $e) {
+                        } catch (\Exception $e) {
                             $this->getListener()->fire(
                                 'error',
                                 new Event\Bucket([
@@ -334,12 +344,21 @@ abstract class Connection
                         $node->clearFragmentation();
 
                         if (true === $isBinary) {
-                            $this->getListener()->fire(
-                                'binary-message',
-                                new Event\Bucket([
-                                    'message' => $message
-                                ])
-                            );
+                            try {
+                                $this->getListener()->fire(
+                                    'binary-message',
+                                    new Event\Bucket([
+                                        'message' => $message
+                                    ])
+                                );
+                            } catch (\Exception $e) {
+                                $this->getListener()->fire(
+                                    'error',
+                                    new Event\Bucket([
+                                        'exception' => $e
+                                    ])
+                                );
+                            }
 
                             break;
                         }
@@ -350,12 +369,21 @@ abstract class Connection
                             break;
                         }
 
-                        $this->getListener()->fire(
-                            'message',
-                            new Event\Bucket([
-                                'message' => $message
-                            ])
-                        );
+                        try {
+                            $this->getListener()->fire(
+                                'message',
+                                new Event\Bucket([
+                                    'message' => $message
+                                ])
+                            );
+                        } catch (\Exception $e) {
+                            $this->getListener()->fire(
+                                'error',
+                                new Event\Bucket([
+                                    'exception' => $e
+                                ])
+                            );
+                        }
                     } else {
                         $node->setComplete(false);
                     }
@@ -390,18 +418,18 @@ abstract class Connection
                     break;
 
                 case self::OPCODE_PONG:
-                    if (0 === $frame['fin']) {
+                    if (0x0 === $frame['fin']) {
                         $this->close(self::CLOSE_PROTOCOL_ERROR);
 
                         break;
                     }
 
-                  break;
+                    break;
 
                 case self::OPCODE_CONNECTION_CLOSE:
                     $length = &$frame['length'];
 
-                    if (1    === $length ||
+                    if (0x1  === $length ||
                         0x7d  <  $length) {
                         $this->close(self::CLOSE_PROTOCOL_ERROR);
 
