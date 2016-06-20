@@ -1,3 +1,9 @@
+# 2.16.06.20
+
+  * Suite: Introduce the integration test suite. (Ivan Enderlin, 2016-06-20T09:36:55+02:00)
+  * Suite: Optimize default namespace. (Ivan Enderlin, 2016-06-20T09:24:05+02:00)
+  * Suite: Fix test case prefix. (Ivan Enderlin, 2016-06-20T09:22:33+02:00)
+
 # 2.16.03.03
 
   * Report: Memory unit is now kilo-bytes. (Ivan Enderlin, 2016-03-02T11:19:16+01:00)
