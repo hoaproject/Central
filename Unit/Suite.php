@@ -52,7 +52,7 @@ class Suite extends atoum\test
 {
     public function __construct()
     {
-        $this->setMethodPrefix('case');
+        $this->setMethodPrefix('/^case_/');
         parent::__construct();
 
         $protocol                = Protocol::getInstance();
