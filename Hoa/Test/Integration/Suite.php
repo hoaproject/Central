@@ -34,64 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Unit;
+namespace Hoa\Test\Integration;
 
-use atoum;
-use Hoa\Protocol;
 use Hoa\Test;
 
 /**
- * Class \Hoa\Test\Unit\Suite.
+ * Class \Hoa\Test\Integration\Suite.
  *
- * Represent a unit test suite.
+ * Represent an integration test suite.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Suite extends atoum\test
+class Suite extends Test\Unit\Suite
 {
-    const defaultNamespace = '/\\\Test\\\Unit\\\/';
-
-
-
-    public function __construct()
-    {
-        $this->setMethodPrefix('/^case_/');
-        parent::__construct();
-
-        $protocol                = Protocol::getInstance();
-        $protocol['Test']        = new Protocol\Node('Test', null);
-        $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
-
-        return;
-    }
-
-    public function getTestedClassName()
-    {
-        return 'StdClass';
-    }
-
-    public function getTestedClassNamespace()
-    {
-        return '\\';
-    }
-
-    public function beforeTestMethod($methodName)
-    {
-        $out             = parent::beforeTestMethod($methodName);
-        $testedClassName = self::getTestedClassNameFromTestClass(
-            $this->getClass(),
-            $this->getTestNamespace()
-        );
-        $testedNamespace = substr(
-            $testedClassName,
-            0,
-            strrpos($testedClassName, '\\')
-        );
-
-        $this->getPhpFunctionMocker()->setDefaultNamespace($testedNamespace);
-        $this->getPhpConstantMocker()->setDefaultNamespace($testedNamespace);
-
-        return $out;
-    }
+    const defaultNamespace = '/\\\Test\\\Integration\\\/';
 }
