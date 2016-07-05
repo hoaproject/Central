@@ -153,6 +153,11 @@ class Rfc6455 extends Generic
         if (0 === $length) {
             $out['message'] = '';
 
+            // Consume the whole frame.
+            if (0x1 === $out['mask']) {
+                $connection->read(4);
+            }
+
             return $out;
         } elseif (0x7e === $length) {
             $handle = unpack('nl', $connection->read(2));
@@ -312,8 +317,8 @@ class Rfc6455 extends Generic
         $end    = true,
         $mask   = false
     ) {
-        if ((Websocket\Connection::OPCODE_TEXT_FRAME         === $opcode ||
-             Websocket\Connection::OPCODE_CONTINUATION_FRAME === $opcode) &&
+        if (Websocket\Connection::OPCODE_TEXT_FRAME === $opcode &&
+            true  === $end &&
             false === (bool) preg_match('//u', $message)) {
             throw new Websocket\Exception\InvalidMessage(
                 'Message “%s” is not in UTF-8, cannot send it.',
