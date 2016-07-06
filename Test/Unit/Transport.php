@@ -57,7 +57,7 @@ class Transport extends Test\Unit\Suite
             ->when($result = SUT::get())
             ->then
                 ->array($result)
-                    ->isEqualTo($standardTransports);
+                    ->strictlyContainsValues($standardTransports);
     }
 
     public function case_get_standards_and_vendors()
@@ -72,7 +72,7 @@ class Transport extends Test\Unit\Suite
             ->when($result = SUT::get())
             ->then
                 ->array($result)
-                    ->isEqualTo(
+                    ->strictlyContainsValues(
                         array_merge(
                             $standardTransports,
                             $vendorTransports
