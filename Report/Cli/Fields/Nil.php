@@ -38,7 +38,7 @@ namespace Hoa\Test\Report\Cli\Fields;
 
 use atoum\report\fields;
 
-class Void extends fields\runner\tests\void\cli
+class Nil extends fields\runner\tests\blank\cli
 {
     public function __toString()
     {
