@@ -116,7 +116,6 @@ class Socket
      * Constructor.
      *
      * @param   string  $uri    URI.
-     * @return  void
      */
     public function __construct($uri)
     {

@@ -82,7 +82,6 @@ class Node
      * @param   string                  $id            ID.
      * @param   resource                $socket        Socket.
      * @param   \Hoa\Socket\Connection  $connection    Connection.
-     * @return  void
      */
     public function __construct($id, $socket, Connection $connection)
     {

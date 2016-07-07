@@ -170,7 +170,6 @@ abstract class Connection
      * @param   int     $flag       Flag, see the child::* constants.
      * @param   string  $context    Context ID (please, see the
      *                              \Hoa\Stream\Context class).
-     * @return  void
      */
     public function __construct($socket, $timeout, $flag, $context = null)
     {

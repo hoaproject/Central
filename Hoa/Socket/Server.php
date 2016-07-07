@@ -157,7 +157,6 @@ class Server extends Connection
      * @param   int     $flag       Flag, see the child::* constants.
      * @param   string  $context    Context ID (please, see the
      *                              \Hoa\Stream\Context class).
-     * @return  void
      * @throws  \Hoa\Socket\Exception
      */
     public function __construct(
