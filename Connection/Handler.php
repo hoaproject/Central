@@ -78,7 +78,6 @@ abstract class Handler
      * Constructor. Must be called.
      *
      * @param   \Hoa\Socket\Connection  $connection    Connection.
-     * @return  void
      */
     public function __construct(Connection $connection)
     {
