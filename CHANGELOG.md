@@ -1,3 +1,9 @@
+# 1.16.07.07
+
+  * Quality: Fix CS. (Ivan Enderlin, 2016-07-07T22:56:21+02:00)
+  * Test: Be more flexible about default transports. (Ivan Enderlin, 2016-07-06T09:22:29+02:00)
+  * Client, Server: Add `ENCRYPTION_TLS*` constants. (Stéphane HULARD, 2016-02-19T15:50:42+01:00)
+
 # 1.16.02.17
 
   * Test: Ensure broken pipes are correcty handled. (Ivan Enderlin, 2016-02-17T09:50:04+01:00)
