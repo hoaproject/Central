@@ -40,7 +40,8 @@
 //
 
 
-%pragma lexer.unicode   false
+%pragma lexer.unicode     false
+%pragma parser.lookahead  0
 
 %skip   space           [\x20\x09\x0a\x0d]+
 
