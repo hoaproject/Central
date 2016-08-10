@@ -85,14 +85,32 @@ class Run extends Console\Dispatcher\Kit
         $debug               = false;
         $php                 = null;
         $concurrentProcesses = 2;
+        $preludeFiles        = [];
+
+        $extractPreludeFiles = function ($composerSchema) {
+            if (!file_exists($composerSchema)) {
+                return [];
+            }
+
+            $schema = json_decode(file_get_contents($composerSchema), true);
+
+            if (!isset($schema['autoload']) ||
+                !isset($schema['autoload']['files'])) {
+                return [];
+            }
+
+            return $schema['autoload']['files'];
+        };
 
         while (false !== $c = $this->getOption($v)) {
             switch ($c) {
                 case 'a':
+                    $root     = dirname(dirname(__DIR__));
                     $iterator = new File\Finder();
-                    $iterator->in(resolve('hoa://Library/', true, true))
-                             ->directories()
-                             ->maxDepth(1);
+                    $iterator
+                        ->in($root)
+                        ->directories()
+                        ->maxDepth(1);
 
                     foreach ($iterator as $fileinfo) {
                         $libraryName = $fileinfo->getBasename();
@@ -101,17 +119,18 @@ class Run extends Console\Dispatcher\Kit
                             continue;
                         }
 
-                        $pathname       = resolve('hoa://Library/' . $libraryName);
-                        $tests          = $pathname . DS . 'Test' . DS;
-                        $manualTests    = $tests . 'Unit';
-                        $automaticTests = $tests . 'Praspel' . DS . 'Unit';
+                        $pathname       = $root . DS . $libraryName;
+                        $tests          = $pathname . DS . 'Test';
+                        $composerSchema = $pathname . DS . 'composer.json';
 
-                        if (is_dir($manualTests)) {
-                            $directories[] = $manualTests;
-                        }
+                        if (is_dir($tests)) {
+                            $directories[] = $tests;
 
-                        if (is_dir($automaticTests)) {
-                            $directories[] = $automaticTests;
+                            if (!in_array($libraryName, ['Consistency', 'Protocol'])) {
+                                foreach ($extractPreludeFiles($composerSchema) as $preludeFile) {
+                                    $preludeFiles[] = $pathname . DS . $preludeFile;
+                                }
+                            }
                         }
                     }
 
@@ -119,9 +138,10 @@ class Run extends Console\Dispatcher\Kit
 
                 case 'l':
                     foreach ($this->parser->parseSpecialValue($v) as $library) {
-                        $libraryName = ucfirst(strtolower($library));
-                        $pathname    = resolve('hoa://Library/' . $libraryName);
-                        $tests       = $pathname . DS . 'Test';
+                        $libraryName    = ucfirst(strtolower($library));
+                        $pathname       = dirname(dirname(__DIR__)) . DS . $libraryName;
+                        $tests          = $pathname . DS . 'Test';
+                        $composerSchema = $pathname . DS . 'composer.json';
 
                         if (!is_dir($tests)) {
                             throw new Console\Exception(
@@ -132,7 +152,12 @@ class Run extends Console\Dispatcher\Kit
                         }
 
                         $directories[] = $tests;
-                        $namespaces[]  = 'Hoa\\' . $libraryName;
+
+                        if (!in_array($libraryName, ['Consistency', 'Protocol'])) {
+                            foreach ($extractPreludeFiles($composerSchema) as $preludeFile) {
+                                $preludeFiles[] = $pathname . DS . $preludeFile;
+                            }
+                        }
                     }
 
                     break;
@@ -162,16 +187,10 @@ class Run extends Console\Dispatcher\Kit
                             );
                         }
 
-                        $tests          = $head . DS . 'Test' . DS;
-                        $manualTests    = $tests . 'Unit' . DS . $tail;
-                        $automaticTests = $tests . 'Praspel' . DS . 'Unit' . DS . $tail;
+                        $tests = $head . DS . 'Test' . DS;
 
-                        if (is_dir($manualTests)) {
-                            $directories[] = $manualTests;
-                        }
-
-                        if (is_dir($automaticTests)) {
-                            $directories[] = $automaticTests;
+                        if (is_dir($tests)) {
+                            $directories[] = $tests;
                         }
 
                         $namespaces[] = $namespace;
@@ -243,9 +262,11 @@ class Run extends Console\Dispatcher\Kit
             }
         }
 
+        // In the `PATH`.
         $atoum = 'atoum';
 
         if (WITH_COMPOSER) {
+            // From the `vendor/hoa/test/Bin/` directory.
             $atoum =
                 __DIR__ . DS .
                 '..' . DS .
@@ -253,16 +274,26 @@ class Run extends Console\Dispatcher\Kit
                 '..' . DS .
                 'bin' . DS .
                 'atoum';
+
+            if (false === file_exists($atoum)) {
+                // From `Bin/` directory.
+                $atoum =
+                    __DIR__ . DS .
+                    '..' . DS .
+                    'vendor' . DS .
+                    'bin' . DS .
+                    'atoum';
+            }
         } elseif (isset($_SERVER['HOA_ATOUM_BIN'])) {
             $atoum = $_SERVER['HOA_ATOUM_BIN'];
         }
 
         $command =
             $atoum .
+            ' --autoloader-file ' .
+                resolve('hoa://Library/Test/.autoloader.atoum.php') .
             ' --configurations ' .
                 resolve('hoa://Library/Test/.atoum.php') .
-            ' --bootstrap-file ' .
-                resolve('hoa://Library/Test/.bootstrap.atoum.php') .
             ' --force-terminal' .
             ' --max-children-number ' . $concurrentProcesses;
 
@@ -294,9 +325,9 @@ class Run extends Console\Dispatcher\Kit
             $command .= ' --filter \'' . str_replace('\'', '\'"\'"\'', $filter) . '\'';
         }
 
-
-        $_server                     = $_SERVER;
-        $_server['HOA_PREVIOUS_CWD'] = getcwd();
+        $_server                      = $_SERVER;
+        $_server['HOA_PREVIOUS_CWD']  = getcwd();
+        $_server['HOA_PRELUDE_FILES'] = implode("\n", $preludeFiles);
 
         $processus = new Processus(
             $command,
