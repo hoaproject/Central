@@ -346,9 +346,14 @@ class Run extends Console\Dispatcher\Kit
 
             return;
         });
+        $processus->on('stop', function ($bucket) {
+            // Wait atoum to finish its sub-children.
+            sleep(1);
+            exit($bucket->getSource()->getExitCode());
+        });
         $processus->run();
 
-        return $processus->getExitCode();
+        return;
     }
 
     /**
