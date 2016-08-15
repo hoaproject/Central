@@ -33,12 +33,15 @@
 //
 // Grammar \Hoa\Json\Grammar.
 //
-// Provide grammar for JSON. Please, see <http://json.org> or RFC4627.
+// Provide grammar for JSON. Please, see <http://json.org>, RFC4627 or RFC7159.
 //
 // @copyright  Copyright © 2007-2016 Hoa community.
 // @license    New BSD License
 //
 
+
+%pragma lexer.unicode     false
+%pragma parser.lookahead  0
 
 %skip   space           [\x20\x09\x0a\x0d]+
 
