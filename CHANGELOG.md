@@ -1,3 +1,9 @@
+# 2.16.08.15
+
+  * Bin: Exit code comes from atoum. (Ivan Enderlin, 2016-08-15T15:44:21+02:00)
+  * Bin: Run test suites of another library. (Ivan Enderlin, 2016-07-05T23:49:08+02:00)
+  * Dependency: Require `atoum/atoum` 2.8. (Ivan Enderlin, 2016-07-05T22:22:53+02:00)
+
 # 2.16.06.20
 
   * Suite: Introduce the integration test suite. (Ivan Enderlin, 2016-06-20T09:36:55+02:00)
