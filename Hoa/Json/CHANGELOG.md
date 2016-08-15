@@ -1,3 +1,10 @@
+# 2.16.08.15
+
+  * Grammar: Support UTF-8 with surrogate pairs as defined in RFC7159 (Ivan Enderlin, 2016-08-15T14:30:39+02:00)
+  * Grammar: Support strict numbers as defined in RFC7159 (Ivan Enderlin, 2016-08-15T11:18:37+02:00)
+  * Grammar: Object and array pairs are optional. (Ivan Enderlin, 2016-02-05T14:16:31+01:00)
+  * Grammar: Update copyright. (Ivan Enderlin, 2016-01-17T14:17:32+01:00)
+
 # 2.16.01.14
 
   * Composer: New stable libraries. (Ivan Enderlin, 2016-01-14T21:58:52+01:00)
