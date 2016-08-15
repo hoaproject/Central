@@ -1,3 +1,7 @@
+# 2.16.08.16
+
+  * Bin: Wait atoum children to finish before exiting. (Ivan Enderlin, 2016-08-15T15:53:43+02:00)
+
 # 2.16.08.15
 
   * Bin: Exit code comes from atoum. (Ivan Enderlin, 2016-08-15T15:44:21+02:00)
