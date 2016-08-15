@@ -34,94 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Compiler\Llk\Rule;
+namespace Hoa\Compiler\Test\Unit\Exception;
 
-use Hoa\Compiler;
+use Hoa\Compiler as LUT;
+use Hoa\Compiler\Exception\UnrecognizedToken as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Compiler\Llk\Rule\Repetition.
+ * Class \Hoa\Compiler\Test\Unit\Exception\UnrecognizedToken.
  *
- * The repetition rule.
+ * Test suite of the unrecognized token exception.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Repetition extends Rule
+class UnrecognizedToken extends Test\Unit\Suite
 {
-    /**
-     * Minimum bound.
-     *
-     * @var int
-     */
-    protected $_min = 0;
-
-    /**
-     * Maximum bound.
-     *
-     * @var int
-     */
-    protected $_max = 0;
-
-
-
-    /**
-     * Constructor.
-     *
-     * @param   string  $name        Name.
-     * @param   int     $min         Minimum bound.
-     * @param   int     $max         Maximum bound.
-     * @param   mixed   $children    Children.
-     * @param   string  $nodeId      Node ID.
-     * @return  void
-     */
-    public function __construct($name, $min, $max, $children, $nodeId)
+    public function case_constructor_and_get_column()
     {
-        parent::__construct($name, $children, $nodeId);
-
-        $min = max(0, (int) $min);
-        $max = max(-1, (int) $max);
-
-        if (-1 !== $max && $min > $max) {
-            throw new Compiler\Exception\Rule(
-                'Cannot repeat with a min (%d) greater than max (%d).',
-                0,
-                [$min, $max]
-            );
-        }
-
-        $this->_min = $min;
-        $this->_max = $max;
-
-        return;
-    }
-
-    /**
-     * Get minimum bound.
-     *
-     * @return  int
-     */
-    public function getMin()
-    {
-        return $this->_min;
-    }
-
-    /**
-     * Get maximum bound.
-     *
-     * @return  int
-     */
-    public function getMax()
-    {
-        return $this->_max;
-    }
-
-    /**
-     * Check whether the maximum repetition is unbounded.
-     *
-     * @return   bool
-     */
-    public function isInfinite()
-    {
-        return -1 === $this->getMax();
+        $this
+            ->given(
+                $line   = 7,
+                $column = 42
+            )
+            ->when($result = new SUT('foo', 0, 'bar', $line, $column))
+            ->then
+                ->object($result)
+                    ->isInstanceOf(LUT\Exception::class)
+                ->integer($result->getLine())
+                    ->isEqualTo($line)
+                ->integer($result->getColumn())
+                    ->isEqualTo($column);
     }
 }

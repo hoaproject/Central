@@ -34,90 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Compiler\Test\Unit;
+namespace Hoa\Compiler\Test\Unit\Llk\Sampler;
 
 use Hoa\Compiler as LUT;
-use Hoa\File;
+use Hoa\Compiler\Llk\Sampler\Exception as SUT;
 use Hoa\Test;
 
 /**
- * Class \Hoa\Compiler\Test\Unit\Documentation.
+ * Class \Hoa\Compiler\Test\Unit\Llk\Sampler\Exception.
  *
- * Test suite of the examples in the documentation.
+ * Test suite of the sampler exception.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Documentation extends Test\Unit\Suite
+class Exception extends Test\Unit\Suite
 {
-    public function case_whole_process()
+    public function case_is_an_exception()
     {
-        $_grammar = <<<GRAMMAR
-%skip   space          \s
-// Scalars.
-%token  true           true
-%token  false          false
-%token  null           null
-// Strings.
-%token  quote_         "        -> string
-%token  string:string  [^"]+
-%token  string:_quote  "        -> default
-// Objects.
-%token  brace_         {
-%token _brace          }
-// Arrays.
-%token  bracket_       \[
-%token _bracket        \]
-// Rest.
-%token  colon          :
-%token  comma          ,
-%token  number         \d+
-
-value:
-    <true> | <false> | <null> | string() | object() | array() | number()
-
-string:
-    ::quote_:: <string> ::_quote::
-
-number:
-    <number>
-
-#object:
-    ::brace_:: pair() ( ::comma:: pair() )* ::_brace::
-
-#pair:
-    string() ::colon:: value()
-
-#array:
-    ::bracket_:: value() ( ::comma:: value() )* ::_bracket::
-GRAMMAR;
-        $_result = <<<GRAMMAR
->  #object
->  >  #pair
->  >  >  token(string:string, foo)
->  >  >  token(true, true)
->  >  #pair
->  >  >  token(string:string, bar)
->  >  >  #array
->  >  >  >  token(null, null)
->  >  >  >  token(number, 42)
-
-GRAMMAR;
-
         $this
-            ->given(
-                $grammar = new File\ReadWrite('hoa://Test/Vfs/Json.pp?type=file'),
-                $grammar->writeAll($_grammar),
-                $compiler = LUT\Llk::load($grammar)
-            )
-            ->when($ast = $compiler->parse('{"foo": true, "bar": [null, 42]}'))
+            ->when($result = new SUT('foo', 0))
             ->then
-                ->object($ast)
-
-            ->given($dump = new LUT\Visitor\Dump())
-            ->when($result = $dump->visit($ast))
-            ->then
-                ->string($result)
-                    ->isEqualTo($_result);
+                ->object($result)
+                    ->isInstanceOf(LUT\Exception::class);
     }
 }

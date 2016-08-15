@@ -34,18 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Compiler\Test\Unit\Llk;
+namespace Hoa\Compiler\Test\Unit\Exception;
 
-use Hoa\Json;
+use Hoa\Compiler as LUT;
+use Hoa\Compiler\Exception\Rule as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Compiler\Test\Unit\Llk\Soundness.
+ * Class \Hoa\Compiler\Test\Unit\Exception\Rule.
  *
- * Check soundness of the LL(k) compiler.
+ * Test suite of the rule exception.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Soundness extends Json\Test\Unit\Soundness
+class Rule extends Test\Unit\Suite
 {
+    public function case_is_an_exception()
+    {
+        $this
+            ->when($result = new SUT('foo', 0))
+            ->then
+                ->object($result)
+                    ->isInstanceOf(LUT\Exception::class);
+    }
 }

@@ -57,7 +57,7 @@
 %token  kept_          <
 %token _kept           >
 %token  named          \(\)
-%token  node           #[a-zA-Z][a-zA-Z0-9]+
+%token  node           #[a-zA-Z_][a-zA-Z0-9_]*(:[mM])?
 
 %token  capturing_     \(
 %token _capturing      \)
@@ -84,7 +84,6 @@ simple:
   | ::kept_:: <token> ( ::unification_:: <unification> ::_unification:: )?
     ::_kept:: #kept
   | <token> ::named::
-    ( ::unification_:: <unification> ::_unification:: )? #named
 
 quantifier:
     <zero_or_one>

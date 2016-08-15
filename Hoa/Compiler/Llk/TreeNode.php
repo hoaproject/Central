@@ -58,7 +58,7 @@ class TreeNode implements Visitor\Element
     /**
      * Value of the node (non-null for token nodes).
      *
-     * @var string
+     * @var array
      */
     protected $_value    = null;
 
@@ -89,19 +89,23 @@ class TreeNode implements Visitor\Element
      * Constructor.
      *
      * @param   string                      $id          ID.
-     * @param   string                      $value       Value.
+     * @param   array                       $value       Value.
      * @param   array                       $children    Children.
      * @param   \Hoa\Compiler\Llk\TreeNode  $parent    Parent.
      * @return  void
      */
     public function __construct(
         $id,
-        $value             = null,
-        array    $children = [],
-        TreeNode $parent   = null
+        array $value    = null,
+        array $children = [],
+        self  $parent   = null
     ) {
         $this->setId($id);
-        $this->setValue($value);
+
+        if (!empty($value)) {
+            $this->setValue($value);
+        }
+
         $this->setChildren($children);
 
         if (null !== $parent) {
@@ -141,7 +145,7 @@ class TreeNode implements Visitor\Element
      * @param   array  $value    Value (token & value).
      * @return  array
      */
-    public function setValue($value)
+    public function setValue(array $value)
     {
         $old          = $this->_value;
         $this->_value = $value;
@@ -166,7 +170,10 @@ class TreeNode implements Visitor\Element
      */
     public function getValueToken()
     {
-        return $this->_value['token'];
+        return
+            isset($this->_value['token'])
+                ? $this->_value['token']
+                : null;
     }
 
     /**
@@ -176,7 +183,10 @@ class TreeNode implements Visitor\Element
      */
     public function getValueValue()
     {
-        return $this->_value['value'];
+        return
+            isset($this->_value['value'])
+                ? $this->_value['value']
+                : null;
     }
 
     /**
@@ -186,7 +196,7 @@ class TreeNode implements Visitor\Element
      */
     public function isToken()
     {
-        return null !== $this->_value;
+        return !empty($this->_value);
     }
 
     /**
@@ -237,7 +247,10 @@ class TreeNode implements Visitor\Element
      */
     public function getChild($i)
     {
-        return $this->_children[$i];
+        return
+            true === $this->childExists($i)
+                ? $this->_children[$i]
+                : null;
     }
 
     /**
