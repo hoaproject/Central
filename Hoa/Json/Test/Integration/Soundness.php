@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Json\Test\Unit;
+namespace Hoa\Json\Test\Integration;
 
 use Hoa\Compiler as LUT;
 use Hoa\File;
@@ -44,14 +44,14 @@ use Hoa\Regex;
 use Hoa\Test;
 
 /**
- * Class \Hoa\Json\Test\Unit\Soundness.
+ * Class \Hoa\Json\Test\Integration\Soundness.
  *
  * Check soundness of the LL(k) compiler.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Soundness extends Test\Unit\Suite
+class Soundness extends Test\Integration\Suite
 {
     public function case_exaustive_json()
     {
