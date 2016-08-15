@@ -348,7 +348,7 @@ class Run extends Console\Dispatcher\Kit
         });
         $processus->run();
 
-        return;
+        return $processus->getExitCode();
     }
 
     /**
