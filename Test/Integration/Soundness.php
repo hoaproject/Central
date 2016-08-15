@@ -130,7 +130,7 @@ class Soundness extends Test\Integration\Suite
     protected function getJSONCompiler()
     {
         return LUT\Llk::load(
-            new File\Read(__DIR__ . '/../../Grammar.pp')
+            new File\Read('hoa://Library/Json/Grammar.pp')
         );
     }
 
