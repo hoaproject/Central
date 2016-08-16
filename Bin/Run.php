@@ -327,7 +327,10 @@ class Run extends Console\Dispatcher\Kit
 
         $_server                      = $_SERVER;
         $_server['HOA_PREVIOUS_CWD']  = getcwd();
-        $_server['HOA_PRELUDE_FILES'] = implode("\n", $preludeFiles);
+
+        if (!empty($preludeFiles)) {
+            $_server['HOA_PRELUDE_FILES'] = implode("\n", $preludeFiles);
+        }
 
         $processus = new Processus(
             $command,
