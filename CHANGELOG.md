@@ -1,3 +1,7 @@
+# 2.16.08.17
+
+  * Bin: Do not set `HOA_PRELUDE_FILES` if empty. (Ivan Enderlin, 2016-08-16T10:36:46+02:00)
+
 # 2.16.08.16
 
   * Bin: Wait atoum children to finish before exiting. (Ivan Enderlin, 2016-08-15T15:53:43+02:00)
