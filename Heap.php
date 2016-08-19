@@ -310,15 +310,17 @@ abstract class Heap implements \Countable, \Iterator
             return false;
         }
 
-        if (self::VALUE_TYPE_MIXED) {
+        if (self::VALUE_TYPE_MIXED === $this->valueType) {
             return $this->storage[$this->key()];
         }
 
         $key = $this->key();
 
-        foreach ($this->storage as $element) {
-            if ($key === $this->storage->offsetGet($element)) {
-                return $element;
+        if (self::VALUE_TYPE_OBJECT === $this->valueType) {
+            foreach ($this->storage as $element) {
+                if ($key === $this->storage->offsetGet($element)) {
+                    return $element;
+                }
             }
         }
 
