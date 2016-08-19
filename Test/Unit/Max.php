@@ -154,6 +154,40 @@ class Max extends Test\Unit\Suite
 
     public function case_top()
     {
+        $this
+            ->given(
+                $max = new SUT(),
+                $keys   = '',
+                $series = '',
+                $four = 'ThisIsTheFourKey'
+            )
+            ->when(
+                $max->insert('4', 79, $four),
+                $three = $max->insert('3', 80),
+                $six   = $max->insert('6'),
+                $two   = $max->insert('2', 85),
+                $one   = $max->insert('1', 90),
+                $five  = $max->insert('5', 1),
+
+                $f = function() use($max, & $series, & $keys) {
+
+                    foreach ($max->top() as $key => $element) {
+
+                        $series .= $element;
+                        $keys .=  $key;
+                    }
+                }
+            )
+            ->then($f())
+                ->integer(0)
+                    ->isIdenticalTo($max->count())
+
+                ->string($keys)
+                    ->isIdenticalTo($one . $two . $three . $four . $five . $six)
+
+                ->string($series)
+                    ->isIdenticalTo('123456')
+        ;
     }
 
     public function case_pop()
