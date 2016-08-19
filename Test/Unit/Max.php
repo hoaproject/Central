@@ -120,15 +120,36 @@ class Max extends Test\Unit\Suite
             )
             ->then
             ->integer($max->count())
-            ->isIdenticalTo(2)
+                ->isIdenticalTo(2)
 
             ->string($foo)
-            ->isIdenticalTo('foo')
+                ->isIdenticalTo('foo')
         ;
     }
 
     public function case_extract()
     {
+        $this
+            ->given(
+                $max = new SUT()
+            )
+            ->when(
+                $key = $max->insert('bar', 10),
+                $max->insert('baz', 5),
+                $max->insert('foo', 50),
+
+                $max->rewind(),
+                $max->next(),
+
+                $max->extract($keyExtract, $valueExtract)
+            )
+            ->then
+                ->string($key)
+                    ->isIdenticalTo($keyExtract)
+
+                ->string('bar')
+                    ->isIdenticalTo($valueExtract)
+        ;
     }
 
     public function case_top()
