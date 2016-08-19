@@ -28,7 +28,41 @@ class Max extends Test\Unit\Suite
         ;
     }
     
-    public function case_insert()
+    public function case_insert_scalar()
+    {
+        $this
+            ->given(
+                $max = new SUT(SUT::VALUE_TYPE_MIXED),
+                $concatKeys   = '',
+                $concatValues = ''
+            )
+            ->when(
+                $four  = $max->insert('4', 79),
+                $three = $max->insert('3', 80),
+                $six   = $max->insert('6'),
+                $two   = $max->insert('2', 85),
+                $one   = $max->insert('1', 90),
+                $five  = $max->insert('5', 1)
+            )
+        ;
+
+        foreach ($max as $key => $element) {
+
+            $concatKeys .= $key;
+            $concatValues .= $element;
+        }
+
+        $this
+            ->then
+                ->string($concatKeys)
+                    ->isIdenticalTo($one . $two . $three . $four . $five . $six)
+
+                ->string($concatValues)
+                    ->isIdenticalTo('123456')
+        ;
+    }
+
+    public function case_insert_callable()
     {
     }
 
