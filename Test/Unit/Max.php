@@ -108,6 +108,23 @@ class Max extends Test\Unit\Suite
 
     public function case_detach()
     {
+        $this
+            ->given(
+                $max = new SUT()
+            )
+            ->when(
+                $max->insert('bar', 10),
+                $max->insert('baz', 5),
+                $key = $max->insert('foo', 50),
+                $foo = $max->detach($key)
+            )
+            ->then
+            ->integer($max->count())
+            ->isIdenticalTo(2)
+
+            ->string($foo)
+            ->isIdenticalTo('foo')
+        ;
     }
 
     public function case_extract()
