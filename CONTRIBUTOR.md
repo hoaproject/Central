@@ -40,6 +40,7 @@ cloak on IRC, etc.
   * Martin Hasoň (hason)
   * ➜ Sébastien Houzé (shouze)
   * Stéphane Hulard (shulard)
+  * Zack Katz (zackkatz)
   * ➜ Matthieu de Laubrie (metalaka)
   * Samuel Laulhau (lalop)
   * Baptiste Leduc (korbeil)
