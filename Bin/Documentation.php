@@ -56,9 +56,10 @@ class Documentation extends Console\Dispatcher\Kit
      * @var array
      */
     protected $options = [
-        ['directories', Console\GetOption::REQUIRED_ARGUMENT, 'd'],
         ['clean',       Console\GetOption::NO_ARGUMENT,       'c'],
+        ['directories', Console\GetOption::REQUIRED_ARGUMENT, 'd'],
         ['language',    Console\GetOption::REQUIRED_ARGUMENT, 'l'],
+        ['open',        Console\GetOption::NO_ARGUMENT,       'o'],
         ['help',        Console\GetOption::NO_ARGUMENT,       'h'],
         ['help',        Console\GetOption::NO_ARGUMENT,       '?']
     ];
@@ -75,6 +76,7 @@ class Documentation extends Console\Dispatcher\Kit
         $directories = [];
         $clean       = false;
         $lang        = 'En';
+        $open        = false;
 
         while (false !== $c = $this->getOption($v)) {
             switch ($c) {
@@ -102,6 +104,11 @@ class Documentation extends Console\Dispatcher\Kit
 
                 case 'l':
                     $lang = ucfirst(strtolower($v));
+
+                    break;
+
+                case 'o':
+                    $open = $v;
 
                     break;
 
@@ -309,7 +316,40 @@ class Documentation extends Console\Dispatcher\Kit
             }
         }
 
-        echo "\n", 'Open file://', $workspace, '/index.html', '.', "\n";
+        $pathname = escapeshellarg('file://' . $workspace . '/index.html');
+
+        echo "\n";
+
+        if (true === $open) {
+            if (isset($_SERVER['BROWSER'])) {
+                echo
+                    'Opening…', "\n",
+                    Console\Processus::execute($_SERVER['BROWSER'] . ' ' . $pathname, false);
+
+                return;
+            }
+
+            $utilities = [
+                'open',
+                'xdg-open',
+                'gnome-open',
+                'kde-open'
+            ];
+
+            foreach ($utilities as $utility) {
+                if (null !== $utilityPath = Console\Processus::locate($utility)) {
+                    echo
+                        'Opening…', "\n",
+                        Console\Processus::execute($utilityPath . ' ' . $pathname, false);
+
+                    return;
+                }
+            }
+
+            echo 'Did not succeed to open the documentation automatically.', "\n";
+        }
+
+        echo "\n", 'Open ', $pathname, '.', "\n";
 
         return;
     }
@@ -329,6 +369,7 @@ class Documentation extends Console\Dispatcher\Kit
                           '(root of the library).',
                 'c'    => 'Clean the generated documentation.',
                 'l'    => 'Language (default: en).',
+                'o'    => 'Open the documentation in a browser after its computation.',
                 'help' => 'This help.'
             ]), "\n";
 
