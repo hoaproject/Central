@@ -50,16 +50,6 @@ use Hoa\Consistency;
  */
 abstract class Heap implements \Countable, \Iterator
 {
-    const VALUE_TYPE_MIXED  = 1;
-    const VALUE_TYPE_OBJECT = 2;
-
-    /**
-     * Type of element storage.
-     *
-     * @var int
-     */
-    protected $valueType;
-
     /**
      * Where store the element.
      *
@@ -100,32 +90,6 @@ abstract class Heap implements \Countable, \Iterator
     abstract protected function compare($key1, $key2);
 
     /**
-     * Heap constructor.
-     * Use storage as object will use SplObjectStorage
-     * for keep objects
-     *
-     * @param int $type
-     */
-    public function __construct($type = self::VALUE_TYPE_MIXED)
-    {
-        $this->valueType = $type;
-
-        if (self::VALUE_TYPE_MIXED === $type) {
-            $this->storage = [];
-
-            return;
-        }
-
-        if (self::VALUE_TYPE_OBJECT === $type) {
-            $this->storage = new \SplObjectStorage();
-
-            return;
-        }
-
-        throw new Exception('Storage type given is not supported');
-    }
-
-    /**
      * Sort heap using the compare method.
      */
     public function sort()
@@ -146,11 +110,6 @@ abstract class Heap implements \Countable, \Iterator
      */
     public function insert($value, $priority = 0, $key = null)
     {
-        if (self::VALUE_TYPE_OBJECT === $this->valueType
-            && false === is_object($value)) {
-            throw new Exception('Value for heap must be an object');
-        }
-
         if (null === $key) {
             $key = Consistency::uuid();
         }
@@ -159,11 +118,7 @@ abstract class Heap implements \Countable, \Iterator
             throw new Exception('Key already exists, must be unique');
         }
 
-        if (self::VALUE_TYPE_OBJECT === $this->valueType) {
-            $this->storage->attach($value, $key);
-        } else {
-            $this->storage[$key] = $value;
-        }
+        $this->storage[$key] = $value;
 
         $this->traversable[]    = $key;
         $this->priorities[$key] = $priority;
@@ -188,21 +143,9 @@ abstract class Heap implements \Countable, \Iterator
 
         $traversableHashMap = array_flip($this->traversable);
         $cursor             = $traversableHashMap[$key];
+        $element            = $this->storage[$key];
 
-        if (self::VALUE_TYPE_OBJECT === $this->valueType) {
-            foreach ($this->storage as $element) {
-                if ($key !== $this->storage->offsetGet($element)) {
-                    continue;
-                }
-
-                $this->storage->detach($element);
-            }
-        }
-        {
-            $element = $this->storage[$key];
-            unset($this->storage[$key]);
-        }
-
+        unset($this->storage[$key]);
         unset($this->traversable[$cursor]);
         unset($this->priorities[$key]);
 
@@ -226,17 +169,9 @@ abstract class Heap implements \Countable, \Iterator
         $key     = $this->key();
         $element = $this->current();
 
-        if (self::VALUE_TYPE_OBJECT === $this->valueType) {
-            $this->storage->detach($element);
-        }
-        {
-            unset($this->storage[$key]);
-        }
-
+        unset($this->storage[$key]);
         unset($this->traversable[$this->cursor]);
         unset($this->priorities[$key]);
-
-        $this->sort();
 
         return true;
     }
@@ -248,8 +183,10 @@ abstract class Heap implements \Countable, \Iterator
      */
     public function top()
     {
+        $this->sort();
+
         for (;;) {
-            $this->rewind();
+            $this->rewind(false);
 
             if (false === $this->extract($key, $element)) {
                 return;
@@ -266,8 +203,10 @@ abstract class Heap implements \Countable, \Iterator
      */
     public function pop()
     {
+        $this->sort();
+        
         for (;;) {
-            $this->end();
+            $this->end(false);
 
             if (false === $this->extract($key, $element)) {
                 return;
@@ -280,11 +219,22 @@ abstract class Heap implements \Countable, \Iterator
     /**
      * Move forward to end of iterator.
      */
-    public function end()
+    public function end($sort = true)
     {
-        $this->sort();
-        $count        = $this->count();
-        $this->cursor = $count === 0 ? 0 : $count - 1;
+        if (true === $sort) {
+            $this->sort();
+        }
+
+        if (0 === $this->count()) {
+            $this->cursor = 0;
+            return;
+        }
+
+        end($this->traversable);
+        $this->cursor = key($this->traversable);
+        reset($this->traversable);
+
+        return;
     }
 
     /**
@@ -304,27 +254,11 @@ abstract class Heap implements \Countable, \Iterator
      */
     public function current()
     {
-        $this->sort();
-
         if (false === $this->valid()) {
             return false;
         }
 
-        if (self::VALUE_TYPE_MIXED === $this->valueType) {
-            return $this->storage[$this->key()];
-        }
-
-        $key = $this->key();
-
-        if (self::VALUE_TYPE_OBJECT === $this->valueType) {
-            foreach ($this->storage as $element) {
-                if ($key === $this->storage->offsetGet($element)) {
-                    return $element;
-                }
-            }
-        }
-
-        return false;
+        return $this->storage[$this->key()];
     }
 
     /**
@@ -353,11 +287,17 @@ abstract class Heap implements \Countable, \Iterator
 
     /**
      * Rewind the iterator to the first element.
+     * 
+     * @param bool $sort
      */
-    public function rewind()
+    public function rewind($sort = true)
     {
-        $this->cursor = 0;
-        $this->sort();
+        reset($this->traversable);
+        $this->cursor = key($this->traversable);
+
+        if (true === $sort) {
+            $this->sort();
+        }
 
         return;
     }
@@ -369,7 +309,7 @@ abstract class Heap implements \Countable, \Iterator
      */
     public function valid()
     {
-        return $this->cursor < count($this->traversable);
+        return isset($this->traversable[$this->cursor]);
     }
 
     /**

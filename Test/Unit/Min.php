@@ -8,26 +8,6 @@ use Hoa\Test;
 
 class Min extends Test\Unit\Suite
 {
-    public function case_construct()
-    {
-        $this
-            ->exception(function () {
-                new SUT(null);
-            })
-            ->hasMessage('Storage type given is not supported')
-            ->isInstanceOf(LUT\Exception::class)
-        ;
-
-        $this
-            ->given(
-                $min = new SUT(SUT::VALUE_TYPE_MIXED)
-            )
-            ->then
-            ->object($min)
-            ->isInstanceOf(SUT::class)
-        ;
-    }
-
     public function case_insert_scalar()
     {
         $this
