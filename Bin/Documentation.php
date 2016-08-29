@@ -138,6 +138,10 @@ class Documentation extends Console\Dispatcher\Kit
             return;
         }
 
+        if (empty($directories)) {
+            $directories[] = getcwd();
+        }
+
         clearstatcache(true);
 
         $workspace .= DS . $lang;
