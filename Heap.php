@@ -204,7 +204,7 @@ abstract class Heap implements \Countable, \Iterator
     public function pop()
     {
         $this->sort();
-        
+
         for (;;) {
             $this->end(false);
 
@@ -227,6 +227,7 @@ abstract class Heap implements \Countable, \Iterator
 
         if (0 === $this->count()) {
             $this->cursor = 0;
+
             return;
         }
 

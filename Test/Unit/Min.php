@@ -1,8 +1,6 @@
 <?php
-
 namespace Hoa\Heap\Test\Unit;
 
-use Hoa\Heap as LUT;
 use Hoa\Heap\Min as SUT;
 use Hoa\Test;
 
@@ -42,9 +40,6 @@ class Min extends Test\Unit\Suite
         ;
     }
 
-    /**
-     * @engine inline
-     */
     public function case_insert_callable()
     {
         $this
