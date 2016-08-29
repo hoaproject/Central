@@ -63,7 +63,7 @@ class Issue extends Test\Unit\Suite
             ->exception(function () use ($visitor, $ast) {
                 $visitor->visit($ast);
             })
-                ->isInstanceOf('RuntimeException');
+                ->isInstanceOf(\RuntimeException::class);
     }
 
     public function case_github_43()
@@ -77,6 +77,25 @@ class Issue extends Test\Unit\Suite
             ->exception(function () use ($visitor, $ast) {
                 $visitor->visit($ast);
             })
-                ->isInstanceOf('RuntimeException');
+                ->isInstanceOf(\RuntimeException::class);
+    }
+
+    public function case_github_47()
+    {
+        $this
+            ->given(
+                $compiler = Compiler\Llk\Llk::load(new File\Read('hoa://Library/Math/Arithmetic.pp')),
+                $visitor  = new CUT()
+            )
+            ->when($ast = $compiler->parse('C'))
+            ->then
+                ->object($ast)
+                    ->isInstanceOf(Compiler\Llk\TreeNode::class)
+                ->string($ast->getId())
+                    ->isEqualTo('token')
+                ->string($ast->getValueToken())
+                    ->isEqualTo('constant')
+                ->string($ast->getValueValue())
+                    ->isEqualTo('C');
     }
 }
