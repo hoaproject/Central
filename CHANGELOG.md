@@ -1,3 +1,7 @@
+# 1.16.09.06
+
+  * Add `Response::getStream` that return STDOUT resource (Metalaka, 2016-02-22T22:44:40+01:00)
+
 # 1.16.01.15
 
   * Composer: New stable library. (Ivan Enderlin, 2016-01-14T21:56:49+01:00)
