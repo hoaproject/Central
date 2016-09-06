@@ -1,3 +1,9 @@
+# 1.16.09.06
+
+  * Bin: Make `…:documentation --directories` optional. (Ivan Enderlin, 2016-08-29T11:42:55+02:00)
+  * Bin: Add the `--open` option to `documentation`. (Ivan Enderlin, 2016-08-26T07:42:56+02:00)
+  * Add a fixer to remove useless constructor return tag (Metalaka, 2016-04-28T10:13:58+02:00)
+
 # 1.16.01.15
 
   * Composer: New stable libraries. (Ivan Enderlin, 2016-01-14T21:47:44+01:00)
