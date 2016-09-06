@@ -1,3 +1,7 @@
+# 2.16.09.06
+
+  * README: Fix a typo. (Ivan Enderlin, 2016-04-17T08:12:54+02:00)
+
 # 2.16.03.15
 
   * Update copyright. (Ivan Enderlin, 2016-01-17T14:28:52+01:00)
