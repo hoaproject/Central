@@ -1,3 +1,8 @@
+# 1.16.09.06
+
+  * Documentation: Update API documentation. (Ivan Enderlin, 2016-05-11T12:17:14+02:00)
+  * Quality: Fix CS. (Ivan Enderlin, 2016-05-11T10:28:35+02:00)
+
 # 1.16.04.06
 
   * Composer: Update `hoa/graph` dependency. (Ivan Enderlin, 2016-04-06T17:36:04+02:00)
