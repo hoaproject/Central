@@ -1,3 +1,11 @@
+# 0.16.09.06
+
+  * Quality: Add a missing void return statement. (Ivan Enderlin, 2016-05-11T10:43:28+02:00)
+  * Add a missing interface on DalStatement. (Metalaka, 2016-04-27T09:59:08+02:00)
+  * Documentation: Fix API documentation. (Ivan Enderlin, 2016-04-13T13:42:09+02:00)
+  * Don't use cursors when they aren't supported by the driver. (Metalaka, 2016-04-06T20:23:32+02:00)
+  * Add a missing dependency. (Metalaka, 2016-04-06T19:53:52+02:00)
+
 # 0.16.04.06
 
   * Dal: Fix a bad method call. (Ivan Enderlin, 2016-04-06T16:01:39+02:00)
