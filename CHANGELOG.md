@@ -1,3 +1,7 @@
+# 1.16.09.06
+
+  * Update copyright. (Ivan Enderlin, 2016-01-17T14:24:47+01:00)
+
 # 1.16.01.15
 
   * Composer: New stable libraries. (Ivan Enderlin, 2016-01-14T22:27:53+01:00)
