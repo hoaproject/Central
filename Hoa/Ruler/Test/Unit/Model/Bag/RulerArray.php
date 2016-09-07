@@ -34,46 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Ruler\Model\Bag;
+namespace Hoa\Ruler\Test\Unit\Model\Bag;
+
+use Hoa\Ruler as LUT;
+use Hoa\Ruler\Model\Bag\RulerArray as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Ruler\Model\Bag\Scalar.
+ * Class \Hoa\Ruler\Test\Unit\Model\Bag\RulerArray.
  *
- * Bag for a scalar.
+ * Test suite of the array bag class.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Scalar extends Bag
+class RulerArray extends Test\Unit\Suite
 {
-    /**
-     * Value.
-     *
-     * @var scalar
-     */
-    protected $_value = null;
-
-
-
-    /**
-     * Constructor.
-     *
-     * @param   string  $value    Value.
-     */
-    public function __construct($value)
+    public function case_is_a_bag()
     {
-        $this->_value = $value;
-
-        return;
+        $this
+            ->when($result = new SUT(['foobar']))
+            ->then
+                ->object($result)
+                    ->isInstanceOf(LUT\Model\Bag::class);
     }
 
-    /**
-     * Get content of the bag.
-     *
-     * @return  scalar
-     */
-    public function getValue()
+    public function case_constructor()
     {
-        return $this->_value;
+        $this
+            ->given($data = ['foo', ['bar'], new LUT\Model\Bag\Scalar('baz')])
+            ->when($result = new SUT($data))
+            ->then
+                ->let($array = $result->getArray())
+                ->array($array)
+                    ->hasSize(count($data))
+                    ->isEqualTo([
+                        new LUT\Model\Bag\Scalar('foo'),
+                        new SUT([new LUT\Model\Bag\Scalar('bar')]),
+                        new LUT\Model\Bag\Scalar('baz')
+                    ]);
     }
 }

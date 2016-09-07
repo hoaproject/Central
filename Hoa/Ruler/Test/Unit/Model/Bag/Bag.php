@@ -34,46 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Ruler\Model\Bag;
+namespace Hoa\Ruler\Test\Unit\Model\Bag;
+
+use Hoa\Test;
+use Hoa\Visitor;
+use Mock\Hoa\Ruler\Model\Bag as SUT;
 
 /**
- * Class \Hoa\Ruler\Model\Bag\Scalar.
+ * Class \Hoa\Ruler\Test\Unit\Model\Bag\Bag.
  *
- * Bag for a scalar.
+ * Test suite of the bag generic class.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Scalar extends Bag
+class Bag extends Test\Unit\Suite
 {
-    /**
-     * Value.
-     *
-     * @var scalar
-     */
-    protected $_value = null;
-
-
-
-    /**
-     * Constructor.
-     *
-     * @param   string  $value    Value.
-     */
-    public function __construct($value)
+    public function case_is_a_visitor()
     {
-        $this->_value = $value;
-
-        return;
-    }
-
-    /**
-     * Get content of the bag.
-     *
-     * @return  scalar
-     */
-    public function getValue()
-    {
-        return $this->_value;
+        $this
+            ->when($result = new SUT())
+            ->then
+                ->object($result)
+                    ->isInstanceOf(Visitor\Element::class);
     }
 }

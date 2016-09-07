@@ -34,46 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Ruler\Model\Bag;
+namespace Hoa\Ruler\Test\Unit\Exception;
+
+use Hoa\Ruler as LUT;
+use Hoa\Ruler\Exception\Asserter as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Ruler\Model\Bag\Scalar.
+ * Class \Hoa\Ruler\Test\Unit\Exception\Asserter.
  *
- * Bag for a scalar.
+ * Test suite of the asserter exception.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Scalar extends Bag
+class Asserter extends Test\Unit\Suite
 {
-    /**
-     * Value.
-     *
-     * @var scalar
-     */
-    protected $_value = null;
-
-
-
-    /**
-     * Constructor.
-     *
-     * @param   string  $value    Value.
-     */
-    public function __construct($value)
+    public function case_is_an_exception()
     {
-        $this->_value = $value;
-
-        return;
-    }
-
-    /**
-     * Get content of the bag.
-     *
-     * @return  scalar
-     */
-    public function getValue()
-    {
-        return $this->_value;
+        $this
+            ->when($result = new SUT('foo'))
+            ->then
+                ->object($result)
+                    ->isInstanceOf(LUT\Exception::class);
     }
 }

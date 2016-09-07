@@ -96,7 +96,6 @@ class Operator implements Visitor\Element
      * @param   string  $name          Name.
      * @param   array   $arguments     Arguments.
      * @param   bool    $isFunction    Whether it is a function.
-     * @return  void
      */
     public function __construct(
         $name,
@@ -104,7 +103,6 @@ class Operator implements Visitor\Element
         $isFunction      = true
     ) {
         $this->setName($name);
-        $this->setLaziness('and' === $name || 'or' === $name);
         $this->setArguments($arguments);
         $this->setFunction($isFunction);
 
@@ -121,6 +119,8 @@ class Operator implements Visitor\Element
     {
         $old         = $this->_name;
         $this->_name = $name;
+
+        $this->setLaziness('and' === $name || 'or' === $name);
 
         return $old;
     }
@@ -223,7 +223,7 @@ class Operator implements Visitor\Element
      */
     public function shouldBreakLazyEvaluation($value)
     {
-        switch ($this->_name) {
+        switch ($this->getName()) {
             case 'and':
                 if (false === $value) {
                     return self::LAZY_BREAK;
