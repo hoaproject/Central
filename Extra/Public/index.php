@@ -80,7 +80,7 @@ $router
             $uri = null;
 
             if ('hoa' === $remote) {
-                $uri   = 'http://git.hoa-project.net/' . $family . '/';
+                $uri   = 'https://git.hoa-project.net/' . $family . '/';
                 $tails = explode('/', trim($tail, '/'));
 
                 if ('Contributions' === $family) {
