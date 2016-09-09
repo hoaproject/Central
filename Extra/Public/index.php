@@ -1,14 +1,21 @@
 <?php
 
-require_once
+$hoaPath =
     __DIR__ . DIRECTORY_SEPARATOR .
     '..' . DIRECTORY_SEPARATOR .
     '..' . DIRECTORY_SEPARATOR .
-    'Hoa' . DIRECTORY_SEPARATOR .
-    'Core' . DIRECTORY_SEPARATOR .
-    'Core.php';
+    'Hoa' . DIRECTORY_SEPARATOR;
 
-$router = new Hoa\Router\Http();
+
+require_once $hoaPath . 'Consistency' . DIRECTORY_SEPARATOR . 'Prelude.php';
+require_once $hoaPath . 'Protocol' . DIRECTORY_SEPARATOR . 'Wrapper.php';
+
+use Hoa\Console;
+use Hoa\Dispatcher;
+use Hoa\Http;
+use Hoa\Router;
+
+$router = new Router\Http();
 $router
     ->get(
         'r',
@@ -17,7 +24,7 @@ $router
             static $_formats = ['tree', 'raw'];
             static $_remotes = ['github', 'hoa'];
 
-            $http   = new Hoa\Http\Response\Response();
+            $http   = new Http\Response\Response();
             $format = $_formats[0];
 
             if (isset($_request['remote'])) {
@@ -78,7 +85,7 @@ $router
 
                 if ('Contributions' === $family) {
                     if (2 > count($tails)) {
-                        throw new Hoa\Router\Exception\NotFound(
+                        throw new Router\Exception\NotFound(
                             'Contribution name is incomplete.',
                             0
                         );
@@ -120,7 +127,7 @@ $router
                     $library = 'Hoathis-' . array_shift($tails);
                 } elseif ('Contributions' === $family) {
                     if (2 > count($tails)) {
-                        throw new Hoa\Router\Exception\NotFound(
+                        throw new Router\Exception\NotFound(
                             'Contribution name is incomplete.',
                             0
                         );
@@ -162,7 +169,7 @@ $router
         '/State/(?<library>[\w ]+)',
         function ($library, $_request) {
             $Library = ucfirst(strtolower($library));
-            $http    = new Hoa\Http\Response\Response();
+            $http    = new Http\Response\Response();
 
             if (false === file_exists('hoa://Library/' . $Library)) {
                 $http->sendStatus($http::STATUS_NOT_FOUND);
@@ -170,7 +177,7 @@ $router
                 return;
             }
 
-            $status = Hoa\Console\Processus::execute('hoa devtools:state ' . $library);
+            $status = Console\Processus::execute('hoa devtools:state ' . $library);
 
             if (empty($status)) {
                 $http->sendStatus($http::STATUS_INTERNAL_SERVER_ERROR);
@@ -203,12 +210,12 @@ $router
         }
     );
 
-$dispatcher = new Hoa\Dispatcher\Basic();
+$dispatcher = new Dispatcher\Basic();
 
 try {
     $dispatcher->dispatch($router);
-} catch (Hoa\Router\Exception\NotFound $e) {
-    $http = new Hoa\Http\Response\Response();
+} catch (Router\Exception\NotFound $e) {
+    $http = new Http\Response\Response();
     $http->sendStatus($http::STATUS_NOT_FOUND);
     $http->sendHeader('Content-Type', 'text/plain');
 
@@ -218,25 +225,24 @@ try {
         'GET ' . $rules['r'][$router::RULE_PATTERN] . "\n\n" .
         'Permanent link to a library or a resource inside a library.' . "\n\n" .
         'Usage:' . "\n" .
-        '    * Link to the Hoa\Core library' . "\n" .
-        '      GET /Resource/Library/Core' . "\n" .
-        '    * Use ?remote to select a specific remote amongst hoa or github (default: auto-select):' . "\n" .
+        '    * Link to the `Hoa\Console` library' . "\n" .
+        '      GET /Resource/Library/Console' . "\n" .
+        '    * Use `?remote` to select a specific remote amongst `hoa` or `github` (auto-select by default):' . "\n" .
         '      GET /Resource/Library/Core?remote=github' . "\n" .
-        '    * Link to the Hoa\Console\Cursor class' . "\n" .
+        '    * Link to the `Hoa\Console\Cursor` class' . "\n" .
         '      GET /Resource/Library/Console/Cursor.php' . "\n" .
-        '    * Link to the atoum/praspel-extension contribution:' . "\n" .
+        '    * Link to the `atoum/praspel-extension` contribution:' . "\n" .
         '      GET /Resource/Contributions/Atoum/PraspelExtension' . "\n" .
-        '    * Use ?format=raw to get only the file, not the tree (default: format=tree)' . "\n" .
-        '      GET
-        /Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw' . "\n\n\n" .
+        '    * Use `?format=raw` to get only the file, not the tree (default: `tree`)' . "\n" .
+        '      GET /Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw' . "\n\n\n" .
 
         'GET ' . $rules['s'][$router::RULE_PATTERN] . "\n\n" .
         'Get the state of a library.' . "\n\n" .
         'Usage:' . "\n" .
-        '    * State of Hoa\Core as an image' . "\n" .
-        '      GET /State/Core' . "\n" .
-        '    * Use ?format to turn the image into text' . "\n" .
-        '      GET /State/Core?format=raw' . "\n";
+        '    * State of `Hoa\Console` as an image' . "\n" .
+        '      GET /State/Console' . "\n" .
+        '    * Use `?format` to turn the image into text' . "\n" .
+        '      GET /State/Console?format=raw' . "\n";
 } catch (Exception $e) {
     $http = new Hoa\Http\Response\Response();
     $http->sendStatus($http::STATUS_INTERNAL_SERVER_ERROR);
