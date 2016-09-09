@@ -165,6 +165,19 @@ $router
         }
     )
     ->get(
+        'd',
+        '/Documentation/(?-i)(?<family>Library)/(?<tail>[/\w \d_\-\.]+)',
+        function ($_this, $family, $tail, $_request) {
+            $http = new Http\Response\Response();
+            $uri  = 'https://hoa-project.net/Literature/Hack/' . $tail . '.html';
+
+            $http->sendStatus($http::STATUS_MOVED_PERMANENTLY);
+            $http->sendHeader('Location', $uri);
+
+            return;
+        }
+    )
+    ->get(
         's',
         '/State/(?<library>[\w ]+)',
         function ($library, $_request) {
@@ -235,6 +248,12 @@ try {
         '      GET /Resource/Contributions/Atoum/PraspelExtension' . "\n" .
         '    * Use `?format=raw` to get only the file, not the tree (default: `tree`)' . "\n" .
         '      GET /Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw' . "\n\n\n" .
+
+        'GET ' . $rules['d'][$router::RULE_PATTERN] . "\n\n" .
+        'Permanent link to a library documentation.' . "\n\n" .
+        'Usage:' . "\n" .
+        '    * Link to the `Hoa\Console` library documentation' . "\n" .
+        '      GET /Documentation/Library/Console' . "\n\n\n" .
 
         'GET ' . $rules['s'][$router::RULE_PATTERN] . "\n\n" .
         'Get the state of a library.' . "\n\n" .
