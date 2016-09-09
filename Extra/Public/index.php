@@ -1,22 +1,38 @@
 <?php
 
-$hoaPath =
+const HOA_ROOT =
     __DIR__ . DIRECTORY_SEPARATOR .
     '..' . DIRECTORY_SEPARATOR .
     '..' . DIRECTORY_SEPARATOR .
     'Hoa' . DIRECTORY_SEPARATOR;
 
 
-require_once $hoaPath . 'Consistency' . DIRECTORY_SEPARATOR . 'Prelude.php';
-require_once $hoaPath . 'Protocol' . DIRECTORY_SEPARATOR . 'Wrapper.php';
+require_once HOA_ROOT . 'Consistency' . DIRECTORY_SEPARATOR . 'Prelude.php';
+require_once HOA_ROOT . 'Protocol' . DIRECTORY_SEPARATOR . 'Wrapper.php';
 
 use Hoa\Console;
 use Hoa\Dispatcher;
+use Hoa\File;
 use Hoa\Http;
 use Hoa\Router;
 
 $router = new Router\Http();
 $router
+    ->get(
+        'l',
+        '/Resource/Library/\*',
+        function () {
+            $finder = new File\Finder();
+            $finder
+                ->in(HOA_ROOT)
+                ->directories()
+                ->maxDepth(1);
+
+            foreach ($finder as $fileInfo) {
+                echo $fileInfo->getBasename(), "\n";
+            }
+        }
+    )
     ->get(
         'r',
         '/Resource/(?-i)(?<family>Library|Hoathis|Contributions)/(?<tail>[/\w \d_\-\.]+)',
@@ -235,6 +251,12 @@ try {
     $rules = $router->getRules();
 
     echo
+        'GET ' . $rules['l'][$router::RULE_PATTERN] . "\n\n" .
+        'List of all standard Hoa libraries.' . "\n\n" .
+        'Usage:' . "\n" .
+        '    * The full list' . "\n" .
+        '      GET /Resource/Library/*' . "\n\n\n" .
+
         'GET ' . $rules['r'][$router::RULE_PATTERN] . "\n\n" .
         'Permanent link to a library or a resource inside a library.' . "\n\n" .
         'Usage:' . "\n" .
