@@ -17,9 +17,11 @@
         }
     ],
     "support": {
-        "email" : "support@lists.hoa-project.net",
-        "irc"   : "irc://irc.freenode.org/hoaproject",
-        "source": "http://git.hoa-project.net/"
+        "email" : "support@hoa-project.net",
+        "irc"   : "irc://chat.freenode.net/hoaproject",
+        "forum" : "http://users.hoa-project.net/",
+        "docs"  : "https://central.hoa-project.net/Documentation/Library/Acl",
+        "source": "https://central.hoa-project.net/Resource/Library/Acl"
     },
     "require": {
         "hoa/consistency": "~1.0",
