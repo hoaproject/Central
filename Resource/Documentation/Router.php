@@ -19,19 +19,19 @@ $router
 
     ->_get(
         'literature',
-        'http://hoa-project.net/Literature\.html'
+        'https://hoa-project.net/Literature\.html'
     )
     ->_get(
         'learn',
-        'http://hoa-project.net/Literature/Learn/(?<chapter>)\.html'
+        'https://hoa-project.net/Literature/Learn/(?<chapter>)\.html'
     )
     ->get(
         '_resource',
-        'http://static.hoa-project.net/(?<resource>)'
+        'https://static.hoa-project.net/(?<resource>)'
     )
     ->_get(
         'central_resource',
-        'http://central.hoa-project.net/Resource/(?<path>)'
+        'https://central.hoa-project.net/Resource/(?<path>)'
     )
     ->_get(
         'board',
@@ -39,7 +39,7 @@ $router
     )
     ->_get(
         'git',
-        'http://git.hoa-project.net/(?<repository>).git/'
+        'https://git.hoa-project.net/(?<repository>).git/'
     )
     ->_get(
         'github',
@@ -47,15 +47,15 @@ $router
     )
     ->_get(
         'research',
-        'http://hoa-project.net/Literature/Research/(?<article>[\w\d]+)\.pdf',
+        'https://hoa-project.net/Literature/Research/(?<article>[\w\d]+)\.pdf',
         'Literature\Research'
     )
     ->_get(
         'event',
-        'http://hoa-project.net/Event/(?<event>\w+)\.html',
+        'https://hoa-project.net/Event/(?<event>\w+)\.html',
         'Generic'
     )
     ->_get(
         'keynote',
-        'http://keynote.hoa-project.net/(?<keynote>)'
+        'https://keynote.hoa-project.net/(?<keynote>)'
     );
