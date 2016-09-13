@@ -6,10 +6,10 @@
   <style>
     @font-face {
         font-family: Text;
-        src: url("http://static.hoa-project.net/Font/DroidSansMono.eot")     format("eot"),
-             url("http://static.hoa-project.net/Font/DroidSansMono.woff")    format("woff"),
-             url("http://static.hoa-project.net/Font/DroidSansMono.ttf")     format("truetype"),
-             url("http://static.hoa-project.net/Font/DroidSansMono.svg#foo") format("svg");
+        src: url("https://static.hoa-project.net/Font/DroidSansMono.eot")     format("eot"),
+             url("https://static.hoa-project.net/Font/DroidSansMono.woff")    format("woff"),
+             url("https://static.hoa-project.net/Font/DroidSansMono.ttf")     format("truetype"),
+             url("https://static.hoa-project.net/Font/DroidSansMono.svg#foo") format("svg");
         font-weight: normal;
         font-style: normal;
     }
