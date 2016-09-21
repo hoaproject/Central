@@ -1,3 +1,7 @@
+# 1.16.09.21
+
+  * Replace `void` by `null` as `void` is now a reserved keyword (Alexis von Glasow, 2016-09-21T13:48:25+02:00)
+
 # 1.16.01.15
 
   * Composer: New stable libraries. (Ivan Enderlin, 2016-01-14T22:07:08+01:00)
