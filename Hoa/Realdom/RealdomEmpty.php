@@ -76,6 +76,6 @@ class RealdomEmpty extends Realdom
      */
     protected function _sample(Math\Sampler $sampler)
     {
-        return void;
+        return null;
     }
 }
