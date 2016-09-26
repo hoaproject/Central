@@ -34,72 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Unit;
-
-use atoum;
-use Hoa\Protocol;
-use Hoa\Test;
+namespace Hoa\Test;
 
 /**
- * Class \Hoa\Test\Unit\Suite.
+ * Interface \Hoa\Test\Decorrelated.
  *
- * Represent a unit test suite.
+ * Represent a test suite where test cases are decorrelated from the System
+ * Under Test.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Suite extends atoum\test
+interface Decorrelated
 {
-    const defaultNamespace = '/\\\Test\\\Unit\\\/';
-
-
-
-    public function __construct()
-    {
-        $this->setMethodPrefix('/^case_/');
-        parent::__construct();
-
-        $protocol                = Protocol::getInstance();
-        $protocol['Test']        = new Protocol\Node('Test', null);
-        $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
-
-        return;
-    }
-
-    public function getTestedClassName()
-    {
-        if ($this instanceof Test\Decorrelated) {
-            return 'StdClass';
-        }
-
-        return parent::getTestedClassName();
-    }
-
-    public function getTestedClassNamespace()
-    {
-        if ($this instanceof Test\Decorrelated) {
-            return '\\';
-        }
-
-        return parent::getTestedClassNamespace();
-    }
-
-    public function beforeTestMethod($methodName)
-    {
-        $out             = parent::beforeTestMethod($methodName);
-        $testedClassName = self::getTestedClassNameFromTestClass(
-            $this->getClass(),
-            $this->getTestNamespace()
-        );
-        $testedNamespace = substr(
-            $testedClassName,
-            0,
-            strrpos($testedClassName, '\\')
-        );
-
-        $this->getPhpFunctionMocker()->setDefaultNamespace($testedNamespace);
-        $this->getPhpConstantMocker()->setDefaultNamespace($testedNamespace);
-
-        return $out;
-    }
 }
