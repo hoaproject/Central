@@ -20,13 +20,8 @@ $runner->addReport($report->addWriter(new atoum\writers\std\out()));
 /**
  * Publish code coverage report on coveralls.io from Travis.
  */
-var_dump(getenv('TRAVIS'));
-var_dump(getenv('COVERALLS_TOKEN'));
-var_dump($_SERVER);
-
-if (false !== getenv('TRAVIS') &&
-    false !== $coverallsToken = getenv('COVERALLS_TOKEN')) {
-    $coverallsReport = new atoum\reports\asynchronous\coveralls('.', $coverallsToken);
+if (false !== getenv('TRAVIS')) {
+    $coverallsReport = new atoum\reports\asynchronous\coveralls('.');
 
     $defaultFinder = $coverallsReport->getBranchFinder();
     $coverallsReport
