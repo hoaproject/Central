@@ -49,6 +49,22 @@ use Hoa\Socket as HoaSocket;
 class Socket extends HoaSocket
 {
     /**
+     * Constructor
+     *
+     * @param string  $uri      Socket URI
+     * @param boolean $secured  Secure mode
+     * @param string  $endPoint Websocket endpoint
+     */
+    public function __construct($uri, $secured = false)
+    {
+        parent::__construct($uri);
+
+        $this->_secured  = $secured;
+
+        return;
+    }
+
+    /**
      * Factory to create a valid instance from the given URI
      *
      * @param string $socketUri URI of the socket to connect to.
@@ -65,9 +81,26 @@ class Socket extends HoaSocket
             );
         }
 
-        $port = isset($parsed['port'])?$parsed['port']:6667;
+        $secured = isset($parsed['scheme'])?
+            'ircs' === $parsed['scheme']:
+            false;
 
-        return new static('tcp://' . $parsed['host'] . ':' . $port);
+        if (isset($parsed['port'])) {
+            $port = $parsed['port'];
+        } else {
+            /**
+             * https://tools.ietf.org/html/draft-butcher-irc-url-04#section-2.4
+             * Regarding RFC, port 194 is likely to be a more "authentic"
+             * server, however at this time the majority of IRC non secure
+             * servers are available on port 6667, at least.
+             */
+            $port = true === $secured ? 994 : 6667;
+        }
+
+        return new static(
+            'tcp://' . $parsed['host'] . ':' . $port,
+            $secured
+        );
     }
 }
 
@@ -75,3 +108,4 @@ class Socket extends HoaSocket
  * Register socket wrappers
  */
 HoaSocket\Transport::register('irc', ['Hoa\Irc\Socket', 'transportFactory']);
+HoaSocket\Transport::register('ircs', ['Hoa\Irc\Socket', 'transportFactory']);
