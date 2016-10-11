@@ -3,7 +3,7 @@
     "description": "The Hoa\\Json library.",
     "type"       : "library",
     "keywords"   : ["library", "json", "grammar", "rfc4627", "rfc7159"],
-    "homepage"   : "http://hoa-project.net/",
+    "homepage"   : "https://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [
         {
@@ -12,7 +12,7 @@
         },
         {
             "name"    : "Hoa community",
-            "homepage": "http://hoa-project.net/"
+            "homepage": "https://hoa-project.net/"
         }
     ],
     "support": {
