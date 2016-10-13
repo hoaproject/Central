@@ -109,7 +109,6 @@ class Finder implements Iterator\Aggregate
     /**
      * Initialize.
      *
-     * @return  void
      */
     public function __construct()
     {
@@ -124,17 +123,30 @@ class Finder implements Iterator\Aggregate
     /**
      * Select a directory to scan.
      *
-     * @param   string  $path    Path.
+     * @param   string|array  $paths    One or more paths.
      * @return  \Hoa\File\Finder
      */
-    public function in($path)
+    public function in($paths)
     {
-        if (!is_array($path)) {
-            $path = [$path];
+        if (!is_array($paths)) {
+            $paths = [$paths];
         }
 
-        foreach ($path as $p) {
-            $this->_paths[] = $p;
+        foreach ($paths as $path) {
+            if (1 === preg_match('/[\*\?\[\]]/', $path)) {
+                $iterator = new Iterator\CallbackFilter(
+                    new Iterator\Glob(rtrim($path, DS)),
+                    function ($current) {
+                        return $current->isDir();
+                    }
+                );
+
+                foreach ($iterator as $fileInfo) {
+                    $this->_paths[] = $fileInfo->getPathname();
+                }
+            } else {
+                $this->_paths[] = $path;
+            }
         }
 
         return $this;
@@ -395,7 +407,6 @@ class Finder implements Iterator\Aggregate
     public function owner($owner)
     {
         $this->_filters[] = function (\SplFileInfo $current) use ($owner) {
-
             return $current->getOwner() === $owner;
         };
 
