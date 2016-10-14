@@ -41,7 +41,7 @@ use Hoa\Socket as HoaSocket;
 /**
  * Class \Hoa\Irc\Socket.
  *
- * Irc specific socket extension.
+ * IRC specific socket and transports.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
@@ -51,61 +51,64 @@ class Socket extends HoaSocket
     /**
      * Constructor
      *
-     * @param string  $uri      Socket URI
-     * @param boolean $secured  Secure mode
-     * @param string  $endPoint Websocket endpoint
+     * @param   string   $uri         Socket URI.
+     * @param   boolean  $secured     Whether the connection is secured.
      */
     public function __construct($uri, $secured = false)
     {
         parent::__construct($uri);
 
-        $this->_secured  = $secured;
+        $this->_secured = $secured;
 
         return;
     }
 
     /**
-     * Factory to create a valid instance from the given URI
+     * Factory to create a valid `Hoa\Socket\Socket` object.
      *
-     * @param string $socketUri URI of the socket to connect to.
-     * @return void
+     * @param   string  $socketUri    URI of the socket to connect to.
+     * @return  void
      */
     public static function transportFactory($socketUri)
     {
         $parsed = parse_url($socketUri);
-        if (false === $parsed) {
+
+        if (false === $parsed || !isset($parsed['host'])) {
             throw new Exception(
-                'URL %s seems syntactically invalid.',
+                'URL %s seems invalid, cannot parse it.',
                 0,
                 $socketUri
             );
         }
 
-        $secured = isset($parsed['scheme'])?
-            'ircs' === $parsed['scheme']:
-            false;
+        $secure =
+            isset($parsed['scheme'])
+                ? 'ircs' === $parsed['scheme']
+                : false;
 
-        if (isset($parsed['port'])) {
-            $port = $parsed['port'];
-        } else {
-            /**
-             * https://tools.ietf.org/html/draft-butcher-irc-url-04#section-2.4
-             * Regarding RFC, port 194 is likely to be a more "authentic"
-             * server, however at this time the majority of IRC non secure
-             * servers are available on port 6667, at least.
-             */
-            $port = true === $secured ? 994 : 6667;
-        }
+        /**
+         * Regarding RFC
+         * https://tools.ietf.org/html/draft-butcher-irc-url-04#section-2.4,
+         * port 194 is likely to be a more “authentic” server, however at this
+         * time the majority of IRC non secure servers are available on port
+         * 6667.
+         */
+        $port =
+            isset($parsed['port'])
+                ? $parsed['port']
+                : (true === $secure
+                    ? 994
+                    : 6667);
 
         return new static(
             'tcp://' . $parsed['host'] . ':' . $port,
-            $secured
+            $secure
         );
     }
 }
 
 /**
- * Register socket wrappers
+ * Register `irc://` and `ircs://` transports.
  */
-HoaSocket\Transport::register('irc', ['Hoa\Irc\Socket', 'transportFactory']);
+HoaSocket\Transport::register('irc',  ['Hoa\Irc\Socket', 'transportFactory']);
 HoaSocket\Transport::register('ircs', ['Hoa\Irc\Socket', 'transportFactory']);
