@@ -39,107 +39,76 @@ namespace Hoa\Irc;
 use Hoa\Socket as HoaSocket;
 
 /**
- * Class \Hoa\Irc\Node.
+ * Class \Hoa\Irc\Socket.
  *
- * Describe a IRC node.
+ * IRC specific socket and transports.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Node extends HoaSocket\Node
+class Socket extends HoaSocket
 {
     /**
-     * Whether this is basically the first message.
+     * Constructor
      *
-     * @var bool
+     * @param   string   $uri         Socket URI.
+     * @param   boolean  $secured     Whether the connection is secured.
      */
-    protected $_joined   = false;
-
-    /**
-     * Username.
-     *
-     * @var string
-     */
-    protected $_username = null;
-
-    /**
-     * Channel.
-     *
-     * @var string
-     */
-    protected $_channel  = null;
-
-
-
-    /**
-     * Whether the client has already joined a channel or not.
-     *
-     * @param   bool  $joined    Joined or not.
-     * @return  bool
-     */
-    public function setJoined($joined)
+    public function __construct($uri, $secured = false)
     {
-        $old           = $this->_joined;
-        $this->_joined = $joined;
+        parent::__construct($uri);
 
-        return $old;
+        $this->_secured = $secured;
+
+        return;
     }
 
     /**
-     * Whether the client has already joined a channel or not.
+     * Factory to create a valid `Hoa\Socket\Socket` object.
      *
-     * @return  bool
+     * @param   string  $socketUri    URI of the socket to connect to.
+     * @return  void
      */
-    public function hasJoined()
+    public static function transportFactory($socketUri)
     {
-        return $this->_joined;
-    }
+        $parsed = parse_url($socketUri);
 
-    /**
-     * Set username.
-     *
-     * @param   string  $username    Username.
-     * @return  string
-     */
-    public function setUsername($username)
-    {
-        $old             = $this->_username;
-        $this->_username = $username;
+        if (false === $parsed || !isset($parsed['host'])) {
+            throw new Exception(
+                'URL %s seems invalid, cannot parse it.',
+                0,
+                $socketUri
+            );
+        }
 
-        return $old;
-    }
+        $secure =
+            isset($parsed['scheme'])
+                ? 'ircs' === $parsed['scheme']
+                : false;
 
-    /**
-     * Get username.
-     *
-     * @return  string
-     */
-    public function getUsername()
-    {
-        return $this->_username;
-    }
+        /**
+         * Regarding RFC
+         * https://tools.ietf.org/html/draft-butcher-irc-url-04#section-2.4,
+         * port 194 is likely to be a more “authentic” server, however at this
+         * time the majority of IRC non secure servers are available on port
+         * 6667.
+         */
+        $port =
+            isset($parsed['port'])
+                ? $parsed['port']
+                : (true === $secure
+                    ? 994
+                    : 6667);
 
-    /**
-     * Set current channel.
-     *
-     * @param   string  $channel    Channel.
-     * @return  string
-     */
-    public function setChannel($channel)
-    {
-        $old            = $this->_channel;
-        $this->_channel = $channel;
-
-        return $old;
-    }
-
-    /**
-     * Get current channel.
-     *
-     * @return  string
-     */
-    public function getChannel()
-    {
-        return $this->_channel;
+        return new static(
+            'tcp://' . $parsed['host'] . ':' . $port,
+            $secure
+        );
     }
 }
+
+/**
+ * Register `irc://` and `ircs://` transports.
+ */
+HoaSocket\Transport::register('irc',  ['Hoa\Irc\Socket', 'transportFactory']);
+HoaSocket\Transport::register('ircs', ['Hoa\Irc\Socket', 'transportFactory']);

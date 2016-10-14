@@ -31,7 +31,8 @@
     "autoload": {
         "psr-4": {
             "Hoa\\Irc\\": "."
-        }
+        },
+        "files": [ "Socket.php" ]
     },
     "extra": {
         "branch-alias": {
