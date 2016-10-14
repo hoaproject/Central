@@ -38,7 +38,7 @@ namespace Hoa\Irc;
 
 use Hoa\Event;
 use Hoa\Exception;
-use Hoa\Socket;
+use Hoa\Socket as HoaSocket;
 
 /**
  * Class \Hoa\Irc\Client.
@@ -49,7 +49,7 @@ use Hoa\Socket;
  * @license    New BSD License
  */
 class          Client
-    extends    Socket\Connection\Handler
+    extends    HoaSocket\Connection\Handler
     implements Event\Listenable
 {
     use Event\Listens;
@@ -60,10 +60,9 @@ class          Client
      * Constructor.
      *
      * @param   \Hoa\Socket\Client  $client    Client.
-     * @return  void
      * @throws  \Hoa\Socket\Exception
      */
-    public function __construct(Socket\Client $client)
+    public function __construct(HoaSocket\Client $client)
     {
         parent::__construct($client);
         $this->getConnection()->setNodeName('\Hoa\Irc\Node');
@@ -95,7 +94,7 @@ class          Client
      * @return  void
      * @throws  \Hoa\Irc\Exception
      */
-    protected function _run(Socket\Node $node)
+    protected function _run(HoaSocket\Node $node)
     {
         if (false === $node->hasJoined()) {
             $node->setJoined(true);
@@ -227,7 +226,7 @@ class          Client
      * @param   \Hoa\Socket\Node  $node       Node.
      * @return  \Closure
      */
-    protected function _send($message, Socket\Node $node)
+    protected function _send($message, HoaSocket\Node $node)
     {
         return $node->getConnection()->writeAll($message . CRLF);
     }
