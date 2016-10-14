@@ -34,8 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Irc;
+namespace Hoa\Irc\Exception;
 
+use Hoa\Consistency;
 use Hoa\Exception as HoaException;
 
 /**
@@ -49,3 +50,8 @@ use Hoa\Exception as HoaException;
 class Exception extends HoaException
 {
 }
+
+/**
+ * Flex entity.
+ */
+Consistency::flexEntity('Hoa\Irc\Exception\Exception');
