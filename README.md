@@ -166,7 +166,7 @@ Options   : --some options
 ```
 
 The use of the [`Hoa\Console`
-library](http://central.hoa-project.net/Resource/Library/Console) would be a
+library](https://central.hoa-project.net/Resource/Library/Console) would be a
 good idea to interprete the options and getting some comfortable services for
 the terminal.
 
