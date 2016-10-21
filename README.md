@@ -33,7 +33,7 @@ The link between libraries and the application is represented by a kit which
 aggregates all important data, such as the dispatcher, the router, the view and
 data associated to the view.
 
-[Learn more](https://central.hoa-project.net/Documentation/Library/Cli).
+[Learn more](https://central.hoa-project.net/Documentation/Library/Dispatcher).
 
 ## Installation
 
