@@ -1,3 +1,9 @@
+# 1.16.10.24
+
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-14T23:22:08+02:00)
+  * Documentation: Use HTTPS in `composer.json`. (Ivan Enderlin, 2016-10-05T15:00:07+02:00)
+  * Documentation: Update support properties. (Ivan Enderlin, 2016-09-09T09:49:59+02:00)
+
 # 1.16.09.06
 
   * Documentation: Update API documentation. (Ivan Enderlin, 2016-05-11T12:17:14+02:00)
