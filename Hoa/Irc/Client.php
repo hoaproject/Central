@@ -37,7 +37,6 @@
 namespace Hoa\Irc;
 
 use Hoa\Event;
-use Hoa\Exception;
 use Hoa\Socket as HoaSocket;
 
 /**
@@ -129,13 +128,6 @@ class          Client
 
                     break;
 
-                case 433: // ERR_NICKNAMEINUSE
-                    throw new Exception(
-                        'Nickname %s is already in use.',
-                        0,
-                        $node->getUsername()
-                    );
-
                 case 'PRIVMSG':
                     $middle   = trim($matches['middle']);
                     $message  = $matches['trailing'];
@@ -199,6 +191,16 @@ class          Client
                     break;
 
                 default:
+                    if ($matches['command'] >= 400 && $matches['command'] < 600) {
+                        $code = intval($matches['command']);
+
+                        throw new Exception\ErrorReply(
+                            'Error reply code %d.',
+                            $code,
+                            $code
+                        );
+                    }
+
                     $listener = 'other-message';
                     $bucket   = [
                         'line'        => $line,
@@ -207,7 +209,7 @@ class          Client
             }
 
             $this->getListener()->fire($listener, new Event\Bucket($bucket));
-        } catch (Exception\Idle $e) {
+        } catch (\Exception $e) {
             $this->getListener()->fire(
                 'error',
                 new Event\Bucket([

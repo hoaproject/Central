@@ -34,18 +34,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Irc;
+namespace Hoa\Irc\Exception;
 
-use Hoa\Exception as HoaException;
+use Hoa\Irc;
 
 /**
- * Class \Hoa\Irc\Exception.
+ * Class \Hoa\Irc\Exception\ErrorReply.
  *
- * Extending the \Hoa\Exception\Exception class.
+ * Extending the \Hoa\Irc\Exception class.
+ * Represent all IRC error replies, see
+ * https://tools.ietf.org/html/rfc1459#section-6.1.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Exception extends HoaException
+class ErrorReply extends Exception
 {
+    /**
+     * Constructor.
+     * Try to find an appropriate error message.
+     *
+     * @param   string      $message      Formatted message.
+     * @param   int         $code         Error reply code.
+     * @param   array       $arguments    Arguments to format message.
+     * @param   \Throwable  $previous     Previous exception in chaining.
+     * @return  void
+     */
+    public function __construct(
+        $message,
+        $code      = 0,
+        $arguments = [],
+        $previous  = null
+    ) {
+        if (isset(Irc\Codes::$errorMapping[$code])) {
+            $message = Irc\Codes::$errorMapping[$code];
+        } else {
+            $message = 'Unknown error reply; code ' . $code . '.';
+        }
+
+        parent::__construct($message, $code, $arguments, $previous);
+
+        return;
+    }
 }
