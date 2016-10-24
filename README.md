@@ -65,7 +65,7 @@ Thus, we are able to generate unit test suites satisfying these
 contract coverage criteria, and thus rensuring that generated unit
 test suites reflect all the behavior expressed in the contract.
 
-## Paper research
+## Research papers
 
 This language is the result of several research papers, journals and PhD thesis.
 
