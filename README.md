@@ -62,7 +62,7 @@ contract. In order to ensure whether the contract is correctly
 covered, we have defined several contract coverage criteria.
 
 Thus, we are able to generate unit test suites satisfying these
-contract coverage criteria, and thus rensuring that generated unit
+contract coverage criteria, and thus ensuring that generated unit
 test suites reflect all the behavior expressed in the contract.
 
 ## Research papers
