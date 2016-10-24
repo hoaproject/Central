@@ -1,3 +1,8 @@
+# 3.16.10.24
+
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-17T20:34:40+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T15:43:12+02:00)
+
 # 3.16.03.15
 
   * Update copyright. (Ivan Enderlin, 2016-01-17T14:12:35+01:00)
