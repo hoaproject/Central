@@ -32,11 +32,13 @@ invariants etc. Specifications are written in the comments of the PHP
 code. Praspel is used for manual, automated or **automatic software
 validation and verification**.
 
-This language is inspired by JML but the difference is in the way to
-specify the data. PHP is dynamically and weakly typed. To specify the
-data, Praspel relies on **realistic domains**: Structures allowing to
-validate and generate data, with the ability to compose them to
-represent more **complex data**.
+This language is inspired by [JML](http://www.jmlspecs.org/) but the
+difference is in the way to specify the data. PHP is dynamically and
+weakly typed. To specify the data, Praspel relies on **realistic
+domains**: Structures allowing to validate and generate data, with the
+ability to compose them to represent more **complex data**. Realistic
+domains are implemented in
+[the `Hoa\Realdom` library](https://central.hoa-project.net/Resource/Library/Realdom).
 
 ## Data generators
 
