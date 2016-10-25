@@ -23,7 +23,7 @@
         "source": "https://central.hoa-project.net/Resource/Library/Test"
     },
     "require": {
-        "atoum/atoum"               : "~2.8",
+        "atoum/atoum"               : "~2.9.0-beta1",
         "atoum/praspel-extension"   : "~0.16",
         "atoum/ruler-extension"     : "~1.2",
         "atoum/visibility-extension": "~1.0",
