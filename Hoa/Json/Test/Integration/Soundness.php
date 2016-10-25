@@ -51,7 +51,7 @@ use Hoa\Test;
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Soundness extends Test\Integration\Suite
+class Soundness extends Test\Integration\Suite implements Test\Decorrelated
 {
     public function case_exaustive_json()
     {
