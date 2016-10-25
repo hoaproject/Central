@@ -34,21 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Mime\Test\Unit;
+namespace Hoa\Mime\Test\Integration;
 
 use Hoa\File;
 use Hoa\Mime as LUT;
 use Hoa\Test;
 
 /**
- * Class \Hoa\Mime\Test\Unit\Documentation.
+ * Class \Hoa\Mime\Test\Integration\Documentation.
  *
  * Test suite of the examples in the documentation.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Documentation extends Test\Unit\Suite
+class Documentation extends Test\Integration\Suite implements Test\Decorrelated
 {
     public function case_getExtensionsFromMime_text_html()
     {
