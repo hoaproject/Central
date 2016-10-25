@@ -1,3 +1,10 @@
+# 2.16.10.25
+
+  * Report: Add Travis and Coveralls.io support. (Ivan Enderlin, 2016-10-25T11:34:43+02:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-18T16:42:16+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-11T08:40:01+02:00)
+  * Documentation: Use TLS for `central.hoa`. (Ivan Enderlin, 2016-09-09T15:02:31+02:00)
+
 # 2.16.08.17
 
   * Bin: Do not set `HOA_PRELUDE_FILES` if empty. (Ivan Enderlin, 2016-08-16T10:36:46+02:00)
