@@ -104,7 +104,7 @@ class Cli extends atoum\reports\realtime
             ->setTitlePrompt($firstLevelPrompt)
             ->setTitleColorizer($defaultColorizer)
             ->setClassPrompt($secondLevelPrompt)
-            ->setMethodPrompt(new atoum\cli\prompt('==> ', $defaultColorizer));
+            ->setMethodPrompt($thirdLevelPrompt);
 
         $this->addField($this->runnerTestsCoverageField);
 
