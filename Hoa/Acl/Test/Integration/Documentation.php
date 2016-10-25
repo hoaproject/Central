@@ -34,21 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Acl\Test\Unit;
+namespace Hoa\Acl\Test\Integration;
 
 use Hoa\Acl\Acl as SUT;
 use Hoa\Acl as LUT;
 use Hoa\Test;
 
 /**
- * Class \Hoa\Acl\Test\Unit\Documentation.
+ * Class \Hoa\Acl\Test\Integration\Documentation.
  *
  * Test suite of the documentation.
  *
  * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
-class Documentation extends Test\Unit\Suite
+class Documentation extends Test\Integration\Suite implements Test\Decorrelated
 {
     public function case_readme()
     {
