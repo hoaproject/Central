@@ -73,7 +73,7 @@ The `Hoa\Irc\Client` proposes the following listeners: `open`, `join`,
 In order to connect to an IRC server, we have to use a socket client, such as:
 
 ```php
-$uri    = 'irc://chat.freenode.net;
+$uri    = 'irc://chat.freenode.net';
 $client = new Hoa\Irc\Client(new Hoa\Socket\Client($uri));
 ```
 
@@ -115,7 +115,7 @@ We can add a WebSocket server to receive external messages we will forward to
 the IRC client. Thus, the beginning of our program will look like:
 
 ```php
-$ircUri = 'irc://chat.freenode.net;
+$ircUri = 'irc://chat.freenode.net';
 $wsUri  = 'ws://127.0.0.1:8889';
 
 $group  = new Hoa\Socket\Connection\Group();
