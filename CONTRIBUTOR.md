@@ -38,6 +38,7 @@ cloak on IRC, etc.
   * Nicolas Grekas (nicolas-grekas)
   * Sarah Haïm-Lubczanski (mere-teresa)
   * Martin Hasoň (hason)
+  * Hugo Henrique (hugohenrique)
   * ➜ Sébastien Houzé (shouze)
   * Stéphane Hulard (shulard)
   * Zack Katz (zackkatz)
