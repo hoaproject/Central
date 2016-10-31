@@ -49,6 +49,7 @@ cloak on IRC, etc.
   * Marc Lemay (flug)
   * ➜ Renaud Littolff (marmotz)
   * ➜ Julien Lorrain (julien)
+  * Edson Medina (edsonmedina)
   * Linus Metzler (limenet)
   * ➜ Jean Molliné (cyrano)
   * Simon Mönch (smoench)
