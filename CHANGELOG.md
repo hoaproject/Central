@@ -1,3 +1,12 @@
+# 0.16.11.08
+
+  * Documentation: Small fix on highlight (Hugo Henrique, 2016-10-25T16:57:45-03:00)
+  * Client: Handle all reply codes in range 400-599. (Ivan Enderlin, 2016-10-24T15:23:42+02:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T08:01:28+02:00)
+  * Socket: Introduce the `ircs://` scheme. (Ivan Enderlin, 2016-10-14T21:25:18+02:00)
+  * Documentation: Use HTTPS in `composer.json`. (Ivan Enderlin, 2016-10-07T07:53:21+02:00)
+  * Documentation: Update support properties. (Alexis von Glasow, 2016-10-06T19:16:47+02:00)
+
 # 0.16.02.03
 
   * Composer: Update `hoa/socket`. (Dupont Yohann, 2016-02-03T08:37:19+01:00)
