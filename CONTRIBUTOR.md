@@ -10,6 +10,7 @@ cloak on IRC, etc.
   * Timothée Barray (tyx)
   * Jonathan Van Belle (grummfy)
   * Abdallah Ben Othman (badoul)
+  * Jeremy Benoist (j0k3r)
   * ➜ Julien Bianchi (jubianchi)
   * ➜ Julien Clauzel (thehawk)
   * ➜ Matthieu Codron (circlecode)
