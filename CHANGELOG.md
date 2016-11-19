@@ -1,3 +1,9 @@
+# 2.16.11.19
+
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T07:41:29+02:00)
+  * Documentation: Fix `docs` and `source` links. (Ivan Enderlin, 2016-10-05T20:21:13+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T15:47:24+02:00)
+
 # 2.16.09.06
 
   * README: Fix a typo. (Ivan Enderlin, 2016-04-17T08:12:54+02:00)
