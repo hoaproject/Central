@@ -1,3 +1,9 @@
+# 2.16.11.19
+
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T08:27:00+02:00)
+  * Documentation: Use HTTPS in `composer.json`. (Ivan Enderlin, 2016-10-11T08:34:14+02:00)
+  * Documentation: Update support properties. (Alexis von Glasow, 2016-10-11T00:51:44+02:00)
+
 # 2.16.01.14
 
   * Composer: New stable library. (Ivan Enderlin, 2016-01-14T22:00:18+01:00)
