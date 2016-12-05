@@ -71,6 +71,7 @@ cloak on IRC, etc.
   * Emmanuel Thierry (sekiltoyai)
   * ➜ Pierre Tomasina (pierozi)
   * Alex Walker (alexpw)
+  * Ahmed Waqas (wakqasahmed)
   * bureX
   * flip101
 
