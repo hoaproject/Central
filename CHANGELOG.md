@@ -1,3 +1,8 @@
+# 1.17.01.06
+
+  * Realdom: Add u8, u16, u32, i8, i16 and i32. (Ivan Enderlin, 2017-01-06T14:04:30+01:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-11T16:57:35+02:00)
+
 # 1.16.09.21
 
   * Replace `void` by `null` as `void` is now a reserved keyword (Alexis von Glasow, 2016-09-21T13:48:25+02:00)
