@@ -54,7 +54,21 @@ class Handler
      *
      * @var \Hoa\Consistency\Xcallable
      */
-    protected $__callable = null;
+    protected $__callable        = null;
+
+    /**
+     * Generated reflection object.
+     *
+     * This is a cache.
+     */
+    private  $__reflectionObject = null;
+
+    /**
+     * Generated object.
+     *
+     * This is a cache.
+     */
+    private $__object            = null;
 
 
 
@@ -80,10 +94,7 @@ class Handler
      */
     public function __getReflectionObject(&$object)
     {
-        static $_out    = null;
-        static $_object = null;
-
-        if (null === $_out) {
+        if (null === $this->__reflectionObject) {
             $callback = $this->__getCallable()->getValidCallback();
 
             if (!is_object($callback[0])) {
@@ -94,13 +105,13 @@ class Handler
                 );
             }
 
-            $_object = $callback[0];
-            $_out    = new \ReflectionObject($_object);
+            $this->__object           = $callback[0];
+            $this->__reflectionObject = new \ReflectionObject($this->__object);
         }
 
-        $object = $_object;
+        $object = $this->__object;
 
-        return $_out;
+        return $this->__reflectionObject;
     }
 
     /**
