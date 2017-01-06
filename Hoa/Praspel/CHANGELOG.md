@@ -1,3 +1,12 @@
+# 1.17.01.06
+
+  * Preambler: Use non-static cache in handler. (Ivan Enderlin, 2017-01-06T15:33:21+01:00)
+  * Documentation: Fix a typo. (Ivan Enderlin, 2016-10-24T15:18:08+02:00)
+  * Documentation: Rename a section. (Ivan Enderlin, 2016-10-24T15:16:31+02:00)
+  * Documentation: Add JML and `Hoa\Realdom` links. (Ivan Enderlin, 2016-10-24T15:15:02+02:00)
+  * Documentation: New `README.md`. (Ivan Enderlin, 2016-10-24T15:11:59+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-11T17:02:34+02:00)
+
 # 1.16.05.11
 
   * Add use missing for `Hoa\Consistency` (Alexis von Glasow, 2016-05-10T00:23:40+02:00)
