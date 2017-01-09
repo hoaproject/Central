@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Consistency;
  *
  * Generic class to manage HTTP headers (parse, set, get) only.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
@@ -81,7 +81,6 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Constructor.
      *
-     * @return  void
      */
     public function __construct()
     {
