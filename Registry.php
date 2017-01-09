@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ use Hoa\Protocol;
  *
  * Hold a register of something.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Registry extends \ArrayObject
@@ -61,7 +61,6 @@ class Registry extends \ArrayObject
     /**
      * Private constructor.
      *
-     * @return  void
      * @throws  \Hoa\Registry\Exception
      */
     public function __construct()
@@ -156,7 +155,7 @@ class Registry extends \ArrayObject
  *
  * The `hoa://Library/Registry` node.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class _Protocol extends Protocol\Node
