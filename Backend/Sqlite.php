@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,7 +45,7 @@ use Hoa\File as HoaFile;
  * SQLite backend manager.
  * SQLite is an extension, take care that SQLite is loaded.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Sqlite extends Backend
@@ -63,7 +63,6 @@ class Sqlite extends Backend
      * Check if SQLite is loaded, else an exception is thrown.
      *
      * @param   array  $parameters    Parameters.
-     * @return  void
      * @throws  \Hoa\Cache\Exception
      */
     public function __construct(array $parameters = [])
@@ -122,7 +121,7 @@ class Sqlite extends Backend
             $statement =
                 'UPDATE hoa_cache ' . "\n" .
                 'SET    data           = \'' .
-                sqlite_escape_string($data)  . '\', ' . "\n" .
+                sqlite_escape_string($data) . '\', ' . "\n" .
                 '       will_expire_at = \'' .
                 (time() + $lifetime) . '\' ' . "\n" .
                 'WHERE  id             = \'' .

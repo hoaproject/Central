@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ use Hoa\Cache;
  * Xcache manager.
  * XCache is an extension, take care that XCache is loaded.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Xcache extends Backend
@@ -53,7 +53,6 @@ class Xcache extends Backend
      * Check if XCache is loaded, else an exception is thrown.
      *
      * @param   array  $parameters    Parameters.
-     * @return  void
      * @throws  \Hoa\Cache\Exception
      */
     public function __construct(array $parameters = [])
