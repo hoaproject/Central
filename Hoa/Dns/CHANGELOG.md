@@ -1,3 +1,10 @@
+# 3.17.01.10
+
+  * Quality: Fix CS. (Ivan Enderlin, 2017-01-10T11:50:05+01:00)
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:36:58+01:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-18T15:59:19+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T20:35:00+02:00)
+
 # 3.16.01.11
 
   * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
