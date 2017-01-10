@@ -455,7 +455,7 @@ class Snapshot extends Console\Dispatcher\Kit
 
                 Console\Processus::execute(
                     'git --git-dir=' . $repositoryRoot . '/.git ' .
-                        'tag ' . $newTag
+                        'tag -s ' . $newTag
                 );
             }
         );
