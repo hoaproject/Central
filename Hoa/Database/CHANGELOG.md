@@ -1,3 +1,9 @@
+# 0.17.01.10
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:38:20+01:00)
+  * Test: Add the `Decorrelated` interface. (Ivan Enderlin, 2016-10-25T08:59:39+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T20:18:24+02:00)
+
 # 0.16.09.06
 
   * Quality: Add a missing void return statement. (Ivan Enderlin, 2016-05-11T10:43:28+02:00)
