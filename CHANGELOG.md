@@ -1,3 +1,8 @@
+# 1.17.01.10
+
+  * Quality: Happy new year! (Ivan Enderlin, 2017-01-10T14:04:59+01:00)
+  * Fix typo (gitomato, 2017-01-10T10:45:17+01:00)
+
 # 1.17.01.06
 
   * Preambler: Use non-static cache in handler. (Ivan Enderlin, 2017-01-06T15:33:21+01:00)
