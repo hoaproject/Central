@@ -53,7 +53,7 @@ PHP language types. Thus, it is possible to combine these realistic
 domains to generate more sophisticated data (like dates, object models
 etc.).
 
-## Contract Coveverage Criteria
+## Contract Coverage Criteria
 
 The contract language can be evaluated to validate and verify data
 manipulated by the program on one hand. On the other hand, we have
