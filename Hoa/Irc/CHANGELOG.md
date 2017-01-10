@@ -1,3 +1,7 @@
+# 0.17.01.10
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:37:33+01:00)
+
 # 0.16.11.08
 
   * Documentation: Small fix on highlight (Hugo Henrique, 2016-10-25T16:57:45-03:00)
