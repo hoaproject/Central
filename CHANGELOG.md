@@ -1,3 +1,10 @@
+# 3.17.01.10
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:38:16+01:00)
+  * Test: Add the `Decorrelated` interface. (Ivan Enderlin, 2016-10-25T07:55:40+02:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-18T15:30:44+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-11T17:04:06+02:00)
+
 # 3.16.01.15
 
   * Composer: Forget to add a new stable library. (Ivan Enderlin, 2016-01-14T22:31:09+01:00)
