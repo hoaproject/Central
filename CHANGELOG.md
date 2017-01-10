@@ -1,3 +1,11 @@
+# 1.17.01.10
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:37:00+01:00)
+  * Documentation: Fix “Learn more” link. (Ivan Enderlin, 2016-10-21T07:49:29+02:00)
+  * Documentation: Use TLS when possible. (Ivan Enderlin, 2016-10-21T07:46:31+02:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T07:45:04+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T20:32:25+02:00)
+
 # 1.16.01.15
 
   * Composer: New stable library. (Ivan Enderlin, 2016-01-14T21:50:22+01:00)
