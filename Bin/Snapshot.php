@@ -540,9 +540,7 @@ class Snapshot extends Console\Dispatcher\Kit
                     'body'     => $body
                 ]);
 
-                $username = $this->readLine('Username: ');
-                $password = $this->readPassword('Password: ');
-                $auth     = base64_encode($username . ':' . $password);
+                $authToken = $this->readLine('Authentication token: ');
 
                 $context = stream_context_create([
                     'http' => [
@@ -552,7 +550,7 @@ class Snapshot extends Console\Dispatcher\Kit
                                      'Accept: application/json' . CRLF .
                                      'Content-Type: application/json' . CRLF .
                                      'Content-Length: ' . strlen($output) . CRLF .
-                                     'Authorization: Basic ' . $auth . CRLF,
+                                     'Authorization: token ' . $authToken . CRLF,
                         'content' => $output
                     ]
                 ]);
