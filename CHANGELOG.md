@@ -1,3 +1,10 @@
+# 1.17.01.10
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:37:03+01:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-19T16:45:22+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T20:30:45+02:00)
+  * Router: Use HTTPS. (Ivan Enderlin, 2016-09-09T15:01:36+02:00)
+
 # 1.16.09.06
 
   * Bin: Make `…:documentation --directories` optional. (Ivan Enderlin, 2016-08-29T11:42:55+02:00)
