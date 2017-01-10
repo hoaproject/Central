@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -48,12 +48,10 @@ use Hoa\Visitor;
  * This algorithm is based on multiset (set with repetition).
  * Repetition unfolding: upper bound of + and * is set to n.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-class          BoundedExhaustive
-    extends    Sampler
-    implements Iterator
+class BoundedExhaustive extends Sampler implements Iterator
 {
     /**
      * Stack of rules to explore.
