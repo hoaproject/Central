@@ -117,7 +117,7 @@ $ dot -Tsvg -oresult.svg <( echo 'digraph { … }'; )
 
 And the result should look like the following image:
 
-![result.svg](http://central.hoa-project.net/Resource/Library/Graph/Documentation/Image/Simple.svg?format=raw)
+![result.svg](https://central.hoa-project.net/Resource/Library/Graph/Documentation/Image/Simple.svg?format=raw)
 
 We can see that `n1` is the parent of `n2` and `n3`. `n2` is the parent of `n3`.
 `n3` is parent of `n4` and also or iself. And finally, `n4` is the parent of
