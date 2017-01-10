@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Cache;
  *
  * Class catching system for frontend cache.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class AClass extends Frontend
@@ -68,7 +68,6 @@ class AClass extends Frontend
      * Redirect constructor call to __call method if necessary. Else, it's like
      * the parent constructor.
      *
-     * @return  mixed
      */
     public function __construct()
     {
@@ -112,7 +111,7 @@ class AClass extends Frontend
 
         $this->_arguments = $this->ksort($arguments);
         $idExtra          = serialize($this->_arguments);
-        $this->makeId($gc . '::' . $method . '/' .  $idExtra);
+        $this->makeId($gc . '::' . $method . '/' . $idExtra);
         $content = $this->_backend->load();
 
         if (false !== $content) {
