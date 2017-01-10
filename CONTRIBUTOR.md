@@ -74,6 +74,7 @@ cloak on IRC, etc.
   * Ahmed Waqas (wakqasahmed)
   * bureX
   * flip101
+  * gitomato
 
 # Special thanks
 
