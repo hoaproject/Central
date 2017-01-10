@@ -1,3 +1,8 @@
+# 1.17.01.10
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:27:39+01:00)
+  * Test: Move `Documentation` to integration suite. (Ivan Enderlin, 2016-10-25T07:47:30+02:00)
+
 # 1.16.10.24
 
   * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-14T23:22:08+02:00)
