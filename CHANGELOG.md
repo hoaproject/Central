@@ -1,3 +1,9 @@
+# 0.17.01.10
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:37:29+01:00)
+  * Documentation: Fix `docs` and `source` links. (Ivan Enderlin, 2016-10-05T20:19:55+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T15:45:18+02:00)
+
 # 0.16.01.28
 
   * Composer: Update hoa/zformat (Dupont Yohann, 2016-01-28T11:59:27+01:00)
