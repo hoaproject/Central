@@ -119,24 +119,27 @@ class Resolve extends Console\Dispatcher\Kit
         }
 
         $dns = new Dns\Resolver(new Socket\Server('udp://' . $listen));
-        $dns->on('query', function (Event\Bucket $bucket) use (&$redirections) {
-            $data = $bucket->getData();
-            echo
-                'Resolving domain ', $data['domain'],
-                ' of type ', $data['type'], ' to ';
+        $dns->on(
+            'query',
+            function (Event\Bucket $bucket) use (&$redirections) {
+                $data = $bucket->getData();
+                echo
+                    'Resolving domain ', $data['domain'],
+                    ' of type ', $data['type'], ' to ';
 
-            foreach ($redirections as $from => $to) {
-                if (0 !== preg_match('#^' . $from . '$#', $data['domain'], $_)) {
-                    echo $to, ".\n";
+                foreach ($redirections as $from => $to) {
+                    if (0 !== preg_match('#^' . $from . '$#', $data['domain'], $_)) {
+                        echo $to, ".\n";
 
-                    return $to;
+                        return $to;
+                    }
                 }
+
+                echo '127.0.0.1 (default).', "\n";
+
+                return '127.0.0.1';
             }
-
-            echo '127.0.0.1 (default).', "\n";
-
-            return '127.0.0.1';
-        });
+        );
 
         echo 'Server is up, on udp://' . $listen . '!', "\n\n";
         $dns->run();
