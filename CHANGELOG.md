@@ -1,5 +1,6 @@
 # 3.17.01.10
 
+  * Prepare 3.17.01.10. (Ivan Enderlin, 2017-01-10T11:20:25+01:00)
   * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:38:16+01:00)
   * Test: Add the `Decorrelated` interface. (Ivan Enderlin, 2016-10-25T07:55:40+02:00)
   * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-18T15:30:44+02:00)
