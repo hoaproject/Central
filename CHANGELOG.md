@@ -1,3 +1,7 @@
+# 2.17.01.11
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-10T18:51:33+01:00)
+
 # 2.16.11.19
 
   * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T07:41:29+02:00)
