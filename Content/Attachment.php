@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ use Hoa\Stream;
  *
  * This class represents an attachment.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Attachment extends Content
@@ -65,7 +65,6 @@ class Attachment extends Content
      * @param   string       $name        Name of the attachment (if null, will
      *                                    use the stream basename).
      * @param   string       $mimeType    Force a MIME type.
-     * @return  void
      */
     public function __construct(Stream $stream, $name = null, $mimeType = null)
     {
