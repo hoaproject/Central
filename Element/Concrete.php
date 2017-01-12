@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Xml;
  *
  * This class represents a XML element in a XML tree.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess
@@ -114,7 +114,6 @@ class Concrete implements Element, \Countable, \IteratorAggregate, \ArrayAccess
      * @param   array             $rank         Rank: abstract elements to
      *                                          concrete elements.
      * @param   string            $namespace    Namespace.
-     * @return  void
      */
     final public function __construct(
         Element $abstract,
