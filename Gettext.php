@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Stream;
  *
  * GetText format reader.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Gettext extends Translate
@@ -89,7 +89,6 @@ class Gettext extends Translate
      * Constructor.
      *
      * @param   \Hoa\Stream\IStream\In  $stream    Stream.
-     * @return  void
      */
     public function __construct(Stream\IStream\In $stream)
     {
