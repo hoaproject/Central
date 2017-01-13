@@ -1,3 +1,11 @@
+# 2.17.01.13
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:37:24+01:00)
+  * Test: Add the `Decorrelated` interface. (Ivan Enderlin, 2016-10-25T07:52:12+02:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-18T16:54:04+02:00)
+  * Documentation: Use HTTPS in `composer.json`. (Ivan Enderlin, 2016-10-11T08:30:28+02:00)
+  * Documentation: Update support properties. (Alexis von Glasow, 2016-10-10T13:23:04+02:00)
+
 # 2.16.08.15
 
   * Grammar: Support UTF-8 with surrogate pairs as defined in RFC7159 (Ivan Enderlin, 2016-08-15T14:30:39+02:00)
