@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,8 +36,8 @@
 
 namespace Hoa\Graph\Test\Unit;
 
-use Hoa\Graph as LUT;
 use Hoa\Graph\AdjacencyList as SUT;
+use Hoa\Graph as LUT;
 use Hoa\Test;
 
 /**
@@ -45,7 +45,7 @@ use Hoa\Test;
  *
  * Test suite of the adjancency list graph implementation.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class AdjacencyList extends Graph
@@ -615,7 +615,6 @@ class AdjacencyList extends Graph
                 $graph->addNode($n2, [$n4]),
                 $graph->addNode($n5)
             )
-            ->dump($graph. '')
             ->when($result = $graph->__toString())
             ->then
                 ->string($result)

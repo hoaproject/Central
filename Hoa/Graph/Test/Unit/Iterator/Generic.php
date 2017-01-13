@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -37,15 +37,15 @@
 namespace Hoa\Graph\Test\Unit\Iterator;
 
 use Hoa\Graph as LUT;
-use Mock\Hoa\Graph\Iterator\Generic as SUT;
 use Hoa\Test;
+use Mock\Hoa\Graph\Iterator\Generic as SUT;
 
 /**
  * Class \Hoa\Graph\Test\Unit\Iterator\Generic.
  *
  * Test suite of the generic iterator class.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Generic extends Test\Unit\Suite

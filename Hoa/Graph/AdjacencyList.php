@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ use Hoa\Iterator;
  *
  * Graph implementation using an adjacency list.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class AdjacencyList extends Graph
@@ -352,7 +352,7 @@ class AdjacencyList extends Graph
 
         foreach ($this->getNodes() as $nodeId => $node) {
             foreach ($this->getChildren($node[self::NODE_VALUE]) as $childId => $child) {
-                $out .= '    ' . $nodeId . ' -> ' . $childId . ';' .  "\n";
+                $out .= '    ' . $nodeId . ' -> ' . $childId . ';' . "\n";
             }
         }
 
