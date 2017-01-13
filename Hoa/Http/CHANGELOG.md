@@ -1,3 +1,7 @@
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:36:57+01:00)
+  * Documentation: Use HTPS in `composer.json`. (Ivan Enderlin, 2016-10-07T07:58:33+02:00)
+  * Documentation: Update support properties. (Alexis von Glasow, 2016-10-06T19:15:43+02:00)
+
 # 1.16.09.06
 
   * Add `Response::getStream` that return STDOUT resource (Metalaka, 2016-02-22T22:44:40+01:00)

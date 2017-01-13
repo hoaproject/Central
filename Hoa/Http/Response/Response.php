@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,7 +47,7 @@ use Hoa\Stream;
  *
  * @TODO Follow http://tools.ietf.org/html/draft-nottingham-http-new-status-03.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class          Response
@@ -493,7 +493,6 @@ class          Response
      *                                method.
      * @param   mixed   $callable     Callable.
      * @param   int     $size         Size.
-     * @return  void
      */
     public function __construct($newBuffer = true, $callable = null, $size = null)
     {
