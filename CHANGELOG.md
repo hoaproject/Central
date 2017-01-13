@@ -1,3 +1,10 @@
+# 1.17.01.13
+
+  * Documentation: Fix link to use HTTPS. (Ivan Enderlin, 2017-01-10T10:02:49+01:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T07:55:56+02:00)
+  * Documentation: Use HTTPS in `composer.json`. (Ivan Enderlin, 2016-10-07T08:02:17+02:00)
+  * Documentation: Update support properties. (Alexis von Glasow, 2016-10-06T19:06:48+02:00)
+
 # 1.16.04.06
 
   * Finalizing `Hoa\Graph` \o/!
