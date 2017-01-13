@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,6 @@
 
 namespace Hoa\Graph\Test\Unit;
 
-use Hoa\Iterator;
 use Hoa\Test;
 use Mock\Hoa\Graph as SUT;
 
@@ -45,7 +44,7 @@ use Mock\Hoa\Graph as SUT;
  *
  * Test suite of the graph abstract class.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Graph extends Test\Unit\Suite
