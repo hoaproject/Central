@@ -1,3 +1,7 @@
+# 1.17.01.13
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:37:07+01:00)
+
 # 1.17.01.06
 
   * Realdom: Add u8, u16, u32, i8, i16 and i32. (Ivan Enderlin, 2017-01-06T14:04:30+01:00)
