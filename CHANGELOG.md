@@ -1,3 +1,10 @@
+# 3.17.01.14
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:36:54+01:00)
+  * Documentation: Use TLS if possible. (Ivan Enderlin, 2016-10-21T17:10:15+02:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T17:08:26+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-11T16:53:26+02:00)
+
 # 3.16.01.14
 
   * Composer: New stable library. (Ivan Enderlin, 2016-01-14T22:10:57+01:00)
