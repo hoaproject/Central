@@ -1,3 +1,7 @@
+# 0.17.01.16
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-12T00:24:26+01:00)
+
 # 0.16.01.11
 
   * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:05:50+01:00)
