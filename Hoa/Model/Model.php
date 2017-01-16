@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -45,7 +45,7 @@ use Hoa\Xyl;
  *
  * Represent a model/document with attributes and relations.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 abstract class Model
@@ -87,13 +87,11 @@ abstract class Model
     /**
      * Initialize the model.
      *
-     * @return  void
      */
     final public function __construct()
     {
         $class   = new \ReflectionClass($this);
         $ucfirst = function (array $matches) {
-
             return ucfirst($matches[1]);
         };
         $default = $class->getDefaultProperties();
