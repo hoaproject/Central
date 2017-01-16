@@ -1,3 +1,9 @@
+# 3.17.01.16
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-12T14:01:21+01:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T17:15:50+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-11T08:52:31+02:00)
+
 # 3.16.01.14
 
   * Composer: New stable libraries. (Ivan Enderlin, 2016-01-14T22:24:15+01:00)
