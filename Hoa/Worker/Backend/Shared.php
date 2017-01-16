@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -67,7 +67,7 @@ use Hoa\Zombie;
  * When the shared worker is stopped, the associated .wid file (if exists) is
  * removed.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Shared implements Event\Listenable
@@ -145,7 +145,6 @@ class Shared implements Event\Listenable
      * @param   mixed   $workerId    Worker ID or a socket client (i.e. a
      *                               \Hoa\Socket\Client object).
      * @param   string  $password    Worker's password.
-     * @return  void
      * @throws  \Hoa\Worker\Exception
      * @throws  \Hoa\Worker\Backend\Exception
      */
