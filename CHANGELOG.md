@@ -1,3 +1,9 @@
+# 2.17.01.16
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-16T08:47:57+01:00)
+  * Dependency: Back to atoum 2.8. (Ivan Enderlin, 2017-01-16T08:46:58+01:00)
+  * Quality: Add the `.gitignore` file. (Ivan Enderlin, 2016-10-25T11:40:23+02:00)
+
 # 2.16.10.25
 
   * Report: Add Travis and Coveralls.io support. (Ivan Enderlin, 2016-10-25T11:34:43+02:00)
