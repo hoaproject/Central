@@ -1,3 +1,9 @@
+# 1.17.01.16
+
+  * Quality: Happy new year! (Ivan Enderlin, 2017-01-16T08:14:37+01:00)
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-12T14:01:32+01:00)
+  * Documentation`: Update `support` properties. (Ivan Enderlin, 2016-10-11T11:39:25+02:00)
+
 # 1.16.09.06
 
   * Update copyright. (Ivan Enderlin, 2016-01-17T14:24:47+01:00)
