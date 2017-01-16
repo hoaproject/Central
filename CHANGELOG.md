@@ -1,3 +1,8 @@
+# 1.17.01.16
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-12T14:01:06+01:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-11T11:46:11+02:00)
+
 # 1.16.01.15
 
   * Composer: New stable library. (Ivan Enderlin, 2016-01-14T22:16:15+01:00)
