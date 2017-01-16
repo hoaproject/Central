@@ -1,3 +1,8 @@
+# 1.17.01.16
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-12T14:01:25+01:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-11T08:54:27+02:00)
+
 # 1.16.04.05
 
   * Element: Forget to implement the `getStream` method. (Ivan Enderlin, 2016-04-05T10:27:46+02:00)
