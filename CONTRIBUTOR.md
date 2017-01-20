@@ -62,6 +62,7 @@ cloak on IRC, etc.
   * Grégoire Pineau (lyrixx)
   * Rogerio Prado de Jesus (rogeriopradoj)
   * ➜ Stéphane Py (stephpy)
+  * Juha Remes (newman101)
   * ➜ Steven Rémot (stevenremot)
   * Tom Rochette (tomzx)
   * Kim Sia Sim (simkimsia)
