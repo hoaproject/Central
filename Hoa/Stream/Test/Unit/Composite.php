@@ -34,79 +34,72 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Stream;
+namespace Hoa\Stream\Test\Unit;
+
+use Mock\Hoa\Stream\Composite as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Stream\Composite.
+ * Class \Hoa\Stream\Test\Unit\Composite.
  *
- * Declare a composite stream, i.e. a stream that uses a stream.
+ * Test suite of the composite stream.
  *
  * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-abstract class Composite
+class Composite extends Test\Unit\Suite
 {
-    /**
-     * Current stream.
-     *
-     * @var mixed
-     */
-    protected $_stream      = null;
-
-    /**
-     * Inner stream.
-     *
-     * @var \Hoa\Stream
-     */
-    protected $_innerStream = null;
-
-
-
-    /**
-     * Set current stream.
-     *
-     * @param   object  $stream    Current stream.
-     * @return  object
-     */
-    protected function setStream($stream)
+    public function case_set_stream()
     {
-        $old           = $this->_stream;
-        $this->_stream = $stream;
-
-        return $old;
+        $this
+            ->given(
+                $stream    = new \StdClass(),
+                $composite = new SUT()
+            )
+            ->when($result = $this->invoke($composite)->setStream($stream))
+            ->then
+                ->variable($result)
+                    ->isNull();
     }
 
-    /**
-     * Get current stream.
-     *
-     * @return  object
-     */
-    public function getStream()
+    public function case_get_stream()
     {
-        return $this->_stream;
+        $this
+            ->given(
+                $stream    = new \StdClass(),
+                $composite = new SUT(),
+                $this->invoke($composite)->setStream($stream)
+            )
+            ->when($result = $composite->getStream())
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($stream);
     }
 
-    /**
-     * Set inner stream.
-     *
-     * @param   \Hoa\Stream  $innerStream    Inner stream.
-     * @return  \Hoa\Stream
-     */
-    protected function setInnerStream(Stream $innerStream)
+    public function case_set_inner_stream()
     {
-        $old                = $this->_innerStream;
-        $this->_innerStream = $innerStream;
-
-        return $old;
+        $this
+            ->given(
+                $innerStream = new \Mock\Hoa\Stream(__FILE__),
+                $composite   = new SUT()
+            )
+            ->when($result = $this->invoke($composite)->setInnerStream($innerStream))
+            ->then
+                ->variable($result)
+                    ->isNull();
     }
 
-    /**
-     * Get inner stream.
-     *
-     * @return  \Hoa\Stream
-     */
-    public function getInnerStream()
+    public function case_get_inner_stream()
     {
-        return $this->_innerStream;
+        $this
+            ->given(
+                $innerStream = new \Mock\Hoa\Stream(__FILE__),
+                $composite   = new SUT(),
+                $this->invoke($composite)->setInnerStream($innerStream)
+            )
+            ->when($result = $composite->getInnerStream())
+            ->then
+                ->object($result)
+                    ->isIdenticalTo($innerStream);
     }
 }

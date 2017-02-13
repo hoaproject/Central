@@ -34,79 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Stream;
+namespace Hoa\Stream\Test\Integration\Filter;
+
+use Hoa\Stream as LUT;
+use Hoa\Stream\Filter as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Stream\Composite.
+ * Class \Hoa\Stream\Test\Integration\Filter\LateComputed.
  *
- * Declare a composite stream, i.e. a stream that uses a stream.
+ * Test suite of the late computed filter class.
  *
  * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-abstract class Composite
+class LateComputed extends Test\Integration\Suite
 {
-    /**
-     * Current stream.
-     *
-     * @var mixed
-     */
-    protected $_stream      = null;
-
-    /**
-     * Inner stream.
-     *
-     * @var \Hoa\Stream
-     */
-    protected $_innerStream = null;
-
-
-
-    /**
-     * Set current stream.
-     *
-     * @param   object  $stream    Current stream.
-     * @return  object
-     */
-    protected function setStream($stream)
+    public function case_custom_late_computed_filter()
     {
-        $old           = $this->_stream;
-        $this->_stream = $stream;
+        $this
+            ->given(
+                $name = 'custom',
+                SUT::register($name, CustomFilter::class),
 
-        return $old;
+                $filename = 'hoa://Test/Vfs/Foo?type=file',
+                $content  = 'Hello, World!',
+                file_put_contents($filename, $content),
+                $stream = fopen($filename, 'r')
+            )
+            ->when(
+                SUT::append($stream, $name),
+                $result = stream_get_contents($stream)
+            )
+            ->then
+                ->string($result)
+                    ->isEqualTo(
+                        strtolower($content) . ' ' .
+                        strlen($content)
+                    );
     }
+}
 
-    /**
-     * Get current stream.
-     *
-     * @return  object
-     */
-    public function getStream()
+class CustomFilter extends LUT\Filter\LateComputed
+{
+    protected function compute()
     {
-        return $this->_stream;
-    }
+        $this->_buffer =
+            strtolower($this->_buffer) . ' ' .
+            strlen($this->_buffer); // proof that the buffer contains all the data
 
-    /**
-     * Set inner stream.
-     *
-     * @param   \Hoa\Stream  $innerStream    Inner stream.
-     * @return  \Hoa\Stream
-     */
-    protected function setInnerStream(Stream $innerStream)
-    {
-        $old                = $this->_innerStream;
-        $this->_innerStream = $innerStream;
-
-        return $old;
-    }
-
-    /**
-     * Get inner stream.
-     *
-     * @return  \Hoa\Stream
-     */
-    public function getInnerStream()
-    {
-        return $this->_innerStream;
+        return;
     }
 }

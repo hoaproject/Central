@@ -34,79 +34,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Stream;
+namespace Hoa\Stream\Test\Unit\IStream;
+
+use Hoa\Stream as LUT;
+use Hoa\Stream\IStream\Statable as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Stream\Composite.
+ * Class \Hoa\Stream\Test\Unit\IStream\Statable.
  *
- * Declare a composite stream, i.e. a stream that uses a stream.
+ * Test suite of the statable interface.
  *
  * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-abstract class Composite
+class Statable extends Test\Unit\Suite
 {
-    /**
-     * Current stream.
-     *
-     * @var mixed
-     */
-    protected $_stream      = null;
-
-    /**
-     * Inner stream.
-     *
-     * @var \Hoa\Stream
-     */
-    protected $_innerStream = null;
-
-
-
-    /**
-     * Set current stream.
-     *
-     * @param   object  $stream    Current stream.
-     * @return  object
-     */
-    protected function setStream($stream)
+    public function case_is_a_valid_interface()
     {
-        $old           = $this->_stream;
-        $this->_stream = $stream;
-
-        return $old;
+        $this
+            ->when($result = new \Mock\Hoa\Stream\IStream\Statable())
+            ->then
+                ->object($result)
+                    ->isInstanceOf(SUT::class)
+                    ->isInstanceOf(LUT\IStream\Stream::class);
     }
 
-    /**
-     * Get current stream.
-     *
-     * @return  object
-     */
-    public function getStream()
+    public function case_constants()
     {
-        return $this->_stream;
-    }
-
-    /**
-     * Set inner stream.
-     *
-     * @param   \Hoa\Stream  $innerStream    Inner stream.
-     * @return  \Hoa\Stream
-     */
-    protected function setInnerStream(Stream $innerStream)
-    {
-        $old                = $this->_innerStream;
-        $this->_innerStream = $innerStream;
-
-        return $old;
-    }
-
-    /**
-     * Get inner stream.
-     *
-     * @return  \Hoa\Stream
-     */
-    public function getInnerStream()
-    {
-        return $this->_innerStream;
+        $this
+            ->when($result = SUT::SIZE_UNDEFINED)
+            ->then
+                ->integer($result)
+                    ->isEqualTo(-1);
     }
 }

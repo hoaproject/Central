@@ -57,28 +57,35 @@ abstract class Stream implements IStream\Stream, Event\Listenable
      *
      * @const int
      */
-    const NAME     = 0;
+    const NAME                = 0;
 
     /**
      * Handler index in the stream bucket.
      *
      * @const int
      */
-    const HANDLER  = 1;
+    const HANDLER             = 1;
 
     /**
      * Resource index in the stream bucket.
      *
      * @const int
      */
-    const RESOURCE = 2;
+    const RESOURCE            = 2;
 
     /**
      * Context index in the stream bucket.
      *
      * @const int
      */
-    const CONTEXT  = 3;
+    const CONTEXT             = 3;
+
+    /**
+     * Default buffer size.
+     *
+     * @const int
+     */
+    const DEFAULT_BUFFER_SIZE = 8192;
 
     /**
      * Current stream bucket.
@@ -99,7 +106,7 @@ abstract class Stream implements IStream\Stream, Event\Listenable
      *
      * @var bool
      */
-    protected $_bufferSize      = 8192;
+    protected $_bufferSize      = self::DEFAULT_BUFFER_SIZE;
 
     /**
      * Original stream name, given to the stream constructor.
@@ -116,36 +123,36 @@ abstract class Stream implements IStream\Stream, Event\Listenable
     protected $_context         = null;
 
     /**
-     * Whether the opening has been differed.
+     * Whether the opening has been deferred.
      *
      * @var bool
      */
-    protected $_hasBeenDiffered = false;
+    protected $_hasBeenDeferred = false;
 
     /**
      * Whether this stream is already opened by another handler.
      *
      * @var bool
      */
-    protected $_borrowed        = false;
+    protected $_borrowing       = false;
 
 
 
     /**
      * Set the current stream.
      * If not exists in the register, try to call the
-     * $this->_open() method. Please, see the self::_getStream() method.
+     * `$this->_open()` method. Please, see the `self::_getStream()` method.
      *
      * @param   string  $streamName    Stream name (e.g. path or URL).
      * @param   string  $context       Context ID (please, see the
-     *                                 \Hoa\Stream\Context class).
+     *                                 `Hoa\Stream\Context` class).
      * @param   bool    $wait          Differ opening or not.
      */
     public function __construct($streamName, $context = null, $wait = false)
     {
         $this->_streamName      = $streamName;
         $this->_context         = $context;
-        $this->_hasBeenDiffered = $wait;
+        $this->_hasBeenDeferred = $wait;
         $this->setListener(
             new Event\Listener(
                 $this,
@@ -222,7 +229,7 @@ abstract class Stream implements IStream\Stream, Event\Listenable
                 $handler
             );
         } else {
-            $handler->_borrowed = true;
+            $handler->_borrowing = true;
         }
 
         if (null === self::$_register[$name][self::RESOURCE]) {
@@ -235,7 +242,7 @@ abstract class Stream implements IStream\Stream, Event\Listenable
 
     /**
      * Open the stream and return the associated resource.
-     * Note: this method is protected, but do not forget that it could be
+     * Note: This method is protected, but do not forget that it could be
      * overloaded into a public context.
      *
      * @param   string               $streamName    Stream name (e.g. path or URL).
@@ -264,7 +271,7 @@ abstract class Stream implements IStream\Stream, Event\Listenable
     {
         $context = $this->_context;
 
-        if (true === $this->_hasBeenDiffered) {
+        if (true === $this->hasBeenDeferred()) {
             if (null === $context) {
                 $handle = Context::getInstance(uniqid());
                 $handle->setParameters([
@@ -283,7 +290,8 @@ abstract class Stream implements IStream\Stream, Event\Listenable
             }
         }
 
-        $this->_bucket = self::_getStream(
+        $this->_bufferSize = self::DEFAULT_BUFFER_SIZE;
+        $this->_bucket     = self::_getStream(
             $this->_streamName,
             $this,
             $context
@@ -399,7 +407,7 @@ abstract class Stream implements IStream\Stream, Event\Listenable
     public function _setStream($stream)
     {
         if (false === is_resource($stream) &&
-            ('resource' === gettype($stream) &&
+            ('resource' !== gettype($stream) ||
              'Unknown'  !== get_resource_type($stream))) {
             throw new Exception(
                 'Try to change the stream resource with an invalid one; ' .
@@ -435,6 +443,14 @@ abstract class Stream implements IStream\Stream, Event\Listenable
     public function setStreamTimeout($seconds, $microseconds = 0)
     {
         return stream_set_timeout($this->getStream(), $seconds, $microseconds);
+    }
+
+    /**
+     * Whether the opening of the stream has been deferred
+     */
+    protected function hasBeenDeferred()
+    {
+        return $this->_hasBeenDeferred;
     }
 
     /**
@@ -540,7 +556,7 @@ abstract class Stream implements IStream\Stream, Event\Listenable
      */
     public function isBorrowing()
     {
-        return $this->_borrowed;
+        return $this->_borrowing;
     }
 
     /**

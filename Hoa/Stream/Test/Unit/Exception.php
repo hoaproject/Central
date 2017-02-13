@@ -34,79 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Stream;
+namespace Hoa\Stream\Test\Unit;
+
+use Hoa\Exception as HoaException;
+use Hoa\Stream\Exception as SUT;
+use Hoa\Test;
 
 /**
- * Class \Hoa\Stream\Composite.
+ * Class \Hoa\Stream\Test\Unit\Exception.
  *
- * Declare a composite stream, i.e. a stream that uses a stream.
+ * Test suite of the exception.
  *
  * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-abstract class Composite
+class Exception extends Test\Unit\Suite
 {
-    /**
-     * Current stream.
-     *
-     * @var mixed
-     */
-    protected $_stream      = null;
-
-    /**
-     * Inner stream.
-     *
-     * @var \Hoa\Stream
-     */
-    protected $_innerStream = null;
-
-
-
-    /**
-     * Set current stream.
-     *
-     * @param   object  $stream    Current stream.
-     * @return  object
-     */
-    protected function setStream($stream)
+    public function case_hoa_exception()
     {
-        $old           = $this->_stream;
-        $this->_stream = $stream;
-
-        return $old;
-    }
-
-    /**
-     * Get current stream.
-     *
-     * @return  object
-     */
-    public function getStream()
-    {
-        return $this->_stream;
-    }
-
-    /**
-     * Set inner stream.
-     *
-     * @param   \Hoa\Stream  $innerStream    Inner stream.
-     * @return  \Hoa\Stream
-     */
-    protected function setInnerStream(Stream $innerStream)
-    {
-        $old                = $this->_innerStream;
-        $this->_innerStream = $innerStream;
-
-        return $old;
-    }
-
-    /**
-     * Get inner stream.
-     *
-     * @return  \Hoa\Stream
-     */
-    public function getInnerStream()
-    {
-        return $this->_innerStream;
+        $this
+            ->when($result = new SUT('foo', 0))
+            ->then
+                ->object($result)
+                    ->isInstanceOf(HoaException::class);
     }
 }
