@@ -340,13 +340,13 @@ class Handler extends Test\Unit\Suite
 
         $this
             ->given(
-                $this->mockGenerator->makeVisible('setConnection')->generate('Hoa\Socket\Connection\Handler'),
+                $this->mockGenerator->makeVisible('setConnection')->generate('Hoa\Socket\Connection\Handler', 'Mock', 'Handlerz'),
                 $this->mockGenerator->orphanize('__construct'),
                 $connectionA = new \Mock\Hoa\Socket\Connection(),
-                $handlerA    = new SUT($connectionA),
+                $handlerA    = new \Mock\Handlerz($connectionA),
                 $this->mockGenerator->orphanize('__construct'),
                 $connectionB = new \Mock\Hoa\Socket\Server(),
-                $handlerB    = new SUT($connectionB),
+                $handlerB    = new \Mock\Handlerz($connectionB),
 
                 $this->calling($handlerB)->setConnection = function (LUT\Connection $connection) use ($self, &$called, $connectionA) {
                     $called = true;
