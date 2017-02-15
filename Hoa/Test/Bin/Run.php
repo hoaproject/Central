@@ -268,18 +268,14 @@ class Run extends Console\Dispatcher\Kit
         if (WITH_COMPOSER) {
             // From the `vendor/hoa/test/Bin/` directory.
             $atoum =
-                __DIR__ . DS .
-                '..' . DS .
-                '..' . DS .
-                '..' . DS .
+                dirname(dirname(dirname(__DIR__))) . DS .
                 'bin' . DS .
                 'atoum';
 
             if (false === file_exists($atoum)) {
                 // From `Bin/` directory.
                 $atoum =
-                    __DIR__ . DS .
-                    '..' . DS .
+                    dirname(__DIR__) . DS .
                     'vendor' . DS .
                     'bin' . DS .
                     'atoum';
