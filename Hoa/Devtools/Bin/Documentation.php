@@ -164,9 +164,10 @@ class Documentation extends Console\Dispatcher\Kit
 
             if (false === is_dir($_location)) {
                 throw new Console\Exception(
-                    'Directory %s does not contain documentation.',
+                    'There is no documentation for the %s library ' .
+                    '(checked directory %s).',
                     1,
-                    $location
+                    [basename($location), $_location]
                 );
             }
 
