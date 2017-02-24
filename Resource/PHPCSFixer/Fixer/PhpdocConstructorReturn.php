@@ -37,10 +37,10 @@
 namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 
 use SplFileInfo;
-use Symfony\CS\AbstractFixer;
-use Symfony\CS\DocBlock\DocBlock;
-use Symfony\CS\FixerInterface;
-use Symfony\CS\Tokenizer\Tokens;
+use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\DocBlock\DocBlock;
+use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * Class \Hoa\Devtools\Resource\PHPCSFixer\Fixer\PhpdocConstructorReturn.
@@ -54,9 +54,8 @@ class PhpdocConstructorReturn extends AbstractFixer
 {
     const CONSTRUCTOR_NAME = '__construct';
 
-    public function fix(SplFileInfo $file, $content)
+    public function fix(SplFileInfo $file, Tokens $tokens)
     {
-        $tokens   = Tokens::fromCode($content);
         $function = $tokens->findSequence([
             [T_FUNCTION],
             [T_STRING, self::CONSTRUCTOR_NAME],
@@ -82,18 +81,20 @@ class PhpdocConstructorReturn extends AbstractFixer
         return $tokens->generateCode();
     }
 
-    public function getDescription()
+    public function getDefinition()
     {
-        return 'Remove `@return void` from constructor.';
+        return new FixerDefinition(
+            'Remove `@return void` from constructor.'
+        );
+    }
+
+    public function isCandidate(Tokens $tokens)
+    {
+        return $tokens->isTokenKindFound(T_FUNCTION);
     }
 
     public function getName()
     {
-        return 'phpdoc_constructor_return';
-    }
-
-    public function getLevel()
-    {
-        return FixerInterface::CONTRIB_LEVEL;
+        return 'Hoa/phpdoc_constructor_return';
     }
 }

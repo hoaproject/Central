@@ -37,10 +37,10 @@
 namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 
 use SplFileInfo;
-use Symfony\CS\AbstractFixer;
-use Symfony\CS\DocBlock\DocBlock;
-use Symfony\CS\FixerInterface;
-use Symfony\CS\Tokenizer\Tokens;
+use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\DocBlock\DocBlock;
+use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * Class \Hoa\Devtools\Resource\PHPCSFixer\Fixer\Copyright.
@@ -52,9 +52,8 @@ use Symfony\CS\Tokenizer\Tokens;
  */
 class Copyright extends AbstractFixer
 {
-    public function fix(SplFileInfo $file, $content)
+    public function fix(SplFileInfo $file, Tokens $tokens)
     {
-        $tokens   = Tokens::fromCode($content);
         $thisYear = date('Y');
 
         foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $token) {
@@ -92,18 +91,21 @@ class Copyright extends AbstractFixer
         return $tokens->generateCode();
     }
 
-    public function getDescription()
+    public function getDefinition()
     {
-        return 'Keep copyright up-to-date.';
+        return new FixerDefinition(
+            'Keep copyright up-to-date.',
+            [new CodeSample('Copyright © 2007-2017')]
+        );
+    }
+
+    public function isCandidate(Tokens $tokens)
+    {
+        return $tokens->isTokenKindFound(T_DOC_COMMENT);
     }
 
     public function getName()
     {
-        return 'copyright';
-    }
-
-    public function getLevel()
-    {
-        return FixerInterface::CONTRIB_LEVEL;
+        return 'Hoa/copyright';
     }
 }

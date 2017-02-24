@@ -45,8 +45,8 @@ $fixers = [
     'PhpdocVar'
 ];
 
-$out = Symfony\CS\Config\Config::create();
-$out->level(Symfony\CS\FixerInterface::PSR2_LEVEL);
+$out = PhpCsFixer\Config::create();
+$out->setCacheFile(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'php_cs.cache');
 
 foreach ($fixers as $fixer) {
     require
@@ -55,32 +55,31 @@ foreach ($fixers as $fixer) {
        $fixer . '.php';
 
     $classname = 'Hoa\Devtools\Resource\PHPCsFixer\Fixer\\' . $fixer;
-    $out->addCustomFixer(new $classname());
+    $out->registerCustomFixers([new $classname()]);
 }
 
 return
-    $out->fixers([
-        'align_double_arrow',
-        'align_equals',
-        'blankline_after_open_tag',
-        'concat_with_spaces',
-        'no_blank_lines_after_class_opening',
-        'ordered_use',
-        'phpdoc_no_access',
-        'remove_leading_slash_use',
-        'remove_leading_slash_uses',
-        'self_accessor',
-        'short_array_syntax',
-        'spaces_cast',
-        'unused_use',
-        'whitespacy_lines',
+    $out->setRules([
+        '@PSR2'                              => true,
+        'binary_operator_spaces'             => ['align_double_arrow' => true, 'align_equals' => true],
+        'blank_line_after_opening_tag'       => true,
+        'concat_space'                       => ['spacing' => 'one'],
+        'no_blank_lines_after_class_opening' => true,
+        'ordered_imports'                    => true,
+        'phpdoc_no_access'                   => true,
+        'no_leading_import_slash'            => true,
+        'self_accessor'                      => true,
+        'array_syntax'                       => ['syntax' => 'short'],
+        'cast_spaces'                        => true,
+        'no_unused_imports'                  => true,
+        'no_whitespace_in_blank_line'        => true,
 
         // Hoa defined
-        'author',
-        'control_flow_statement',
-        'copyright',
-        'no_blank_lines_before_entity',
-        'phpdoc_constructor_return',
-        'phpdoc_throws',
-        'phpdoc_var'
+        'Hoa/author'                       => true,
+        'Hoa/control_flow_statement'       => true,
+        'Hoa/copyright'                    => true,
+        'Hoa/no_blank_lines_before_entity' => true,
+        'Hoa/phpdoc_constructor_return'    => true,
+        'Hoa/phpdoc_throws'                => true,
+        'Hoa/phpdoc_var'                   => true
     ]);

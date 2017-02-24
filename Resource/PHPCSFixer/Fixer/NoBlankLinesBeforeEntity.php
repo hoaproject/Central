@@ -37,9 +37,9 @@
 namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 
 use SplFileInfo;
-use Symfony\CS\AbstractLinesBeforeNamespaceFixer;
-use Symfony\CS\FixerInterface;
-use Symfony\CS\Tokenizer\Tokens;
+use PhpCsFixer\AbstractLinesBeforeNamespaceFixer;
+use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * Class \Hoa\Devtools\Resource\PHPCSFixer\Fixer\NoBlankLinesBeforeEntity.
@@ -51,10 +51,8 @@ use Symfony\CS\Tokenizer\Tokens;
  */
 class NoBlankLinesBeforeEntity extends AbstractLinesBeforeNamespaceFixer
 {
-    public function fix(SplFileInfo $file, $content)
+    public function fix(SplFileInfo $file, Tokens $tokens)
     {
-        $tokens = Tokens::fromCode($content);
-
         foreach ($tokens as $index => $token) {
             if ($token->isGivenKind(T_CLASS) ||
                 $token->isGivenKind(T_INTERFACE) ||
@@ -73,18 +71,23 @@ class NoBlankLinesBeforeEntity extends AbstractLinesBeforeNamespaceFixer
         return $tokens->generateCode();
     }
 
-    public function getDescription()
+    public function getDefinition()
     {
-        return 'Remove blank lines before entity declarations.';
+        return new FixerDefinition(
+            'Remove blank lines before entity declarations.'
+        );
+    }
+
+    public function isCandidate(Tokens $tokens)
+    {
+        return
+            $tokens->isTokenKindFound(T_CLASS) ||
+            $tokens->isTokenKindFound(T_INTERFACE) ||
+            $tokens->isTokenKindFound(T_TRAIT);
     }
 
     public function getName()
     {
-        return 'no_blank_lines_before_entity';
-    }
-
-    public function getLevel()
-    {
-        return FixerInterface::CONTRIB_LEVEL;
+        return 'Hoa/no_blank_lines_before_entity';
     }
 }

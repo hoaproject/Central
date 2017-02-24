@@ -37,9 +37,9 @@
 namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 
 use SplFileInfo;
-use Symfony\CS\AbstractFixer;
-use Symfony\CS\FixerInterface;
-use Symfony\CS\Tokenizer\Tokens;
+use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * Class \Hoa\Devtools\Resource\PHPCSFixer\Fixer\ControlFlowStatement.
@@ -52,10 +52,8 @@ use Symfony\CS\Tokenizer\Tokens;
  */
 class ControlFlowStatement extends AbstractFixer
 {
-    public function fix(SplFileInfo $file, $content)
+    public function fix(SplFileInfo $file, Tokens $tokens)
     {
-        $tokens = Tokens::fromCode($content);
-
         for ($index = 0, $limit = $tokens->count(); $index < $limit; ++$index) {
             $token = $tokens[$index];
 
@@ -91,18 +89,24 @@ class ControlFlowStatement extends AbstractFixer
         return $tokens->generateCode();
     }
 
-    public function getDescription()
+    public function getDefinition()
     {
-        return 'Add a newline before `return`, `break` and `continue` if needed.';
+        return new FixerDefinition(
+            'Add a newline before `return`, `break` and `continue` if needed.',
+            [new CodeSample("<?php\nswitch (…) {\n    case …:\n        …\n\n        break;")]
+        );
+    }
+
+    public function isCandidate(Tokens $tokens)
+    {
+        return
+            $tokens->isTokenKindFound(T_RETURN) ||
+            $tokens->isTokenKindFound(T_BREAK) ||
+            $tokens->isTokenKindFound(T_CONTINUE);
     }
 
     public function getName()
     {
-        return 'control_flow_statement';
-    }
-
-    public function getLevel()
-    {
-        return FixerInterface::CONTRIB_LEVEL;
+        return 'Hoa/control_flow_statement';
     }
 }
