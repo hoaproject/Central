@@ -201,7 +201,7 @@ class Cli extends atoum\reports\realtime
         $voidTestMethodPrompt = clone $secondLevelPrompt;
         $voidTestMethodPrompt->setColorizer($voidTestColorizer);
 
-        $runnerVoidField = new Fields\Void();
+        $runnerVoidField = new Fields\Nil();
         $runnerVoidField
             ->setTitlePrompt($voidTestTitlePrompt)
             ->setTitleColorizer($voidTestColorizer)
