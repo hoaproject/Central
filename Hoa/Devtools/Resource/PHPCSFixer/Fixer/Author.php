@@ -37,10 +37,10 @@
 namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 
 use SplFileInfo;
-use Symfony\CS\AbstractFixer;
-use Symfony\CS\DocBlock\DocBlock;
-use Symfony\CS\FixerInterface;
-use Symfony\CS\Tokenizer\Tokens;
+use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\DocBlock\DocBlock;
+use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * Class \Hoa\Devtools\Resource\PHPCSFixer\Fixer\Author.
@@ -52,10 +52,8 @@ use Symfony\CS\Tokenizer\Tokens;
  */
 class Author extends AbstractFixer
 {
-    public function fix(SplFileInfo $file, $content)
+    public function fix(SplFileInfo $file, Tokens $tokens)
     {
-        $tokens = Tokens::fromCode($content);
-
         foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $token) {
             $docBlock    = new DocBlock($token->getContent());
             $annotations = $docBlock->getAnnotationsOfType('author');
@@ -74,18 +72,21 @@ class Author extends AbstractFixer
         return $tokens->generateCode();
     }
 
-    public function getDescription()
+    public function getDefinition()
     {
-        return 'Remove `@author`.';
+        return new FixerDefinition(
+            'Remove `@author`.',
+            [new CodeSample("<?php\n/** @author … */")]
+        );
+    }
+
+    public function isCandidate(Tokens $tokens)
+    {
+        return $tokens->isTokenKindFound(T_DOC_COMMENT);
     }
 
     public function getName()
     {
-        return 'author';
-    }
-
-    public function getLevel()
-    {
-        return FixerInterface::CONTRIB_LEVEL;
+        return 'Hoa/author';
     }
 }

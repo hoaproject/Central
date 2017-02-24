@@ -112,7 +112,7 @@ class Cs extends Console\Dispatcher\Kit
             throw new Console\Exception('php-cs-fixer binary is not found.', 0);
         }
 
-        $arguments = ['fix', '--config-file' => $configurationFile];
+        $arguments = ['fix', '--config' => $configurationFile];
 
         if (true === $dryRun) {
             $arguments[] = '--dry-run';
