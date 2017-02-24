@@ -1,3 +1,10 @@
+# 2.17.02.24
+
+  * Dependency: atoum/praspel-ext. 0.17.* released. (Ivan Enderlin, 2017-02-24T14:57:38+01:00)
+  * Replace reserved keyword "Void" to "Nil" (Alexis von Glasow, 2017-02-24T14:48:41+01:00)
+  * Dependency: Move to atoum 3.0. (Ivan Enderlin, 2017-02-24T14:46:03+01:00)
+  * Bin: Simplify path to atoum. (Ivan Enderlin, 2017-02-14T09:49:40+01:00)
+
 # 2.17.01.16
 
   * Quality: Happy new year! (Alexis von Glasow, 2017-01-16T08:47:57+01:00)
