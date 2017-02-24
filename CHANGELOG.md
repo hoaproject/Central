@@ -1,3 +1,10 @@
+# 1.17.02.24
+
+  * CS: Move to PHP CS Fixer 2.x. (Ivan Enderlin, 2017-02-24T16:29:54+01:00)
+  * Documentation: Update an exception message. (Ivan Enderlin, 2017-02-21T17:07:54+01:00)
+  * Snapshot: Force Github auth to use a token. (Ivan Enderlin, 2017-01-10T14:11:42+01:00)
+  * Snapshot: Force tag to be signed. (Ivan Enderlin, 2017-01-10T14:11:19+01:00)
+
 # 1.17.01.10
 
   * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:37:03+01:00)
