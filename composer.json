@@ -24,7 +24,7 @@
     },
     "require": {
         "atoum/atoum"               : "~3.0",
-        "atoum/praspel-extension"   : "dev-atoum_3 as 0.17",
+        "atoum/praspel-extension"   : "~0.17",
         "atoum/ruler-extension"     : "~1.3",
         "atoum/visibility-extension": "~1.3",
         "hoa/cli"                   : "~2.0",
@@ -35,12 +35,6 @@
         "hoa/protocol"              : "~1.0",
         "hoa/ustring"               : "~4.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Hywan/Contributions-Atoum-PraspelExtension/"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Hoa\\Test\\": "."
