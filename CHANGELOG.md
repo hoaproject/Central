@@ -1,3 +1,7 @@
+# 2.17.02.27
+
+  * Test: Restrict code coverage to current lib. (Ivan Enderlin, 2017-02-24T19:40:30+01:00)
+
 # 2.17.02.24
 
   * Dependency: atoum/praspel-ext. 0.17.* released. (Ivan Enderlin, 2017-02-24T14:57:38+01:00)
