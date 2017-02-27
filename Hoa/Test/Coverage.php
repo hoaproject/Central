@@ -34,82 +34,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Unit;
+namespace Hoa\Test;
 
 use atoum;
-use Hoa\Protocol;
-use Hoa\Test;
 
 /**
- * Class \Hoa\Test\Unit\Suite.
+ * Class \Hoa\Test\Coverage.
  *
- * Represent a unit test suite.
- *
+ * Extend the default coverage scorer, but adds the ability to whitelist
+ * instead of blacklist a namespace.
+
  * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-class Suite extends atoum\test
+class Coverage extends atoum\score\coverage
 {
-    const defaultNamespace = '/\\\Test\\\Unit\\\/';
+    protected $restrictedNamespace = null;
 
-
-
-    public function __construct()
+    public function restrictNamespace($namespace)
     {
-        $this->setMethodPrefix('/^case_/');
-        parent::__construct();
+        $this->restrictedNamespace = $namespace . '\\';
 
-        $namespaces = explode('\\', get_class($this));
-
-        if (2 <= count($namespaces)) {
-            if ('Hoa' === $namespaces[0]) {
-                $coverage = new Test\Coverage();
-                $coverage->restrictNamespace('Hoa\\' . $namespaces[1]);
-                $this->getScore()->setCoverage($coverage);
-            }
-        }
-
-        $protocol                = Protocol::getInstance();
-        $protocol['Test']        = new Protocol\Node('Test', null);
-        $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
-
-        return;
+        return $this;
     }
 
-    public function getTestedClassName()
+    protected function isExcluded(\ReflectionClass $class)
     {
-        if ($this instanceof Test\Decorrelated) {
-            return 'StdClass';
+        $className = $class->getName();
+
+        if (null === $this->restrictedNamespace) {
+            return parent::isExcluded($class);
         }
 
-        return parent::getTestedClassName();
-    }
-
-    public function getTestedClassNamespace()
-    {
-        if ($this instanceof Test\Decorrelated) {
-            return '\\';
-        }
-
-        return parent::getTestedClassNamespace();
-    }
-
-    public function beforeTestMethod($methodName)
-    {
-        $out             = parent::beforeTestMethod($methodName);
-        $testedClassName = self::getTestedClassNameFromTestClass(
-            $this->getClass(),
-            $this->getTestNamespace()
-        );
-        $testedNamespace = substr(
-            $testedClassName,
+        $classNamespace = substr(
+            $className,
             0,
-            strrpos($testedClassName, '\\')
+            strlen($this->restrictedNamespace)
         );
 
-        $this->getPhpFunctionMocker()->setDefaultNamespace($testedNamespace);
-        $this->getPhpConstantMocker()->setDefaultNamespace($testedNamespace);
-
-        return $out;
+        return
+            $this->restrictedNamespace !== $classNamespace ||
+            parent::isExcluded($class);
     }
 }
