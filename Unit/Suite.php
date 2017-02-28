@@ -73,6 +73,9 @@ class Suite extends atoum\test
         $protocol['Test']        = new Protocol\Node('Test', null);
         $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
 
+        ini_set('zend.assertions', 1);
+        ini_set('assert.exception', 1);
+
         return;
     }
 
