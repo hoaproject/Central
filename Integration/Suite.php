@@ -49,4 +49,22 @@ use Hoa\Test;
 class Suite extends Test\Unit\Suite
 {
     const defaultNamespace = '/\\\Test\\\Integration\\\/';
+
+
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this
+            ->getAssertionManager()
+            ->setHandler(
+                'do',
+                function (callable $callable) {
+                    $result = $callable();
+
+                    $this->variable($result)->isNull();
+                }
+            );
+    }
 }
