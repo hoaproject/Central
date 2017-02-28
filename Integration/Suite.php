@@ -48,7 +48,7 @@ use Hoa\Test;
  */
 class Suite extends Test\Unit\Suite
 {
-    const defaultNamespace = '/\\\Test\\\Integration\\\/';
+    const defaultNamespace = '/\\\Test\\\(Integration|Documentation)\\\/';
 
 
 

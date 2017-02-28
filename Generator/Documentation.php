@@ -211,7 +211,7 @@ class Documentation
 
             $testSuite = sprintf(
                 '<?php' . "\n\n" .
-                'namespace %s\%s\Test\Integration%s;' . "\n\n" .
+                'namespace %s\%s\Test\Documentation%s;' . "\n\n" .
                 'use Hoa\Test;' . "\n\n" .
                 'class %s extends Test\Integration\Suite' . "\n" .
                 '{',
