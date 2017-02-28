@@ -34,42 +34,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Integration;
+namespace Hoa\Test\Asserter;
 
-use Hoa\Test;
+use atoum;
 
 /**
- * Class \Hoa\Test\Integration\Suite.
+ * Class \Hoa\Test\Asserter\Assert.
  *
- * Represent an integration test suite.
+ * The `assert` asserter. It helps to test a piece of code using the `assert`
+ * intrinsic.
  *
  * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-class Suite extends Test\Unit\Suite
+class Assert extends atoum\asserter
 {
-    const defaultNamespace = '/\\\Test\\\Integration\\\/';
-
-
-
-    public function __construct()
+    public function setWith($callable)
     {
-        parent::__construct();
+        parent::setWith($callable);
 
-        $assertAsserter = null;
-
-        $this
-            ->getAssertionManager()
-            ->setHandler(
-                'assert',
-                function (callable $callable) use (&$assertAsserter) {
-                    if (null === $assertAsserter) {
-                        $assertAsserter = new Test\Asserter\Assert($this->getAsserterGenerator());
-                        $assertAsserter->setWithTest($this);
-                    }
-
-                    return $assertAsserter->setWith($callable);
-                }
+        try {
+            $callable();
+        } catch (\AssertionError $e) {
+            $this->fail(
+                $this->_(
+                    'The assertion `%s` has failed.',
+                    $e->getMessage()
+                )
             );
+
+            return;
+        }
+
+        $this->pass();
+
+        return $this;
     }
 }
