@@ -59,16 +59,11 @@ class Documentation
 
 
 
-    public function __construct($directoryToScan, $namespaceToScan)
+    public function generate($directoryToScan, $namespaceToScan)
     {
         $this->_directoryToScan = $directoryToScan;
         $this->_namespaceToScan = $namespaceToScan;
 
-        return;
-    }
-
-    public function generate()
-    {
         $this->includeAutoloader();
 
         $reflectedClasses = $this->getClassesToCompile();
