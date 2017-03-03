@@ -81,6 +81,16 @@ class Documentation
             ->in($directoryToScan)
             ->notIn('/^\.git|vendor|Test$/');
 
+        $documentationDirectory =
+            $directoryToScan . DS .
+            'Test' . DS .
+            'Documentation';
+
+        if (is_dir($documentationDirectory)) {
+            $since = time() - filemtime($documentationDirectory);
+            $finder->modified('since ' . $since . ' seconds');
+        }
+
         return $finder;
     }
 
@@ -287,5 +297,10 @@ class Documentation
                 $code
             );
         }
+
+        // Update the mtime of the `Documentation` for the caching algorithm.
+        touch($this->_directoryToScan . DS . 'Test' . DS . 'Documentation');
+
+        return;
     }
 }
