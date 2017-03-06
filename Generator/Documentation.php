@@ -203,6 +203,15 @@ class Documentation
 
     protected function compileToTestCaseBody(array $codeBlock)
     {
+        if (0 !== preg_match('/\bignore\b/', $codeBlock['type'])) {
+            return sprintf(
+                '        $this' . "\n" .
+                '            ->skip(\'Skipped because ' .
+                'the code block type contains `ignore`: `%s`.\');' . "\n",
+                $codeBlock['type']
+            );
+        }
+
         return sprintf(
             '        $this' . "\n" .
             '            ->assert(function () {' . "\n" .
