@@ -212,6 +212,20 @@ class Documentation
             );
         }
 
+        if (0 !== preg_match('/\bmust_throw\b/', $codeBlock['type'], $matches)) {
+            return sprintf(
+                '        $this' . "\n" .
+                '            ->exception(function () {' . "\n" .
+                '                %s' . "\n" .
+                '            });' . "\n",
+                preg_replace(
+                    '/^\h+$/m',
+                    '',
+                    str_replace("\n", "\n" . '                ', $codeBlock['code'])
+                )
+            );
+        }
+
         return sprintf(
             '        $this' . "\n" .
             '            ->assert(function () {' . "\n" .
