@@ -207,7 +207,7 @@ class Documentation
             return sprintf(
                 '        $this' . "\n" .
                 '            ->skip(\'Skipped because ' .
-                'the code block type contains `ignore`: `%s`.\');' . "\n",
+                'the code block type contains `ignore`: `%s`.\');',
                 $codeBlock['type']
             );
         }
@@ -217,7 +217,7 @@ class Documentation
                 '        $this' . "\n" .
                 '            ->exception(function () {' . "\n" .
                 '                %s' . "\n" .
-                '            });' . "\n",
+                '            });',
                 preg_replace(
                     '/^\h+$/m',
                     '',
@@ -230,7 +230,7 @@ class Documentation
             '        $this' . "\n" .
             '            ->assert(function () {' . "\n" .
             '                %s' . "\n" .
-            '            });' . "\n",
+            '            });',
             preg_replace(
                 '/^\h+$/m',
                 '',
