@@ -58,7 +58,7 @@ class Expandflexentities extends Console\Dispatcher\Kit
     protected $options = [
         ['output', Console\GetOption::REQUIRED_ARGUMENT, 'o'],
         ['dry-run', Console\GetOption::NO_ARGUMENT, 'd'],
-        ['verbose', Console\GetOption::NO_ARGUMENT, 'V'],
+        ['verbose', Console\GetOption::NO_ARGUMENT, 'v'],
         ['help', Console\GetOption::NO_ARGUMENT, 'h'],
         ['help', Console\GetOption::NO_ARGUMENT, '?']
     ];
@@ -112,7 +112,6 @@ class Expandflexentities extends Console\Dispatcher\Kit
         $finder
             ->in(resolve($hoaPath, true, true))
             ->name('#\.php$#')
-            ->maxDepth(100)
             ->files();
 
         foreach ($finder as $file) {
@@ -133,7 +132,7 @@ class Expandflexentities extends Console\Dispatcher\Kit
 
             preg_match(
                 '#((?:(?:abstract|final)\s)?' .
-                'class|interface|trait)\s+' . $className . '\s#',
+                'class|interface|trait)\s+' . $className . '\s#m',
                 $raw,
                 $keyword
             );
@@ -195,4 +194,4 @@ class Expandflexentities extends Console\Dispatcher\Kit
 }
 
 __halt_compiler();
-Extend flex entities class in parent namespace to enable auto completion for IDE
+Expand entities to ease auto-completion in IDE
