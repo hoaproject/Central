@@ -177,8 +177,18 @@ class Documentation
                     continue;
                 }
 
+                $type = trim($childNode->getInfo());
+
+                if (empty($type)) {
+                    $type = 'php';
+                }
+
+                if (0 === preg_match('/\bphp\b/', $type)) {
+                    continue;
+                }
+
                 $codeBlock = [
-                    'type' => $childNode->getInfo(),
+                    'type' => $type,
                     'code' => trim($childNode->getStringContent())
                 ];
 
