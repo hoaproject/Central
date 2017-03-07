@@ -8,9 +8,10 @@ matrix:
     - php: 7.1
       env:
         - ENABLE_XDEBUG=true
-    - php: nightly
+    - php: 7.1
       env:
         - ENABLE_DEVTOOLS=true
+    - php: nightly
     - php: hhvm-3.12
       sudo: required
       dist: trusty
