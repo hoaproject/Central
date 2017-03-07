@@ -53,6 +53,11 @@ class Documentation
 {
     const DOCUMENTATION_SECTION = 'Examples';
 
+    const NO_STATE                  = 0;
+    const STATE_USE                 = 1;
+    const STATE_NAME                = 2;
+    const STATE_NAMESPACE_SEPARATOR = 3;
+
     protected $_directoryToScan = null;
 
     protected $_namespaceToScan = null;
@@ -70,6 +75,8 @@ class Documentation
         $testSuites       = $this->compileToTestSuites($reflectedClasses);
 
         $this->saveToFile($testSuites);
+
+        return;
     }
 
     protected function getFinder($directoryToScan)
@@ -144,6 +151,97 @@ class Documentation
         );
     }
 
+    protected function unfoldCode($code)
+    {
+        // Remove `#`, and add an opening tag (for the lexer).
+        $code =
+            '<?php ' .
+            preg_replace(
+                ',^\h*(#\h*),m',
+                '',
+                trim($code)
+            );
+
+        // Contains an array of the form: `string -> string` where the key is
+        // the string to search, and the value is the string to use to replace
+        // the search.
+        $aliases  = [];
+
+        // Current state. See `self::NO_STATE` and `self::STATE_*` constants.
+        $state    = 0;
+
+        // Small buffer. Not related to the accumulator. It will store an alias.
+        $buffer   = null;
+
+        return array_reduce(
+            token_get_all($code),
+            function ($accumulator, $token) use (&$buffer, &$state, &$aliases) {
+                // If the token is not an array…
+                if (!is_array($token)) {
+                    $tokenValue = $token;
+
+                    // If the end of a `use` statement is being read, then it
+                    // is possible to add a new alias in the `$aliases` array.
+                    if (self::STATE_USE === $state && ';' === $tokenValue) {
+                        $replace = '\\' . $buffer;
+
+                        if (false !== $pos = strrpos($buffer, '\\')) {
+                            $search = substr($buffer, $pos + 1);
+                        } else {
+                            $search = $buffer;
+                        }
+
+                        $aliases[$search] = $replace;
+                        $state            = self::NO_STATE;
+                        $buffer           = null;
+                    }
+
+                    return $accumulator . $tokenValue;
+                }
+
+                list($tokenType, $tokenValue) = $token;
+
+                // Skip the opening tag.
+                if (T_OPEN_TAG === $tokenType) {
+                    return $accumulator;
+                }
+                // Enter a `use` statement.
+                else if (T_USE === $tokenType) {
+                    $state      = self::STATE_USE;
+                    $tokenValue = '# ' . $tokenValue;
+                }
+                // Reading a `use` statement.
+                else if (self::STATE_USE === $state) {
+                    if (T_STRING === $tokenType || T_NS_SEPARATOR === $tokenType) {
+                        $buffer .= $tokenValue;
+                    }
+                }
+                // A namespace separator is being read. Change the state to
+                // `STATE_NAMESPACE_SEPARATOR`. This way, the next `T_STRING`
+                // will be ignored when unfolded aliases.
+                else if (T_NS_SEPARATOR === $tokenType) {
+                    $state = self::STATE_NAMESPACE_SEPARATOR;
+                }
+                // A name is being read.
+                else if (T_STRING === $tokenType) {
+                    // But the previous significant token is a namespace
+                    // separator, so skip it.
+                    if (self::STATE_NAMESPACE_SEPARATOR === $state) {
+                        $state = self::NO_STATE;
+                    }
+                    // Great, we can replace this name —which is an alias— by
+                    // its fully-qualified name.
+                    else if (self::NO_STATE === $state && isset($aliases[$tokenValue])) {
+                        $tokenValue = $aliases[$tokenValue];
+                    }
+                }
+
+                return $accumulator . $tokenValue;
+            },
+            ''
+        );
+    }
+
     protected function collectCodeBlocks(CommonMark\Node\NodeWalker $walker)
     {
         while ($event = $walker->next()) {
@@ -187,9 +285,11 @@ class Documentation
                     continue;
                 }
 
+                $code = $this->unfoldCode($childNode->getStringContent());
+
                 $codeBlock = [
                     'type' => $type,
-                    'code' => trim($childNode->getStringContent())
+                    'code' => $code
                 ];
 
                 $codeBlocks[$hash] = $codeBlock;
