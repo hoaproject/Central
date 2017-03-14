@@ -5,8 +5,8 @@
 ---
 
 <p align="center">
-  <a href="https://travis-ci.org/hoaproject/socket"><img src="https://img.shields.io/travis/hoaproject/socket/master.svg" alt="Build status" /></a>
-  <a href="https://coveralls.io/github/hoaproject/socket?branch=master"><img src="https://img.shields.io/coveralls/hoaproject/socket/master.svg" alt="Code coverage" /></a>
+  <a href="https://travis-ci.org/hoaproject/Socket"><img src="https://img.shields.io/travis/hoaproject/Socket/master.svg" alt="Build status" /></a>
+  <a href="https://coveralls.io/github/hoaproject/Socket?branch=master"><img src="https://img.shields.io/coveralls/hoaproject/Socket/master.svg" alt="Code coverage" /></a>
   <a href="https://packagist.org/packages/hoa/socket"><img src="https://img.shields.io/packagist/dt/hoa/socket.svg" alt="Packagist" /></a>
   <a href="https://hoa-project.net/LICENSE"><img src="https://img.shields.io/packagist/l/hoa/socket.svg" alt="License" /></a>
 </p>
