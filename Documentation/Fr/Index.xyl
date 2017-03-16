@@ -126,7 +126,7 @@ echo $bench;
     <li>comparer la durée d'exécution entre deux marques, grâce à la méthode
     <code>Hoa\Bench\Mark::compareTo</code> ;</li>
     <li>savoir si une marque est en cours d'exécution, grâce à la méthode
-    <code>Hoa\Bench\Mark::isRunning</code> ;</li>
+    <code>Hoa\Bench\Mark::isStarted</code> ;</li>
     <li>savoir si une marque est en pause, grâce à la méthode
     <code>Hoa\Bench\Mark::isPause</code>.</li>
   </ul>
@@ -149,14 +149,14 @@ if (isset($bench->foo)) {
   <code>Hoa\Bench\Bench</code> se comporte comme un itérateur sur toutes les
   marques, ainsi :</p>
   <pre><code class="language-php">foreach ($bench as $id => $mark) {
-    echo $id, ' => ', ($mark->isRunning() ? 'running' : 'stopped'), "\n";
+    echo $id, ' => ', ($mark->isStarted() ? 'started' : 'stopped'), "\n";
 }
 
 /**
  * Could output:
  *     one => stopped
- *     two => running
- *     three => running
+ *     two => started
+ *     three => started
  */</code></pre>
   <p>Nous pouvons également compter le nombre de marques de la manière
   suivante :</p>

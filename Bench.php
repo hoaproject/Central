@@ -225,25 +225,25 @@ class Bench implements Iterator, \Countable
     }
 
     /**
-     * Pause all marks and return only previously running tasks.
+     * Pause all marks and return only previously started tasks.
      *
      * @return  array
      */
     public function pause()
     {
-        $runningMarks = [];
+        $startedMarks = [];
 
         foreach ($this as $mark) {
-            if (true === $mark->isRunning() && false === $mark->isPause()) {
-                $runningMarks[] = $mark;
+            if (true === $mark->isStarted() && false === $mark->isPause()) {
+                $startedMarks[] = $mark;
             }
         }
 
-        foreach ($runningMarks as $mark) {
+        foreach ($startedMarks as $mark) {
             $mark->pause();
         }
 
-        return $runningMarks;
+        return $startedMarks;
     }
 
     /**
@@ -303,7 +303,7 @@ class Bench implements Iterator, \Countable
             return [];
         }
 
-        $runningMarks = $this->pause();
+        $startedMarks = $this->pause();
 
         $max = $this->getLongest()->diff();
         $out = [];
@@ -326,7 +326,7 @@ class Bench implements Iterator, \Countable
             ];
         }
 
-        static::resume($runningMarks);
+        static::resume($startedMarks);
 
         return $out;
     }

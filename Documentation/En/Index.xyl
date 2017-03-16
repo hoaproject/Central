@@ -73,11 +73,11 @@ echo $bench;
 
   <p>Marks can be in three different states:</p>
   <ul>
-    <li>running, thanks to the <code>Hoa\Bench\Mark::start</code> method,</li>
+    <li>started, thanks to the <code>Hoa\Bench\Mark::start</code> method,</li>
     <li>paused, thanks to the <code>Hoa\Bench\Mark::pause</code> method, only if
-    it was previously running,</li>
+    it was previously started,</li>
     <li>stopped, thanks to the <code>Hoa\Bench\Bench::stop</code> method, only
-    if it was previously running.</li>
+    if it was previously started.</li>
   </ul>
   <p>If we start and stop a mark, and then start it again, it will be reset.
   Notwithstanding, it exists the <code>Hoa\Bench\Mark::reset</code> method that
@@ -111,7 +111,7 @@ echo $bench;
  *     __global__  ||||||||||||||||||||||||||||||||||||||||||||||||||||    45ms, 100.0%
  *     aMark       |||||||||||||                                           11ms,  24.8%
  */</code></pre>
-  <p>We can also pause all marks and get which marks were running with the
+  <p>We can also pause all marks and get which marks were started with the
   <code>Hoa\Bench\Bench::pause</code> method. The
   <code>Hoa\Bench\Bench::resume</code> method allows to restart a set of marks.</p>
   <p>Other operations are available, such as:</p>
@@ -120,8 +120,8 @@ echo $bench;
     method,</li>
     <li>compare the execution time between two marks, thanks to the
     <code>Hoa\Bench\Mark::compareTo</code> method,</li>
-    <li>check whether a mark is running, thanks to the
-    <code>Hoa\Bench\Mark::isRunning</code> method,</li>
+    <li>check whether a mark is started, thanks to the
+    <code>Hoa\Bench\Mark::isStarted</code> method,</li>
     <li>check whether a mark is paused, thanks to the
     <code>Hoa\Bench\Mark::isPause</code> method.</li>
   </ul>
@@ -143,14 +143,14 @@ if (isset($bench->foo)) {
   <code>Hoa\Bench\Bench</code> class behaves like an iterator on all marks,
   thus:</p>
   <pre><code class="language-php">foreach ($bench as $id => $mark) {
-    echo $id, ' => ', ($mark->isRunning() ? 'running' : 'stopped'), "\n";
+    echo $id, ' => ', ($mark->isStarted() ? 'started' : 'stopped'), "\n";
 }
 
 /**
  * Could output:
  *     one => stopped
- *     two => running
- *     three => running
+ *     two => started
+ *     three => started
  */</code></pre>
   <p>We can also count the number of marks:</p>
   <pre><code class="language-php">var_dump(count($bench));
