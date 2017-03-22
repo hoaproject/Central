@@ -118,15 +118,15 @@ class Expandflexentities extends Console\Dispatcher\Kit
             $pathName = $file->getPathName();
             $raw      = file_get_contents($pathName);
 
-            if (!preg_match('#flexEntity\(\'([^\']+)#', $raw, $class)) {
-                preg_match('#\nclass_alias\(\'([^\']+)#', $raw, $class);
+            if (!preg_match('#flexEntity\(\'(?P<classname>[^\']+)#', $raw, $class)) {
+                preg_match('#\nclass_alias\(\'(?P<classname>[^\']+)#', $raw, $class);
             }
 
             if (empty($class)) {
                 continue;
             }
 
-            $FQCN      = $class[1]; // Fully-Qualified Class Name
+            $FQCN      = $class['classname']; // Fully-Qualified Class Name
             $alias     = Consistency::getEntityShortestName($FQCN);
             $className = substr($alias, strrpos($alias, '\\') + 1);
 
