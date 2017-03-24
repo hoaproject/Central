@@ -110,15 +110,19 @@ class Basic extends Dispatcher
                     continue;
                 }
 
-                if (false === $parameter->isOptional()) {
-                    throw new Exception(
-                        'The closured action for the rule with pattern %s needs ' .
-                        'a value for the parameter $%s and this value does not ' .
-                        'exist.',
+                if (true === $parameter->isOptional()) {
+                    $arguments[$name] = $parameter->getDefaultValue();
+
+                    continue;
+                }
+
+                throw new Exception(
+                    'The closured action for the rule with pattern %s needs ' .
+                    'a value for the parameter $%s and this value does not ' .
+                    'exist.',
                         1,
                         [$rule[Router::RULE_PATTERN], $name]
                     );
-                }
             }
         } elseif (is_string($call) && null === $able) {
             $kitname = $this->getKitName();
@@ -148,15 +152,19 @@ class Basic extends Dispatcher
                     continue;
                 }
 
-                if (false === $parameter->isOptional()) {
-                    throw new Exception(
-                        'The functional action for the rule with pattern %s needs ' .
-                        'a value for the parameter $%s and this value does not ' .
-                        'exist.',
+                if (true === $parameter->isOptional()) {
+                    $arguments[$name] = $parameter->getDefaultValue();
+
+                    continue;
+                }
+
+                throw new Exception(
+                    'The functional action for the rule with pattern %s needs ' .
+                    'a value for the parameter $%s and this value does not ' .
+                    'exist.',
                         3,
                         [$rule[Router::RULE_PATTERN], $name]
                     );
-                }
             }
         } else {
             $async      = $router->isAsynchronous();
@@ -235,10 +243,15 @@ class Basic extends Dispatcher
                     continue;
                 }
 
-                if (false === $parameter->isOptional()) {
-                    throw new Exception(
-                        'The action %s on the controller %s needs a value for ' .
-                        'the parameter $%s and this value does not exist.',
+                if (true === $parameter->isOptional()) {
+                    $arguments[$name] = $parameter->getDefaultValue();
+
+                    continue;
+                }
+
+                throw new Exception(
+                    'The action %s on the controller %s needs a value for ' .
+                    'the parameter $%s and this value does not exist.',
                         6,
                         [
                             $action,
@@ -246,7 +259,6 @@ class Basic extends Dispatcher
                             $name
                         ]
                     );
-                }
             }
         }
 
