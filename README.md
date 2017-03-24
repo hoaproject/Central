@@ -5,8 +5,8 @@
 ---
 
 <p align="center">
-  <a href="https://travis-ci.org/hoaproject/zombie"><img src="https://img.shields.io/travis/hoaproject/zombie/master.svg" alt="Build status" /></a>
-  <a href="https://coveralls.io/github/hoaproject/zombie?branch=master"><img src="https://img.shields.io/coveralls/hoaproject/zombie/master.svg" alt="Code coverage" /></a>
+  <a href="https://travis-ci.org/hoaproject/Zombie"><img src="https://img.shields.io/travis/hoaproject/Zombie/master.svg" alt="Build status" /></a>
+  <a href="https://coveralls.io/github/hoaproject/Zombie?branch=master"><img src="https://img.shields.io/coveralls/hoaproject/Zombie/master.svg" alt="Code coverage" /></a>
   <a href="https://packagist.org/packages/hoa/zombie"><img src="https://img.shields.io/packagist/dt/hoa/zombie.svg" alt="Packagist" /></a>
   <a href="https://hoa-project.net/LICENSE"><img src="https://img.shields.io/packagist/l/hoa/zombie.svg" alt="License" /></a>
 </p>
