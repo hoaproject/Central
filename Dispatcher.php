@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,24 +36,25 @@
 
 namespace Hoa\Dispatcher;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Router;
 use Hoa\View;
+use Hoa\Zformat;
 
 /**
  * Class \Hoa\Dispatcher.
  *
  * Abstract dispatcher.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-abstract class Dispatcher implements Core\Parameter\Parameterizable
+abstract class Dispatcher implements Zformat\Parameterizable
 {
     /**
      * Parameters.
      *
-     * @var \Hoa\Core\Parameter
+     * @var \Hoa\Zformat\Parameter
      */
     protected $_parameters  = null;
 
@@ -77,11 +78,10 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable
      * Build a new dispatcher.
      *
      * @param   array   $parameters    Parameters.
-     * @return  void
      */
-    public function __construct(Array $parameters = [])
+    public function __construct(array $parameters = [])
     {
-        $this->_parameters = new Core\Parameter(
+        $this->_parameters = new Zformat\Parameter(
             __CLASS__,
             [
                 'call' => 'main',
@@ -109,7 +109,7 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable
     /**
      * Get parameters.
      *
-     * @return  \Hoa\Core\Parameter
+     * @return  \Hoa\Zformat\Parameter
      */
     public function getParameters()
     {
@@ -163,7 +163,7 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable
      * @throws  \Hoa\Dispatcher\Exception
      */
     abstract protected function resolve(
-        Array         $rule,
+        array         $rule,
         Router        $router,
         View\Viewable $view = null
     );
@@ -197,4 +197,4 @@ abstract class Dispatcher implements Core\Parameter\Parameterizable
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Dispatcher\Dispatcher');
+Consistency::flexEntity('Hoa\Dispatcher\Dispatcher');

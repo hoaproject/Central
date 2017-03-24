@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,6 +36,7 @@
 
 namespace Hoa\Dispatcher;
 
+use Hoa\Consistency;
 use Hoa\Router;
 use Hoa\View;
 
@@ -45,7 +46,7 @@ use Hoa\View;
  * This class dispatches on a class/object and a method, nothing more. There is
  * no concept of controller or action, it is just _call and _able.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class ClassMethod extends Dispatcher
@@ -60,7 +61,7 @@ class ClassMethod extends Dispatcher
      * @throws  \Hoa\Dispatcher\Exception
      */
     protected function resolve(
-        Array $rule,
+        array $rule,
         Router $router,
         View\Viewable $view = null
     ) {
@@ -95,7 +96,7 @@ class ClassMethod extends Dispatcher
         $method = $this->_parameters->getFormattedParameter($_method);
 
         try {
-            $class = dnew($class, $rtv);
+            $class = Consistency\Autoloader::dnew($class, $rtv);
         } catch (\Exception $e) {
             throw new Exception(
                 'Class %s is not found ' .
@@ -118,7 +119,7 @@ class ClassMethod extends Dispatcher
             !isset($variables['_this']) ||
             !(isset($variables['_this']) &&
             ($variables['_this'] instanceof $kitname))) {
-            $variables['_this'] = dnew($kitname, $rtv);
+            $variables['_this'] = Consistency\Autoloader::dnew($kitname, $rtv);
             $variables['_this']->construct();
         }
 

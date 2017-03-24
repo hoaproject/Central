@@ -1,3 +1,31 @@
+# 1.17.01.10
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:37:00+01:00)
+  * Documentation: Fix “Learn more” link. (Ivan Enderlin, 2016-10-21T07:49:29+02:00)
+  * Documentation: Use TLS when possible. (Ivan Enderlin, 2016-10-21T07:46:31+02:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T07:45:04+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T20:32:25+02:00)
+
+# 1.16.01.15
+
+  * Composer: New stable library. (Ivan Enderlin, 2016-01-14T21:50:22+01:00)
+
+# 1.16.01.14
+
+  * Quality: Drop PHP5.4. (Ivan Enderlin, 2016-01-11T09:15:26+01:00)
+  * Quality: Run devtools:cs. (Ivan Enderlin, 2016-01-09T09:00:42+01:00)
+  * Core: Remove `Hoa\Core`. (Ivan Enderlin, 2016-01-09T08:14:12+01:00)
+  * Parameters: Use `Hoa\Zformat`. (Ivan Enderlin, 2016-01-08T17:09:13+01:00)
+  * Core: `Hoa\Core\Data` has been moved. (Ivan Enderlin, 2016-01-06T08:24:52+01:00)
+  * Consistency: Remove `from` calls. (Ivan Enderlin, 2015-12-09T06:36:48+01:00)
+  * Consistency: Update `dnew` calls. (Ivan Enderlin, 2015-12-08T23:40:19+01:00)
+  * Consistency: Use `Hoa\Consistency`. (Ivan Enderlin, 2015-12-08T11:05:04+01:00)
+  * Exception: Use `Hoa\Exception`. (Ivan Enderlin, 2015-11-20T07:20:55+01:00)
+
+# 0.15.11.09
+
+  * Add a `.gitignore` file. (Stéphane HULARD, 2015-08-03T11:27:38+02:00)
+
 # 0.15.05.29
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-04T20:24:40+02:00)

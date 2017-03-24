@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -36,6 +36,7 @@
 
 namespace Hoa\Dispatcher;
 
+use Hoa\Consistency;
 use Hoa\Router;
 use Hoa\View;
 
@@ -45,7 +46,7 @@ use Hoa\View;
  * A basic and generic dispatcher. It supports function, closure, object and
  * class (controller::action).
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Basic extends Dispatcher
@@ -60,7 +61,7 @@ class Basic extends Dispatcher
      * @throws  \Hoa\Dispatcher\Exception
      */
     protected function resolve(
-        Array $rule,
+        array $rule,
         Router $router,
         View\Viewable $view = null
     ) {
@@ -84,7 +85,7 @@ class Basic extends Dispatcher
             $kitname = $this->getKitName();
 
             if (!empty($kitname)) {
-                $kit = dnew($this->getKitName(), $rtv);
+                $kit = Consistency\Autoloader::dnew($this->getKitName(), $rtv);
 
                 if (!($kit instanceof Kit)) {
                     throw new Exception(
@@ -127,7 +128,7 @@ class Basic extends Dispatcher
             $kitname = $this->getKitName();
 
             if (!empty($kitname)) {
-                $kit = dnew($this->getKitName(), $rtv);
+                $kit = Consistency\Autoloader::dnew($this->getKitName(), $rtv);
 
                 if (!($kit instanceof Kit)) {
                     throw new Exception(
@@ -186,7 +187,7 @@ class Basic extends Dispatcher
                 $action     = $this->_parameters->getFormattedParameter($_action);
 
                 try {
-                    $controller = dnew($controller, $rtv);
+                    $controller = Consistency\Autoloader::dnew($controller, $rtv);
                 } catch (\Exception $e) {
                     throw new Exception(
                         'Controller %s is not found ' .
@@ -206,7 +207,7 @@ class Basic extends Dispatcher
                 $kitname = $this->getKitName();
 
                 if (!empty($kitname)) {
-                    $variables['_this'] = dnew($kitname, $rtv);
+                    $variables['_this'] = Consistency\Autoloader::dnew($kitname, $rtv);
                 }
 
                 if (method_exists($controller, 'construct')) {

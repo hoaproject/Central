@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ use Hoa\Test;
  *
  * Test suite of the abstract dispatcher.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Dispatcher extends Test\Unit\Suite
@@ -56,7 +56,7 @@ class Dispatcher extends Test\Unit\Suite
             ->when($result = $dispatcher->getParameters())
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Core\Parameter');
+                    ->isInstanceOf('Hoa\Zformat\Parameter');
     }
 
     public function case_kitname()
@@ -89,7 +89,6 @@ class Dispatcher extends Test\Unit\Suite
                     &$routedView,
                     &$routedParameters
                 ) {
-
                     $routedRule       = $rule;
                     $routedRouter     = $router;
                     $routedView       = $view;
@@ -109,7 +108,7 @@ class Dispatcher extends Test\Unit\Suite
                 ->variable($routedView)
                     ->isNull()
                 ->object($routedParameters)
-                    ->isInstanceOf('Hoa\Core\Parameter')
+                    ->isInstanceOf('Hoa\Zformat\Parameter')
 
                 ->object($dispatcher->getParameters())
                     ->isIdenticalTo($parameters)
@@ -137,7 +136,6 @@ class Dispatcher extends Test\Unit\Suite
                     &$routedView,
                     &$routedParameters
                 ) {
-
                     $routedRule       = $rule;
                     $routedRouter     = $router;
                     $routedView       = $view;
@@ -163,7 +161,7 @@ class Dispatcher extends Test\Unit\Suite
                 ->variable($routedView)
                     ->isNull()
                 ->object($routedParameters)
-                    ->isInstanceOf('Hoa\Core\Parameter')
+                    ->isInstanceOf('Hoa\Zformat\Parameter')
 
                 ->object($dispatcher->getParameters())
                     ->isIdenticalTo($parameters)
