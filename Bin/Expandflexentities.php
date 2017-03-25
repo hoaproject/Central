@@ -106,7 +106,7 @@ class Expandflexentities extends Console\Dispatcher\Kit
         $aliases = [];
         $finder  = new File\Finder();
         $finder
-            ->in(resolve($hoaPath, true, true))
+            ->in($hoaPath)
             ->name('#\.php$#')
             ->files();
 
