@@ -124,8 +124,6 @@ class Generate extends Console\Dispatcher\Kit
             $generateDocumentation = true;
         }
 
-        var_dump($generateDocumentation, $directoryToScan, $namespaceToScan);
-
         if (true === $generateDocumentation) {
             $documentationGenerator = new Test\Generator\Documentation();
             $documentationGenerator->generate(

@@ -168,7 +168,7 @@ class Documentation
         $aliases  = [];
 
         // Current state. See `self::NO_STATE` and `self::STATE_*` constants.
-        $state    = 0;
+        $state    = self::NO_STATE;
 
         // Small buffer. Not related to the accumulator. It will store an alias.
         $buffer   = null;
