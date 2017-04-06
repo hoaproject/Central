@@ -101,7 +101,7 @@ class State extends Console\Dispatcher\Kit
         }
 
         $status  = 'beta';
-        $path   .= '/.State';
+        $path .= '/.State';
 
         if (true === file_exists($path)) {
             $status = trim(file_get_contents($path));
