@@ -173,73 +173,72 @@ class Documentation
         // Small buffer. Not related to the accumulator. It will store an alias.
         $buffer   = null;
 
-        return array_reduce(
-            token_get_all($code),
-            function ($accumulator, $token) use (&$buffer, &$state, &$aliases) {
-                // If the token is not an array…
-                if (!is_array($token)) {
-                    $tokenValue = $token;
+        // Reducer: Walk in the token sequence and unfold the code.
+        $reducer = function ($accumulator, $token) use (&$buffer, &$state, &$aliases) {
+            // If the token is not an array…
+            if (!is_array($token)) {
+                $tokenValue = $token;
 
-                    // If the end of a `use` statement is being read, then it
-                    // is possible to add a new alias in the `$aliases` array.
-                    if (self::STATE_USE === $state && ';' === $tokenValue) {
-                        $replace = '\\' . $buffer;
+                // If the end of a `use` statement is being read, then it
+                // is possible to add a new alias in the `$aliases` array.
+                if (self::STATE_USE === $state && ';' === $tokenValue) {
+                    $replace = '\\' . $buffer;
 
-                        if (false !== $pos = strrpos($buffer, '\\')) {
-                            $search = substr($buffer, $pos + 1);
-                        } else {
-                            $search = $buffer;
-                        }
-
-                        $aliases[$search] = $replace;
-                        $state            = self::NO_STATE;
-                        $buffer           = null;
+                    if (false !== $pos = strrpos($buffer, '\\')) {
+                        $search = substr($buffer, $pos + 1);
+                    } else {
+                        $search = $buffer;
                     }
 
-                    return $accumulator . $tokenValue;
-                }
-
-                list($tokenType, $tokenValue) = $token;
-
-                // Skip the opening tag.
-                if (T_OPEN_TAG === $tokenType) {
-                    return $accumulator;
-                }
-                // Enter a `use` statement.
-                else if (T_USE === $tokenType) {
-                    $state      = self::STATE_USE;
-                    $tokenValue = '# ' . $tokenValue;
-                }
-                // Reading a `use` statement.
-                else if (self::STATE_USE === $state) {
-                    if (T_STRING === $tokenType || T_NS_SEPARATOR === $tokenType) {
-                        $buffer .= $tokenValue;
-                    }
-                }
-                // A namespace separator is being read. Change the state to
-                // `STATE_NAMESPACE_SEPARATOR`. This way, the next `T_STRING`
-                // will be ignored when unfolded aliases.
-                else if (T_NS_SEPARATOR === $tokenType) {
-                    $state = self::STATE_NAMESPACE_SEPARATOR;
-                }
-                // A name is being read.
-                else if (T_STRING === $tokenType) {
-                    // But the previous significant token is a namespace
-                    // separator, so skip it.
-                    if (self::STATE_NAMESPACE_SEPARATOR === $state) {
-                        $state = self::NO_STATE;
-                    }
-                    // Great, we can replace this name —which is an alias— by
-                    // its fully-qualified name.
-                    else if (self::NO_STATE === $state && isset($aliases[$tokenValue])) {
-                        $tokenValue = $aliases[$tokenValue];
-                    }
+                    $aliases[$search] = $replace;
+                    $state            = self::NO_STATE;
+                    $buffer           = null;
                 }
 
                 return $accumulator . $tokenValue;
-            },
-            ''
-        );
+            }
+
+            list($tokenType, $tokenValue) = $token;
+
+            // Skip the opening tag.
+            if (T_OPEN_TAG === $tokenType) {
+                return $accumulator;
+            }
+            // Enter a `use` statement.
+            else if (T_USE === $tokenType) {
+                $state      = self::STATE_USE;
+                $tokenValue = '# ' . $tokenValue;
+            }
+            // Reading a `use` statement.
+            else if (self::STATE_USE === $state) {
+                if (T_STRING === $tokenType || T_NS_SEPARATOR === $tokenType) {
+                    $buffer .= $tokenValue;
+                }
+            }
+            // A namespace separator is being read. Change the state to
+            // `STATE_NAMESPACE_SEPARATOR`. This way, the next `T_STRING`
+            // will be ignored when unfolded aliases.
+            else if (T_NS_SEPARATOR === $tokenType) {
+                $state = self::STATE_NAMESPACE_SEPARATOR;
+            }
+            // A name is being read.
+            else if (T_STRING === $tokenType) {
+                // But the previous significant token is a namespace
+                // separator, so skip it.
+                if (self::STATE_NAMESPACE_SEPARATOR === $state) {
+                    $state = self::NO_STATE;
+                }
+                // Great, we can replace this name —which is an alias— by
+                // its fully-qualified name.
+                else if (self::NO_STATE === $state && isset($aliases[$tokenValue])) {
+                    $tokenValue = $aliases[$tokenValue];
+                }
+            }
+
+            return $accumulator . $tokenValue;
+        };
+
+        return array_reduce(token_get_all($code), $reducer, '');
     }
 
     protected function collectCodeBlocks(CommonMark\Node\NodeWalker $walker)
