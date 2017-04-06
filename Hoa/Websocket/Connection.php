@@ -202,6 +202,7 @@ abstract class Connection
                     'message',
                     'binary-message',
                     'ping',
+                    'close-before',
                     'close',
                     'error'
                 ]
@@ -580,13 +581,21 @@ abstract class Connection
         $protocol   = $connection->getCurrentNode()->getProtocolImplementation();
 
         try {
+            $this->getListener()->fire(
+                'close-before',
+                new Event\Bucket([
+                    'code'   => $code,
+                    'reason' => $reason
+                ])
+            );
+
             if (null !== $protocol) {
                 $protocol->close($code, $reason);
             }
         } finally {
-            $out = $connection->disconnect();
+            $connection->disconnect();
         }
 
-        return $out;
+        return;
     }
 }
