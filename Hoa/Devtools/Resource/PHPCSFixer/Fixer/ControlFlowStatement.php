@@ -36,10 +36,10 @@
 
 namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 
-use SplFileInfo;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\Tokens;
+use SplFileInfo;
 
 /**
  * Class \Hoa\Devtools\Resource\PHPCSFixer\Fixer\ControlFlowStatement.

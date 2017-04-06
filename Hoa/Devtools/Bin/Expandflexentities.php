@@ -182,9 +182,10 @@ class Expandflexentities extends Console\Dispatcher\Kit
             'Usage   : devtools:expandflexentities <options>', "\n",
             'Options :', "\n",
              $this->makeUsageOptionsList([
-                 'dry-run'            => 'No written operation.',
-                 'verbose'            => 'Echo all information.',
-                 'help'               => 'This help.'
+                 'output'  => 'Where to output the result.',
+                 'dry-run' => 'No written operation.',
+                 'verbose' => 'Echo all information.',
+                 'help'    => 'This help.'
              ]), "\n";
 
         return;

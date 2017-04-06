@@ -111,6 +111,14 @@ Generate the documentation of all libraries installed:
 $ hoa devtools:documentation
 ```
 
+### `expandflexentities`
+
+Expand entity names to ease auto-completion in IDE.
+
+```sh
+$ hoa devtools:expandflexentities
+```
+
 ### `paste`
 
 Paste something somewhere (by default, on `paste.hoa-project.net`).
