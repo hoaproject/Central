@@ -1,3 +1,11 @@
+# 1.17.05.02
+
+  * Documentation: Update badges. (Ivan Enderlin, 2017-03-07T17:11:19+01:00)
+  * CI: Enable devtools in PHP 7.1. (Ivan Enderlin, 2017-03-07T16:57:39+01:00)
+  * CI: Run devtools on PHP nightly. (Ivan Enderlin, 2017-02-27T09:56:21+01:00)
+  * CI: Add PHP 7.1. (Ivan Enderlin, 2017-02-24T15:10:02+01:00)
+  * Quality: Add Travis. (Ivan Enderlin, 2016-08-15T15:32:07+02:00)
+
 # 1.17.01.10
 
   * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:27:39+01:00)
