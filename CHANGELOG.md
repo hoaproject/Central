@@ -1,3 +1,8 @@
+# 1.17.05.02
+
+  * Quality: Fix CS. (Ivan Enderlin, 2017-03-24T15:56:41+01:00)
+  * if value is not defined, set the default value (Aymeric GERLIER, 2014-09-17T14:03:12+02:00)
+
 # 1.17.01.10
 
   * Quality: Happy new year! (Alexis von Glasow, 2017-01-09T21:37:00+01:00)
