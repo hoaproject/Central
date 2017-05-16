@@ -38,6 +38,7 @@ cloak on IRC, etc.
   * Marc Gratch (mgratch)
   * Kevin Gravier (mrkmg)
   * Nicolas Grekas (nicolas-grekas)
+  * Arne Groskurth (arnegroskurth)
   * Sarah Haïm-Lubczanski (mere-teresa)
   * Martin Hasoň (hason)
   * Hugo Henrique (hugohenrique)
