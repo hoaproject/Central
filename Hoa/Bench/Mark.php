@@ -83,11 +83,11 @@ class Mark
     protected $pause    = 0.0;
 
     /**
-     * Whether the mark is running.
+     * Whether the mark is started.
      *
      * @var bool
      */
-    protected $_running = false;
+    protected $_started = false;
 
     /**
      * Whether the mark is in pause.
@@ -144,10 +144,10 @@ class Mark
      */
     public function start()
     {
-        if (true === $this->isRunning()) {
+        if (true === $this->isStarted()) {
             if (false === $this->isPause()) {
                 throw new Exception(
-                    'Cannot start the %s mark, because it is running.',
+                    'Cannot start the %s mark, because it is started.',
                     0,
                     $this->getId()
                 );
@@ -161,7 +161,7 @@ class Mark
             $this->start  = microtime(true);
         }
 
-        $this->_running = true;
+        $this->_started = true;
         $this->_pause   = false;
 
         return $this;
@@ -172,17 +172,17 @@ class Mark
      * A mark can be stopped if it is in pause, or started. Else, an exception
      * will be thrown (or not, according to the $silent argument).
      *
-     * @param   bool    $silent    If set to true and if the mark is not running,
+     * @param   bool    $silent    If set to true and if the mark is not started,
      *                             no exception will be thrown.
      * @return  \Hoa\Bench\Mark
      * @throws  \Hoa\Bench\Exception
      */
     public function stop($silent = false)
     {
-        if (false === $this->isRunning()) {
+        if (false === $this->isStarted()) {
             if (false === $silent) {
                 throw new Exception(
-                    'Cannot stop the %s mark, because it is not running.',
+                    'Cannot stop the %s mark, because it is not started.',
                     1,
                     $this->getId()
                 );
@@ -192,7 +192,7 @@ class Mark
         }
 
         $this->stop     = microtime(true);
-        $this->_running = false;
+        $this->_started = false;
         $this->_pause   = false;
 
         return $this;
@@ -208,7 +208,7 @@ class Mark
         $this->start    = 0.0;
         $this->stop     = 0.0;
         $this->pause    = 0.0;
-        $this->_running = false;
+        $this->_started = false;
         $this->_pause   = false;
 
         return $this;
@@ -219,7 +219,7 @@ class Mark
      * A mark can be in pause if it is started. Else, an exception will be
      * thrown (or not, according to the $silent argument).
      *
-     * @param   bool    $silent    If set to true and the mark is not running,
+     * @param   bool    $silent    If set to true and the mark is not started,
      *                             no exception will be throw. Idem if the mark
      *                             is in pause.
      * @return  \Hoa\Bench\Mark
@@ -227,10 +227,10 @@ class Mark
      */
     public function pause($silent = false)
     {
-        if (false === $this->isRunning()) {
+        if (false === $this->isStarted()) {
             if (false === $silent) {
                 throw new Exception(
-                    'Cannot stop the %s mark, because it is not running.',
+                    'Cannot stop the %s mark, because it is not started.',
                     2,
                     $this->getId()
                 );
@@ -266,7 +266,7 @@ class Mark
      */
     public function diff()
     {
-        if (false === $this->isRunning() || true === $this->isPause()) {
+        if (false === $this->isStarted() || true === $this->isPause()) {
             return $this->stop - $this->start - $this->pause;
         }
 
@@ -299,11 +299,22 @@ class Mark
     /**
      * Check if the mark is running.
      *
+     * @deprecated use `isStarted` instead
      * @return  bool
      */
     public function isRunning()
     {
-        return $this->_running;
+        return $this->isStarted();
+    }
+
+    /**
+     * Check if the mark is started.
+     *
+     * @return  bool
+     */
+    public function isStarted()
+    {
+        return $this->_started;
     }
 
     /**
