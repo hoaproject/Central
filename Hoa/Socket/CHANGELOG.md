@@ -1,3 +1,8 @@
+# 1.17.05.16
+
+  * CI: Set up Travis. (Ivan Enderlin, 2017-03-14T09:44:30+01:00)
+  * Test: Fix mocking issue. (Ivan Enderlin, 2017-02-14T09:07:57+01:00)
+
 # 1.17.01.13
 
   * Quality: Happy new year! (Alexis von Glasow, 2017-01-12T14:00:54+01:00)
