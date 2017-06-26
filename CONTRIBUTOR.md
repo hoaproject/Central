@@ -7,6 +7,7 @@ The symbol `➜` indicates that the contributor has an email address of the form
 cloak on IRC, etc.
 
   * ➜ Ivan Enderlin (hywan)
+  * Armen Baghumian (armen)
   * Timothée Barray (tyx)
   * Jonathan Van Belle (grummfy)
   * Abdallah Ben Othman (badoul)
