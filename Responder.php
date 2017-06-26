@@ -203,17 +203,17 @@ class Responder extends Connection
         $request .= $this->pack(self::REQUEST_PARAMETERS, '');
 
         if (null !== $content) {
-            // The maximum length of each record is 65535 bytes, pack multiple
-            // records if the length is larger than the 65535 bytes
-            $contents = str_split($content, 65535);
-            foreach ($contents as $content) {
-                $request .= $this->pack(self::STREAM_STDIN, $content);
+            // The maximum length of each record is 65535 bytes.
+            // Pack multiple records if the length is larger than the
+            // 65535 bytes.
+            foreach (str_split($content, 65535) as $chunk) {
+                $request .= $this->pack(self::STREAM_STDIN, $chunk);
             }
         }
 
         $request .= $this->pack(self::STREAM_STDIN, '');
         $client->writeAll($request);
-        $handle   = null;
+        $handle = null;
 
         do {
             if (false === $handle = $this->readPack()) {
