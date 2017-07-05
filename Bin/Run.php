@@ -39,6 +39,8 @@ namespace Hoa\Test\Bin;
 use Hoa\Consistency;
 use Hoa\Console;
 use Hoa\File;
+use Kitab;
+use Hoa\Protocol;
 use Hoa\Test;
 
 /**
@@ -262,6 +264,33 @@ class Run extends Console\Dispatcher\Kit
                     break;
             }
         }
+
+        $kitabFinder = new Kitab\Finder();
+        $kitabFinder->notIn('/^vendor$/');
+
+        $kitabOutputDirectory = File\Temporary\Temporary::getTemporaryDirectory() . DS . 'Hoa.kitab.test.output' . DS;
+        Protocol\Protocol::getInstance()['Kitab']['Output']->setReach("\r" . $kitabOutputDirectory . DS);
+
+        foreach ($directories as $directory) {
+            if (0 !== preg_match('#/Test/?$#', $directory)) {
+                $directory = dirname($directory);
+            }
+
+            $kitabFinder->in($directory);
+        }
+
+        if (is_dir($kitabOutputDirectory)) {
+            $since = time() - filemtime($kitabOutputDirectory);
+            $kitabFinder->modified('since ' . $since . ' seconds');
+        } else {
+            File\Directory::create($kitabOutputDirectory);
+        }
+
+        $kitabTarget   = new Kitab\Compiler\Target\DocTest\DocTest();
+        $kitabCompiler = new Kitab\Compiler\Compiler();
+        $kitabCompiler->compile($kitabFinder, $kitabTarget);
+
+        $directories[] = $kitabOutputDirectory;
 
         // In the `PATH`.
         $atoum = 'atoum';
