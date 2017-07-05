@@ -56,12 +56,11 @@ class Generate extends Console\Dispatcher\Kit
      * @var array
      */
     protected $options = [
-        ['praspel',       Console\GetOption::NO_ARGUMENT,       'p'],
-        ['documentation', Console\GetOption::NO_ARGUMENT,       'a'],
-        ['directory',     Console\GetOption::REQUIRED_ARGUMENT, 'd'],
-        ['namespace',     Console\GetOption::REQUIRED_ARGUMENT, 'n'],
-        ['help',          Console\GetOption::NO_ARGUMENT,       'h'],
-        ['help',          Console\GetOption::NO_ARGUMENT,       '?']
+        ['praspel',   Console\GetOption::NO_ARGUMENT,       'p'],
+        ['directory', Console\GetOption::REQUIRED_ARGUMENT, 'd'],
+        ['namespace', Console\GetOption::REQUIRED_ARGUMENT, 'n'],
+        ['help',      Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',      Console\GetOption::NO_ARGUMENT,       '?']
     ];
 
 
@@ -73,7 +72,6 @@ class Generate extends Console\Dispatcher\Kit
      */
     public function main()
     {
-        $generateDocumentation = false;
         $directoryToScan       = null;
         $namespaceToScan       = null;
 
@@ -84,11 +82,6 @@ class Generate extends Console\Dispatcher\Kit
                         'The `-p` option is not implemented yet.',
                         0
                     );
-
-                    break;
-
-                case 'a':
-                    $generateDocumentation = !$generateDocumentation;
 
                     break;
 
@@ -118,20 +111,6 @@ class Generate extends Console\Dispatcher\Kit
             return $this->usage();
         }
 
-        // When `-p` will be implemented, usage should be printed to decide
-        // what must be generated.
-        if (false === $generateDocumentation) {
-            $generateDocumentation = true;
-        }
-
-        if (true === $generateDocumentation) {
-            $documentationGenerator = new Test\Generator\Documentation();
-            $documentationGenerator->generate(
-                $directoryToScan,
-                $namespaceToScan
-            );
-        }
-
         return;
     }
 
@@ -147,7 +126,6 @@ class Generate extends Console\Dispatcher\Kit
             'Options :', "\n",
             $this->makeUsageOptionsList([
                 'p'    => 'Generate test suites based on contracts written in Praspel.',
-                'a'    => 'Generate test suites based on examples in API documentations.',
                 'd'    => 'Directory containing entities to parse (classes, interfaces…).',
                 'n'    => 'Restrict generation to a particular namespace (`.` is replaced by namespace separator).',
                 'help' => 'This help.'

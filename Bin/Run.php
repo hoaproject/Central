@@ -329,26 +329,6 @@ class Run extends Console\Dispatcher\Kit
             $_server['HOA_PRELUDE_FILES'] = implode("\n", $preludeFiles);
         }
 
-        $documentationGenerator = new Test\Generator\Documentation();
-
-        foreach ($directories as $directory) {
-            $directory = realpath($directory);
-
-            do {
-                $composerFile = $directory . DS . 'composer.json';
-
-                if (true === file_exists($composerFile)) {
-                    $composerJson       = json_decode(file_get_contents($composerFile), true);
-                    $generatorDirectory = $directory;
-                    $generatorNamespace = array_keys($composerJson['autoload']['psr-4'])[0];
-                    $documentationGenerator->generate(
-                        $generatorDirectory,
-                        $generatorNamespace
-                    );
-                }
-            } while (DS !== $directory = dirname($directory));
-        }
-
         $processus = new Processus(
             $command,
             null,

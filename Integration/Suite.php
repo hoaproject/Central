@@ -48,28 +48,5 @@ use Hoa\Test;
  */
 class Suite extends Test\Unit\Suite
 {
-    const defaultNamespace = '/\\\Test\\\(Integration|Documentation)\\\/';
-
-
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $assertAsserter = null;
-
-        $this
-            ->getAssertionManager()
-            ->setHandler(
-                'assert',
-                function (callable $callable) use (&$assertAsserter) {
-                    if (null === $assertAsserter) {
-                        $assertAsserter = new Test\Asserter\Assert($this->getAsserterGenerator());
-                        $assertAsserter->setWithTest($this);
-                    }
-
-                    return $assertAsserter->setWith($callable);
-                }
-            );
-    }
+    const defaultNamespace = '/\\\Test\\\Integration\\\/';
 }
