@@ -59,6 +59,7 @@ class Run extends Console\Dispatcher\Kit
     protected $options = [
         ['all',                  Console\GetOption::NO_ARGUMENT,       'a'],
         ['libraries',            Console\GetOption::REQUIRED_ARGUMENT, 'l'],
+        ['no-code-coverage',     Console\GetOption::NO_ARGUMENT,       'N'],
         ['namespaces',           Console\GetOption::REQUIRED_ARGUMENT, 'n'],
         ['directories',          Console\GetOption::REQUIRED_ARGUMENT, 'd'],
         ['files',                Console\GetOption::REQUIRED_ARGUMENT, 'f'],
@@ -87,6 +88,7 @@ class Run extends Console\Dispatcher\Kit
         $php                 = null;
         $concurrentProcesses = 2;
         $preludeFiles        = [];
+        $coverageEnabled     = true;
 
         $extractPreludeFiles = function ($composerSchema) {
             if (!file_exists($composerSchema)) {
@@ -249,6 +251,11 @@ class Run extends Console\Dispatcher\Kit
 
                     break;
 
+	            case 'N':
+		            $coverageEnabled = false;
+
+		            break;
+
                 case '__ambiguous':
                     $this->resolveOptionAmbiguity($v);
 
@@ -296,6 +303,10 @@ class Run extends Console\Dispatcher\Kit
 
         if (true === $debug) {
             $command .= ' --debug';
+        }
+
+        if (false === $coverageEnabled) {
+	        $command .= ' --no-code-coverage';
         }
 
         if (null !== $php) {
@@ -390,6 +401,7 @@ class Run extends Console\Dispatcher\Kit
                 'a'    => 'Run tests of all libraries.',
                 'l'    => 'Run tests of some libraries.',
                 'n'    => 'Run tests of some namespaces.',
+                'N'    => 'Disable the code coverage score.',
                 'd'    => 'Run tests of some directories.',
                 'f'    => 'Run tests of some files.',
                 'F'    => 'Filter tests with a ruler expression (see ' .
