@@ -22,8 +22,6 @@ matrix:
       group: edge
   allow_failures:
     - php: nightly
-    - php: hhvm-3.12
-    - php: hhvm
   fast_finish: true
 
 os:
