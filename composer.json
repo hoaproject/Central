@@ -33,6 +33,11 @@
     "config": {
         "bin-dir": "bin/"
     },
+    "autoload": {
+        "psr-4": {
+            "Hoa\\Cli\\": "."
+        }
+    },
     "bin"  : ["Bin/hoa"],
     "extra": {
         "branch-alias": {
