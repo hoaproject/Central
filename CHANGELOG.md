@@ -1,3 +1,8 @@
+# 2.17.07.12
+
+  * chore(cs) Re-order fields in `composer.json`. (Ivan Enderlin, 2017-07-12T09:21:37+02:00)
+  * fix(autoloading) Register `Hoa\Cli` to the autoloader of Composer (Grummfy, 2017-07-12T00:05:32+02:00)
+
 # 2.17.01.11
 
   * Quality: Happy new year! (Alexis von Glasow, 2017-01-10T18:51:33+01:00)
