@@ -30,13 +30,13 @@
         "hoa/protocol"   : "~1.0",
         "hoa/router"     : "~3.0"
     },
-    "config": {
-        "bin-dir": "bin/"
-    },
     "autoload": {
         "psr-4": {
             "Hoa\\Cli\\": "."
         }
+    },
+    "config": {
+        "bin-dir": "bin/"
     },
     "bin"  : ["Bin/hoa"],
     "extra": {
