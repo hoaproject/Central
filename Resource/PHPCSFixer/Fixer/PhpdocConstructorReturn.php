@@ -54,7 +54,7 @@ class PhpdocConstructorReturn extends AbstractFixer
 {
     const CONSTRUCTOR_NAME = '__construct';
 
-    public function fix(SplFileInfo $file, Tokens $tokens)
+    protected function applyfix(SplFileInfo $file, Tokens $tokens)
     {
         $function = $tokens->findSequence([
             [T_FUNCTION],

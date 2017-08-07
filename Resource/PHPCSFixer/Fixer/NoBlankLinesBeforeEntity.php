@@ -51,7 +51,7 @@ use SplFileInfo;
  */
 class NoBlankLinesBeforeEntity extends AbstractLinesBeforeNamespaceFixer
 {
-    public function fix(SplFileInfo $file, Tokens $tokens)
+    protected function applyfix(SplFileInfo $file, Tokens $tokens)
     {
         foreach ($tokens as $index => $token) {
             if ($token->isGivenKind(T_CLASS) ||

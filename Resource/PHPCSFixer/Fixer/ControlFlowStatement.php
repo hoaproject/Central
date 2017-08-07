@@ -52,7 +52,7 @@ use SplFileInfo;
  */
 class ControlFlowStatement extends AbstractFixer
 {
-    public function fix(SplFileInfo $file, Tokens $tokens)
+    protected function applyfix(SplFileInfo $file, Tokens $tokens)
     {
         for ($index = 0, $limit = $tokens->count(); $index < $limit; ++$index) {
             $token = $tokens[$index];
