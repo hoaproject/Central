@@ -68,6 +68,7 @@ cloak on IRC, etc.
   * Juha Remes (newman101)
   * ➜ Steven Rémot (stevenremot)
   * Tom Rochette (tomzx)
+  * Samundra Shrestha (samundra)
   * Kim Sia Sim (simkimsia)
   * Mike Simonson (mikesimonson)
   * Mathias Strasser (mathiasstrasser)
