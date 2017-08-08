@@ -52,7 +52,7 @@ use SplFileInfo;
  */
 class Copyright extends AbstractFixer
 {
-    public function fix(SplFileInfo $file, Tokens $tokens)
+    protected function applyfix(SplFileInfo $file, Tokens $tokens)
     {
         $thisYear = date('Y');
 

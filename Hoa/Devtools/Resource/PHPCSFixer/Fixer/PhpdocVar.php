@@ -60,7 +60,7 @@ use SplFileInfo;
  */
 class PhpdocVar extends AbstractFixer
 {
-    public function fix(SplFileInfo $file, Tokens $tokens)
+    protected function applyfix(SplFileInfo $file, Tokens $tokens)
     {
         foreach ($tokens->findGivenKind(T_DOC_COMMENT) as $token) {
             $docBlock    = new DocBlock($token->getContent());
