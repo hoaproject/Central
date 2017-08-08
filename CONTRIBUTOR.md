@@ -59,6 +59,7 @@ cloak on IRC, etc.
   * Simon Mönch (smoench)
   * Joris Mulliez (jojolapine)
   * Matthieu Napoli (mnapoli)
+  * Kirill Nesmeyanov (serafimarts)
   * Cosmin Nitu (ncosmin2001)
   * Rémi Parpaillon (rparpa)
   * Benjamin Perche (lovenunu)
