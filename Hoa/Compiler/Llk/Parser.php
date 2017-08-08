@@ -187,6 +187,11 @@ class Parser
 
             if (false === $this->backtrack()) {
                 $token  = $this->_errorToken;
+
+                if (null === $this->_errorToken) {
+                    $token = $this->_tokenSequence->current();
+                }
+
                 $offset = $token['offset'];
                 $line   = 1;
                 $column = 1;
