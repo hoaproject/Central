@@ -1,3 +1,16 @@
+# 1.17.08.08
+
+## Fixes
+
+  * `php-cs-fixer` Change method to apply fix with php-cs-fixer (Alexis von Glasow, 2017-08-07T13:48:14+02:00)
+
+## Features
+
+  * Add `expandflexentities`. (Pierre Tomasina, 2017-04-06T13:43:35+02:00)
+
+## Chores
+  
+  * Run `hoa devtools:cs`. (Ivan Enderlin, 2017-04-06T13:44:46+02:00)
 # 1.17.02.24
 
   * CS: Move to PHP CS Fixer 2.x. (Ivan Enderlin, 2017-02-24T16:29:54+01:00)
