@@ -59,7 +59,6 @@ class Run extends Console\Dispatcher\Kit
     protected $options = [
         ['all',                  Console\GetOption::NO_ARGUMENT,       'a'],
         ['libraries',            Console\GetOption::REQUIRED_ARGUMENT, 'l'],
-        ['no-code-coverage',     Console\GetOption::NO_ARGUMENT,       'N'],
         ['namespaces',           Console\GetOption::REQUIRED_ARGUMENT, 'n'],
         ['directories',          Console\GetOption::REQUIRED_ARGUMENT, 'd'],
         ['files',                Console\GetOption::REQUIRED_ARGUMENT, 'f'],
@@ -67,6 +66,7 @@ class Run extends Console\Dispatcher\Kit
         ['debug',                Console\GetOption::NO_ARGUMENT,       'D'],
         ['php-binary',           Console\GetOption::REQUIRED_ARGUMENT, 'p'],
         ['concurrent-processes', Console\GetOption::REQUIRED_ARGUMENT, 'P'],
+        ['no-code-coverage',     Console\GetOption::NO_ARGUMENT,       'N'],
         ['help',                 Console\GetOption::NO_ARGUMENT,       'h'],
         ['help',                 Console\GetOption::NO_ARGUMENT,       '?']
     ];
@@ -88,7 +88,7 @@ class Run extends Console\Dispatcher\Kit
         $php                 = null;
         $concurrentProcesses = 2;
         $preludeFiles        = [];
-        $coverageEnabled     = true;
+        $codeCoverage        = true;
 
         $extractPreludeFiles = function ($composerSchema) {
             if (!file_exists($composerSchema)) {
@@ -251,10 +251,10 @@ class Run extends Console\Dispatcher\Kit
 
                     break;
 
-	            case 'N':
-		            $coverageEnabled = false;
+                case 'N':
+                    $codeCoverage = false;
 
-		            break;
+                    break;
 
                 case '__ambiguous':
                     $this->resolveOptionAmbiguity($v);
@@ -305,8 +305,8 @@ class Run extends Console\Dispatcher\Kit
             $command .= ' --debug';
         }
 
-        if (false === $coverageEnabled) {
-	        $command .= ' --no-code-coverage';
+        if (false === $codeCoverage) {
+            $command .= ' --no-code-coverage';
         }
 
         if (null !== $php) {
@@ -401,7 +401,6 @@ class Run extends Console\Dispatcher\Kit
                 'a'    => 'Run tests of all libraries.',
                 'l'    => 'Run tests of some libraries.',
                 'n'    => 'Run tests of some namespaces.',
-                'N'    => 'Disable the code coverage score.',
                 'd'    => 'Run tests of some directories.',
                 'f'    => 'Run tests of some files.',
                 'F'    => 'Filter tests with a ruler expression (see ' .
@@ -409,6 +408,8 @@ class Run extends Console\Dispatcher\Kit
                 'D'    => 'Activate the debugging mode.',
                 'p'    => 'Path to a specific PHP binary.',
                 'P'    => 'Maximum concurrent processes that can run.',
+                'N'    => 'Disable the code coverage score (can accelerate ' .
+                          'test execution).',
                 'help' => 'This help.'
             ]), "\n\n",
             'Available variables for filter expressions:', "\n",
