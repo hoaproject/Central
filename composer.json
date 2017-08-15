@@ -23,6 +23,7 @@
         "source": "https://central.hoa-project.net/Resource/Library/Option"
     },
     "require": {
+        "php"            : ">=7.1",
         "hoa/consistency": "~1.0"
     },
     "require-dev": {
