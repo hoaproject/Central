@@ -1,3 +1,27 @@
+# 2.17.08.15
+
+  * fix(doctest) Remove the `assert` asserter. (Ivan Enderlin, 2017-08-15T11:57:15+02:00)
+  * chore(composer) Require at least hoa/kitab 0.6. (Ivan Enderlin, 2017-08-15T11:51:46+02:00)
+  * feat(doctest) Use Kitab. (Ivan Enderlin, 2017-08-15T11:47:22+02:00)
+  * chore(cs) Use spaces, rename a variable, fix doc. (Ivan Enderlin, 2017-08-15T11:25:02+02:00)
+  * feat(run) Add the --no-code-coverage option. (Grummfy, 2017-07-06T19:52:54+02:00)
+  * Quality: Extract the reducer in its own variable. (Ivan Enderlin, 2017-04-06T12:47:11+02:00)
+  * Quality: Clean up the code. (Ivan Enderlin, 2017-04-06T12:41:53+02:00)
+  * Generator: Support `use` and `#`. (Ivan Enderlin, 2017-03-07T08:21:45+01:00)
+  * Generator: Allow `must_throw(E)`. (Ivan Enderlin, 2017-03-06T17:07:52+01:00)
+  * Generator: Clean the output. (Ivan Enderlin, 2017-03-06T08:27:33+01:00)
+  * Generator: Support `must_throw` in code block type. (Ivan Enderlin, 2017-03-06T08:23:40+01:00)
+  * Generator: Support `ignore` in code block type. (Ivan Enderlin, 2017-03-06T08:13:47+01:00)
+  * Generator: Ignore code block whose is not PHP. (Ivan Enderlin, 2017-03-06T08:05:17+01:00)
+  * Documentation: Generate classes that need to. (Ivan Enderlin, 2017-03-03T16:58:43+01:00)
+  * Run: Auto-generate doc API tests when running. (Ivan Enderlin, 2017-03-03T08:22:35+01:00)
+  * Generator: Move arguments from ctor to `generate`. (Ivan Enderlin, 2017-03-03T08:21:34+01:00)
+  * Integration: Allow `Documentation` in namespace. (Ivan Enderlin, 2017-02-28T21:29:54+01:00)
+  * Bin: Generate test suites from API documentations. (Ivan Enderlin, 2017-02-28T21:22:39+01:00)
+  * Asserter: Add the `assert` asserter. (Ivan Enderlin, 2017-02-28T21:20:38+01:00)
+  * Integration: Add the `do` asserter. (Ivan Enderlin, 2017-02-28T11:32:37+01:00)
+  * Unit: Enable assertions/expectations. (Ivan Enderlin, 2017-02-28T11:32:15+01:00)
+
 # 2.17.02.27
 
   * Test: Restrict code coverage to current lib. (Ivan Enderlin, 2017-02-24T19:40:30+01:00)
