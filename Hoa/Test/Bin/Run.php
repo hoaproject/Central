@@ -66,6 +66,7 @@ class Run extends Console\Dispatcher\Kit
         ['debug',                Console\GetOption::NO_ARGUMENT,       'D'],
         ['php-binary',           Console\GetOption::REQUIRED_ARGUMENT, 'p'],
         ['concurrent-processes', Console\GetOption::REQUIRED_ARGUMENT, 'P'],
+        ['no-code-coverage',     Console\GetOption::NO_ARGUMENT,       'N'],
         ['help',                 Console\GetOption::NO_ARGUMENT,       'h'],
         ['help',                 Console\GetOption::NO_ARGUMENT,       '?']
     ];
@@ -87,6 +88,7 @@ class Run extends Console\Dispatcher\Kit
         $php                 = null;
         $concurrentProcesses = 2;
         $preludeFiles        = [];
+        $codeCoverage        = true;
 
         $extractPreludeFiles = function ($composerSchema) {
             if (!file_exists($composerSchema)) {
@@ -249,6 +251,11 @@ class Run extends Console\Dispatcher\Kit
 
                     break;
 
+                case 'N':
+                    $codeCoverage = false;
+
+                    break;
+
                 case '__ambiguous':
                     $this->resolveOptionAmbiguity($v);
 
@@ -296,6 +303,10 @@ class Run extends Console\Dispatcher\Kit
 
         if (true === $debug) {
             $command .= ' --debug';
+        }
+
+        if (false === $codeCoverage) {
+            $command .= ' --no-code-coverage';
         }
 
         if (null !== $php) {
@@ -397,6 +408,8 @@ class Run extends Console\Dispatcher\Kit
                 'D'    => 'Activate the debugging mode.',
                 'p'    => 'Path to a specific PHP binary.',
                 'P'    => 'Maximum concurrent processes that can run.',
+                'N'    => 'Disable the code coverage score (can accelerate ' .
+                          'test execution).',
                 'help' => 'This help.'
             ]), "\n\n",
             'Available variables for filter expressions:', "\n",
