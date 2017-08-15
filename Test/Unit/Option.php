@@ -399,8 +399,8 @@ class Option extends Test\Unit\Suite
         $this
             ->given(
                 $option = SUT::some(42),
-                $mapper = function () {
-                    return 153;
+                $mapper = function (): SUT {
+                    return SUT::some(153);
                 }
             )
             ->when($result = $option->andThen($mapper))
@@ -414,8 +414,8 @@ class Option extends Test\Unit\Suite
         $this
             ->given(
                 $option = SUT::some(42),
-                $mapper = function () {
-                    return null;
+                $mapper = function (): SUT {
+                    return SUT::none();
                 }
             )
             ->when($result = $option->andThen($mapper))
@@ -429,8 +429,8 @@ class Option extends Test\Unit\Suite
         $this
             ->given(
                 $option = SUT::none(),
-                $mapper = function () {
-                    return 153;
+                $mapper = function (): SUT {
+                    return SUT::some(153);
                 }
             )
             ->when($result = $option->andThen($mapper))
@@ -445,8 +445,8 @@ class Option extends Test\Unit\Suite
         $this
             ->given(
                 $option = SUT::none(),
-                $mapper = function () {
-                    return 153;
+                $mapper = function (): SUT {
+                    return SUT::some(153);
                 }
             )
             ->when($result = $option->andThen($mapper))
@@ -513,8 +513,8 @@ class Option extends Test\Unit\Suite
         $this
             ->given(
                 $option = SUT::some(42),
-                $else   = function () {
-                    return 153;
+                $else   = function (): SUT {
+                    return SUT::some(153);
                 }
             )
             ->when($result = $option->orElse($else))
@@ -528,8 +528,8 @@ class Option extends Test\Unit\Suite
         $this
             ->given(
                 $option = SUT::some(42),
-                $else   = function () {
-                    return null;
+                $else   = function (): SUT {
+                    return SUT::none();
                 }
             )
             ->when($result = $option->orElse($else))
@@ -543,8 +543,8 @@ class Option extends Test\Unit\Suite
         $this
             ->given(
                 $option = SUT::none(),
-                $else   = function () {
-                    return 153;
+                $else   = function (): SUT {
+                    return SUT::some(153);
                 }
             )
             ->when($result = $option->orElse($else))
@@ -558,8 +558,8 @@ class Option extends Test\Unit\Suite
         $this
             ->given(
                 $option = SUT::none(),
-                $else   = function () {
-                    return 153;
+                $else   = function (): SUT {
+                    return SUT::some(153);
                 }
             )
             ->when($result = $option->orElse($else))
