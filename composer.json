@@ -23,7 +23,6 @@
         "source": "https://central.hoa-project.net/Resource/Library/Test"
     },
     "require": {
-        "league/commonmark"         : "~0.15",
         "atoum/atoum"               : "~3.0",
         "atoum/praspel-extension"   : "~0.17",
         "atoum/ruler-extension"     : "~1.3",
@@ -33,6 +32,7 @@
         "hoa/console"               : "~3.0",
         "hoa/devtools"              : "~1.0",
         "hoa/file"                  : "~1.0",
+        "hoa/kitab"                 : "~0.0",
         "hoa/protocol"              : "~1.0",
         "hoa/ustring"               : "~4.0"
     },
