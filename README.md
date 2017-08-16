@@ -26,7 +26,7 @@
 This library is an implementation of the
 famous
 [`Option` polymorphic type](https://en.wikipedia.org/wiki/Option_type)
-(also call `Maybe`). An `Option` represents an optional value, either
+(also called `Maybe`). An `Option` represents an optional value, either
 there is `Some` value, or there is `None` which is the equivalent of
 `null`. This is a convenient and safe way to manipulate an optional
 value.
@@ -97,16 +97,11 @@ assert($y->isNone());
 ```
 
 The `unwrap` method returns the contained value if there is some, or
-will return a `RuntimeException` if there is none:
+throws a `RuntimeException` if there is none:
 
 ```php
-$x = Some(42);
-
-assert($x->unwrap() === 42);
-
-$y = None();
-
-assert($y->unwrap()); // will throw a `RuntimeException`.
+assert(Some(42)->unwrap() === 42);
+ssert(None()->unwrap()); // will throw a `RuntimeException`.
 ```
 
 In general, because of the unexpected exception, its use is
@@ -161,8 +156,8 @@ to the contained value if some.
 $x = Some('Hello, World!');
 $y = None();
 
-assert($x->map('strlen') === Some(13));
-assert($x->map('strlen') === None());
+assert($x->map('strlen') == Some(13));
+assert($x->map('strlen') == None());
 ```
 
 The `mapOr` mapper transform an option into another option but use a
@@ -171,7 +166,7 @@ default value if there is no contained value:
 ```php
 $x = None();
 
-assert($x->mapOr('strlen', 0) === Some(0));
+assert($x->mapOr('strlen', 0) == Some(0));
 ```
 
 The result of `mapOr` is always an option with some value.
@@ -183,7 +178,7 @@ value from a callable:
 $x    = None();
 $else = function (): int { return 0; };
 
-assert($x->mapOrElse('strlen', $else) === Some(0));
+assert($x->mapOrElse('strlen', $else) == Some(0));
 ```
 
 ### Boolean operations

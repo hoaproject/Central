@@ -73,15 +73,13 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
     public function case_readme_1()
     {
         $this
-            ->given($x = Some(42))
-            ->when($result = $x->unwrap())
+            ->when($result = Some(42)->unwrap())
             ->then
                 ->integer($result)
                     ->isEqualTo(42)
 
-            ->given($y = None())
-            ->exception(function () use ($y) {
-                $y->unwrap();
+            ->exception(function () {
+                None()->unwrap();
             })
                 ->isInstanceOf(RuntimeException::class);
     }
