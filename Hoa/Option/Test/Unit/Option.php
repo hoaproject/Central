@@ -37,10 +37,10 @@
 namespace Hoa\Option\Test\Unit;
 
 use Hoa\Option\Option as SUT;
-use function Hoa\Option\None;
-use function Hoa\Option\Some;
 use Hoa\Test;
 use RuntimeException;
+use function Hoa\Option\None;
+use function Hoa\Option\Some;
 
 /**
  * Class \Hoa\Option\Test\Unit\Option.

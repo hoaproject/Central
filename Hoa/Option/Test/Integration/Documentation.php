@@ -37,10 +37,10 @@
 namespace Hoa\Option\Test\Integration;
 
 use Hoa\Option\Option;
-use function Hoa\Option\None;
-use function Hoa\Option\Some;
 use Hoa\Test;
 use RuntimeException;
+use function Hoa\Option\None;
+use function Hoa\Option\Some;
 
 /**
  * Class \Hoa\Option\Test\Integration\Documentation.
