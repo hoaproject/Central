@@ -46,7 +46,7 @@ use Hoa\Consistency;
  * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-class Option
+final class Option
 {
     /**
      * Some value or none.
