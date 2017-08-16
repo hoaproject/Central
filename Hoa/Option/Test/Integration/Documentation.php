@@ -185,7 +185,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                 ->object($result)
                     ->isEqualTo(Some(153))
 
-            ->when($result = None()->and(None()))
+            ->when($result = Some(42)->and(None()))
             ->then
                 ->object($result)
                     ->isEqualTo(None())
