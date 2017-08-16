@@ -34,40 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Asserter;
-
-use atoum;
+namespace Hoa\Option;
 
 /**
- * Class \Hoa\Test\Asserter\Assert.
+ * Allocate an option with some value.
  *
- * The `assert` asserter. It helps to test a piece of code using the `assert`
- * intrinsic.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * See `Hoa\Option\Option::some`.
  */
-class Assert extends atoum\asserter
+function Some($value): Option
 {
-    public function setWith($callable)
-    {
-        parent::setWith($callable);
+    return Option::some($value);
+}
 
-        try {
-            $callable();
-        } catch (\AssertionError $e) {
-            $this->fail(
-                $this->_(
-                    'The assertion `%s` has failed.',
-                    $e->getMessage()
-                )
-            );
-
-            return;
-        }
-
-        $this->pass();
-
-        return $this;
-    }
+/**
+ * Allocate an option with no value.
+ *
+ * See `Hoa\Option\Option::none`.
+ */
+function None(): Option
+{
+    return Option::none();
 }

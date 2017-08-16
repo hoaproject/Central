@@ -39,6 +39,8 @@ namespace Hoa\Test\Bin;
 use Hoa\Consistency;
 use Hoa\Console;
 use Hoa\File;
+use Kitab;
+use Hoa\Protocol;
 use Hoa\Test;
 
 /**
@@ -66,6 +68,7 @@ class Run extends Console\Dispatcher\Kit
         ['debug',                Console\GetOption::NO_ARGUMENT,       'D'],
         ['php-binary',           Console\GetOption::REQUIRED_ARGUMENT, 'p'],
         ['concurrent-processes', Console\GetOption::REQUIRED_ARGUMENT, 'P'],
+        ['no-code-coverage',     Console\GetOption::NO_ARGUMENT,       'N'],
         ['help',                 Console\GetOption::NO_ARGUMENT,       'h'],
         ['help',                 Console\GetOption::NO_ARGUMENT,       '?']
     ];
@@ -87,6 +90,7 @@ class Run extends Console\Dispatcher\Kit
         $php                 = null;
         $concurrentProcesses = 2;
         $preludeFiles        = [];
+        $codeCoverage        = true;
 
         $extractPreludeFiles = function ($composerSchema) {
             if (!file_exists($composerSchema)) {
@@ -249,6 +253,11 @@ class Run extends Console\Dispatcher\Kit
 
                     break;
 
+                case 'N':
+                    $codeCoverage = false;
+
+                    break;
+
                 case '__ambiguous':
                     $this->resolveOptionAmbiguity($v);
 
@@ -262,6 +271,40 @@ class Run extends Console\Dispatcher\Kit
                     break;
             }
         }
+
+        $kitabOutputDirectory = File\Temporary\Temporary::getTemporaryDirectory() . DS . 'Hoa.kitab.test.output' . DS;
+        Protocol\Protocol::getInstance()['Kitab']['Output']->setReach("\r" . $kitabOutputDirectory . DS);
+
+        $kitabFinder = new Kitab\Finder();
+        $kitabFinder->notIn('/^vendor$/');
+
+        if (empty($directories) && empty($files) && empty($namespaces)) {
+            $kitabFinder->in('.');
+
+            if (is_dir('Test')) {
+                $directories[] = 'Test';
+            }
+
+            if (is_dir($kitabOutputDirectory)) {
+                $directories[] = $kitabOutputDirectory;
+            }
+        } else {
+            foreach ($directories as $directory) {
+                $kitabFinder->in($directory);
+            }
+        }
+
+        if (is_dir($kitabOutputDirectory)) {
+            $since = time() - filemtime($kitabOutputDirectory);
+            $kitabFinder->modified('since ' . $since . ' seconds');
+        } else {
+            File\Directory::create($kitabOutputDirectory);
+        }
+
+        $kitabTarget   = new Kitab\Compiler\Target\DocTest\DocTest();
+        $kitabCompiler = new Kitab\Compiler\Compiler();
+        $kitabCompiler->compile($kitabFinder, $kitabTarget);
+
 
         // In the `PATH`.
         $atoum = 'atoum';
@@ -298,12 +341,12 @@ class Run extends Console\Dispatcher\Kit
             $command .= ' --debug';
         }
 
-        if (null !== $php) {
-            $command .= ' --php ' . $php;
+        if (false === $codeCoverage) {
+            $command .= ' --no-code-coverage';
         }
 
-        if (empty($directories) && empty($files) && empty($namespaces) && is_dir('Test')) {
-            $directories[] = 'Test';
+        if (null !== $php) {
+            $command .= ' --php ' . $php;
         }
 
         if (!empty($directories)) {
@@ -327,26 +370,6 @@ class Run extends Console\Dispatcher\Kit
 
         if (!empty($preludeFiles)) {
             $_server['HOA_PRELUDE_FILES'] = implode("\n", $preludeFiles);
-        }
-
-        $documentationGenerator = new Test\Generator\Documentation();
-
-        foreach ($directories as $directory) {
-            $directory = realpath($directory);
-
-            do {
-                $composerFile = $directory . DS . 'composer.json';
-
-                if (true === file_exists($composerFile)) {
-                    $composerJson       = json_decode(file_get_contents($composerFile), true);
-                    $generatorDirectory = $directory;
-                    $generatorNamespace = array_keys($composerJson['autoload']['psr-4'])[0];
-                    $documentationGenerator->generate(
-                        $generatorDirectory,
-                        $generatorNamespace
-                    );
-                }
-            } while (DS !== $directory = dirname($directory));
         }
 
         $processus = new Processus(
@@ -397,6 +420,8 @@ class Run extends Console\Dispatcher\Kit
                 'D'    => 'Activate the debugging mode.',
                 'p'    => 'Path to a specific PHP binary.',
                 'P'    => 'Maximum concurrent processes that can run.',
+                'N'    => 'Disable the code coverage score (can accelerate ' .
+                          'test execution).',
                 'help' => 'This help.'
             ]), "\n\n",
             'Available variables for filter expressions:', "\n",
