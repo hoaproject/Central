@@ -37,7 +37,7 @@
 namespace Hoa\Option;
 
 /**
- * Allocate an option representing no value.
+ * Allocate an option with some value.
  *
  * See `Hoa\Option\Option::some`.
  */
@@ -47,7 +47,7 @@ function Some($value): Option
 }
 
 /**
- * Allocate an option representing no value.
+ * Allocate an option with no value.
  *
  * See `Hoa\Option\Option::none`.
  */
