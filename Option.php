@@ -41,7 +41,11 @@ use Hoa\Consistency;
 /**
  * Class \Hoa\Option.
  *
- * …
+ * This class is an implementation of the famous [`Option` polymorphic
+ * type](https://en.wikipedia.org/wiki/Option_type) (also called `Maybe`). An
+ * `Option` represents an optional value, either there is `Some` value, or
+ * there is `None` which is the equivalent of `null`. This is a convenient and
+ * safe way to manipulate an optional value.
  *
  * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
