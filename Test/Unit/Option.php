@@ -43,7 +43,7 @@ use Hoa\Test;
 use RuntimeException;
 
 /**
- * Class \Hoa\Option\Test\Unit\Console.
+ * Class \Hoa\Option\Test\Unit\Option.
  *
  * Test suite of the option class.
  *
@@ -81,7 +81,7 @@ class Option extends Test\Unit\Suite
     public function case_some()
     {
         $this
-            ->when($result = SUT::some(42))
+            ->when($result = Some(42))
             ->then
                 ->boolean($result->isSome())
                     ->isTrue()
@@ -92,7 +92,7 @@ class Option extends Test\Unit\Suite
     public function case_none()
     {
         $this
-            ->when($result = SUT::none())
+            ->when($result = None())
             ->then
                 ->boolean($result->isNone())
                     ->isTrue()
@@ -103,7 +103,7 @@ class Option extends Test\Unit\Suite
     public function case_some_is_some()
     {
         $this
-            ->given($option = SUT::some(42))
+            ->given($option = Some(42))
             ->when($result = $option->isSome())
             ->then
                 ->boolean($result)
@@ -113,7 +113,7 @@ class Option extends Test\Unit\Suite
     public function case_none_is_some()
     {
         $this
-            ->given($option = SUT::none())
+            ->given($option = None())
             ->when($result = $option->isSome())
             ->then
                 ->boolean($result)
@@ -123,7 +123,7 @@ class Option extends Test\Unit\Suite
     public function case_some_is_none()
     {
         $this
-            ->given($option = SUT::some(42))
+            ->given($option = Some(42))
             ->when($result = $option->isNone())
             ->then
                 ->boolean($result)
@@ -133,7 +133,7 @@ class Option extends Test\Unit\Suite
     public function case_none_is_none()
     {
         $this
-            ->given($option = SUT::none())
+            ->given($option = None())
             ->when($result = $option->isNone())
             ->then
                 ->boolean($result)
@@ -143,7 +143,7 @@ class Option extends Test\Unit\Suite
     public function case_some_expect()
     {
         $this
-            ->given($option = SUT::some(42))
+            ->given($option = Some(42))
             ->when($result = $option->expect('foo'))
             ->then
                 ->integer($result)
@@ -153,7 +153,7 @@ class Option extends Test\Unit\Suite
     public function case_none_expect()
     {
         $this
-            ->given($option = SUT::none())
+            ->given($option = None())
             ->exception(function () use ($option) {
                 $option->expect('foo');
             })
@@ -164,7 +164,7 @@ class Option extends Test\Unit\Suite
     public function case_some_unwrap()
     {
         $this
-            ->given($option = SUT::some(42))
+            ->given($option = Some(42))
             ->when($result = $option->unwrap())
             ->then
                 ->integer($result)
@@ -174,7 +174,7 @@ class Option extends Test\Unit\Suite
     public function case_none_unwrap()
     {
         $this
-            ->given($option = SUT::none())
+            ->given($option = None())
             ->exception(function () use ($option) {
                 $option->unwrap();
             })
@@ -185,7 +185,7 @@ class Option extends Test\Unit\Suite
     public function case_some_unwrap_or()
     {
         $this
-            ->given($option = SUT::some(42))
+            ->given($option = Some(42))
             ->when($result = $option->unwrapOr(153))
             ->then
                 ->integer($result)
@@ -195,7 +195,7 @@ class Option extends Test\Unit\Suite
     public function case_none_unwrap_or()
     {
         $this
-            ->given($option = SUT::none())
+            ->given($option = None())
             ->when($result = $option->unwrapOr(153))
             ->then
                 ->integer($result)
@@ -206,7 +206,7 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::some(42),
+                $option = Some(42),
                 $else   = function (): int {
                     return 153;
                 }
@@ -221,7 +221,7 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::none(),
+                $option = None(),
                 $else   = function (): int {
                     return 153;
                 }
@@ -236,7 +236,7 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::some(42),
+                $option = Some(42),
                 $mapper = function (int $x): int {
                     return $x * 2;
                 }
@@ -253,7 +253,7 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::none(),
+                $option = None(),
                 $mapper = function (int $x): int {
                     return $x * 2;
                 }
@@ -270,7 +270,7 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::some(42),
+                $option = Some(42),
                 $mapper = function (int $x): int {
                     return $x * 2;
                 }
@@ -287,7 +287,7 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::none(),
+                $option = None(),
                 $mapper = function (int $x): int {
                     return $x * 2;
                 }
@@ -304,7 +304,7 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::some(42),
+                $option = Some(42),
                 $else   = function (): int {
                     return 153;
                 },
@@ -324,7 +324,7 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::none(),
+                $option = None(),
                 $else   = function (): int {
                     return 153;
                 },
@@ -344,8 +344,8 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option      = SUT::some(42),
-                $rightOption = SUT::some(153)
+                $option      = Some(42),
+                $rightOption = Some(153)
             )
             ->when($result = $option->and($rightOption))
             ->then
@@ -357,8 +357,8 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option      = SUT::some(42),
-                $rightOption = SUT::none()
+                $option      = Some(42),
+                $rightOption = None()
             )
             ->when($result = $option->and($rightOption))
             ->then
@@ -370,8 +370,8 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option      = SUT::none(),
-                $rightOption = SUT::some(153)
+                $option      = None(),
+                $rightOption = Some(153)
             )
             ->when($result = $option->and($rightOption))
             ->then
@@ -384,8 +384,8 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option      = SUT::none(),
-                $rightOption = SUT::none()
+                $option      = None(),
+                $rightOption = None()
             )
             ->when($result = $option->and($rightOption))
             ->then
@@ -398,45 +398,45 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::some(42),
+                $option = Some(42),
                 $mapper = function (): SUT {
-                    return SUT::some(153);
+                    return Some(153);
                 }
             )
             ->when($result = $option->andThen($mapper))
             ->then
                 ->object($result)
-                    ->isEqualTo(SUT::some(153));
+                    ->isEqualTo(Some(153));
     }
 
     public function case_some_and_then_none()
     {
         $this
             ->given(
-                $option = SUT::some(42),
+                $option = Some(42),
                 $mapper = function (): SUT {
-                    return SUT::none();
+                    return None();
                 }
             )
             ->when($result = $option->andThen($mapper))
             ->then
                 ->object($result)
-                    ->isEqualTo(SUT::none());
+                    ->isEqualTo(None());
     }
 
     public function case_none_and_then_some()
     {
         $this
             ->given(
-                $option = SUT::none(),
+                $option = None(),
                 $mapper = function (): SUT {
-                    return SUT::some(153);
+                    return Some(153);
                 }
             )
             ->when($result = $option->andThen($mapper))
             ->then
                 ->object($result)
-                    ->isEqualTo(SUT::none())
+                    ->isEqualTo(None())
                     ->isNotIdenticalTo($option);
     }
 
@@ -444,15 +444,15 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::none(),
+                $option = None(),
                 $mapper = function (): SUT {
-                    return SUT::some(153);
+                    return Some(153);
                 }
             )
             ->when($result = $option->andThen($mapper))
             ->then
                 ->object($result)
-                    ->isEqualTo(SUT::none())
+                    ->isEqualTo(None())
                     ->isNotIdenticalTo($option);
     }
 
@@ -460,8 +460,8 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option      = SUT::some(42),
-                $rightOption = SUT::some(153)
+                $option      = Some(42),
+                $rightOption = Some(153)
             )
             ->when($result = $option->or($rightOption))
             ->then
@@ -473,8 +473,8 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option      = SUT::some(42),
-                $rightOption = SUT::none()
+                $option      = Some(42),
+                $rightOption = None()
             )
             ->when($result = $option->or($rightOption))
             ->then
@@ -486,8 +486,8 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option      = SUT::none(),
-                $rightOption = SUT::some(153)
+                $option      = None(),
+                $rightOption = Some(153)
             )
             ->when($result = $option->or($rightOption))
             ->then
@@ -499,8 +499,8 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option      = SUT::none(),
-                $rightOption = SUT::none()
+                $option      = None(),
+                $rightOption = None()
             )
             ->when($result = $option->or($rightOption))
             ->then
@@ -512,9 +512,9 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::some(42),
+                $option = Some(42),
                 $else   = function (): SUT {
-                    return SUT::some(153);
+                    return Some(153);
                 }
             )
             ->when($result = $option->orElse($else))
@@ -527,9 +527,9 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::some(42),
+                $option = Some(42),
                 $else   = function (): SUT {
-                    return SUT::none();
+                    return None();
                 }
             )
             ->when($result = $option->orElse($else))
@@ -542,29 +542,29 @@ class Option extends Test\Unit\Suite
     {
         $this
             ->given(
-                $option = SUT::none(),
+                $option = None(),
                 $else   = function (): SUT {
-                    return SUT::some(153);
+                    return Some(153);
                 }
             )
             ->when($result = $option->orElse($else))
             ->then
                 ->object($result)
-                    ->isEqualTo(SUT::some(153));
+                    ->isEqualTo(Some(153));
     }
 
     public function case_none_or_then_none()
     {
         $this
             ->given(
-                $option = SUT::none(),
+                $option = None(),
                 $else   = function (): SUT {
-                    return SUT::some(153);
+                    return Some(153);
                 }
             )
             ->when($result = $option->orElse($else))
             ->then
                 ->object($result)
-                    ->isEqualTo(SUT::some(153));
+                    ->isEqualTo(Some(153));
     }
 }
