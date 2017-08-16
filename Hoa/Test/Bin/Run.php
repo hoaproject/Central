@@ -272,18 +272,26 @@ class Run extends Console\Dispatcher\Kit
             }
         }
 
-        $kitabFinder = new Kitab\Finder();
-        $kitabFinder->notIn('/^vendor$/');
-
         $kitabOutputDirectory = File\Temporary\Temporary::getTemporaryDirectory() . DS . 'Hoa.kitab.test.output' . DS;
         Protocol\Protocol::getInstance()['Kitab']['Output']->setReach("\r" . $kitabOutputDirectory . DS);
 
-        foreach ($directories as $directory) {
-            if (0 !== preg_match('#/Test/?$#', $directory)) {
-                $directory = dirname($directory);
+        $kitabFinder = new Kitab\Finder();
+        $kitabFinder->notIn('/^vendor$/');
+
+        if (empty($directories) && empty($files) && empty($namespaces)) {
+            $kitabFinder->in('.');
+
+            if (is_dir('Test')) {
+                $directories[] = 'Test';
             }
 
-            $kitabFinder->in($directory);
+            if (is_dir($kitabOutputDirectory)) {
+                $directories[] = $kitabOutputDirectory;
+            }
+        } else {
+            foreach ($directories as $directory) {
+                $kitabFinder->in($directory);
+            }
         }
 
         if (is_dir($kitabOutputDirectory)) {
@@ -297,7 +305,6 @@ class Run extends Console\Dispatcher\Kit
         $kitabCompiler = new Kitab\Compiler\Compiler();
         $kitabCompiler->compile($kitabFinder, $kitabTarget);
 
-        $directories[] = $kitabOutputDirectory;
 
         // In the `PATH`.
         $atoum = 'atoum';
@@ -340,10 +347,6 @@ class Run extends Console\Dispatcher\Kit
 
         if (null !== $php) {
             $command .= ' --php ' . $php;
-        }
-
-        if (empty($directories) && empty($files) && empty($namespaces) && is_dir('Test')) {
-            $directories[] = 'Test';
         }
 
         if (!empty($directories)) {
