@@ -68,6 +68,7 @@ cloak on IRC, etc.
   * ➜ Stéphane Py (stephpy)
   * Juha Remes (newman101)
   * ➜ Steven Rémot (stevenremot)
+  * Mathieu Rochette (mathroc)
   * Tom Rochette (tomzx)
   * Samundra Shrestha (samundra)
   * Kim Sia Sim (simkimsia)
