@@ -184,16 +184,16 @@ assert($x->mapOrElse('strlen', $else) == Some(0));
 ### Boolean operations
 
 It is possible to apply boolean operations on options. The `and`
-method returns a none option if the option has no value, otherwise it
+method returns a none option if the current option has no value, otherwise it
 returns the right option:
 
 ```php
 assert(Some(42)->and(Some(153)) == Some(153));
-assert(Some(42)->and(None()) == Some(153));
+assert(Some(42)->and(None()) == None());
 assert(None()->and(Some(153)) == None());
 ```
 
-The `andThen` method returns a none option if the option has no value,
+The `andThen` method returns a none option if the current option has no value,
 otherwise it returns a new option computed by a callable. Some
 languages call this operation `flatmap`.
 
@@ -209,7 +209,7 @@ assert(Some(2)->andThen($square)->andThen($square) == Some(16));
 assert(Some(2)->andThen($nop)->andThen($square)    == None());
 ```
 
-The `or` method returns the option if it has some value, otherwise it
+The `or` method returns the current option if it has some value, otherwise it
 returns the right option:
 
 ```php
