@@ -75,7 +75,7 @@ class Option
      * equivalent.
      *
      * ```php
-     * $x = Hoa\Option\Option::some(42);
+     * $x = Hoa\Option\Some(42);
      * $y = Hoa\Option\Some(42);
      *
      * assert($x->isSome());
@@ -95,7 +95,7 @@ class Option
      * In this example, `Option::none()` and `None()` are strictly equivalent.
      *
      * ```php
-     * $x = Hoa\Option\Option::none();
+     * $x = Hoa\Option\None();
      * $y = Hoa\Option\None();
      *
      * assert($x->isNone());
@@ -113,8 +113,8 @@ class Option
      * # Examples
      *
      * ```php
-     * $x = Hoa\Option\Option::some(42);
-     * $y = Hoa\Option\Option::none();
+     * $x = Hoa\Option\Some(42);
+     * $y = Hoa\Option\None();
      *
      * assert(true  === $x->isSome());
      * assert(false === $y->isSome());
@@ -131,8 +131,8 @@ class Option
      * # Examples
      *
      * ```php
-     * $x = Hoa\Option\Option::some(42);
-     * $y = Hoa\Option\Option::none();
+     * $x = Hoa\Option\Some(42);
+     * $y = Hoa\Option\None();
      *
      * assert(false === $x->isNone());
      * assert(true  === $y->isNone());
@@ -154,7 +154,7 @@ class Option
      * There is some value (`42`), so `expect` unwraps successfully:
      *
      * ```php
-     * $x = Hoa\Option\Option::some(42);
+     * $x = Hoa\Option\Some(42);
      *
      * assert($x->expect('damn!') === 42);
      * ```
@@ -162,7 +162,7 @@ class Option
      * There is no value, so a `RuntimeException` is thrown:
      *
      * ```php,must_throw(RuntimeException)
-     * $x = Hoa\Option\Option::none();
+     * $x = Hoa\Option\None();
      *
      * assert($x->expect('damn!') === 42);
      * ```
@@ -192,7 +192,7 @@ class Option
      * There is some value (`42`), so `unwrap` is successful:
      *
      * ```php
-     * $x = Hoa\Option\Option::some(42);
+     * $x = Hoa\Option\Some(42);
      *
      * assert($x->unwrap() === 42);
      * ```
@@ -200,7 +200,7 @@ class Option
      * There is no value, so a `RuntimeException` is thrown:
      *
      * ```php,must_throw(RuntimeException)
-     * $x = Hoa\Option\Option::none();
+     * $x = Hoa\Option\None();
      *
      * assert($x->unwrap() === 42);
      * ```
@@ -217,8 +217,8 @@ class Option
      * # Examples
      *
      * ```php
-     * $x = Hoa\Option\Option::some(42);
-     * $y = Hoa\Option\Option::none();
+     * $x = Hoa\Option\Some(42);
+     * $y = Hoa\Option\None();
      *
      * assert($x->unwrapOr(153) === 42);
      * assert($y->unwrapOr(153) === 153);
@@ -240,8 +240,8 @@ class Option
      * # Examples
      *
      * ```php
-     * $x = Hoa\Option\Option::some(42);
-     * $y = Hoa\Option\Option::none();
+     * $x = Hoa\Option\Some(42);
+     * $y = Hoa\Option\None();
      *
      * $else = function () { return 153; };
      *
@@ -265,7 +265,7 @@ class Option
      * # Examples
      *
      * ```php
-     * $maybeMessage       = Hoa\Option\Option::some('Hello, World!');
+     * $maybeMessage       = Hoa\Option\Some('Hello, World!');
      * $maybeMessageLength = $maybeMessage->map(
      *     function (string $message): int {
      *         return strlen($message);
@@ -291,8 +291,8 @@ class Option
      * # Examples
      *
      * ```php
-     * $x = Hoa\Option\Option::some('Hello, World!');
-     * $y = Hoa\Option\Option::none();
+     * $x = Hoa\Option\Some('Hello, World!');
+     * $y = Hoa\Option\None();
      *
      * assert($x->mapOr('strlen', 42)->unwrap() === 13);
      * assert($y->mapOr('strlen', 42)->unwrap() === 42);
@@ -316,8 +316,8 @@ class Option
      * # Examples
      *
      * ```php
-     * $x = Hoa\Option\Option::some('Hello, World!');
-     * $y = Hoa\Option\Option::none();
+     * $x = Hoa\Option\Some('Hello, World!');
+     * $y = Hoa\Option\None();
      *
      * $else = function () { return 42; };
      *
@@ -346,9 +346,9 @@ class Option
      * and `$z`:
      *
      * ```php
-     * $x = Hoa\Option\Option::some(42);
-     * $y = Hoa\Option\Option::some(42);
-     * $z = Hoa\Option\Option::none();
+     * $x = Hoa\Option\Some(42);
+     * $y = Hoa\Option\Some(42);
+     * $z = Hoa\Option\None();
      *
      * assert($x->and($y) === $y);
      * assert($x->and($z) === $z);
@@ -357,8 +357,8 @@ class Option
      * The `$x` option contains no value, so it returns a new option with no value.
      *
      * ```php
-     * $x = Hoa\Option\Option::none();
-     * $y = Hoa\Option\Option::some(42);
+     * $x = Hoa\Option\None();
+     * $y = Hoa\Option\Some(42);
      *
      * assert($x->and($y)->isNone());
      * ```
@@ -381,12 +381,12 @@ class Option
      * # Examples
      *
      * ```php
-     * $x      = Hoa\Option\Option::some(2);
+     * $x      = Hoa\Option\Some(2);
      * $square = function (int $x): Hoa\Option\Option {
-     *     return Hoa\Option\Option::some($x * $x);
+     *     return Hoa\Option\Some($x * $x);
      * };
      * $nop = function(): Hoa\Option\Option {
-     *     return Hoa\Option\Option::none();
+     *     return Hoa\Option\None();
      * };
      *
      * assert($x->andThen($square)->andThen($square)->unwrap() === 16);
@@ -409,9 +409,9 @@ class Option
      * # Examples
      *
      * ```php
-     * $x = Hoa\Option\Option::some(42);
-     * $y = Hoa\Option\Option::some(42);
-     * $z = Hoa\Option\Option::none();
+     * $x = Hoa\Option\Some(42);
+     * $y = Hoa\Option\Some(42);
+     * $z = Hoa\Option\None();
      *
      * assert($x->or($y) === $x);
      * assert($z->or($y) === $y);
@@ -433,13 +433,13 @@ class Option
      * # Examples
      *
      * ```php
-     * $x      = Hoa\Option\Option::none();
-     * $y      = Hoa\Option\Option::some('me');
+     * $x      = Hoa\Option\None();
+     * $y      = Hoa\Option\Some('me');
      * $nobody = function (): Hoa\Option\Option {
-     *     return Hoa\Option\Option::none();
+     *     return Hoa\Option\None();
      * };
      * $somebody = function(): Hoa\Option\Option {
-     *     return Hoa\Option\Option::some('somebody');
+     *     return Hoa\Option\Some('somebody');
      * };
      *
      * assert($x->orElse($somebody)->unwrap() === 'somebody');
@@ -455,26 +455,6 @@ class Option
 
         return $this;
     }
-}
-
-/**
- * Allocate an option representing no value.
- *
- * See `Option::some`.
- */
-function Some($value): Option
-{
-    return Option::some($value);
-}
-
-/**
- * Allocate an option representing no value.
- *
- * See `Option::none`.
- */
-function None(): Option
-{
-    return Option::none();
 }
 
 /**
