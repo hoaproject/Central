@@ -101,7 +101,7 @@ throws a `RuntimeException` if there is none:
 
 ```php
 assert(Some(42)->unwrap() === 42);
-ssert(None()->unwrap()); // will throw a `RuntimeException`.
+assert(None()->unwrap()); // will throw a `RuntimeException`.
 ```
 
 In general, because of the unexpected exception, its use is
