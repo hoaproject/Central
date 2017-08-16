@@ -1,3 +1,7 @@
+# 2.17.08.16
+
+  * fix(run) Kitab must not override default directory. (Ivan Enderlin, 2017-08-15T14:26:04+02:00)
+
 # 2.17.08.15
 
   * fix(doctest) Remove the `assert` asserter. (Ivan Enderlin, 2017-08-15T11:57:15+02:00)
