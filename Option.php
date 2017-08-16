@@ -410,7 +410,7 @@ class Option
      *
      * ```php
      * $x = Hoa\Option\Some(42);
-     * $y = Hoa\Option\Some(42);
+     * $y = Hoa\Option\Some(153);
      * $z = Hoa\Option\None();
      *
      * assert($x->or($y) === $x);

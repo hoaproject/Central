@@ -23,8 +23,13 @@
 [![Documentation](https://img.shields.io/badge/documentation-hack_book-ff0066.svg)](https://central.hoa-project.net/Documentation/Library/Option)
 [![Board](https://img.shields.io/badge/organisation-board-ff0066.svg)](https://waffle.io/hoaproject/option)
 
-This library allows to interact easily with a terminal: getoption, cursor,
-window, processus, readline etc.
+This library is an implementation of the
+famous
+[`Option` polymorphic type](https://en.wikipedia.org/wiki/Option_type)
+(also call `Maybe`). An `Option` represents an optional value, either
+there is `Some` value, or there is `None` which is the equivalent of
+`null`. This is a convenient and safe way to manipulate an optional
+value.
 
 [Learn more](https://central.hoa-project.net/Documentation/Library/Option).
 
@@ -60,7 +65,173 @@ guide](https://hoa-project.net/Literature/Contributor/Guide.html).
 
 ## Quick usage
 
-…
+The following examples illustrate how to use the `Hoa\Option\Option` class.
+
+### Build an optional value
+
+There are two static methods to allocate an optional value:
+
+  * `Hoa\Option\Option::some($value)` for some value,
+  * `Hoa\Option\Option::none()` for no value.
+
+Two functional aliases exist, respectively:
+
+  * `Hoa\Option\Some($value)`, and
+  * `Hoa\Option\None()`.
+
+In the next examples, it is assumed that `use function
+Hoa\Option\{Some, None}` is declared, so that we can use `Some` and
+`None` directly.
+
+### Basic operations
+
+The `isSome` and `isNone` methods respectively return `true` if the
+option contains some value or none:
+
+```php
+$x = Some(42);
+$y = None();
+
+assert($x->isSome());
+assert($y->isNone());
+```
+
+The `unwrap` method returns the contained value if there is some, or
+will return a `RuntimeException` if there is none:
+
+```php
+$x = Some(42);
+
+assert($x->unwrap() === 42);
+
+$y = None();
+
+assert($y->unwrap()); // will throw a `RuntimeException`.
+```
+
+In general, because of the unexpected exception, its use is
+discouraged. Prefer to use either: `expect`, `unwrapOr`, `isSome`, or
+`isNone` for instance.
+
+One common mistake is to think that it is required to extract/unwrap
+the value from the option. Actually, the `Hoa\Option\Option` API is
+designed to always manipulate an option without having the need to
+extract its contained value. New options can be constructed or mapped,
+see next sections.
+
+The `unwrap` method can throw a `RuntimeException` with a default
+message. To have a custom message, please use the `expect` method:
+
+```php
+$x = None();
+
+assert($x->expect('Damn…') === 42);
+```
+
+The `unwrapOr` method returns the contained value if there is some, or
+a default value if none:
+
+```php
+$x = Some(42);
+$y = None();
+
+assert($x->unwrapOr(153) === 42);
+assert($y->unwrapOr(153) === 153);
+```
+
+The `unwrapOrElse` method returns the contained value if there is
+some, or computes a default value from the given callable if none:
+
+```php
+$x = Some(42);
+$y = None();
+
+$else = function (): int { return 153; };
+
+assert($x->unwrapOrElse($else) === 42);
+assert($y->unwrapOrElse($else) === 153);
+```
+
+### Mappers
+
+Mappers transform an option into another option by applying a callable
+to the contained value if some.
+
+```php
+$x = Some('Hello, World!');
+$y = None();
+
+assert($x->map('strlen') === Some(13));
+assert($x->map('strlen') === None());
+```
+
+The `mapOr` mapper transform an option into another option but use a
+default value if there is no contained value:
+
+```php
+$x = None();
+
+assert($x->mapOr('strlen', 0) === Some(0));
+```
+
+The result of `mapOr` is always an option with some value.
+
+The `mapOrElse` mapper is similar to `mapOr` but computes the default
+value from a callable:
+
+```php
+$x    = None();
+$else = function (): int { return 0; };
+
+assert($x->mapOrElse('strlen', $else) === Some(0));
+```
+
+### Boolean operations
+
+It is possible to apply boolean operations on options. The `and`
+method returns a none option if the option has no value, otherwise it
+returns the right option:
+
+```php
+assert(Some(42)->and(Some(153)) == Some(153));
+assert(Some(42)->and(None()) == Some(153));
+assert(None()->and(Some(153)) == None());
+```
+
+The `andThen` method returns a none option if the option has no value,
+otherwise it returns a new option computed by a callable. Some
+languages call this operation `flatmap`.
+
+```php
+$square = function (int $x): Option {
+    return Some($x * $x);
+};
+$nop = function (): Option {
+    return None();
+};
+
+assert(Some(2)->andThen($square)->andThen($square) == Some(16));
+assert(Some(2)->andThen($nop)->andThen($square)    == None());
+```
+
+The `or` method returns the option if it has some value, otherwise it
+returns the right option:
+
+```php
+assert(Some(42)->or(Some(153)) == Some(42));
+assert(None()->or(Some(153))   == Some(153));
+```
+
+Finally the `orElse` option returns the option if it has some value,
+otherwise it returns a new option computed by a callable:
+
+```php
+$somebody = function (): Option {
+    return Some('somebody');
+};
+
+assert(None()->orElse($somebody) == Some('somebody'));
+```
 
 ## Documentation
 
