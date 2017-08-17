@@ -189,8 +189,8 @@ returns the right option:
 
 ```php
 assert(Some(42)->and(Some(153)) == Some(153));
-assert(Some(42)->and(None()) == None());
-assert(None()->and(Some(153)) == None());
+assert(Some(42)->and(None())    == None());
+assert(None()->and(Some(153))   == None());
 ```
 
 The `andThen` method returns a none option if the current option has no value,
