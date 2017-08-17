@@ -89,6 +89,19 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
+    public function case_some_null()
+    {
+        $this
+            ->exception(function () {
+                Some(null);
+            })
+                ->isInstanceOf(RuntimeException::class)
+                ->hasMessage(
+                    'Called `' . SUT::class . '::some` with a `null` value, forbidden. ' .
+                    'Use `' . SUT::class . '::none` instead.'
+                );
+    }
+
     public function case_none()
     {
         $this
