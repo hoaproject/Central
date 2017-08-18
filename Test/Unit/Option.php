@@ -191,8 +191,8 @@ class Option extends Test\Unit\Suite
             ->exception(function () use ($option) {
                 $option->unwrap();
             })
-            ->isInstanceOf(RuntimeException::class)
-                ->hasMessage('Unwrap a null value.');
+                ->isInstanceOf(RuntimeException::class)
+                ->hasMessage('Called `' . SUT::class . '::unwrap` on a none value.');
     }
 
     public function case_some_unwrap_or()

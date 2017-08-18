@@ -219,7 +219,7 @@ final class Option
      */
     public function unwrap()
     {
-        return $this->expect('Unwrap a null value.');
+        return $this->expect('Called `' . __METHOD__ . '` on a none value.');
     }
 
     /**
