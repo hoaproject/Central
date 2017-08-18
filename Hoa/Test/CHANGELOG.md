@@ -1,3 +1,7 @@
+# 2.17.08.18
+
+  * fix(doctest) Always add Kitab output directory. (Ivan Enderlin, 2017-08-18T10:42:18+02:00)
+
 # 2.17.08.16
 
   * fix(run) Kitab must not override default directory. (Ivan Enderlin, 2017-08-15T14:26:04+02:00)
