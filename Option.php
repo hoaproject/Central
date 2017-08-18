@@ -37,6 +37,7 @@
 namespace Hoa\Option;
 
 use Hoa\Consistency;
+use RuntimeException;
 
 /**
  * Class \Hoa\Option.
@@ -88,6 +89,13 @@ final class Option
      */
     public static function some($value): self
     {
+        if (null === $value) {
+            throw new RuntimeException(
+                'Called `' . __METHOD__ . '` with a `null` value, forbidden. ' .
+                'Use `' . __CLASS__ . '::none` instead.'
+            );
+        }
+
         return new self($value);
     }
 
@@ -174,7 +182,7 @@ final class Option
     public function expect(string $errorMessage)
     {
         if (true === $this->isNone()) {
-            throw new \RuntimeException($errorMessage);
+            throw new RuntimeException($errorMessage);
         }
 
         return $this->_value;
