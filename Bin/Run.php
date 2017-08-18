@@ -285,9 +285,7 @@ class Run extends Console\Dispatcher\Kit
                 $directories[] = 'Test';
             }
 
-            if (is_dir($kitabOutputDirectory)) {
-                $directories[] = $kitabOutputDirectory;
-            }
+            $directories[] = $kitabOutputDirectory;
         } else {
             foreach ($directories as $directory) {
                 $kitabFinder->in($directory);
