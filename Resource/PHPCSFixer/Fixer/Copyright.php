@@ -78,11 +78,7 @@ class Copyright extends AbstractFixer
             }
 
             foreach ($annotations as $annotation) {
-                $line = $docBlock->getLine($annotation->getStart());
-                $line->setContent(
-                    ' * @copyright  Copyright © 2007-' . $thisYear .
-                    ' Hoa community' . "\n"
-                );
+                $annotation->remove();
             }
 
             $token->setContent($docBlock->getContent());
