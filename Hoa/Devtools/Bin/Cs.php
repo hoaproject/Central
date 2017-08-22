@@ -122,6 +122,8 @@ class Cs extends Console\Dispatcher\Kit
             $arguments[] = '--diff';
         }
 
+        $arguments['--allow-risky'] = 'yes';
+
         $arguments[] = $path;
 
         $processus = new Console\Processus($phpCsFixer, $arguments);
