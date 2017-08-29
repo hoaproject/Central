@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -47,12 +49,11 @@ use function Hoa\Option\Some;
  *
  * Test suite of the documentation.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Documentation extends Test\Integration\Suite implements Test\Decorrelated
 {
-    public function case_readme_0()
+    public function case_readme_0(): void
     {
         $this
             ->given(
@@ -70,7 +71,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                     ->isTrue();
     }
 
-    public function case_readme_1()
+    public function case_readme_1(): void
     {
         $this
             ->when($result = Some(42)->unwrap())
@@ -78,24 +79,24 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                 ->integer($result)
                     ->isEqualTo(42)
 
-            ->exception(function () {
+            ->exception(function (): void {
                 None()->unwrap();
             })
                 ->isInstanceOf(RuntimeException::class);
     }
 
-    public function case_readme_2()
+    public function case_readme_2(): void
     {
         $this
             ->given($x = None())
-            ->exception(function () use ($x) {
+            ->exception(function () use ($x): void {
                 $x->expect('Damn…');
             })
                 ->isInstanceOf(RuntimeException::class)
                 ->hasMessage('Damn…');
     }
 
-    public function case_readme_3()
+    public function case_readme_3(): void
     {
         $this
             ->given(
@@ -113,7 +114,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                     ->isEqualTo(153);
     }
 
-    public function case_readme_4()
+    public function case_readme_4(): void
     {
         $this
             ->given(
@@ -134,7 +135,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                     ->isEqualTo(153);
     }
 
-    public function case_readme_5()
+    public function case_readme_5(): void
     {
         $this
             ->given(
@@ -152,7 +153,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                     ->isEqualTo(None());
     }
 
-    public function case_readme_6()
+    public function case_readme_6(): void
     {
         $this
             ->given($x = None())
@@ -162,7 +163,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                     ->isEqualTo(Some(0));
     }
 
-    public function case_readme_7()
+    public function case_readme_7(): void
     {
         $this
             ->given(
@@ -177,7 +178,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                     ->isEqualTo(Some(0));
     }
 
-    public function case_readme_8()
+    public function case_readme_8(): void
     {
         $this
             ->when($result = Some(42)->and(Some(153)))
@@ -196,7 +197,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                     ->isEqualTo(None());
     }
 
-    public function case_readme_9()
+    public function case_readme_9(): void
     {
         $this
             ->given(
@@ -218,7 +219,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                     ->isEqualTo(None());
     }
 
-    public function case_readme_10()
+    public function case_readme_10(): void
     {
         $this
             ->when($result = Some(42)->or(Some(153)))
@@ -232,7 +233,7 @@ class Documentation extends Test\Integration\Suite implements Test\Decorrelated
                     ->isEqualTo(Some(153));
     }
 
-    public function case_readme_11()
+    public function case_readme_11(): void
     {
         $this
             ->given(

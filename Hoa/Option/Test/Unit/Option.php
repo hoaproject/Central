@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -47,12 +49,11 @@ use function Hoa\Option\Some;
  *
  * Test suite of the option class.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Option extends Test\Unit\Suite
 {
-    public function case_function_some()
+    public function case_function_some(): void
     {
         $this
             ->when($result = Some(42))
@@ -65,7 +66,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_function_none()
+    public function case_function_none(): void
     {
         $this
             ->when($result = None())
@@ -78,7 +79,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_some()
+    public function case_some(): void
     {
         $this
             ->when($result = Some(42))
@@ -89,10 +90,10 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_some_null()
+    public function case_some_null(): void
     {
         $this
-            ->exception(function () {
+            ->exception(function (): void {
                 Some(null);
             })
                 ->isInstanceOf(RuntimeException::class)
@@ -102,7 +103,7 @@ class Option extends Test\Unit\Suite
                 );
     }
 
-    public function case_none()
+    public function case_none(): void
     {
         $this
             ->when($result = None())
@@ -113,7 +114,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_some_is_some()
+    public function case_some_is_some(): void
     {
         $this
             ->given($option = Some(42))
@@ -123,7 +124,7 @@ class Option extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_none_is_some()
+    public function case_none_is_some(): void
     {
         $this
             ->given($option = None())
@@ -133,7 +134,7 @@ class Option extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_some_is_none()
+    public function case_some_is_none(): void
     {
         $this
             ->given($option = Some(42))
@@ -143,7 +144,7 @@ class Option extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_none_is_none()
+    public function case_none_is_none(): void
     {
         $this
             ->given($option = None())
@@ -153,7 +154,7 @@ class Option extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_some_expect()
+    public function case_some_expect(): void
     {
         $this
             ->given($option = Some(42))
@@ -163,18 +164,18 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_none_expect()
+    public function case_none_expect(): void
     {
         $this
             ->given($option = None())
-            ->exception(function () use ($option) {
+            ->exception(function () use ($option): void {
                 $option->expect('foo');
             })
             ->isInstanceOf(RuntimeException::class)
                 ->hasMessage('foo');
     }
 
-    public function case_some_unwrap()
+    public function case_some_unwrap(): void
     {
         $this
             ->given($option = Some(42))
@@ -184,18 +185,18 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_none_unwrap()
+    public function case_none_unwrap(): void
     {
         $this
             ->given($option = None())
-            ->exception(function () use ($option) {
+            ->exception(function () use ($option): void {
                 $option->unwrap();
             })
                 ->isInstanceOf(RuntimeException::class)
                 ->hasMessage('Called `' . SUT::class . '::unwrap` on a none value.');
     }
 
-    public function case_some_unwrap_or()
+    public function case_some_unwrap_or(): void
     {
         $this
             ->given($option = Some(42))
@@ -205,7 +206,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_none_unwrap_or()
+    public function case_none_unwrap_or(): void
     {
         $this
             ->given($option = None())
@@ -215,7 +216,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(153);
     }
 
-    public function case_some_unwrap_or_else()
+    public function case_some_unwrap_or_else(): void
     {
         $this
             ->given(
@@ -230,7 +231,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_none_unwrap_or_else()
+    public function case_none_unwrap_or_else(): void
     {
         $this
             ->given(
@@ -245,7 +246,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(153);
     }
 
-    public function case_some_map()
+    public function case_some_map(): void
     {
         $this
             ->given(
@@ -262,7 +263,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(84);
     }
 
-    public function case_none_map()
+    public function case_none_map(): void
     {
         $this
             ->given(
@@ -279,7 +280,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(153);
     }
 
-    public function case_some_map_or()
+    public function case_some_map_or(): void
     {
         $this
             ->given(
@@ -296,7 +297,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(84);
     }
 
-    public function case_none_map_or()
+    public function case_none_map_or(): void
     {
         $this
             ->given(
@@ -313,7 +314,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(153);
     }
 
-    public function case_some_map_or_else()
+    public function case_some_map_or_else(): void
     {
         $this
             ->given(
@@ -333,7 +334,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(84);
     }
 
-    public function case_none_map_or_else()
+    public function case_none_map_or_else(): void
     {
         $this
             ->given(
@@ -353,7 +354,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(153);
     }
 
-    public function case_some_and_some()
+    public function case_some_and_some(): void
     {
         $this
             ->given(
@@ -366,7 +367,7 @@ class Option extends Test\Unit\Suite
                     ->isIdenticalTo($rightOption);
     }
 
-    public function case_some_and_none()
+    public function case_some_and_none(): void
     {
         $this
             ->given(
@@ -379,7 +380,7 @@ class Option extends Test\Unit\Suite
                     ->isIdenticalTo($rightOption);
     }
 
-    public function case_none_and_some()
+    public function case_none_and_some(): void
     {
         $this
             ->given(
@@ -393,7 +394,7 @@ class Option extends Test\Unit\Suite
                     ->isNotIdenticalTo($option);
     }
 
-    public function case_none_and_none()
+    public function case_none_and_none(): void
     {
         $this
             ->given(
@@ -407,7 +408,7 @@ class Option extends Test\Unit\Suite
                     ->isNotIdenticalTo($option);
     }
 
-    public function case_some_and_then_some()
+    public function case_some_and_then_some(): void
     {
         $this
             ->given(
@@ -422,7 +423,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(Some(153));
     }
 
-    public function case_some_and_then_none()
+    public function case_some_and_then_none(): void
     {
         $this
             ->given(
@@ -437,7 +438,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(None());
     }
 
-    public function case_none_and_then_some()
+    public function case_none_and_then_some(): void
     {
         $this
             ->given(
@@ -453,7 +454,7 @@ class Option extends Test\Unit\Suite
                     ->isNotIdenticalTo($option);
     }
 
-    public function case_none_and_then_none()
+    public function case_none_and_then_none(): void
     {
         $this
             ->given(
@@ -469,7 +470,7 @@ class Option extends Test\Unit\Suite
                     ->isNotIdenticalTo($option);
     }
 
-    public function case_some_or_some()
+    public function case_some_or_some(): void
     {
         $this
             ->given(
@@ -482,7 +483,7 @@ class Option extends Test\Unit\Suite
                     ->isIdenticalTo($option);
     }
 
-    public function case_some_or_none()
+    public function case_some_or_none(): void
     {
         $this
             ->given(
@@ -495,7 +496,7 @@ class Option extends Test\Unit\Suite
                     ->isIdenticalTo($option);
     }
 
-    public function case_none_or_some()
+    public function case_none_or_some(): void
     {
         $this
             ->given(
@@ -508,7 +509,7 @@ class Option extends Test\Unit\Suite
                     ->isIdenticalTo($rightOption);
     }
 
-    public function case_none_or_none()
+    public function case_none_or_none(): void
     {
         $this
             ->given(
@@ -521,7 +522,7 @@ class Option extends Test\Unit\Suite
                     ->isIdenticalTo($rightOption);
     }
 
-    public function case_some_or_then_some()
+    public function case_some_or_then_some(): void
     {
         $this
             ->given(
@@ -536,7 +537,7 @@ class Option extends Test\Unit\Suite
                     ->isIdenticalTo($option);
     }
 
-    public function case_some_or_then_none()
+    public function case_some_or_then_none(): void
     {
         $this
             ->given(
@@ -551,7 +552,7 @@ class Option extends Test\Unit\Suite
                     ->isIdenticalTo($option);
     }
 
-    public function case_none_or_then_some()
+    public function case_none_or_then_some(): void
     {
         $this
             ->given(
@@ -566,7 +567,7 @@ class Option extends Test\Unit\Suite
                     ->isEqualTo(Some(153));
     }
 
-    public function case_none_or_then_none()
+    public function case_none_or_then_none(): void
     {
         $this
             ->given(
