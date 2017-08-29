@@ -31,9 +31,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Hoa\\Option\\": "."
+            "Hoa\\Option\\": "Source"
         },
-        "files": ["Prelude.php"]
+        "files": ["Source/Prelude.php"]
     },
     "extra": {
         "branch-alias": {
