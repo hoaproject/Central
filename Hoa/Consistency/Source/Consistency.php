@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,42 +36,48 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Consistency
-{
+namespace Hoa\Consistency;
 
 /**
- * Class Hoa\Consistency\Consistency.
- *
- * This class is a collection of tools to ensure foreward and backward
- * compatibility.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * A collection of tools to ensure foreward and backward compatibility between
+ * different Hoa versions and PHP versions.
  */
 class Consistency
 {
     /**
-     * Check if an entity exists (class, interface, trait…).
+     * Returns `true` if an entity exists (a class, an interface, a trait…),
+     * otherwise returns `false`.
      *
-     * @param   string  $entityName    Entity name.
-     * @param   bool    $autoloader    Run autoloader if necessary.
-     * @return  bool
+     * By default, the autoloaders will not run if the entity does not exist.
+     *
+     * # Examples
+     *
+     * ```php
+     * assert(true  === Hoa\Consistency\Consistency::entityExists(Hoa\Consistency\Consistency::class));
+     * assert(false === Hoa\Consistency\Consistency::entityExists(FooBar::class));
+     * ```
      */
-    public static function entityExists($entityName, $autoloader = false)
+    public static function entityExists(string $entityName, bool $autoloader = false): bool
     {
         return
             class_exists($entityName, $autoloader) ||
-            interface_exists($entityName, false)   ||
+            interface_exists($entityName, false) ||
             trait_exists($entityName, false);
     }
 
     /**
-     * Get the shortest name for an entity.
+     * An entity has a short name if the two last parts of its fully-qualified
+     * name are equal. Then the latest part can be removed.
      *
-     * @param   string  $entityName    Entity name.
-     * @return  string
+     * # Examples
+     *
+     * ```php
+     * assert('Foo\Bar'     === Hoa\Consistency\Consistency::getEntityShortestName('Foo\Bar\Bar'));
+     * assert('Foo\Bar\Baz' === Hoa\Consistency\Consistency::getEntityShortestName('Foo\Bar\Baz'));
+     * assert('Foo'         === Hoa\Consistency\Consistency::getEntityShortestName('Foo'));
+     * ```
      */
-    public static function getEntityShortestName($entityName)
+    public static function getEntityShortestName(string $entityName): string
     {
         $parts = explode('\\', $entityName);
         $count = count($parts);
@@ -86,12 +94,20 @@ class Consistency
     }
 
     /**
-     * Declare a flex entity (for nested library).
+     * Declares a flexible entity.
      *
-     * @param   string  $entityName    Entity name.
-     * @return  bool
+     * A flexible entity can be referenced with 2 names: Its normal name, and
+     * its shortest name (see `getEntityShortestName`).
+     *
+     * # Examples
+     *
+     * ```php,ignore
+     * Hoa\Consistency\Consistency::flexEntity(Foo\Bar\Bar::class);
+     *
+     * // `new Foo\Bar()` will work!
+     * ```
      */
-    public static function flexEntity($entityName)
+    public static function flexEntity(string $entityName): bool
     {
         return class_alias(
             $entityName,
@@ -101,12 +117,17 @@ class Consistency
     }
 
     /**
-     * Whether a word is reserved or not.
+     * Returns `true` if the given word is a reserved keyword of PHP (based on
+     * the latest version), otherwise returns `false`.
      *
-     * @param   string  $word    Word.
-     * @return  bool
+     * # Examples
+     *
+     * ```php
+     * assert(true  === Hoa\Consistency\Consistency::isKeyword('else'));
+     * assert(false === Hoa\Consistency\Consistency::isKeyword('otherwise'));
+     * ```
      */
-    public static function isKeyword($word)
+    public static function isKeyword(string $word): bool
     {
         static $_list = [
             // PHP keywords.
@@ -204,12 +225,17 @@ class Consistency
     }
 
     /**
-     * Whether an ID is a valid PHP identifier.
+     * Returns `true` if the given identifier is a valid PHP identifier (based on
+     * the latest version), otherwise returns `false`.
      *
-     * @param   string  $id    ID.
-     * @return  bool
+     * # Examples
+     *
+     * ```php
+     * assert(true  === Hoa\Consistency\Consistency::isIdentifier('hello'));
+     * assert(false === Hoa\Consistency\Consistency::isIdentifier('world!'));
+     * ```
      */
-    public static function isIdentifier($id)
+    public static function isIdentifier(string $id): bool
     {
         return 0 !== preg_match(
             '#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x80-\xff]*$#',
@@ -218,23 +244,30 @@ class Consistency
     }
 
     /**
-     * Register a register shutdown function.
+     * Registers a [register shutdown function](http://php.net/register_shutdown_function).
+     *
      * It may be analogous to a super static destructor.
      *
-     * @param   callable  $callable    Callable.
-     * @return  bool
+     * # Examples
+     *
+     * ```php
+     * Hoa\Consistency\Consistency::registerShutdownFunction(
+     *     function (): void {
+     *         echo 'Bye bye!', "\n";
+     *     }
+     * );
+     * ```
      */
-    public static function registerShutdownFunction($callable)
+    public static function registerShutdownFunction(callable $callable): void
     {
-        return register_shutdown_function($callable);
+        register_shutdown_function($callable);
     }
 
     /**
-     * Get PHP executable.
-     *
-     * @return  string
+     * Returns the absolute path to the PHP binary, or `null` if the method is
+     * not able to find it.
      */
-    public static function getPHPBinary()
+    public static function getPHPBinary(): ?string
     {
         if (defined('PHP_BINARY')) {
             return PHP_BINARY;
@@ -254,11 +287,19 @@ class Consistency
     }
 
     /**
-     * Generate an Universal Unique Identifier (UUID).
+     * Generates a [Universally Unique
+     * Identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier)
+     * (UUID).
      *
-     * @return  string
+     * # Examples
+     *
+     * ```php
+     * $uuid = Hoa\Consistency\Consistency::uuid();
+     *
+     * assert(preg_match('/[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/', $uuid));
+     * ```
      */
-    public static function uuid()
+    public static function uuid(): string
     {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -274,90 +315,42 @@ class Consistency
     }
 }
 
-}
-
-namespace
-{
-
-if (70000 > PHP_VERSION_ID && false === interface_exists('Throwable', false)) {
-    /**
-     * Implement a fake Throwable class, introduced in PHP7.0.
-     */
-    interface Throwable
-    {
-        public function getMessage();
-        public function getCode();
-        public function getFile();
-        public function getLine();
-        public function getTrace();
-        public function getPrevious();
-        public function getTraceAsString();
-        public function __toString();
-    }
-}
-
 /**
- * Define TLSv* constants, introduced in PHP 5.5.
+ * Curry a function with the “…” character (HORIZONTAL ELLIPSIS Unicode
+ * character [unicode: 2026, UTF-8: E2 80 A6]).
+ *
+ * Obviously, because the first argument is a callable, it is possible to combien it with
+ * `Hoa\Consistency\Xcallable`.
+ *
+ * # Examples
+ *
+ * ```php
+ * $replaceInFoobar   = curry('str_replace', …, …, 'foobar');
+ * $replaceFooByBazIn = curry('str_replace', 'foo', 'baz', …);
+ *
+ * assert('bazbar'    === $replaceInFoobar('foo', 'baz'));
+ * assert('bazbarbaz' === $replaceFooByBazIn('foobarbaz'));
+ * ```
+ *
+ * Nested curries also work:
+ *
+ * ```php
+ * $replaceInFoobar = curry('str_replace', …, …, 'foobar');
+ * $replaceFooInFoobarBy = curry($replaceInFoobar, 'foo', …);
+ *
+ * assert('bazbar' === $replaceFooInFoobarBy('baz'));
+ * ```
  */
-if (50600 > PHP_VERSION_ID) {
-    $define = function ($constantName, $constantValue, $case = false) {
-        if (!defined($constantName)) {
-            return define($constantName, $constantValue, $case);
-        }
+function curry(callable $callable, ...$arguments): Closure
+{
+    $ii = array_keys($arguments, …, true);
 
-        return false;
+    return function (...$subArguments) use ($callable, $arguments, $ii) {
+        return $callable(...array_replace($arguments, array_combine($ii, $subArguments)));
     };
-
-    $define('STREAM_CRYPTO_METHOD_TLSv1_0_SERVER', 8);
-    $define('STREAM_CRYPTO_METHOD_TLSv1_1_SERVER', 16);
-    $define('STREAM_CRYPTO_METHOD_TLSv1_2_SERVER', 32);
-    $define('STREAM_CRYPTO_METHOD_ANY_SERVER', 62);
-
-    $define('STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT', 9);
-    $define('STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT', 17);
-    $define('STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT', 33);
-    $define('STREAM_CRYPTO_METHOD_ANY_CLIENT', 63);
-}
-
-if (!function_exists('curry')) {
-    /**
-     * Curry.
-     * Example:
-     *     $c = curry('str_replace', …, …, 'foobar');
-     *     var_dump($c('foo', 'baz')); // bazbar
-     *     $c = curry('str_replace', 'foo', 'baz', …);
-     *     var_dump($c('foobarbaz')); // bazbarbaz
-     * Nested curries also work:
-     *     $c1 = curry('str_replace', …, …, 'foobar');
-     *     $c2 = curry($c1, 'foo', …);
-     *     var_dump($c2('baz')); // bazbar
-     * Obviously, as the first argument is a callable, we can combine this with
-     * \Hoa\Consistency\Xcallable ;-).
-     * The “…” character is the HORIZONTAL ELLIPSIS Unicode character (Unicode:
-     * 2026, UTF-8: E2 80 A6).
-     *
-     * @param   mixed  $callable    Callable (two parts).
-     * @param   ...    ...          Arguments.
-     * @return  \Closure
-     */
-    function curry($callable)
-    {
-        $arguments = func_get_args();
-        array_shift($arguments);
-        $ii        = array_keys($arguments, …, true);
-
-        return function () use ($callable, $arguments, $ii) {
-            return call_user_func_array(
-                $callable,
-                array_replace($arguments, array_combine($ii, func_get_args()))
-            );
-        };
-    }
 }
 
 /**
  * Flex entity.
  */
-Hoa\Consistency\Consistency::flexEntity('Hoa\Consistency\Consistency');
-
-}
+Consistency::flexEntity(Consistency::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,16 +38,14 @@
 
 namespace Hoa\Consistency;
 
-use Hoa\Exception as HoaException;
+use RuntimeException;
 
 /**
- * Class \Hoa\Consistency\Exception.
- *
- * Extending the \Hoa\Exception\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * `Hoa\Consistency` cannot use the `Hoa\Exception` library because it would
+ * create a cyclic reference. It is not a problem because only few methods or
+ * functions throw exceptions. In all cases, an exception from
+ * `Hoa\Consistency` is nothing more than a `RuntimeException`.
  */
-class Exception extends HoaException
+class Exception extends RuntimeException
 {
 }
