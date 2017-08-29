@@ -24,7 +24,7 @@
     },
     "require": {
         "php"            : ">=7.1",
-        "hoa/consistency": "~1.0"
+        "hoa/consistency": "~2.0"
     },
     "require-dev": {
         "hoa/test": "~2.0"
