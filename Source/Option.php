@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -48,7 +50,6 @@ use RuntimeException;
  * there is `None` which is the equivalent of `null`. This is a convenient and
  * safe way to manipulate an optional value.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 final class Option
