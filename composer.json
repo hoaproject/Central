@@ -23,12 +23,13 @@
         "source": "https://central.hoa-project.net/Resource/Library/Cli"
     },
     "require": {
-        "hoa/consistency": "~1.0",
-        "hoa/console"    : "~3.0",
-        "hoa/dispatcher" : "~1.0",
-        "hoa/exception"  : "~1.0",
-        "hoa/protocol"   : "~1.0",
-        "hoa/router"     : "~3.0"
+        "php"            : ">=7.1",
+        "hoa/consistency": "~2.0",
+        "hoa/console"    : "~4.0",
+        "hoa/dispatcher" : "~2.0",
+        "hoa/exception"  : "~2.0",
+        "hoa/protocol"   : "~2.0",
+        "hoa/router"     : "~4.0"
     },
     "autoload": {
         "psr-4": {
@@ -41,7 +42,7 @@
     "bin"  : ["Bin/hoa"],
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-master": "3.x-dev"
         }
     }
 }

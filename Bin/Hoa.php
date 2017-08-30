@@ -71,12 +71,14 @@ if (!defined('HOA')) {
             dirname(__DIR__) . DIRECTORY_SEPARATOR .
             '..' . DIRECTORY_SEPARATOR .
             'Consistency' . DIRECTORY_SEPARATOR .
+            'Source' . DIRECTORY_SEPARATOR .
             'Prelude.php';
 
         require_once
             dirname(__DIR__) . DIRECTORY_SEPARATOR .
             '..' . DIRECTORY_SEPARATOR .
             'Protocol' . DIRECTORY_SEPARATOR .
+            'Source' . DIRECTORY_SEPARATOR .
             'Wrapper.php';
     }
 }
@@ -107,7 +109,7 @@ try {
         'synchronous.able'
             => 'main'
     ]);
-    $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
+    $dispatcher->setKitName(Console\Dispatcher\Kit::class);
     exit((int) $dispatcher->dispatch($router));
 } catch (Exception $e) {
     $message = $e->raise(true);
