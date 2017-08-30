@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,16 +38,55 @@
 
 namespace Hoa\Event;
 
-use Hoa\Exception as HoaException;
-
 /**
- * Class \Hoa\Event\Exception.
- *
- * Extending the \Hoa\Exception\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Implementation of a listener.
  */
-class Exception extends HoaException
+trait Listens
 {
+    /**
+     * Listener instance of type `Hoa\Event\Listener`.
+     */
+    protected $_listener = null;
+
+
+
+    /**
+     * Attaches a callable to a listenable component.
+     */
+    public function on(string $listenerId, $callable): Listenable
+    {
+        $listener = $this->getListener();
+
+        if (null === $listener) {
+            throw new Exception(
+                'Cannot attach a callable to the listener %s because ' .
+                'it has not been initialized yet.',
+                0,
+                get_class($this)
+            );
+        }
+
+        $listener->attach($listenerId, $callable);
+
+        return $this;
+    }
+
+    /**
+     * Sets a new listener.
+     */
+    protected function setListener(Listener $listener): ?Listener
+    {
+        $old             = $this->_listener;
+        $this->_listener = $listener;
+
+        return $old;
+    }
+
+    /**
+     * Returns the listener.
+     */
+    protected function getListener(): ?Listener
+    {
+        return $this->_listener;
+    }
 }

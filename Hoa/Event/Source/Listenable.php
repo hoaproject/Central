@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,70 +39,12 @@
 namespace Hoa\Event;
 
 /**
- * Trait \Hoa\Event\Listens.
- *
- * Implementation of a listener.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Each object which is listenable must implement this interface.
  */
-trait Listens
+interface Listenable extends Source
 {
     /**
-     * Listener instance.
-     *
-     * @var \Hoa\Event\Listener
+     * Attaches a callable to a listenable component.
      */
-    protected $_listener = null;
-
-
-
-    /**
-     * Attach a callable to a listenable component.
-     *
-     * @param   string  $listenerId    Listener ID.
-     * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Event\Listenable
-     */
-    public function on($listenerId, $callable)
-    {
-        $listener = $this->getListener();
-
-        if (null === $listener) {
-            throw new Exception(
-                'Cannot attach a callable to the listener %s because ' .
-                'it has not been initialized yet.',
-                0,
-                get_class($this)
-            );
-        }
-
-        $listener->attach($listenerId, $callable);
-
-        return $this;
-    }
-
-    /**
-     * Set listener.
-     *
-     * @param  \Hoa\Event\Listener  $listener    Listener.
-     * @return \Hoa\Event\Listener
-     */
-    protected function setListener(Listener $listener)
-    {
-        $old             = $this->_listener;
-        $this->_listener = $listener;
-
-        return $old;
-    }
-
-    /**
-     * Get listener.
-     *
-     * @return \Hoa\Event\Listener
-     */
-    protected function getListener()
-    {
-        return $this->_listener;
-    }
+    public function on(string $listenerId, $callable): Listenable;
 }

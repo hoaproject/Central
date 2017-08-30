@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,14 +38,11 @@
 
 namespace Hoa\Event;
 
+use Hoa\Exception as HoaException;
+
 /**
- * Interface \Hoa\Event\Source.
- *
- * Each object which is listenable must implement this interface.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Extending the `Hoa\Exception\Exception` class.
  */
-interface Source
+class Exception extends HoaException
 {
 }
