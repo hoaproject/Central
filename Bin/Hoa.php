@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -39,9 +41,6 @@ use Hoa\Dispatcher;
 use Hoa\Exception;
 use Hoa\Router;
 
-/**
- * @copyright  Copyright © 2007-2017 Hoa community
- */
 if (!defined('HOA')) {
     $composer = [
         dirname(__DIR__) . DIRECTORY_SEPARATOR .
