@@ -24,7 +24,8 @@
     },
     "require": {
         "hoa/consistency": "~1.0",
-        "hoa/exception"  : "~1.0"
+        "hoa/exception"  : "~1.0",
+        "hoa/socket"  : "~1.0"
     },
     "require-dev": {
         "hoa/test": "~2.0"
@@ -33,9 +34,6 @@
         "psr-4": {
             "Hoa\\Fastcgi\\": "."
         }
-    },
-    "suggest": {
-        "hoa/socket": "Provide sockets."
     },
     "extra": {
         "branch-alias": {
