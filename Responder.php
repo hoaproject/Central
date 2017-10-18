@@ -177,7 +177,7 @@ class Responder extends Connection
      * @throws  \Hoa\Fastcgi\Exception\Overloaded
      * @throws  \Hoa\Fastcgi\Exception\UnknownRole
      */
-    public function send(array $headers, $content = null)
+    public function send(array $headers, $content = null, &$stderr = '')
     {
         $client = $this->getClient();
         $client->connect();
@@ -223,9 +223,12 @@ class Responder extends Connection
                 );
             }
 
-            if (self::STREAM_STDOUT === $handle[parent::HEADER_TYPE] ||
-                self::STREAM_STDERR === $handle[parent::HEADER_TYPE]) {
+            if (self::STREAM_STDOUT === $handle[parent::HEADER_TYPE]) {
                 $response .= $handle[parent::HEADER_CONTENT];
+            }
+
+            if (self::STREAM_STDERR === $handle[parent::HEADER_TYPE]) {
+                $stderr .= $handle[parent::HEADER_CONTENT];
             }
         } while (self::REQUEST_END !== $handle[parent::HEADER_TYPE]);
 
