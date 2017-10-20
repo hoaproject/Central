@@ -176,10 +176,12 @@ class Responder extends Connection
      * @throws  \Hoa\Fastcgi\Exception\CannotMultiplex
      * @throws  \Hoa\Fastcgi\Exception\Overloaded
      * @throws  \Hoa\Fastcgi\Exception\UnknownRole
+     * @throws  \Hoa\Fastcgi\Exception\UnknownStatus
      */
     public function send(array $headers, $content = null, &$stderr = '')
     {
         $this->_content = null;
+        $this->_headers = [];
 
         $client = $this->getClient();
         $client->connect();
@@ -236,12 +238,14 @@ class Responder extends Connection
 
         $client->disconnect();
 
-        switch (ord($handle[parent::HEADER_CONTENT][4])) {
+        $status = ord($handle[parent::HEADER_CONTENT][4]);
+
+        switch ($status) {
             case self::STATUS_CANNOT_MULTIPLEX:
                 throw new Exception\CannotMultiplex(
                     'Application %s that you are trying to reach does not ' .
                     'support multiplexing.',
-                    0,
+                    1,
                     $this->getClient()->getSocket()->__toString()
                 );
 
@@ -250,7 +254,7 @@ class Responder extends Connection
             case self::STATUS_OVERLOADED:
                 throw new Exception\Overloaded(
                     'Application %s is too busy and rejects your request.',
-                    1,
+                    2,
                     $this->getClient()->getSocket()->__toString()
                 );
 
@@ -259,17 +263,25 @@ class Responder extends Connection
             case self::STATUS_UNKNOWN_ROLE:
                 throw new Exception\UnknownRole(
                     'Server for the application %s returns an unknown role.',
-                    2,
+                    3,
                     $this->getClient()->getSocket()->__toString()
                 );
 
                 break;
-        }
 
-        /**
-         * default: // self::STATUS_COMPLETE
-         *   break;
-         */
+            case self::STATUS_COMPLETE:
+                break;
+
+            default:
+                throw new Exception\UnknownStatus(
+                    'Server for the application %s returns an unknown status: %d.',
+                    4,
+                    [
+                        $this->getClient()->getSocket()->__toString(),
+                        $status
+                    ]
+                );
+        }
 
         $pos     = strpos($response, "\r\n\r\n");
         $headers = substr($response, 0, $pos);
