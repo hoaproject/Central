@@ -238,9 +238,7 @@ class Responder extends Connection
 
             if (self::STREAM_STDOUT === $handle[parent::HEADER_TYPE]) {
                 $responseOutput .= $handle[parent::HEADER_CONTENT];
-            }
-
-            if (self::STREAM_STDERR === $handle[parent::HEADER_TYPE]) {
+            } elseif (self::STREAM_STDERR === $handle[parent::HEADER_TYPE]) {
                 $this->_responseError .= $handle[parent::HEADER_CONTENT];
             }
         } while (self::REQUEST_END !== $handle[parent::HEADER_TYPE]);
