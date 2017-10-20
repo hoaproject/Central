@@ -179,6 +179,8 @@ class Responder extends Connection
      */
     public function send(array $headers, $content = null)
     {
+        $this->_content = null;
+
         $client = $this->getClient();
         $client->connect();
         $client->setStreamBlocking(true);
