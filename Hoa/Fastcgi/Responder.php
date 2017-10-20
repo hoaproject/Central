@@ -135,21 +135,28 @@ class Responder extends Connection
      *
      * @var \Hoa\Socket\Client
      */
-    protected $_client  = null;
+    protected $_client          = null;
 
     /**
-     * Response: content.
+     * Response's output.
      *
      * @var string
      */
-    protected $_content = null;
+    protected $_responseOutput  = null;
 
     /**
-     * Response: headers.
+     * Response's error.
+     *
+     * @var string
+     */
+    protected $_responseError   = null;
+
+    /**
+     * Response's headers.
      *
      * @var array
      */
-    protected $_headers = [];
+    protected $_responseHeaders = [];
 
 
 
@@ -180,16 +187,18 @@ class Responder extends Connection
      */
     public function send(array $headers, $content = null)
     {
-        $this->_content = null;
-        $this->_headers = [];
+        $this->_responseOutput  = null;
+        $this->_responseError   = null;
+        $this->_responseHeaders = [];
 
         $client = $this->getClient();
         $client->connect();
         $client->setStreamBlocking(true);
 
-        $parameters = null;
-        $response   = null;
-        $request    = $this->pack(
+        $parameters     = null;
+        $responseOutput = null;
+
+        $request = $this->pack(
             self::REQUEST_BEGIN,
             // ┌───────────────────┐
             // │ “I'm a responder” │
@@ -227,9 +236,10 @@ class Responder extends Connection
                 );
             }
 
-            if (self::STREAM_STDOUT === $handle[parent::HEADER_TYPE] ||
-                self::STREAM_STDERR === $handle[parent::HEADER_TYPE]) {
-                $response .= $handle[parent::HEADER_CONTENT];
+            if (self::STREAM_STDOUT === $handle[parent::HEADER_TYPE]) {
+                $responseOutput .= $handle[parent::HEADER_CONTENT];
+            } elseif (self::STREAM_STDERR === $handle[parent::HEADER_TYPE]) {
+                $this->_responseError .= $handle[parent::HEADER_CONTENT];
             }
         } while (self::REQUEST_END !== $handle[parent::HEADER_TYPE]);
 
@@ -280,26 +290,36 @@ class Responder extends Connection
                 );
         }
 
-        $pos     = strpos($response, "\r\n\r\n");
-        $headers = substr($response, 0, $pos);
+        $pos     = strpos($responseOutput, "\r\n\r\n");
+        $headers = substr($responseOutput, 0, $pos);
 
         foreach (explode("\r\n", $headers) as $header) {
             $semicolon = strpos($header, ':');
-            $this->_headers[strtolower(trim(substr($header, 0, $semicolon)))]
+            $this->_responseHeaders[strtolower(trim(substr($header, 0, $semicolon)))]
                 = trim(substr($header, $semicolon + 1));
         }
 
-        return $this->_content = substr($response, $pos + 4);
+        return $this->_responseOutput = substr($responseOutput, $pos + 4);
     }
 
     /**
      * Get response content.
      *
-     * @return  string
+     * @return  ?string
      */
     public function getResponseContent()
     {
-        return $this->_content;
+        return $this->_responseOutput;
+    }
+
+    /**
+     * Get response error if any.
+     *
+     * @return  ?string
+     */
+    public function getResponseError()
+    {
+        return $this->_responseError;
     }
 
     /**
@@ -309,7 +329,7 @@ class Responder extends Connection
      */
     public function getResponseHeaders()
     {
-        return $this->_headers;
+        return $this->_responseHeaders;
     }
 
     /**
