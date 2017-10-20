@@ -180,6 +180,7 @@ class Responder extends Connection
     public function send(array $headers, $content = null)
     {
         $this->_content = null;
+        $this->_headers = [];
 
         $client = $this->getClient();
         $client->connect();
