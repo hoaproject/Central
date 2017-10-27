@@ -324,9 +324,14 @@ class Parser
                 }
             }
 
-            $namespace = $this->_tokenSequence->current()['namespace'];
+            $current = $this->_tokenSequence->current();
+
+            $namespace = $current['namespace'];
+            $offset = $current['offset'];
+
             $zzeRule   = clone $zeRule;
             $zzeRule->setValue($value);
+            $zzeRule->setOffset($offset);
             $zzeRule->setNamespace($namespace);
 
             if (isset($this->_tokens[$namespace][$name])) {
@@ -595,7 +600,9 @@ class Parser
                     'token'     => $trace->getTokenName(),
                     'value'     => $trace->getValue(),
                     'namespace' => $trace->getNamespace(),
+                    'offset'    => $trace->getOffset()
                 ]);
+
                 $children[] = $child;
                 ++$i;
             }
