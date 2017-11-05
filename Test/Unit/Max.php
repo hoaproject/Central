@@ -10,7 +10,7 @@ class Max extends Test\Unit\Suite
     {
         $this
             ->given(
-                $max = new SUT(SUT::VALUE_TYPE_MIXED),
+                $max = new SUT(),
                 $keys   = '',
                 $series = '',
                 $four   = "ThisIsTheFourKey"
@@ -44,7 +44,7 @@ class Max extends Test\Unit\Suite
     {
         $this
             ->given(
-                $max = new SUT(SUT::VALUE_TYPE_OBJECT),
+                $max = new SUT(),
                 $series = '',
                 $four   = "ThisIsTheFourKey"
             )
