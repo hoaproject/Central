@@ -10,7 +10,7 @@ class Min extends Test\Unit\Suite
     {
         $this
             ->given(
-                $min = new SUT(SUT::VALUE_TYPE_MIXED),
+                $min = new SUT(),
                 $keys   = '',
                 $series = '',
                 $four   = "ThisIsTheFourKey"
@@ -44,7 +44,7 @@ class Min extends Test\Unit\Suite
     {
         $this
             ->given(
-                $min = new SUT(SUT::VALUE_TYPE_OBJECT),
+                $min = new SUT(),
                 $series = '',
                 $four   = "ThisIsTheFourKey"
             )
