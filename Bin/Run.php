@@ -180,7 +180,7 @@ class Run extends Console\Dispatcher\Kit
                             );
                         }
 
-                        $head               = resolve('hoa://Library/' . $parts[1]);
+                        $head               = Protocol::resolve('hoa://Library/' . $parts[1]);
                         $tail               = implode(DS, array_slice($parts, 2));
                         $namespaceDirectory = $head . DS . $tail;
 
@@ -329,9 +329,9 @@ class Run extends Console\Dispatcher\Kit
         $command =
             $atoum .
             ' --autoloader-file ' .
-                resolve('hoa://Library/Test/.autoloader.atoum.php') .
+                Protocol::resolve('hoa://Library/Test/.autoloader.atoum.php') .
             ' --configurations ' .
-                resolve('hoa://Library/Test/.atoum.php') .
+                Protocol::resolve('hoa://Library/Test/.atoum.php') .
             ' --force-terminal' .
             ' --max-children-number ' . $concurrentProcesses;
 
@@ -374,7 +374,7 @@ class Run extends Console\Dispatcher\Kit
             $command,
             null,
             null,
-            resolve('hoa://Library/Test/'),
+            Protocol::resolve('hoa://Library/Test/'),
             $_server
         );
         $processus->on('input', function ($bucket) {
