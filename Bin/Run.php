@@ -329,9 +329,9 @@ class Run extends Console\Dispatcher\Kit
         $command =
             $atoum .
             ' --autoloader-file ' .
-                Protocol::resolve('hoa://Library/Test/.autoloader.atoum.php') .
+                Protocol\Protocol::getInstance()->resolve('hoa://Library/Test/.autoloader.atoum.php') .
             ' --configurations ' .
-                Protocol::resolve('hoa://Library/Test/.atoum.php') .
+                Protocol\Protocol::getInstance()->resolve('hoa://Library/Test/.atoum.php') .
             ' --force-terminal' .
             ' --max-children-number ' . $concurrentProcesses;
 
@@ -374,7 +374,7 @@ class Run extends Console\Dispatcher\Kit
             $command,
             null,
             null,
-            Protocol::resolve('hoa://Library/Test/'),
+            Protocol\Protocol::getInstance()->resolve('hoa://Library/Test/'),
             $_server
         );
         $processus->on('input', function ($bucket) {
