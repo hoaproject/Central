@@ -436,11 +436,8 @@ class Processus extends Console\Processus
 {
     /**
      * Avoid to escape the command.
-     *
-     * @param   string  $command    Command name.
-     * @return  string
      */
-    protected function setCommand($command)
+    protected function setCommand(string $command): ?string
     {
         $old            = $this->getCommand();
         $this->_command = $command;
