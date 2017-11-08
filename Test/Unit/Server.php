@@ -537,8 +537,10 @@ class Server extends Test\Unit\Suite
                 $oldStack   = $this->invoke($server)->getStack(),
 
                 $this->calling($other)->isDisconnected = $disconnected,
-                $this->calling($other)->connect        = function () use (&$called): void {
+                $this->calling($other)->connect        = function () use (&$called, $other) {
                     $called = true;
+
+                    return $other;
                 }
             )
             ->when($result = $server->consider($other))
@@ -587,8 +589,10 @@ class Server extends Test\Unit\Suite
                 $oldStack   = $this->invoke($server)->getStack(),
 
                 $this->calling($other)->isDisconnected = $disconnected,
-                $this->calling($other)->connectAndWait = function () use (&$called): void {
+                $this->calling($other)->connectAndWait = function () use (&$called, $other) {
                     $called = true;
+
+                    return $other;
                 }
             )
             ->when($result = $server->consider($other))
