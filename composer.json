@@ -23,7 +23,7 @@
         "source": "https://central.hoa-project.net/Resource/Library/View"
     },
     "require": {
-        "php"            : ">=5.5.0",
+        "php"            : ">=7.1",
         "hoa/consistency": "~1.0"
     },
     "require-dev": {
@@ -31,7 +31,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Hoa\\View\\": "."
+            "Hoa\\View\\"      : "Source",
+            "Hoa\\View\\Test\\": "Test"
         }
     },
     "suggest": {
