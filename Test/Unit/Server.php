@@ -38,6 +38,7 @@ declare(strict_types=1);
 
 namespace Hoa\Socket\Test\Unit;
 
+use Hoa\Socket as LUT;
 use Hoa\Socket\Server as SUT;
 use Hoa\Stream;
 use Hoa\Test;
@@ -58,7 +59,7 @@ class Server extends Test\Unit\Suite
             ->when($result = new \Mock\Hoa\Socket\Server())
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Socket\Connection');
+                    ->isInstanceOf(LUT\Connection::class);
     }
 
     public function case_constructor(): void
@@ -74,7 +75,7 @@ class Server extends Test\Unit\Suite
             ->then
                 ->let($_socket = $result->getSocket())
                 ->object($_socket)
-                    ->isInstanceOf('Hoa\Socket\Socket')
+                    ->isInstanceOf(LUT\Socket::class)
                 ->integer($_socket->getAddressType())
                     ->isEqualTo($_socket::ADDRESS_DOMAIN)
                 ->string($_socket->getTransport())
@@ -170,7 +171,7 @@ class Server extends Test\Unit\Suite
             ->exception(function () use ($socket, $timeout, $flag): void {
                 new SUT($socket, $timeout, $flag);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_open_cannot_join(): void
@@ -201,7 +202,7 @@ class Server extends Test\Unit\Suite
             ->exception(function () use ($self, $server, $streamName): void {
                 $self->invoke($server)->_open($streamName);
             })
-                ->isInstanceOf('Hoa\Socket\Exception')
+                ->isInstanceOf(LUT\Exception::class)
                 ->hasCode(1)
             ->boolean($called)
                 ->isTrue();
@@ -350,7 +351,7 @@ class Server extends Test\Unit\Suite
             ->exception(function () use ($server): void {
                 $server->connect();
             })
-                ->isInstanceOf('Hoa\Socket\Exception')
+                ->isInstanceOf(LUT\Exception::class)
             ->boolean($called)
                 ->isTrue();
     }
@@ -504,7 +505,7 @@ class Server extends Test\Unit\Suite
             ->exception(function () use ($server): void {
                 $server->select();
             })
-                ->isInstanceOf('Hoa\Socket\Exception')
+                ->isInstanceOf(LUT\Exception::class)
             ->boolean($called0)
                 ->isTrue()
             ->boolean($called1)

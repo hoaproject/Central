@@ -177,7 +177,7 @@ class Socket extends Test\Unit\Suite
             ->exception(function (): void {
                 new SUT('tcp://[2001:0db8:85a3::]:80');
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(SUT\Exception::class);
     }
 
     public function case_ipv6_disabled_by_AF_INET6(): void
@@ -192,7 +192,7 @@ class Socket extends Test\Unit\Suite
             ->exception(function (): void {
                 new SUT('tcp://[2001:0db8:85a3::]:80');
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(SUT\Exception::class);
     }
 
     public function case_full_path()
@@ -214,7 +214,7 @@ class Socket extends Test\Unit\Suite
             ->exception(function (): void {
                 new SUT('foobar');
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(SUT\Exception::class);
     }
 
     public function case_has_port(): void

@@ -39,8 +39,10 @@ declare(strict_types=1);
 namespace Hoa\Socket\Test\Unit\Connection;
 
 use Hoa\Socket as LUT;
+use Hoa\Stream;
 use Hoa\Test;
 use Mock\Hoa\Socket\Connection as SUT;
+use Mock\Hoa\Socket\Test\Unit\Connection\Unclosable as UnclosableConnection;
 
 /**
  * Class \Hoa\Socket\Test\Unit\Connection\Connection.
@@ -58,11 +60,11 @@ class Connection extends Test\Unit\Suite
             ->when($result = new SUT())
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Stream')
-                    ->isInstanceOf('Hoa\Stream\IStream\In')
-                    ->isInstanceOf('Hoa\Stream\IStream\Out')
-                    ->isInstanceOf('Hoa\Stream\IStream\Pathable')
-                    ->isInstanceOf('Iterator');
+                    ->isInstanceOf(Stream::class)
+                    ->isInstanceOf(Stream\IStream\In::class)
+                    ->isInstanceOf(Stream\IStream\Out::class)
+                    ->isInstanceOf(Stream\IStream\Pathable::class)
+                    ->isInstanceOf(\Iterator::class);
     }
 
     public function case_constructor(): void
@@ -78,7 +80,7 @@ class Connection extends Test\Unit\Suite
             ->then
                 ->let($_socket = $result->getSocket())
                 ->object($_socket)
-                    ->isInstanceOf('Hoa\Socket\Socket')
+                    ->isInstanceOf(LUT\Socket::class)
                 ->integer($_socket->getAddressType())
                     ->isEqualTo($_socket::ADDRESS_DOMAIN)
                 ->string($_socket->getTransport())
@@ -104,7 +106,7 @@ class Connection extends Test\Unit\Suite
                 $socket     = 'tcp://hoa-project.net:80',
                 $timeout    = 42,
                 $flag       = 153,
-                $connection = new SUT($socket, $timeout, $flag),
+                $connection = new UnclosableConnection($socket, $timeout, $flag),
 
                 $this->calling($connection)->open = function () use (&$called): void {
                     $called = true;
@@ -248,20 +250,13 @@ class Connection extends Test\Unit\Suite
                 $socket     = 'tcp://hoa-project.net:80',
                 $timeout    = 42,
                 $flag       = 153,
-                $connection = new SUT($socket, $timeout, $flag),
-                $connection->connect(),
-
-                $this->calling($connection)->open   = null,
-                $this->calling($connection)->_close = function () use (&$called): void {
-                    $called = true;
-                }
+                $connection = new UnclosableConnection($socket, $timeout, $flag),
+                $connection->connect()
             )
             ->when($result = $connection->disconnect())
             ->then
                 ->variable($result)
                     ->isNull()
-                ->boolean($called)
-                    ->isTrue()
                 ->boolean($connection->isDisconnected())
                     ->isTrue();
     }
@@ -277,7 +272,7 @@ class Connection extends Test\Unit\Suite
             ->exception(function () use ($connection, $socketUri): void {
                 $this->invoke($connection)->setSocket($socketUri);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_set_socket(): void
@@ -294,7 +289,7 @@ class Connection extends Test\Unit\Suite
                     ->isNull()
                 ->let($socket = $connection->getSocket())
                 ->object($socket)
-                    ->isInstanceOf('Hoa\Socket\Socket')
+                    ->isInstanceOf(LUT\Socket::class)
                 ->integer($socket->getAddressType())
                     ->isEqualTo($socket::ADDRESS_DOMAIN)
                 ->string($socket->getTransport())
@@ -575,7 +570,7 @@ class Connection extends Test\Unit\Suite
             ->when($result = $this->invoke($connection)->getNodeId($resource))
             ->then
                 ->string($result)
-                    ->isEqualTo(md5((int) $resource));
+                    ->isEqualTo(sha1((string) (int) $resource, true));
     }
 
     public function case_read_on_a_null_stream(): void
@@ -590,7 +585,7 @@ class Connection extends Test\Unit\Suite
             ->exception(function () use ($connection): void {
                 $connection->read(42);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_read_a_negative_length(): void
@@ -605,7 +600,7 @@ class Connection extends Test\Unit\Suite
             ->exception(function () use ($connection): void {
                 $connection->read(-1);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_read_encrypted_node(): void
@@ -631,13 +626,13 @@ class Connection extends Test\Unit\Suite
                         ->integer($_length)
                             ->isEqualTo($length);
 
-                    return $_length;
+                    return $_stream;
                 }
             )
             ->when($result = $connection->read($length))
             ->then
-                ->integer($result)
-                    ->isEqualTo($length)
+                ->string($result)
+                    ->isEqualTo($stream)
                 ->boolean($called)
                     ->isTrue();
     }
@@ -925,7 +920,7 @@ class Connection extends Test\Unit\Suite
             ->exception(function () use ($connection): void {
                 $connection->write('foo', 3);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_write_a_negative_length(): void
@@ -941,7 +936,7 @@ class Connection extends Test\Unit\Suite
             ->exception(function () use ($connection): void {
                 $connection->write('foo', -1);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_write_on_encrypted_node(): void
@@ -1039,7 +1034,7 @@ class Connection extends Test\Unit\Suite
             ->exception(function () use ($connection, $string, $length): void {
                 $connection->write($string, $length);
             })
-                ->isInstanceOf('Hoa\Socket\Exception\BrokenPipe');
+                ->isInstanceOf(LUT\Exception\BrokenPipe::class);
     }
 
     public function case_write(): void
@@ -1108,7 +1103,7 @@ class Connection extends Test\Unit\Suite
             ->exception(function () use ($connection, $string, $length): void {
                 $connection->write($string, $length);
             })
-                ->isInstanceOf('Hoa\Socket\Exception\BrokenPipe');
+                ->isInstanceOf(LUT\Exception\BrokenPipe::class);
     }
 
     public function case_base_name(): void
@@ -1172,12 +1167,20 @@ class Connection extends Test\Unit\Suite
     }
 }
 
-abstract class ConnectionIterator extends \Hoa\Socket\Connection\Connection
+abstract class ConnectionIterator extends LUT\Connection\Connection
 {
     protected $_iterator = ['foo', 'bar', 'baz'];
 
     public function current()
     {
         return $this->_current();
+    }
+}
+
+abstract class Unclosable extends LUT\Connection\Connection
+{
+    public function _close(): bool
+    {
+        return false;
     }
 }

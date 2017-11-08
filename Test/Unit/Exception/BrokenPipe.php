@@ -38,6 +38,7 @@ declare(strict_types=1);
 
 namespace Hoa\Socket\Test\Unit\Exception;
 
+use Hoa\Socket as LUT;
 use Hoa\Socket\Exception\BrokenPipe as SUT;
 use Hoa\Test;
 
@@ -56,6 +57,6 @@ class BrokenPipe extends Test\Unit\Suite
             ->when($result = new SUT('foo', 0))
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Socket\Exception\Exception');
+                    ->isInstanceOf(LUT\Exception\Exception::class);
     }
 }

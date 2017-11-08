@@ -187,7 +187,7 @@ class Client extends Connection
     /**
      * Select connections.
      */
-    public function select(): self
+    public function select(): iterable
     {
         $read   = $this->getStack();
         $write  = null;
@@ -205,7 +205,7 @@ class Client extends Connection
     /**
      * Consider another client when selecting connection.
      */
-    public function consider(Connection $other): self
+    public function consider(Connection $other): Connection
     {
         if (!($other instanceof self)) {
             throw new Exception(

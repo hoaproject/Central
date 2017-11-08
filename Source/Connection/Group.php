@@ -78,7 +78,7 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Add a connection.
      */
-    public function offsetSet($offset, Handler $connection): void
+    public function offsetSet($offset, $connection): void
     {
         if (!($connection instanceof Handler)) {
             throw new Socket\Exception(

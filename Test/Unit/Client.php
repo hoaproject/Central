@@ -38,6 +38,7 @@ declare(strict_types=1);
 
 namespace Hoa\Socket\Test\Unit;
 
+use Hoa\Socket as LUT;
 use Hoa\Socket\Client as SUT;
 use Hoa\Stream;
 use Hoa\Test;
@@ -58,7 +59,7 @@ class Client extends Test\Unit\Suite
             ->when($result = new \Mock\Hoa\Socket\Client())
             ->then
                 ->object($result)
-                    ->isInstanceOf('Hoa\Socket\Connection');
+                    ->isInstanceOf(LUT\Connection::class);
     }
 
     public function case_constructor(): void
@@ -74,7 +75,7 @@ class Client extends Test\Unit\Suite
             ->then
                 ->let($_socket = $result->getSocket())
                 ->object($_socket)
-                    ->isInstanceOf('Hoa\Socket\Socket')
+                    ->isInstanceOf(LUT\Socket::class)
                 ->integer($_socket->getAddressType())
                     ->isEqualTo($_socket::ADDRESS_DOMAIN)
                 ->string($_socket->getTransport())
@@ -125,7 +126,7 @@ class Client extends Test\Unit\Suite
             ->exception(function () use ($self, $client, $streamName): void {
                 $self->invoke($client)->_open($streamName);
             })
-                ->isInstanceOf('Hoa\Socket\Exception')
+                ->isInstanceOf(LUT\Exception::class)
                 ->hasCode(0)
             ->boolean($called)
                 ->isTrue();
@@ -163,7 +164,7 @@ class Client extends Test\Unit\Suite
             ->exception(function () use ($self, $client, $streamName): void {
                 $self->invoke($client)->_open($streamName);
             })
-                ->isInstanceOf('Hoa\Socket\Exception')
+                ->isInstanceOf(LUT\Exception::class)
                 ->hasCode(1)
             ->boolean($called)
                 ->isTrue();
@@ -213,7 +214,7 @@ class Client extends Test\Unit\Suite
 
                 ->let($node = $client->getCurrentNode())
                 ->object($node)
-                    ->isInstanceOf('Hoa\Socket\Node')
+                    ->isInstanceOf(LUT\Node::class)
                 ->string($node->getId())
                     ->isEqualTo($this->invoke($client)->getNodeId($result))
                 ->resource($node->getSocket())
@@ -277,7 +278,7 @@ class Client extends Test\Unit\Suite
 
                 ->let($node = $client->getCurrentNode())
                 ->object($node)
-                    ->isInstanceOf('Hoa\Socket\Node')
+                    ->isInstanceOf(LUT\Node::class)
                 ->string($node->getId())
                     ->isEqualTo($this->invoke($client)->getNodeId($result))
                 ->resource($node->getSocket())
@@ -389,7 +390,7 @@ class Client extends Test\Unit\Suite
             ->exception(function () use ($client, $other): void {
                 $client->consider($other);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_consider_disconnected_client(): void
@@ -417,8 +418,10 @@ class Client extends Test\Unit\Suite
                     $this->calling($node)->getId           = 'foo',
                     $this->calling($other)->isDisconnected = $disconnected,
                     $this->calling($other)->getCurrentNode = $node,
-                    $this->calling($other)->connect        = function () use (&$called): void {
+                    $this->calling($other)->connect        = function () use (&$called, $other) {
                         $called = true;
+
+                        return $other;
                     },
 
                     $oldStack = $this->invoke($client)->getStack(),

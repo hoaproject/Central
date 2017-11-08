@@ -166,11 +166,11 @@ class Transport extends Test\Unit\Suite
             })
             ->then
                 ->object($result)
-                    ->isInstanceOf('Closure')
+                    ->isInstanceOf(\Closure::class)
                 ->exception(function () use ($result, $transport): void {
                     $result($transport . '://127.0.0.1:80');
                 })
-                    ->isInstanceOf('Hoa\Socket\Exception');
+                    ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_get_standard_factory(): void
@@ -181,7 +181,7 @@ class Transport extends Test\Unit\Suite
             })
             ->then
                 ->object($result)
-                    ->isInstanceOf('Closure')
+                    ->isInstanceOf(\Closure::class)
                 ->object($result('tcp://127.0.0.1:80'))
                     ->isEqualTo(new LUT('tcp://127.0.0.1:80'));
     }
@@ -211,7 +211,7 @@ class Transport extends Test\Unit\Suite
             })
             ->then
                 ->object($result)
-                    ->isInstanceOf('Closure')
+                    ->isInstanceOf(\Closure::class)
                 ->object($result('foo://bar/baz'))
                     ->isEqualTo(new LUT('tcp://bar/baz'))
                 ->boolean($called)

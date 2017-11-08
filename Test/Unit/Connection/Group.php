@@ -57,9 +57,9 @@ class Group extends Test\Unit\Suite
             ->when($result = new SUT())
             ->then
                 ->object($result)
-                    ->isInstanceOf('ArrayAccess')
-                    ->isInstanceOf('IteratorAggregate')
-                    ->isInstanceOf('Countable');
+                    ->isInstanceOf(\ArrayAccess::class)
+                    ->isInstanceOf(\IteratorAggregate::class)
+                    ->isInstanceOf(\Countable::class);
     }
 
     public function case_offset_exists(): void
@@ -120,7 +120,7 @@ class Group extends Test\Unit\Suite
             ->exception(function () use ($group): void {
                 $group->offsetSet(null, 42);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_offset_set_with_a_null_offset(): void
@@ -197,12 +197,14 @@ class Group extends Test\Unit\Suite
                 $this->mockGenerator->orphanize('__construct'),
                 $connectionA = new \Mock\Hoa\Socket\Connection\Handler(),
                 $connectionB = new \Mock\Hoa\Socket\Connection\Handler(),
-                $this->calling($connectionA)->merge = function (LUT\Connection\Handler $connection) use ($self, &$called, $connectionB): void {
+                $this->calling($connectionA)->merge = function (LUT\Connection\Handler $connection) use ($self, &$called, $connectionA, $connectionB) {
                     $called = true;
 
                     $self
                         ->object($connection)
                             ->isIdenticalTo($connectionB);
+
+                    return $connectionA;
                 },
 
                 $group = new SUT(),
@@ -234,7 +236,7 @@ class Group extends Test\Unit\Suite
             ->exception(function () use ($group): void {
                 $group->offsetUnset('foo');
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_get_empty_iterator(): void
@@ -244,7 +246,7 @@ class Group extends Test\Unit\Suite
             ->when($result = $group->getIterator())
             ->then
                 ->iterator($result)
-                    ->isInstanceOf('ArrayIterator')
+                    ->isInstanceOf(\ArrayIterator::class)
                     ->hasSize(0);
     }
 
@@ -259,7 +261,7 @@ class Group extends Test\Unit\Suite
             ->when($result = $group->getIterator())
             ->then
                 ->iterator($result)
-                    ->isInstanceOf('ArrayIterator')
+                    ->isInstanceOf(\ArrayIterator::class)
                     ->hasSize(1);
     }
 
@@ -317,7 +319,7 @@ class Group extends Test\Unit\Suite
             ->exception(function () use ($group): void {
                 $group->run();
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
     public function case_run(): void

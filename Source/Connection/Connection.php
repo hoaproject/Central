@@ -129,7 +129,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
     /**
      * Start a connection.
      */
-    public function __construct(string $socket, int $timeout, int $flag, string $context = null)
+    public function __construct(?string $socket, int $timeout, int $flag, string $context = null)
     {
         // Children could setSocket() before __construct.
         if (null !== $socket) {
@@ -138,7 +138,10 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
 
         $this->setTimeout($timeout);
         $this->setFlag($flag);
-        $this->setContext($context);
+
+        if (null !== $context) {
+            $this->setContext($context);
+        }
 
         return;
     }
@@ -160,7 +163,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
     /**
      * Select connections.
      */
-    abstract public function select(): self;
+    abstract public function select(): iterable;
 
     /**
      * Consider another connection when selecting connection.
@@ -463,7 +466,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
      */
     protected function getNodeId($resource): string
     {
-        return md5((int) $resource);
+        return sha1((string) (int) $resource, true);
     }
 
     /**

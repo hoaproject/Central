@@ -38,6 +38,7 @@ declare(strict_types=1);
 
 namespace Hoa\Socket\Test\Unit\Connection;
 
+use Hoa\Exception;
 use Hoa\Socket as LUT;
 use Hoa\Test;
 use Mock\Hoa\Socket\Connection\Handler as SUT;
@@ -106,13 +107,15 @@ class Handler extends Test\Unit\Suite
                 $connection = new \Mock\Hoa\Socket\Server(),
                 $handler    = new SUT($connection),
 
-                $this->calling($connection)->connectAndWait = function () use (&$connectCalled): void {
+                $this->calling($connection)->connectAndWait = function () use (&$connectCalled, $connection) {
                     $connectCalled = true;
+
+                    return $connection;
                 },
                 $this->calling($connection)->disconnect = function () use (&$disconnectCalled): void {
                     $disconnectCalled = true;
                 },
-                $this->calling($connection)->select = [],
+                $this->calling($connection)->select = $connection,
 
                 $this->constant->SUCCEED = false
             )
@@ -134,13 +137,15 @@ class Handler extends Test\Unit\Suite
                 $connection = new \Mock\Hoa\Socket\Connection(),
                 $handler    = new SUT($connection),
 
-                $this->calling($connection)->connect = function () use (&$connectCalled): void {
+                $this->calling($connection)->connect = function () use (&$connectCalled, $connection) {
                     $connectCalled = true;
+
+                    return $connection;
                 },
                 $this->calling($connection)->disconnect = function () use (&$disconnectCalled): void {
                     $disconnectCalled = true;
                 },
-                $this->calling($connection)->select = [],
+                $this->calling($connection)->select = $connection,
 
                 $this->constant->SUCCEED = false
             )
@@ -276,11 +281,13 @@ class Handler extends Test\Unit\Suite
                 $this->mockGenerator->orphanize('__construct'),
                 $nodeX = new \Mock\Hoa\Socket\Node(),
 
-                $resourceY = 42,
+                $this->mockGenerator->orphanize('__construct'),
+                $socketY = new \Mock\Hoa\Socket(),
 
-                $this->calling($connectionA)->select         = [$resourceY],
+                $this->calling($connectionA)->select         = [42],
+                $this->calling($connectionA)->is             = true,
                 $this->calling($connectionB)->getCurrentNode = $nodeX,
-                $this->calling($nodeX)->getSocket            = $resourceY,
+                $this->calling($nodeX)->getSocket            = $socketY,
 
                 $this->calling($handlerA)->_run = function (LUT\Node $node) use (&$runCalledA): void {
                     $runCalledA = true;
@@ -317,14 +324,14 @@ class Handler extends Test\Unit\Suite
                 $connectionB = new \Mock\Hoa\Socket\Connection(),
                 $handlerB    = new SUT($connectionB),
 
-                $this->calling($connectionA)->consider = function (LUT\Connection $connection) use ($self, &$called, $connectionB): void {
+                $this->calling($connectionA)->consider = function (LUT\Connection $connection) use ($self, &$called, $connectionA, $connectionB) {
                     $called = true;
 
                     $self
                         ->object($connection)
                             ->isIdenticalTo($connectionB);
 
-                    return;
+                    return $connectionA;
                 }
             )
             ->when($result = $handlerA->merge($handlerB))
@@ -681,7 +688,9 @@ class Handler extends Test\Unit\Suite
                 $exception = new LUT\Exception\BrokenPipe('Foo', 0),
 
                 $this->mockGenerator->orphanize('__construct'),
-                $resource   = 42,
+                $socket = new \Mock\Hoa\Socket(),
+
+                $this->mockGenerator->orphanize('__construct'),
                 $connection = new \Mock\Hoa\Socket\Connection(),
                 $handler    = new SUT($connection),
 
@@ -690,7 +699,7 @@ class Handler extends Test\Unit\Suite
                 $nodeY = new \Mock\Hoa\Socket\Node(),
                 $nodeZ = new \Mock\Hoa\Socket\Node(),
 
-                $this->calling($connection)->getSocket = $resource,
+                $this->calling($connection)->getSocket = $socket,
                 $this->calling($connection)->getNodes  = [$nodeX, $nodeY, $nodeZ],
 
                 $this->calling($nodeY)->getConnection = $connection,
@@ -704,7 +713,7 @@ class Handler extends Test\Unit\Suite
             ->exception(function () use ($handler, $predicate, $message): void {
                 $handler->broadcastIf($predicate, $message, 'bar', 'baz');
             })
-                ->isInstanceOf('Hoa\Exception\Group')
+                    ->isInstanceOf(Exception\Group::class)
                 ->integer(count($this->exception))
                     ->isEqualTo(2)
                 ->object($this->exception[$nodeY->getId()])
@@ -725,7 +734,9 @@ class Handler extends Test\Unit\Suite
                 },
 
                 $this->mockGenerator->orphanize('__construct'),
-                $resource   = 42,
+                $socket = new \Mock\Hoa\Socket(),
+
+                $this->mockGenerator->orphanize('__construct'),
                 $connection = new \Mock\Hoa\Socket\Connection(),
                 $handler    = new SUT($connection),
 
@@ -734,7 +745,7 @@ class Handler extends Test\Unit\Suite
                 $nodeY = new \Mock\Hoa\Socket\Node(),
                 $nodeZ = new \Mock\Hoa\Socket\Node(),
 
-                $this->calling($connection)->getSocket = $resource,
+                $this->calling($connection)->getSocket = $socket,
                 $this->calling($connection)->getNodes  = [$nodeX, $nodeY, $nodeZ],
 
                 $this->calling($nodeY)->getConnection = $connection,
