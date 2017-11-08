@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,16 +45,11 @@ namespace Hoa\Socket;
  * kind `scheme://uri`. A callable is associated to a `scheme` and represents a
  * factory building valid `Hoa\Socket\Socket` instances (so with `tcp://` or
  * `udp://` “native” schemes).
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Transport
 {
     /**
      * Additionnal transports (scheme to callable).
-     *
-     * @var array
      */
     protected static $_transports = [];
 
@@ -60,10 +57,8 @@ class Transport
 
     /**
      * Get all enabled transports.
-     *
-     * @return  array
      */
-    public static function get()
+    public static function get(): array
     {
         return array_merge(
             stream_get_transports(),
@@ -73,11 +68,8 @@ class Transport
 
     /**
      * Check if a transport exists.
-     *
-     * @param   string  $transport    Transport to check.
-     * @return  bool
      */
-    public static function exists($transport)
+    public static function exists(string $transport): bool
     {
         return in_array(strtolower($transport), static::get());
     }
@@ -85,26 +77,16 @@ class Transport
     /**
      * Register a new transport.
      * Note: It is possible to override a standard transport.
-     *
-     * @param  string    $transport    Transport name.
-     * @param  callable  $factory      Associated factory to build a valid
-     *                                 `Hoa\Socket\Socket` object.
-     * @return void
      */
-    public static function register($transport, callable $factory)
+    public static function register(string $transport, callable $factory): void
     {
         static::$_transports[$transport] = $factory;
-
-        return;
     }
 
     /**
      * Get the factory associated to a specific transport.
-     *
-     * @param  string  $transport    Transport.
-     * @return callable
      */
-    public static function getFactory($transport)
+    public static function getFactory(string $transport): callable
     {
         if (false === static::exists($transport) ||
             !isset(static::$_transports[$transport])) {

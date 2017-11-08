@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,12 +47,11 @@ use Hoa\Test;
  *
  * Test suite for the server object.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Server extends Test\Unit\Suite
 {
-    public function case_is_a_connection()
+    public function case_is_a_connection(): void
     {
         $this
             ->given($this->mockGenerator->orphanize('__construct'))
@@ -60,7 +61,7 @@ class Server extends Test\Unit\Suite
                     ->isInstanceOf('Hoa\Socket\Connection');
     }
 
-    public function case_constructor()
+    public function case_constructor(): void
     {
         $this
             ->given(
@@ -92,7 +93,7 @@ class Server extends Test\Unit\Suite
                     ->isEqualTo($context);
     }
 
-    public function case_constructor_no_flag_with_tcp()
+    public function case_constructor_no_flag_with_tcp(): void
     {
         $this
             ->given(
@@ -108,7 +109,7 @@ class Server extends Test\Unit\Suite
                     ->isEqualTo(SUT::BIND | SUT::LISTEN);
     }
 
-    public function case_constructor_no_flag_with_udp()
+    public function case_constructor_no_flag_with_udp(): void
     {
         $this
             ->given(
@@ -124,7 +125,7 @@ class Server extends Test\Unit\Suite
                     ->isEqualTo(SUT::BIND);
     }
 
-    public function case_constructor_with_flag_and_tcp()
+    public function case_constructor_with_flag_and_tcp(): void
     {
         $this
             ->given(
@@ -141,7 +142,7 @@ class Server extends Test\Unit\Suite
                     ->isEqualTo(SUT::BIND | SUT::LISTEN);
     }
 
-    public function case_constructor_with_flag_and_udp()
+    public function case_constructor_with_flag_and_udp(): void
     {
         $this
             ->given(
@@ -158,7 +159,7 @@ class Server extends Test\Unit\Suite
                     ->isEqualTo($flag);
     }
 
-    public function case_constructor_with_flag_and_udp_listen_not_allowed()
+    public function case_constructor_with_flag_and_udp_listen_not_allowed(): void
     {
         $this
             ->given(
@@ -166,13 +167,13 @@ class Server extends Test\Unit\Suite
                 $timeout = 42,
                 $flag    = SUT::LISTEN
             )
-            ->exception(function () use ($socket, $timeout, $flag) {
+            ->exception(function () use ($socket, $timeout, $flag): void {
                 new SUT($socket, $timeout, $flag);
             })
                 ->isInstanceOf('Hoa\Socket\Exception');
     }
 
-    public function case_open_cannot_join()
+    public function case_open_cannot_join(): void
     {
         $self = $this;
 
@@ -197,7 +198,7 @@ class Server extends Test\Unit\Suite
                     return false;
                 }
             )
-            ->exception(function () use ($self, $server, $streamName) {
+            ->exception(function () use ($self, $server, $streamName): void {
                 $self->invoke($server)->_open($streamName);
             })
                 ->isInstanceOf('Hoa\Socket\Exception')
@@ -206,7 +207,7 @@ class Server extends Test\Unit\Suite
                 ->isTrue();
     }
 
-    public function case_open()
+    public function case_open(): void
     {
         $self = $this;
 
@@ -262,7 +263,7 @@ class Server extends Test\Unit\Suite
                     ->isIdenticalTo($result);
     }
 
-    public function case_open_with_context()
+    public function case_open_with_context(): void
     {
         $self = $this;
 
@@ -322,7 +323,7 @@ class Server extends Test\Unit\Suite
                     ->isIdenticalTo($result);
     }
 
-    public function case_connect_timed_out()
+    public function case_connect_timed_out(): void
     {
         $self = $this;
 
@@ -346,7 +347,7 @@ class Server extends Test\Unit\Suite
                     return false;
                 }
             )
-            ->exception(function () use ($server) {
+            ->exception(function () use ($server): void {
                 $server->connect();
             })
                 ->isInstanceOf('Hoa\Socket\Exception')
@@ -354,7 +355,7 @@ class Server extends Test\Unit\Suite
                 ->isTrue();
     }
 
-    public function case_connect()
+    public function case_connect(): void
     {
         $self = $this;
 
@@ -388,7 +389,7 @@ class Server extends Test\Unit\Suite
                     ->isIdenticalTo($client);
     }
 
-    public function case_connect_and_wait()
+    public function case_connect_and_wait(): void
     {
         $self = $this;
 
@@ -416,7 +417,7 @@ class Server extends Test\Unit\Suite
                     ->isNotEqualTo(true);
     }
 
-    public function case_select_not_a_master()
+    public function case_select_not_a_master(): void
     {
         $self = $this;
 
@@ -430,7 +431,7 @@ class Server extends Test\Unit\Suite
                 $oldIteratorValues = $this->invoke($server)->getIteratorValues(),
 
                 $this->calling($server)->getTimeout = $timeout,
-                $this->function->stream_select      = function (&$_read, &$_write, &$_except, $_timeout, $_ttimeout) use ($self, &$called, $stack, $timeout) {
+                $this->function->stream_select      = function (&$_read, &$_write, &$_except, $_timeout, $_ttimeout) use ($self, &$called, $stack, $timeout): void {
                     $called = true;
 
                     $self
@@ -463,7 +464,7 @@ class Server extends Test\Unit\Suite
                     ->isEqualTo(count($oldIteratorValues) + 1);
     }
 
-    public function case_select_timed_out()
+    public function case_select_timed_out(): void
     {
         $self = $this;
 
@@ -475,7 +476,7 @@ class Server extends Test\Unit\Suite
                 $timeout = 42,
 
                 $this->calling($server)->getTimeout = $timeout,
-                $this->function->stream_select      = function (&$_read, &$_write, &$_except, $_timeout, $_ttimeout) use ($self, &$called0, $stack, $timeout) {
+                $this->function->stream_select      = function (&$_read, &$_write, &$_except, $_timeout, $_ttimeout) use ($self, &$called0, $stack, $timeout): void {
                     $called0 = true;
 
                     $self
@@ -500,7 +501,7 @@ class Server extends Test\Unit\Suite
                     return false;
                 }
             )
-            ->exception(function () use ($server) {
+            ->exception(function () use ($server): void {
                 $server->select();
             })
                 ->isInstanceOf('Hoa\Socket\Exception')
@@ -510,17 +511,17 @@ class Server extends Test\Unit\Suite
                 ->isTrue();
     }
 
-    public function case_consider_client()
+    public function case_consider_client(): void
     {
         $this->_case_consider_client(false);
     }
 
-    public function case_consider_disconnected_client()
+    public function case_consider_disconnected_client(): void
     {
         $this->_case_consider_client(true);
     }
 
-    protected function _case_consider_client($disconnected)
+    protected function _case_consider_client($disconnected): void
     {
         $this
             ->given(
@@ -535,7 +536,7 @@ class Server extends Test\Unit\Suite
                 $oldStack   = $this->invoke($server)->getStack(),
 
                 $this->calling($other)->isDisconnected = $disconnected,
-                $this->calling($other)->connect        = function () use (&$called) {
+                $this->calling($other)->connect        = function () use (&$called): void {
                     $called = true;
                 }
             )
@@ -560,17 +561,17 @@ class Server extends Test\Unit\Suite
                     ->isEqualTo($disconnected ?: null);
     }
 
-    public function case_consider()
+    public function case_consider(): void
     {
         $this->_case_consider(false);
     }
 
-    public function case_consider_disconnected_other()
+    public function case_consider_disconnected_other(): void
     {
         $this->_case_consider(true);
     }
 
-    protected function _case_consider($disconnected)
+    protected function _case_consider($disconnected): void
     {
         $this
             ->given(
@@ -585,7 +586,7 @@ class Server extends Test\Unit\Suite
                 $oldStack   = $this->invoke($server)->getStack(),
 
                 $this->calling($other)->isDisconnected = $disconnected,
-                $this->calling($other)->connectAndWait = function () use (&$called) {
+                $this->calling($other)->connectAndWait = function () use (&$called): void {
                     $called = true;
                 }
             )
@@ -610,7 +611,7 @@ class Server extends Test\Unit\Suite
                     ->isEqualTo($disconnected ?: null);
     }
 
-    public function case_is()
+    public function case_is(): void
     {
         $this
             ->given(
@@ -621,7 +622,7 @@ class Server extends Test\Unit\Suite
                 ->isTrue();
     }
 
-    public function case_is_not()
+    public function case_is_not(): void
     {
         $this
             ->given(
@@ -651,13 +652,13 @@ class Server extends Test\Unit\Suite
                     ->boolean($result);
     }
 
-    public function case_is_binding()
+    public function case_is_binding(): void
     {
         $this
             ->_case_flag_is(SUT::BIND, 'isBinding');
     }
 
-    public function case_is_Listening()
+    public function case_is_Listening(): void
     {
         $this
             ->_case_flag_is(SUT::LISTEN, 'isListening');

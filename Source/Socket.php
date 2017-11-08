@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -42,82 +44,59 @@ use Hoa\Consistency;
  * Class \Hoa\Socket.
  *
  * Socket analyzer.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Socket
 {
     /**
      * Address type: IPv6.
-     *
-     * @const int
      */
-    const ADDRESS_IPV6   = 0;
+    public const ADDRESS_IPV6   = 0;
 
     /**
      * Address type: IPv4.
-     *
-     * @const int
      */
-    const ADDRESS_IPV4   = 1;
+    public const ADDRESS_IPV4   = 1;
 
     /**
      * Address type: domain.
-     *
-     * @const int
      */
-    const ADDRESS_DOMAIN = 2;
+    public const ADDRESS_DOMAIN = 2;
 
     /**
      * Address type: path.
-     *
-     * @const int
      */
-    const ADDRESS_PATH   = 3;
+    public const ADDRESS_PATH   = 3;
 
     /**
      * Address.
-     *
-     * @var string
      */
     protected $_address     = null;
 
     /**
      * Address type. Please, see the self::ADDRESS_* constants.
-     *
-     * @var int
      */
     protected $_addressType = 0;
 
     /**
      * Port.
-     *
-     * @var int
      */
     protected $_port        = -1;
 
     /**
      * Transport.
-     *
-     * @var string
      */
     protected $_transport   = null;
 
     /**
      * Whether the socket is secured or not.
-     *
-     * @var bool
      */
     protected $_secured     = false;
 
 
     /**
      * Constructor.
-     *
-     * @param   string  $uri    URI.
      */
-    public function __construct($uri)
+    public function __construct(string $uri)
     {
         $this->setURI($uri);
 
@@ -126,12 +105,8 @@ class Socket
 
     /**
      * Set URI.
-     *
-     * @param   string  $uri    URI.
-     * @return  string
-     * @throws  \Hoa\Socket\Exception
      */
-    public function setURI($uri)
+    protected function setURI(string $uri): void
     {
         $m = preg_match(
             '#(?<scheme>[^:]+)://' .
@@ -140,7 +115,8 @@ class Socket
                 '(?<domain>[^:]+)(?::(?<domain_port>\d+))?$|' .
                 '(?<ipv6>.+)$)#',
             $uri,
-            $matches);
+            $matches
+        );
 
         if (0 === $m) {
             throw new Exception(
@@ -198,18 +174,12 @@ class Socket
                 $uri
             );
         }
-
-        return;
     }
 
     /**
      * Set the port.
-     *
-     * @param   int  $port    Port.
-     * @return  int
-     * @throws  \Hoa\Socket\Exception
      */
-    protected function setPort($port)
+    protected function setPort(int $port): int
     {
         if ($port < 0) {
             throw new Exception(
@@ -227,18 +197,14 @@ class Socket
 
     /**
      * Set the transport.
-     *
-     * @param   string  $transport    Transport (TCP, UDP etc.).
-     * @return  string
-     * @throws  \Hoa\Socket\Exception
      */
-    protected function setTransport($transport)
+    protected function setTransport(string $transport): ?string
     {
         $transport = strtolower($transport);
 
         if (false === Transport::exists($transport)) {
             throw new Exception(
-                'Transport %s is not enabled on this machin.',
+                'Transport %s is not enabled on this machine.',
                 3,
                 $transport
             );
@@ -252,80 +218,64 @@ class Socket
 
     /**
      * Get the address.
-     *
-     * @return  string
      */
-    public function getAddress()
+    public function getAddress(): ?string
     {
         return $this->_address;
     }
 
     /**
      * Get the address type.
-     *
-     * @return  int
      */
-    public function getAddressType()
+    public function getAddressType(): int
     {
         return $this->_addressType;
     }
 
     /**
      * Check if a port was declared.
-     *
-     * @return  string
      */
-    public function hasPort()
+    public function hasPort(): bool
     {
         return -1 != $this->getPort();
     }
 
     /**
      * Get the port.
-     *
-     * @return  int
      */
-    public function getPort()
+    public function getPort(): int
     {
         return $this->_port;
     }
 
     /**
      * Check if a transport was declared.
-     *
-     * @return  bool
      */
-    public function hasTransport()
+    public function hasTransport(): bool
     {
         return null !== $this->getTransport();
     }
 
     /**
      * Get the transport.
-     *
-     * @return  string
      */
-    public function getTransport()
+    public function getTransport(): ?string
     {
         return $this->_transport;
     }
 
     /**
      * Check if the socket is secured or not.
-     *
-     * @return bool
      */
-    public function isSecured()
+    public function isSecured(): bool
     {
         return $this->_secured;
     }
 
     /**
      * Get a string that represents the socket address.
-     *
-     * @return  string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $out = null;
 
@@ -350,4 +300,4 @@ class Socket
 /**
  * Flex entity.
  */
-Consistency::flexEntity('Hoa\Socket\Socket');
+Consistency::flexEntity(Socket::class);

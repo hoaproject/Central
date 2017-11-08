@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -40,37 +42,26 @@ namespace Hoa\Socket;
  * Class \Hoa\Socket\Node.
  *
  * Represent a generic node.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Node
 {
     /**
      * Node's ID.
-     *
-     * @var string
      */
     protected $_id             = null;
 
     /**
      * Node's socket resource.
-     *
-     * @var resource
      */
     private $_socket           = null;
 
     /**
      * Get server.
-     *
-     * @var \Hoa\Socket\Connection
      */
     private $_connection       = null;
 
     /**
      * Encryption type.
-     *
-     * @var int
      */
     protected $_encryptionType = null;
 
@@ -78,12 +69,8 @@ class Node
 
     /**
      * Constructor.
-     *
-     * @param   string                  $id            ID.
-     * @param   resource                $socket        Socket.
-     * @param   \Hoa\Socket\Connection  $connection    Connection.
      */
-    public function __construct($id, $socket, Connection $connection)
+    public function __construct(string $id, $socket, Connection $connection)
     {
         $this->_id         = $id;
         $this->_socket     = $socket;
@@ -94,18 +81,14 @@ class Node
 
     /**
      * Get node's ID.
-     *
-     * @return  string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->_id;
     }
 
     /**
      * Get node's socket resource.
-     *
-     * @return  resource
      */
     public function getSocket()
     {
@@ -114,23 +97,16 @@ class Node
 
     /**
      * Get connection.
-     *
-     * @return  \Hoa\Socket\Connection
      */
-    public function getConnection()
+    public function getConnection(): Connection
     {
         return $this->_connection;
     }
 
     /**
      * Set encryption type.
-     *
-     * @param   int  $type    Type of encryption (please, see ENCRYPTION_*
-     *                        constants from Hoa\Socket\Client and
-     *                        Hoa\Socket\Server).
-     * @return  int
      */
-    public function setEncryptionType($type)
+    public function setEncryptionType(int $type): ?int
     {
         $old                   = $this->_encryptionType;
         $this->_encryptionType = $type;
@@ -140,10 +116,8 @@ class Node
 
     /**
      * Get encryption type.
-     *
-     * @return  int
      */
-    public function getEncryptionType()
+    public function getEncryptionType(): ?int
     {
         return $this->_encryptionType;
     }

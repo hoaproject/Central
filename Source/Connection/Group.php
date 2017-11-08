@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,16 +45,11 @@ use Hoa\Socket;
  *
  * Represent a group of connection handlers.
  * Add semantics around Hoa\Socket\Connection\Handler.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Group implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * All connections.
-     *
-     * @var array
      */
     protected $_connections = [];
 
@@ -60,22 +57,16 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Check if a connection offset exists.
-     *
-     * @param   mixed  $offset    Offset.
-     * @return  bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return true === array_key_exists($offset, $this->_connections);
     }
 
     /**
      * Get a specific connection.
-     *
-     * @param   mixed  $offset    Offset.
-     * @return  \Hoa\Socket\Connection\Handler
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): ?Handler
     {
         if (false === $this->offsetExists($offset)) {
             return null;
@@ -86,14 +77,8 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Add a connection.
-     *
-     * @param   mixed                           $offset        Offset.
-     * @param   \Hoa\Socket\Connection\Handler  $connection    Connection
-     *                                                         (handler).
-     * @return  void
-     * @throws  \Hoa\Socket\Exception
      */
-    public function offsetSet($offset, $connection)
+    public function offsetSet($offset, Handler $connection): void
     {
         if (!($connection instanceof Handler)) {
             throw new Socket\Exception(
@@ -112,56 +97,40 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable
         if (1 < count($this)) {
             $this->getFirstConnection()->merge($connection);
         }
-
-        return;
     }
 
     /**
      * Nothing (not allowed).
-     *
-     * @param   mixed  $offset    Offset.
-     * @return  void
-     * @throws  \Hoa\Socket\Exception
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new Socket\Exception(
             'This operation is not allowed: you cannot unset a connection ' .
             'from a group.',
             1
         );
-
-        return;
     }
 
     /**
      * Get iterator of all declared connections.
-     *
-     * @return  \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->_connections);
     }
 
     /**
      * Count number of declared connections.
-     *
-     * @return  int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->_connections);
     }
 
     /**
      * Semantics alias of $this->offsetSet(null, $connection).
-     *
-     * @param   \Hoa\Socket\Connection\Handler  $connection    Connection
-     *                                                         (handler).
-     * @return  \Hoa\Socket\Connection\Group
      */
-    public function merge(Handler $connection)
+    public function merge(Handler $connection): self
     {
         $this[] = $connection;
 
@@ -170,11 +139,8 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Run the group of connections.
-     *
-     * @return  void
-     * @throws  \Hoa\Socket\Exception
      */
-    public function run()
+    public function run(): void
     {
         if (0 === count($this)) {
             throw new Socket\Exception(
@@ -183,16 +149,14 @@ class Group implements \ArrayAccess, \IteratorAggregate, \Countable
             );
         }
 
-        return $this->getFirstConnection()->run();
+        $this->getFirstConnection()->run();
     }
 
     /**
      * Get the first declared connection (where other connections have been
      * merged).
-     *
-     * @return  \Hoa\Socket\Connection\Handler
      */
-    public function getFirstConnection()
+    public function getFirstConnection(): Handler
     {
         return $this[key($this->_connections)];
     }

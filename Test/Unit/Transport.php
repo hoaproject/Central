@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,12 +47,11 @@ use Hoa\Test;
  *
  * Test suite for the transport.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Transport extends Test\Unit\Suite
 {
-    public function case_get_standards()
+    public function case_get_standards(): void
     {
         $this
             ->given($standardTransports = stream_get_transports())
@@ -60,14 +61,16 @@ class Transport extends Test\Unit\Suite
                     ->strictlyContainsValues($standardTransports);
     }
 
-    public function case_get_standards_and_vendors()
+    public function case_get_standards_and_vendors(): void
     {
         $this
             ->given(
                 $standardTransports = stream_get_transports(),
                 $vendorTransports   = ['foo', 'bar'],
-                SUT::register('foo', function () { }),
-                SUT::register('bar', function () { })
+                SUT::register('foo', function (): void {
+                }),
+                SUT::register('bar', function (): void {
+                })
             )
             ->when($result = SUT::get())
             ->then
@@ -80,7 +83,7 @@ class Transport extends Test\Unit\Suite
                     );
     }
 
-    public function case_exists_standards()
+    public function case_exists_standards(): void
     {
         $this
             ->given($this->function->stream_get_transports = ['tcp'])
@@ -90,12 +93,13 @@ class Transport extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_exists_standards_and_vendors()
+    public function case_exists_standards_and_vendors(): void
     {
         $this
             ->given(
                 $this->function->stream_get_transports = ['tcp'],
-                SUT::register('foo', function () { })
+                SUT::register('foo', function (): void {
+                })
             )
             ->when($result = SUT::exists('tcp'))
             ->then
@@ -108,12 +112,13 @@ class Transport extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_not_exists_standards_and_vendors()
+    public function case_not_exists_standards_and_vendors(): void
     {
         $this
             ->given(
                 $this->function->stream_get_transports = ['tcp'],
-                SUT::register('foo', function () { })
+                SUT::register('foo', function (): void {
+                })
             )
             ->when($result = SUT::exists('bar'))
             ->then
@@ -121,7 +126,7 @@ class Transport extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_exists_not_in_lower_case()
+    public function case_exists_not_in_lower_case(): void
     {
         $this
             ->given($this->function->stream_get_transports = ['tcp'])
@@ -131,7 +136,7 @@ class Transport extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_register()
+    public function case_register(): void
     {
         $this
             ->given(
@@ -139,7 +144,8 @@ class Transport extends Test\Unit\Suite
                 $transport = 'foo' . uniqid(),
                 $oldExists = SUT::exists($transport)
             )
-            ->when($result = SUT::register($transport, function () { }))
+            ->when($result = SUT::register($transport, function (): void {
+            }))
             ->then
                 ->variable($result)
                     ->isNull()
@@ -151,26 +157,26 @@ class Transport extends Test\Unit\Suite
                     ->isEqualTo(count($oldGet) + 1);
     }
 
-    public function case_get_unknown_factory()
+    public function case_get_unknown_factory(): void
     {
         $this
             ->given($transport = 'foo' . uniqid())
-            ->when(function () use (&$result, $transport) {
+            ->when(function () use (&$result, $transport): void {
                 $result = SUT::getFactory($transport);
             })
             ->then
                 ->object($result)
                     ->isInstanceOf('Closure')
-                ->exception(function () use ($result, $transport) {
+                ->exception(function () use ($result, $transport): void {
                     $result($transport . '://127.0.0.1:80');
                 })
                     ->isInstanceOf('Hoa\Socket\Exception');
     }
 
-    public function case_get_standard_factory()
+    public function case_get_standard_factory(): void
     {
         $this
-            ->when(function () use (&$result) {
+            ->when(function () use (&$result): void {
                 $result = SUT::getFactory('tcp');
             })
             ->then
@@ -180,7 +186,7 @@ class Transport extends Test\Unit\Suite
                     ->isEqualTo(new LUT('tcp://127.0.0.1:80'));
     }
 
-    public function case_get_vendor_factory()
+    public function case_get_vendor_factory(): void
     {
         $self = $this;
 
@@ -200,7 +206,7 @@ class Transport extends Test\Unit\Suite
                 },
                 SUT::register($transport, $factory)
             )
-            ->when(function () use (&$result, $transport) {
+            ->when(function () use (&$result, $transport): void {
                 $result = SUT::getFactory($transport);
             })
             ->then

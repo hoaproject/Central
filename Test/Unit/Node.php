@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,12 +47,11 @@ use Hoa\Test;
  *
  * Test suite for the node object.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Node extends Test\Unit\Suite
 {
-    public function case_constructor()
+    public function case_constructor(): void
     {
         $this
             ->given(
@@ -70,7 +71,7 @@ class Node extends Test\Unit\Suite
                     ->isIdenticalTo($connection);
     }
 
-    public function case_set_encryption_type()
+    public function case_set_encryption_type(): void
     {
         $this
             ->given(
@@ -88,7 +89,7 @@ class Node extends Test\Unit\Suite
                     ->isEqualTo(LUT\Server::ENCRYPTION_SSLv23);
     }
 
-    public function case_get_encryption_type()
+    public function case_get_encryption_type(): void
     {
         $this
             ->given(

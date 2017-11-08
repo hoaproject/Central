@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,12 +47,11 @@ use Hoa\Test;
  *
  * Test suite for the client object.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Client extends Test\Unit\Suite
 {
-    public function case_is_a_connection()
+    public function case_is_a_connection(): void
     {
         $this
             ->given($this->mockGenerator->orphanize('__construct'))
@@ -60,7 +61,7 @@ class Client extends Test\Unit\Suite
                     ->isInstanceOf('Hoa\Socket\Connection');
     }
 
-    public function case_constructor()
+    public function case_constructor(): void
     {
         $this
             ->given(
@@ -92,7 +93,7 @@ class Client extends Test\Unit\Suite
                     ->isEqualTo($context);
     }
 
-    public function case_open_cannot_join()
+    public function case_open_cannot_join(): void
     {
         $self = $this;
 
@@ -121,7 +122,7 @@ class Client extends Test\Unit\Suite
                     return false;
                 }
             )
-            ->exception(function () use ($self, $client, $streamName) {
+            ->exception(function () use ($self, $client, $streamName): void {
                 $self->invoke($client)->_open($streamName);
             })
                 ->isInstanceOf('Hoa\Socket\Exception')
@@ -130,7 +131,7 @@ class Client extends Test\Unit\Suite
                 ->isTrue();
     }
 
-    public function case_open_returns_an_error()
+    public function case_open_returns_an_error(): void
     {
         $self = $this;
 
@@ -159,7 +160,7 @@ class Client extends Test\Unit\Suite
                     return false;
                 }
             )
-            ->exception(function () use ($self, $client, $streamName) {
+            ->exception(function () use ($self, $client, $streamName): void {
                 $self->invoke($client)->_open($streamName);
             })
                 ->isInstanceOf('Hoa\Socket\Exception')
@@ -168,7 +169,7 @@ class Client extends Test\Unit\Suite
                 ->isTrue();
     }
 
-    public function case_open()
+    public function case_open(): void
     {
         $self = $this;
 
@@ -228,7 +229,7 @@ class Client extends Test\Unit\Suite
                     ->isIdenticalTo($node);
     }
 
-    public function case_open_with_context()
+    public function case_open_with_context(): void
     {
         $self = $this;
 
@@ -292,7 +293,7 @@ class Client extends Test\Unit\Suite
                     ->isIdenticalTo($node);
     }
 
-    public function case_close_persistent_connection()
+    public function case_close_persistent_connection(): void
     {
         $this
             ->given(
@@ -307,7 +308,7 @@ class Client extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_close()
+    public function case_close(): void
     {
         $self = $this;
 
@@ -337,7 +338,7 @@ class Client extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_select()
+    public function case_select(): void
     {
         $self = $this;
 
@@ -348,7 +349,7 @@ class Client extends Test\Unit\Suite
                 $timeout = 42,
 
                 $this->calling($client)->getTimeout = $timeout,
-                $this->function->stream_select      = function (&$_read, &$_write, &$_except, $_timeout, $_ttimeout) use ($self, &$called, $timeout) {
+                $this->function->stream_select      = function (&$_read, &$_write, &$_except, $_timeout, $_ttimeout) use ($self, &$called, $timeout): void {
                     $called = true;
 
                     $self
@@ -376,7 +377,7 @@ class Client extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_consider_not_a_client()
+    public function case_consider_not_a_client(): void
     {
         $this
             ->given(
@@ -385,18 +386,18 @@ class Client extends Test\Unit\Suite
                 $this->mockGenerator->orphanize('__construct'),
                 $other = new \Mock\Hoa\Socket\Server()
             )
-            ->exception(function () use ($client, $other) {
+            ->exception(function () use ($client, $other): void {
                 $client->consider($other);
             })
                 ->isInstanceOf('Hoa\Socket\Exception');
     }
 
-    public function case_consider_disconnected_client()
+    public function case_consider_disconnected_client(): void
     {
         $this->_case_consider(true);
     }
 
-    public function case_consider()
+    public function case_consider(): void
     {
         $this->_case_consider(false);
     }
@@ -416,7 +417,7 @@ class Client extends Test\Unit\Suite
                     $this->calling($node)->getId           = 'foo',
                     $this->calling($other)->isDisconnected = $disconnected,
                     $this->calling($other)->getCurrentNode = $node,
-                    $this->calling($other)->connect        = function () use (&$called) {
+                    $this->calling($other)->connect        = function () use (&$called): void {
                         $called = true;
                     },
 
@@ -443,14 +444,14 @@ class Client extends Test\Unit\Suite
                         ->isEqualTo($node);
     }
 
-    public function case_is()
+    public function case_is(): void
     {
         $this
             ->_case_is('foo', 'foo')
                 ->isTrue();
     }
 
-    public function case_is_not()
+    public function case_is_not(): void
     {
         $this
             ->_case_is('foo', 'bar')
@@ -476,19 +477,19 @@ class Client extends Test\Unit\Suite
                     ->boolean($result);
     }
 
-    public function case_is_connected()
+    public function case_is_connected(): void
     {
         $this
             ->_case_flag_is(SUT::CONNECT, 'isConnected');
     }
 
-    public function case_is_asynchronous()
+    public function case_is_asynchronous(): void
     {
         $this
             ->_case_flag_is(SUT::ASYNCHRONOUS, 'isAsynchronous');
     }
 
-    public function case_is_persistent()
+    public function case_is_persistent(): void
     {
         $this
             ->_case_flag_is(SUT::PERSISTENT, 'isPersistent');
