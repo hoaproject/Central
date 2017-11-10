@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Hoa
@@ -44,7 +44,6 @@ use Hoa\File;
  *
  * Clean generated tests.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Clean extends Console\Dispatcher\Kit
@@ -68,7 +67,7 @@ class Clean extends Console\Dispatcher\Kit
      *
      * @return  int
      */
-    public function main()
+    public function main(): int
     {
         $libraries = [];
 
@@ -94,7 +93,7 @@ class Clean extends Console\Dispatcher\Kit
                     if (empty($libraries)) {
                         echo 'Already clean.';
 
-                        return;
+                        return 0;
                     }
 
                     break;
@@ -114,7 +113,7 @@ class Clean extends Console\Dispatcher\Kit
                     if (empty($libraries)) {
                         echo 'Already clean.';
 
-                        return;
+                        return 0;
                     }
 
                     break;
@@ -159,7 +158,7 @@ class Clean extends Console\Dispatcher\Kit
             $directory->close();
         }
 
-        return;
+        return 0;
     }
 
     /**
@@ -167,7 +166,7 @@ class Clean extends Console\Dispatcher\Kit
      *
      * @return  int
      */
-    public function usage()
+    public function usage(): int
     {
         echo
             'Usage   : test:clean <options>', "\n",
@@ -178,7 +177,7 @@ class Clean extends Console\Dispatcher\Kit
                 'help' => 'This help.'
             ]), "\n";
 
-        return;
+        return 0;
     }
 }
 

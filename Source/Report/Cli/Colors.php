@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -33,47 +35,15 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+namespace Hoa\Test\Report\Cli;
 
-namespace Hoa\Test;
-
-use atoum;
-
-/**
- * Class \Hoa\Test\Coverage.
- *
- * Extend the default coverage scorer, but adds the ability to whitelist
- * instead of blacklist a namespace.
-
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
- */
-class Coverage extends atoum\score\coverage
+final class Colors
 {
-    protected $restrictedNamespace = null;
-
-    public function restrictNamespace($namespace)
-    {
-        $this->restrictedNamespace = $namespace . '\\';
-
-        return $this;
-    }
-
-    protected function isExcluded(\ReflectionClass $class)
-    {
-        $className = $class->getName();
-
-        if (null === $this->restrictedNamespace) {
-            return parent::isExcluded($class);
-        }
-
-        $classNamespace = substr(
-            $className,
-            0,
-            strlen($this->restrictedNamespace)
-        );
-
-        return
-            $this->restrictedNamespace !== $classNamespace ||
-            parent::isExcluded($class);
-    }
+    public const WHITE   = '#FFFFFF';
+    public const GRAY    = '#CCCCCC';
+    public const BLACK   = '#341d44';
+    public const GREEN   = '#6CBE6C';
+    public const MAGENTA = '#FF0066';
+    public const YELLOW  = '#FFBB2A';
+    public const BLUE    = '#01BBBC';
 }

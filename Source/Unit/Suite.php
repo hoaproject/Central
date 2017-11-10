@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,13 +46,10 @@ use Hoa\Test;
  * Class \Hoa\Test\Unit\Suite.
  *
  * Represent a unit test suite.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Suite extends atoum\test
 {
-    const defaultNamespace = '/\\\Test\\\Unit\\\/';
+    public const defaultNamespace = '/\\\Test\\\Unit\\\/';
 
 
 

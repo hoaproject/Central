@@ -38,7 +38,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Hoa\\Test\\": "."
+            "Hoa\\Test\\"     : "Source",
+            "Hoa\\Test\\Bin\\": "Bin"
         }
     },
     "extra": {

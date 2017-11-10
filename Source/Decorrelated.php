@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,19 +36,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Integration;
-
-use Hoa\Test;
+namespace Hoa\Test;
 
 /**
- * Class \Hoa\Test\Integration\Suite.
+ * Interface \Hoa\Test\Decorrelated.
  *
- * Represent an integration test suite.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Represent a test suite where test cases are decorrelated from the System
+ * Under Test.
  */
-class Suite extends Test\Unit\Suite
+interface Decorrelated
 {
-    const defaultNamespace = '/\\\Test\\\Integration\\\/';
 }

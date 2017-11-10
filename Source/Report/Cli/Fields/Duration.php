@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -33,18 +35,27 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+namespace Hoa\Test\Report\Cli\Fields;
 
-namespace Hoa\Test;
+use atoum\report\fields;
 
-/**
- * Interface \Hoa\Test\Decorrelated.
- *
- * Represent a test suite where test cases are decorrelated from the System
- * Under Test.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
- */
-interface Decorrelated
+class Duration extends fields\test\duration\cli
 {
+    public function __toString()
+    {
+        return
+            $this->prompt .
+            sprintf(
+                $this->locale->_('%1$s: %2$s.'),
+                $this->titleColorizer->colorize($this->locale->_('Duration')),
+                $this->durationColorizer->colorize(
+                    null === $this->value
+                        ? $this->locale->_('unknown')
+                        : sprintf(
+                            $this->locale->__('%4.6f second', '%4.6f seconds', $this->value),
+                            $this->value
+                        )
+                )
+            ) . "\n";
+    }
 }
