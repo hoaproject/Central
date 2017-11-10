@@ -158,7 +158,7 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Get a header's value.
      */
-    public function offsetGet($offset): string
+    public function offsetGet($offset): ?string
     {
         if (false === $this->offsetExists($offset)) {
             return null;
