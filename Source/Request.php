@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -40,93 +42,66 @@ namespace Hoa\Http;
  * Class \Hoa\Http\Request.
  *
  * HTTP request support.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Request extends Http
 {
     /**
      * Method: CONNECT.
-     *
-     * @const string
      */
-    const METHOD_CONNECT  = 'connect';
+    public const METHOD_CONNECT  = 'connect';
 
     /**
      * Method: DELETE.
-     *
-     * @const string
      */
-    const METHOD_DELETE   = 'delete';
+    public const METHOD_DELETE   = 'delete';
 
     /**
      * Method: GET.
-     *
-     * @const string
      */
-    const METHOD_GET      = 'get';
+    public const METHOD_GET      = 'get';
 
     /**
      * Method: HEAD.
-     *
-     * @const string
      */
-    const METHOD_HEAD     = 'head';
+    public const METHOD_HEAD     = 'head';
 
     /**
      * Method: OPTIONS.
-     *
-     * @const string
      */
-    const METHOD_OPTIONS  = 'options';
+    public const METHOD_OPTIONS  = 'options';
 
     /**
      * Method: PATCH.
-     *
-     * @const string
      */
-    const METHOD_PATCH    = 'patch';
+    public const METHOD_PATCH    = 'patch';
 
     /**
      * Method: POST.
-     *
-     * @const string
      */
-    const METHOD_POST     = 'post';
+    public const METHOD_POST     = 'post';
 
     /**
      * Method: PUT.
-     *
-     * @const string
      */
-    const METHOD_PUT      = 'put';
+    public const METHOD_PUT      = 'put';
 
     /**
      * Method: TRACE.
-     *
-     * @const string
      */
-    const METHOD_TRACE    = 'trace';
+    public const METHOD_TRACE    = 'trace';
 
     /**
      * Other methods.
-     *
-     * @const string
      */
-    const METHOD_EXTENDED = 'extended';
+    public const METHOD_EXTENDED = 'extended';
 
     /**
      * Request method (please, see self::METHOD_* constants).
-     *
-     * @var string
      */
     protected $_method = null;
 
     /**
      * Request URL.
-     *
-     * @var string
      */
     protected $_url    = null;
 
@@ -134,12 +109,8 @@ class Request extends Http
 
     /**
      * Parse a HTTP packet.
-     *
-     * @param   string  $packet    HTTP packet.
-     * @return  void
-     * @throws  \Hoa\Http\Exception
      */
-    public function parse($packet)
+    public function parse(string $packet): void
     {
         $headers = explode("\r\n", $packet);
         $http    = array_shift($headers);
@@ -188,18 +159,12 @@ class Request extends Http
         $this->setHttpVersion((float) $matches[3]);
 
         $this->_parse($headers);
-
-        return;
     }
 
     /**
      * Set request method.
-     *
-     * @param   string  $method    Method (please, see self::METHOD_*
-     *                             constants).
-     * @return  string
      */
-    public function setMethod($method)
+    public function setMethod(string $method): ?string
     {
         $old           = $this->_method;
         $this->_method = $method;
@@ -209,21 +174,16 @@ class Request extends Http
 
     /**
      * Get request method.
-     *
-     * @return  string
      */
-    public function getMethod()
+    public function getMethod(): ?string
     {
         return $this->_method;
     }
 
     /**
      * Set request URL.
-     *
-     * @param   string  $url    URL.
-     * @return  string
      */
-    public function setUrl($url)
+    public function setUrl(string $url): ?string
     {
         $old        = $this->_url;
         $this->_url = $url;
@@ -233,20 +193,16 @@ class Request extends Http
 
     /**
      * Get request URL.
-     *
-     * @return  string
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->_url;
     }
 
     /**
      * Dump (parse^-1).
-     *
-     * @return  string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return
             strtoupper($this->getMethod()) . ' ' .

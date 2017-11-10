@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -42,37 +44,26 @@ use Hoa\Consistency;
  * Class \Hoa\Http.
  *
  * Generic class to manage HTTP headers (parse, set, get) only.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * Whether PHP is running with FastCGI or not.
-     *
-     * @var bool
      */
     protected static $_fcgi = null;
 
     /**
      * Request HTTP version.
-     *
-     * @var float
      */
     protected $_httpVersion = 1.1;
 
     /**
      * Headers (not sent).
-     *
-     * @var array
      */
     protected $_headers     = [];
 
     /**
      * Request body.
-     *
-     * @var string
      */
     protected $_body        = null;
 
@@ -80,7 +71,6 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Constructor.
-     *
      */
     public function __construct()
     {
@@ -93,11 +83,8 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Set request HTTP version.
-     *
-     * @param   float  $version    HTTP version.
-     * @return  float
      */
-    public function setHttpVersion($version)
+    public function setHttpVersion(float $version): float
     {
         $old                = $this->_httpVersion;
         $this->_httpVersion = $version;
@@ -107,30 +94,21 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Get request HTTP version.
-     *
-     * @return  float
      */
-    public function getHttpVersion()
+    public function getHttpVersion(): float
     {
         return $this->_httpVersion;
     }
 
     /**
      * Parse a HTTP packet.
-     *
-     * @param   string  $packet    HTTP packet.
-     * @return  void
-     * @throws  \Hoa\Http\Exception
      */
-    abstract public function parse($packet);
+    abstract public function parse(string $packet): void;
 
     /**
      * Helper to parse HTTP headers and distribute them in array accesses.
-     *
-     * @param   array  $headers    Headers to parse and distribute.
-     * @return  array
      */
-    protected function _parse(array $headers)
+    protected function _parse(array $headers): array
     {
         unset($this->_headers);
         $this->_headers = [];
@@ -145,20 +123,16 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Get headers.
-     *
-     * @return  array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->_headers;
     }
 
     /**
      * Get headers (formatted).
-     *
-     * @return  array
      */
-    public function getHeadersFormatted()
+    public function getHeadersFormatted(): array
     {
         $out = [];
 
@@ -175,22 +149,16 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Check if header exists.
-     *
-     * @param   string  $offset    Header.
-     * @return  bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->_headers);
     }
 
     /**
      * Get a header's value.
-     *
-     * @param   string  $offset    Header.
-     * @return  string
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): string
     {
         if (false === $this->offsetExists($offset)) {
             return null;
@@ -201,58 +169,40 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Set a value to a header.
-     *
-     * @param   string  $offset    Header.
-     * @param   string  $value     Value.
-     * @return  void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->_headers[$offset] = $value;
-
-        return;
     }
 
     /**
      * Unset a header.
-     *
-     * @param   string  $offset    Header.
-     * @return  void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->_headers[$offset]);
-
-        return;
     }
 
     /**
      * Get iterator.
-     *
-     * @return  \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->getHeaders());
     }
 
     /**
      * Count number of headers.
-     *
-     * @return  int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->getHeaders());
     }
 
     /**
      * Set request body.
-     *
-     * @param   string  $body   Body.
-     * @return  string
      */
-    public function setBody($body)
+    public function setBody(string $body): ?string
     {
         $old         = $this->_body;
         $this->_body = $body;
@@ -262,20 +212,16 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Get request body.
-     *
-     * @return  string
      */
-    public function getBody()
+    public function getBody(): ?string
     {
         return $this->_body;
     }
 
     /**
      * Dump (parse^-1).
-     *
-     * @return  string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $out = null;
 
@@ -290,4 +236,4 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
 /**
  * Flex entity.
  */
-Consistency::flexEntity('Hoa\Http\Http');
+Consistency::flexEntity(Http::class);
