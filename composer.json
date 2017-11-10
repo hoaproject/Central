@@ -24,12 +24,12 @@
     },
     "require": {
         "php"            : ">=7.1",
-        "hoa/consistency": "~2.0",
-        "hoa/console"    : "~4.0",
-        "hoa/dispatcher" : "~2.0",
-        "hoa/exception"  : "~2.0",
-        "hoa/protocol"   : "~2.0",
-        "hoa/router"     : "~4.0"
+        "hoa/consistency": "~1.0",
+        "hoa/console"    : "~3.0",
+        "hoa/dispatcher" : "~1.0",
+        "hoa/exception"  : "~1.0",
+        "hoa/protocol"   : "~1.0",
+        "hoa/router"     : "~3.0"
     },
     "autoload": {
         "psr-4": {
