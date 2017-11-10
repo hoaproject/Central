@@ -33,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Hoa\\Cli\\Bin": "Bin"
+            "Hoa\\Cli\\Bin\\": "Bin"
         }
     },
     "config": {
