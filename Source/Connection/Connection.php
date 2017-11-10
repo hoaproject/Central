@@ -530,7 +530,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
      * Warning: if this method returns false, it means that the buffer is empty.
      * You should use the Hoa\Stream::setStreamBlocking(true) method.
      */
-    public function read(int $length, int $flags = 0): string
+    public function read(int $length, int $flags = 0)
     {
         if (null === $this->getStream()) {
             throw new Socket\Exception(
@@ -570,7 +570,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
     /**
      * Alias of $this->read().
      */
-    public function readString(int $length): string
+    public function readString(int $length)
     {
         return $this->read($length);
     }
@@ -579,7 +579,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
      * Read a character.
      * It is equivalent to $this->read(1).
      */
-    public function readCharacter(): string
+    public function readCharacter()
     {
         return $this->read(1);
     }
@@ -587,7 +587,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
     /**
      * Read a boolean.
      */
-    public function readBoolean(): bool
+    public function readBoolean()
     {
         return (bool) $this->read(1);
     }
@@ -595,7 +595,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
     /**
      * Read an integer.
      */
-    public function readInteger(int $length = 1): int
+    public function readInteger(int $length = 1)
     {
         return (int) $this->read($length);
     }
@@ -603,7 +603,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
     /**
      * Read a float.
      */
-    public function readFloat(int $length = 1): float
+    public function readFloat(int $length = 1)
     {
         return (float) $this->read($length);
     }
@@ -612,7 +612,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
      * Read an array.
      * Alias of the $this->scanf() method.
      */
-    public function readArray(string $format = null): array
+    public function readArray(string $format = null)
     {
         return $this->scanf($format);
     }
@@ -620,7 +620,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
     /**
      * Read a line.
      */
-    public function readLine(): string
+    public function readLine()
     {
         if (true === $this->isEncrypted()) {
             return rtrim(fgets($this->getStream(), 1 << 15), "\n");
@@ -632,7 +632,7 @@ abstract class Connection extends Stream implements Stream\IStream\In, Stream\IS
     /**
      * Read all, i.e. read as much as possible.
      */
-    public function readAll(int $offset = -1): string
+    public function readAll(int $offset = -1)
     {
         return stream_get_contents($this->getStream());
     }
