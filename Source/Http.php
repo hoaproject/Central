@@ -202,7 +202,7 @@ abstract class Http implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * Set request body.
      */
-    public function setBody(string $body): ?string
+    public function setBody(?string $body): ?string
     {
         $old         = $this->_body;
         $this->_body = $body;
