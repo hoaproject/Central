@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -40,18 +42,13 @@ namespace Hoa\Locale\Localizer;
  * Class \Hoa\Locale\Localizer\System.
  *
  * Deduce locale from the system.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class System implements Localizer
 {
     /**
      * Get locale.
-     *
-     * @return  string
      */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         foreach (explode('/', setlocale(LC_ALL, 0)) as $locale) {
             if ('C' !== $locale) {

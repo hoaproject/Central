@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -42,100 +44,71 @@ use Hoa\Consistency;
  * Class \Hoa\Locale.
  *
  * Deduce, extract and format locales from different localizers.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Locale
 {
     /**
      * Type: langtag (the real one).
-     *
-     * @const int
      */
-    const TYPE_LANGTAG       = 0;
+    public const TYPE_LANGTAG       = 0;
 
     /**
      * Type: private use.
-     *
-     * @const int
      */
-    const TYPE_PRIVATEUSE    = 1;
+    public const TYPE_PRIVATEUSE    = 1;
 
     /**
      * Type: grandfathered.
-     *
-     * @const int
      */
-    const TYPE_GRANDFATHERED = 2;
+    public const TYPE_GRANDFATHERED = 2;
 
     /**
      * Default locale.
-     *
-     * @var string
      */
     protected static $_default = null;
 
     /**
      * Localizer.
-     *
-     * @var \Hoa\Locale\Localizer
      */
     protected $_localizer      = null;
 
     /**
      * Type of locale. Please, see self::TYPE_* constants.
-     *
-     * @var int
      */
     protected $_type           = 0;
 
     /**
      * Language.
-     *
-     * @var string
      */
     protected $_language       = null;
 
     /**
      * Script.
-     *
-     * @var string
      */
     protected $_script         = null;
 
     /**
      * Region.
-     *
-     * @var string
      */
     protected $_region         = null;
 
     /**
      * Variants.
-     *
-     * @var array
      */
     protected $_variant        = null;
 
     /**
      * Extensions.
-     *
-     * @var array
      */
     protected $_extension      = null;
 
     /**
      * Private use.
-     *
-     * @var mixed
      */
     protected $_privateuse     = null;
 
     /**
      * Grandfathered.
-     *
-     * @var string
      */
     protected $_grandfathered  = null;
 
@@ -143,8 +116,6 @@ class Locale
 
     /**
      * Compute the locale from a localizer.
-     *
-     * @param   mixed  $localizer    Localizer or locale.
      */
     public function __construct($localizer = null)
     {
@@ -159,11 +130,8 @@ class Locale
 
     /**
      * Set default locale.
-     *
-     * @param   string  $locale    Locale.
-     * @return  string
      */
-    public static function setDefault($locale)
+    public static function setDefault(string $locale): ?string
     {
         $old              = static::$_default;
         static::$_default = $locale;
@@ -173,21 +141,16 @@ class Locale
 
     /**
      * Get default locale.
-     *
-     * @return  string
      */
-    public static function getDefault()
+    public static function getDefault(): ?string
     {
         return static::$_default;
     }
 
     /**
      * Set localizer.
-     *
-     * @param   \Hoa\Locale\Localizer  $localizer    Localizer.
-     * @return  \Hoa\Locale\Localizer
      */
-    public function setLocalizer(Localizer $localizer)
+    public function setLocalizer(Localizer $localizer): ?Localizer
     {
         $this->reset();
 
@@ -201,21 +164,16 @@ class Locale
 
     /**
      * Get localizer.
-     *
-     * @return  \Hoa\Locale\Localizer
      */
-    public function getLocalizer()
+    public function getLocalizer(): ?Localizer
     {
         return $this->_localizer;
     }
 
     /**
      * Compute locale.
-     *
-     * @return  void
-     * @throws  \Hoa\Locale\Exception
      */
-    protected function computeLocale()
+    protected function computeLocale(): void
     {
         $locale = $this->getLocalizer()->getLocale() ?: static::getDefault();
 
@@ -225,7 +183,7 @@ class Locale
 
         $parsed = static::parse($locale);
 
-        if (false === $parsed) {
+        if (empty($parsed)) {
             throw new Exception('Locale %s is not well-formed.', 1, $locale);
         }
 
@@ -237,29 +195,23 @@ class Locale
             $this->_privateuse = $parsed['privateuse'];
         } else {
             $this->_type = static::TYPE_LANGTAG;
-            list(
-                $this->_language,
-                $this->_script,
-                $this->_region,
-                $this->_variant,
-                $this->_extension,
-                $this->_privateuse
-            ) = array_values($parsed['langtag']);
+            [
+                'language'   => $this->_language,
+                'script'     => $this->_script,
+                'region'     => $this->_region,
+                'variant'    => $this->_variant,
+                'extension'  => $this->_extension,
+                'privateuse' => $this->_privateuse
+            ] = $parsed['langtag'];
         }
-
-        return;
     }
 
     /**
      * Parse a local.
      * Please, see RFC4646, 2.1 Syntax.
-     *
-     * @param   string  $locale    Locale.
-     * @return  array
      */
-    public static function parse($locale)
+    public static function parse(string $locale): array
     {
-
         // RFC4646
         $match = preg_match(
             '#^
@@ -281,7 +233,7 @@ class Locale
         );
 
         if (0 === $match) {
-            return false;
+            return [];
         }
 
         if (isset($matches['r_grandfathered'])) {
@@ -326,7 +278,7 @@ class Locale
             );
 
             foreach ($handle as $value) {
-                list($extensionName, $extensionValue) = explode('-', $value);
+                [$extensionName, $extensionValue]     = explode('-', $value);
                 $out['extension'][$extensionName]     = $extensionValue;
             }
         }
@@ -340,68 +292,54 @@ class Locale
 
     /**
      * Get type. Please, see static::TYPE_* constants.
-     *
-     * @return  int
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->_type;
     }
 
     /**
      * Get language.
-     *
-     * @return  string
      */
-    public function getLanguage()
+    public function getLanguage(): ?string
     {
         return $this->_language;
     }
 
     /**
      * Get script.
-     *
-     * @return  string
      */
-    public function getScript()
+    public function getScript(): ?string
     {
         return $this->_script;
     }
 
     /**
      * Get region.
-     *
-     * @return  string
      */
-    public function getRegion()
+    public function getRegion(): ?string
     {
         return $this->_region;
     }
 
     /**
      * Get all variants.
-     *
-     * @return  array
      */
-    public function getVariants()
+    public function getVariants(): ?array
     {
         return $this->_variant;
     }
 
     /**
      * Get extensions.
-     *
-     * @return  array
      */
-    public function getExtensions()
+    public function getExtensions(): ?array
     {
         return $this->_extension;
     }
 
     /**
      * Get private use.
-     *
-     * @return  mixed
      */
     public function getPrivateUse()
     {
@@ -410,20 +348,16 @@ class Locale
 
     /**
      * Get grand-fathered value.
-     *
-     * @return  string
      */
-    public function getGrandfathered()
+    public function getGrandfathered(): ?string
     {
         return $this->_grandfathered;
     }
 
     /**
      * Reset the object.
-     *
-     * @return  void
      */
-    protected function reset()
+    protected function reset(): void
     {
         $class             = new \ReflectionClass(get_class($this));
         $object            = new \ReflectionObject($this);
@@ -445,12 +379,10 @@ class Locale
                     : null
             );
         }
-
-        return;
     }
 }
 
 /**
  * Flex entity.
  */
-Consistency::flexEntity('Hoa\Locale\Locale');
+Consistency::flexEntity(Locale::class);

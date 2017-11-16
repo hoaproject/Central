@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -40,16 +42,11 @@ namespace Hoa\Locale\Localizer;
  * Class \Hoa\Locale\Localizer\Coerce.
  *
  * Arbitrary locale.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Coerce implements Localizer
 {
     /**
-     * Locale.
-     *
-     * @var \Hoa\Locale\Localizer
+     * Locale, of kind `Hoa\Locale\Localizer`.
      */
     protected $_locale = null;
 
@@ -57,10 +54,8 @@ class Coerce implements Localizer
 
     /**
      * Force a locale.
-     *
-     * @param   string  $locale    Locale.
      */
-    public function __construct($locale)
+    public function __construct(string $locale)
     {
         $this->_locale = $locale;
 
@@ -69,10 +64,8 @@ class Coerce implements Localizer
 
     /**
      * Get locale.
-     *
-     * @return  string
      */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->_locale;
     }

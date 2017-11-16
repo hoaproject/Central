@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -40,22 +42,16 @@ use Hoa\Consistency;
 
 /**
  * Interface \Hoa\Locale\Localizer.
- *
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 interface Localizer
 {
     /**
      * Get locale.
-     *
-     * @return  string
      */
-    public function getLocale();
+    public function getLocale(): ?string;
 }
 
 /**
  * Flex entity.
  */
-Consistency::flexEntity('Hoa\Locale\Localizer\Localizer');
+Consistency::flexEntity(Localizer::class);

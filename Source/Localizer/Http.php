@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,16 +47,11 @@ use Hoa\Http as HHttp;
  *
  * Overview: http://www.w3.org/International/articles/language-tags/.
  * Specifications: RFC2822 and RFC3282.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Http implements Localizer
 {
     /**
-     * Value of the Accept-Language header.
-     *
-     * @var string
+     * Value of the `Accept-Language` header.
      */
     protected $_value = null;
 
@@ -62,11 +59,8 @@ class Http implements Localizer
 
     /**
      * Constructor.
-     *
-     * @param   string  $headerValue    Accept-Language value. If null, will be
-     *                                  deduced from the current HTTP request.
      */
-    public function __construct($headerValue = null)
+    public function __construct(string $headerValue = null)
     {
         $value = $headerValue ?: HHttp\Runtime::getHeader('accept-language');
 
@@ -80,10 +74,8 @@ class Http implements Localizer
      * Get locale.
      * Please, see RFC3282 3. The Accept-Language header and
      * RFC2822 3.2.3. Folding white space and comments.
-     *
-     * @return  string
      */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         foreach (explode(',', $this->_value) as $language) {
             $match = preg_match(
