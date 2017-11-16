@@ -55,7 +55,7 @@ class Coerce implements Localizer
     /**
      * Force a locale.
      */
-    public function __construct(string $locale)
+    public function __construct(?string $locale)
     {
         $this->_locale = $locale;
 
