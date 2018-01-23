@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -33,16 +35,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 namespace Hoa\Test\Report\Cli;
 
-final class Colors
+use atoum;
+use Hoa\Console;
+
+class Colorizer extends atoum\cli\colorizer
 {
-    const WHITE   = '#FFFFFF';
-    const GRAY    = '#CCCCCC';
-    const BLACK   = '#341d44';
-    const GREEN   = '#6CBE6C';
-    const MAGENTA = '#FF0066';
-    const YELLOW  = '#FFBB2A';
-    const BLUE    = '#01BBBC';
+    private $style;
+
+    public function __construct($style)
+    {
+        $this->style = $style;
+    }
+
+    public function colorize($message)
+    {
+        return Console\Chrome\Text::colorize($message, $this->style);
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,7 +47,6 @@ use Hoa\Test;
  * Automatically generate test suites based on examples in API documentations
  * or from contracts written in Praspel.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Generate extends Console\Dispatcher\Kit
@@ -70,10 +71,10 @@ class Generate extends Console\Dispatcher\Kit
      *
      * @return  int
      */
-    public function main()
+    public function main(): int
     {
-        $directoryToScan       = null;
-        $namespaceToScan       = null;
+        $directoryToScan = null;
+        $namespaceToScan = null;
 
         while (false !== $c = $this->getOption($v)) {
             switch ($c) {
@@ -111,7 +112,7 @@ class Generate extends Console\Dispatcher\Kit
             return $this->usage();
         }
 
-        return;
+        return 0;
     }
 
     /**
@@ -119,7 +120,7 @@ class Generate extends Console\Dispatcher\Kit
      *
      * @return  int
      */
-    public function usage()
+    public function usage(): int
     {
         echo
             'Usage   : test:generate <options>', "\n",
@@ -131,7 +132,7 @@ class Generate extends Console\Dispatcher\Kit
                 'help' => 'This help.'
             ]), "\n";
 
-        return;
+        return 0;
     }
 }
 

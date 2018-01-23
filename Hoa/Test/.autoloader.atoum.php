@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 date_default_timezone_set('Europe/Paris');
 
 $composerAutoloaders = [
@@ -27,11 +29,13 @@ if (false === defined('HOA')) {
     require_once
         dirname(__DIR__) . DIRECTORY_SEPARATOR .
         'Consistency' . DIRECTORY_SEPARATOR .
+        'Source' . DIRECTORY_SEPARATOR .
         'Prelude.php';
 
     require_once
         dirname(__DIR__) . DIRECTORY_SEPARATOR .
         'Protocol' . DIRECTORY_SEPARATOR .
+        'Source' . DIRECTORY_SEPARATOR .
         'Wrapper.php';
 }
 

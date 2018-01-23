@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Atoum\PraspelExtension;
 use Hoa\Test;
 use mageekguy\atoum;

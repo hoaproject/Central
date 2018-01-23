@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -8,7 +10,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -33,47 +35,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 namespace Hoa\Test\Report\Cli\Fields;
 
 use atoum\report\fields;
 
-class Nil extends fields\runner\tests\blank\cli
+class Memory extends fields\test\memory\cli
 {
     public function __toString()
     {
-        $string = '';
-
-        if (null !== $this->runner) {
-            $voidMethods      = $this->runner->getScore()->getVoidMethods();
-            $sizeOfVoidMethod = sizeof($voidMethods);
-
-            if (0 < $sizeOfVoidMethod) {
-                $string .=
-                    $this->titlePrompt .
+        return
+            $this->prompt .
+            sprintf(
+                $this->locale->_('%1$s: %2$s.'),
+                $this->titleColorizer->colorize($this->locale->_('Memory usage')),
+                $this->memoryColorizer->colorize(
+                    $this->value === null
+                    ?
+                    $this->locale->_('unknown')
+                    :
                     sprintf(
-                        $this->locale->_('%s:'),
-                        $this->titleColorizer->colorize(
-                            sprintf(
-                                $this->locale->__(
-                                    'There is %d void test case',
-                                    'There are %d void test cases',
-                                    $sizeOfVoidMethod
-                                ),
-                                $sizeOfVoidMethod
-                            )
-                        )
-                    ) . "\n";
-
-                foreach ($voidMethods as $voidMethod) {
-                    $string .=
-                        $this->methodPrompt .
-                        $this->methodColorizer->colorize(sprintf('%s::%s()', $voidMethod['class'], $voidMethod['method'])) .
-                        "\n";
-                }
-            }
-        }
-
-        return $string;
+                        $this->locale->_('%4.3f Kb'),
+                        $this->value / 1024
+                    )
+                )
+            ) . "\n";
     }
 }

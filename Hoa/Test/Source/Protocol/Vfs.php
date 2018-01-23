@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,23 +45,16 @@ use Hoa\Protocol;
  * Class \Hoa\Test\Protocol\Vfs.
  *
  * Create the `hoa://Test/Vfs/` node.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Vfs extends Protocol\Node
 {
     /**
      * Component's name.
-     *
-     * @var string
      */
     protected $_name    = 'Vfs';
 
     /**
      * Current opened streams.
-     *
-     * @var array
      */
     protected $_streams = [];
 
@@ -67,12 +62,8 @@ class Vfs extends Protocol\Node
 
     /**
      * Queue of the component.
-     *
-     * @param   string  $queue    Queue of the component (generally, a filename,
-     *                            with probably a query).
-     * @return  mixed
      */
-    public function reach($queue = null)
+    public function reach(string $queue = null): ?string
     {
         if (null === $queue) {
             return null;

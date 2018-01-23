@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,13 +46,10 @@ use Hoa\Test;
  * Class \Hoa\Test\Unit\Suite.
  *
  * Represent a unit test suite.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Suite extends atoum\test
 {
-    const defaultNamespace = '/\\\Test\\\Unit\\\/';
+    public const defaultNamespace = '/\\\Test\\\Unit\\\/';
 
 
 
@@ -73,8 +72,8 @@ class Suite extends atoum\test
         $protocol['Test']        = new Protocol\Node('Test', null);
         $protocol['Test']['Vfs'] = new Test\Protocol\Vfs();
 
-        ini_set('zend.assertions', 1);
-        ini_set('assert.exception', 1);
+        ini_set('zend.assertions', '1');
+        ini_set('assert.exception', '1');
 
         return;
     }

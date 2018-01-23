@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -39,16 +41,15 @@ namespace Hoa\Test\Bin;
 use Hoa\Consistency;
 use Hoa\Console;
 use Hoa\File;
-use Kitab;
 use Hoa\Protocol;
 use Hoa\Test;
+use Kitab;
 
 /**
  * Class Hoa\Test\Bin\Run.
  *
  * Run tests.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Run extends Console\Dispatcher\Kit
@@ -80,7 +81,7 @@ class Run extends Console\Dispatcher\Kit
      *
      * @return  int
      */
-    public function main()
+    public function main(): int
     {
         $directories         = [];
         $files               = [];
@@ -180,7 +181,7 @@ class Run extends Console\Dispatcher\Kit
                             );
                         }
 
-                        $head               = resolve('hoa://Library/' . $parts[1]);
+                        $head               = Protocol::resolve('hoa://Library/' . $parts[1]);
                         $tail               = implode(DS, array_slice($parts, 2));
                         $namespaceDirectory = $head . DS . $tail;
 
@@ -329,9 +330,9 @@ class Run extends Console\Dispatcher\Kit
         $command =
             $atoum .
             ' --autoloader-file ' .
-                resolve('hoa://Library/Test/.autoloader.atoum.php') .
+                Protocol\Protocol::getInstance()->resolve('hoa://Library/Test/.autoloader.atoum.php') .
             ' --configurations ' .
-                resolve('hoa://Library/Test/.atoum.php') .
+                Protocol\Protocol::getInstance()->resolve('hoa://Library/Test/.atoum.php') .
             ' --force-terminal' .
             ' --max-children-number ' . $concurrentProcesses;
 
@@ -374,27 +375,27 @@ class Run extends Console\Dispatcher\Kit
             $command,
             null,
             null,
-            resolve('hoa://Library/Test/'),
+            Protocol\Protocol::getInstance()->resolve('hoa://Library/Test/'),
             $_server
         );
         $processus->on('input', function ($bucket) {
             return false;
         });
-        $processus->on('output', function ($bucket) {
+        $processus->on('output', function ($bucket): void {
             $data = $bucket->getData();
 
             echo $data['line'], "\n";
 
             return;
         });
-        $processus->on('stop', function ($bucket) {
+        $processus->on('stop', function ($bucket): void {
             // Wait atoum to finish its sub-children.
             sleep(1);
             exit($bucket->getSource()->getExitCode());
         });
         $processus->run();
 
-        return;
+        return 0;
     }
 
     /**
@@ -402,7 +403,7 @@ class Run extends Console\Dispatcher\Kit
      *
      * @return  int
      */
-    public function usage()
+    public function usage(): int
     {
         echo
             'Usage   : test:run <options>', "\n",
@@ -428,7 +429,7 @@ class Run extends Console\Dispatcher\Kit
             '    * namespace,', "\n",
             '    * tags.', "\n";
 
-        return;
+        return 0;
     }
 }
 
@@ -436,11 +437,8 @@ class Processus extends Console\Processus
 {
     /**
      * Avoid to escape the command.
-     *
-     * @param   string  $command    Command name.
-     * @return  string
      */
-    protected function setCommand($command)
+    protected function setCommand(string $command): ?string
     {
         $old            = $this->getCommand();
         $this->_command = $command;

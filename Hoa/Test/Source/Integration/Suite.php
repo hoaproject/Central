@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,29 +36,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Test\Report\Cli\Fields;
+namespace Hoa\Test\Integration;
 
-use atoum\report\fields;
+use Hoa\Test;
 
-class Memory extends fields\test\memory\cli
+/**
+ * Class \Hoa\Test\Integration\Suite.
+ *
+ * Represent an integration test suite.
+ */
+class Suite extends Test\Unit\Suite
 {
-    public function __toString()
-    {
-        return
-            $this->prompt .
-            sprintf(
-                $this->locale->_('%1$s: %2$s.'),
-                $this->titleColorizer->colorize($this->locale->_('Memory usage')),
-                $this->memoryColorizer->colorize(
-                    $this->value === null
-                    ?
-                    $this->locale->_('unknown')
-                    :
-                    sprintf(
-                        $this->locale->_('%4.3f Kb'),
-                        $this->value / 1024
-                    )
-                )
-            ) . "\n";
-    }
+    public const defaultNamespace = '/\\\Test\\\Integration\\\/';
 }

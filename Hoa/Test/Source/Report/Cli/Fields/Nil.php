@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -33,23 +35,46 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+namespace Hoa\Test\Report\Cli\Fields;
 
-namespace Hoa\Test\Report\Cli;
+use atoum\report\fields;
 
-use atoum;
-use Hoa\Console;
-
-class Colorizer extends atoum\cli\colorizer
+class Nil extends fields\runner\tests\blank\cli
 {
-    private $style;
-
-    public function __construct($style)
+    public function __toString()
     {
-        $this->style = $style;
-    }
+        $string = '';
 
-    public function colorize($message)
-    {
-        return Console\Chrome\Text::colorize($message, $this->style);
+        if (null !== $this->runner) {
+            $voidMethods      = $this->runner->getScore()->getVoidMethods();
+            $sizeOfVoidMethod = sizeof($voidMethods);
+
+            if (0 < $sizeOfVoidMethod) {
+                $string .=
+                    $this->titlePrompt .
+                    sprintf(
+                        $this->locale->_('%s:'),
+                        $this->titleColorizer->colorize(
+                            sprintf(
+                                $this->locale->__(
+                                    'There is %d void test case',
+                                    'There are %d void test cases',
+                                    $sizeOfVoidMethod
+                                ),
+                                $sizeOfVoidMethod
+                            )
+                        )
+                    ) . "\n";
+
+                foreach ($voidMethods as $voidMethod) {
+                    $string .=
+                        $this->methodPrompt .
+                        $this->methodColorizer->colorize(sprintf('%s::%s()', $voidMethod['class'], $voidMethod['method'])) .
+                        "\n";
+                }
+            }
+        }
+
+        return $string;
     }
 }
