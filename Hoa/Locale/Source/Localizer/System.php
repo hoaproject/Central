@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,26 +38,32 @@
 
 namespace Hoa\Locale\Localizer;
 
-use Hoa\Consistency;
-
 /**
- * Interface \Hoa\Locale\Localizer.
+ * Class \Hoa\Locale\Localizer\System.
  *
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Deduce locale from the system.
  */
-interface Localizer
+class System implements Localizer
 {
     /**
      * Get locale.
-     *
-     * @return  string
      */
-    public function getLocale();
-}
+    public function getLocale(): ?string
+    {
+        foreach (explode('/', setlocale(LC_ALL, 0)) as $locale) {
+            if ('C' !== $locale) {
+                break;
+            }
+        }
 
-/**
- * Flex entity.
- */
-Consistency::flexEntity('Hoa\Locale\Localizer\Localizer');
+        if ('C' === $locale) {
+            return null;
+        }
+
+        return str_replace(
+            '_',
+            '-',
+            substr($locale, 0, strpos($locale, '.') ?: strlen($locale))
+        );
+    }
+}

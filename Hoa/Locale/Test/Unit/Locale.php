@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,21 +46,20 @@ use Hoa\Test;
  *
  * Test suite of the locale main object.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Locale extends Test\Unit\Suite
 {
-    public function case_no_default_no_locale()
+    public function case_no_default_no_locale(): void
     {
         $this
-            ->exception(function () {
+            ->exception(function (): void {
                 new LUT();
             })
-                ->isInstanceOf('Hoa\Locale\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
-    public function case_no_locale()
+    public function case_no_locale(): void
     {
         $this
             ->given(
@@ -72,7 +73,7 @@ class Locale extends Test\Unit\Suite
             )
             ->then
                 ->object($localizer)
-                    ->isInstanceOf('Hoa\Locale\Localizer\Coerce')
+                    ->isInstanceOf(LUT\Localizer\Coerce::class)
                 ->variable($localizer->getLocale())
                     ->isNull()
                 ->string($language)
@@ -81,26 +82,26 @@ class Locale extends Test\Unit\Suite
                     ->isEqualTo('FR');
     }
 
-    public function case_locale_autoBoxing()
+    public function case_locale_autoBoxing(): void
     {
         $this
             ->given($locale = new LUT('fr-FR'))
             ->when($localizer = $locale->getLocalizer())
             ->then
                 ->object($localizer)
-                    ->isInstanceOf('Hoa\Locale\Localizer\Coerce');
+                    ->isInstanceOf(LUT\Localizer\Coerce::class);
     }
 
-    public function case_invalid_locale()
+    public function case_invalid_locale(): void
     {
         $this
-            ->exception(function () {
+            ->exception(function (): void {
                 new LUT('fr_FR');
             })
-                ->isInstanceOf('Hoa\Locale\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
-    public function case_type_privateUse()
+    public function case_type_privateUse(): void
     {
         $this
             ->given(
@@ -108,7 +109,7 @@ class Locale extends Test\Unit\Suite
                     '/x\-[a-z0-9]{1,8}/'
                 )
             )
-            ->when(function () use ($regex) {
+            ->when(function () use ($regex): void {
                 foreach ($this->sampleMany($regex, 1000) as $datum) {
                     $this
                         ->given($locale = new LUT($datum))
@@ -125,7 +126,7 @@ class Locale extends Test\Unit\Suite
             });
     }
 
-    public function case_type_grandfathered()
+    public function case_type_grandfathered(): void
     {
         $this
             ->given(
@@ -135,7 +136,7 @@ class Locale extends Test\Unit\Suite
                     '/[a-wyz](\-[a-z0-9]{2,8}){1,2}/'
                 )
             )
-            ->when(function () use ($regex) {
+            ->when(function () use ($regex): void {
                 foreach ($this->sampleMany($regex, 1000) as $datum) {
                     $this
                         ->given($locale = new LUT($datum))
@@ -152,7 +153,7 @@ class Locale extends Test\Unit\Suite
             });
     }
 
-    public function case_type_langtag()
+    public function case_type_langtag(): void
     {
         $this
             ->given(
@@ -167,7 +168,7 @@ class Locale extends Test\Unit\Suite
                     '/'
                 )
             )
-            ->when(function () use ($regex) {
+            ->when(function () use ($regex): void {
                 foreach ($this->sampleMany($regex, 1000) as $datum) {
                     $this
                         ->given($locale = new LUT($datum))
@@ -179,7 +180,7 @@ class Locale extends Test\Unit\Suite
             });
     }
 
-    public function case_langtag_exploded()
+    public function case_langtag_exploded(): void
     {
         $this
             ->given($locale = 'zh-Hant-TW-xy-ab-123-f-oo-4-42-x-qux')
@@ -199,7 +200,7 @@ class Locale extends Test\Unit\Suite
                     ->isEqualTo('qux');
     }
 
-    public function case_langtag_default()
+    public function case_langtag_default(): void
     {
         $this
             ->given($locale = 'fr')
@@ -219,7 +220,7 @@ class Locale extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_reset()
+    public function case_reset(): void
     {
         $this
             ->given(

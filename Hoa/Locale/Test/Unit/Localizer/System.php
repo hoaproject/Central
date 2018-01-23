@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,12 +46,11 @@ use Hoa\Test;
  *
  * Test suite of the system localizer.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class System extends Test\Unit\Suite
 {
-    public function case_classic()
+    public function case_classic(): void
     {
         $this
             ->given(
@@ -62,7 +63,7 @@ class System extends Test\Unit\Suite
                     ->isEqualTo('fr-FR');
     }
 
-    public function case_null()
+    public function case_null(): void
     {
         $this
             ->given(
@@ -75,7 +76,7 @@ class System extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_not_encoding()
+    public function case_not_encoding(): void
     {
         $this
             ->given(

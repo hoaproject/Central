@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,12 +46,11 @@ use Hoa\Test;
  *
  * Test suite of the HTTP localizer.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Http extends Test\Unit\Suite
 {
-    public function case_classic()
+    public function case_classic(): void
     {
         $this
             ->given($localizer = new CUT('fr-fr,en-uk;q=0.7,en;q=0.3'))
@@ -59,7 +60,7 @@ class Http extends Test\Unit\Suite
                     ->isEqualTo('fr-fr');
     }
 
-    public function case_cfws()
+    public function case_cfws(): void
     {
         $this
             ->given($localizer = new CUT('fr-fr  , en-uk ; q = 0.7'))
@@ -69,7 +70,7 @@ class Http extends Test\Unit\Suite
                     ->isEqualTo('fr-fr');
     }
 
-    public function case_q_on_first()
+    public function case_q_on_first(): void
     {
         $this
             ->given($localizer = new CUT('fr-fr;q=0.9,en-uk;q=0.7'))

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,12 +46,11 @@ use Hoa\Test;
  *
  * Test suite of the coerce localizer.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Coerce extends Test\Unit\Suite
 {
-    public function case_classic()
+    public function case_classic(): void
     {
         $this
             ->given($localizer = new CUT('foo'))
