@@ -35,9 +35,6 @@
 //
 // Provide grammar for JSON. Please, see <http://json.org>, RFC4627 or RFC7159.
 //
-// @copyright  Copyright © 2007-2017 Hoa community.
-// @license    New BSD License
-//
 
 
 %pragma lexer.unicode     false
