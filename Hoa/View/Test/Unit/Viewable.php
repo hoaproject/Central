@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,22 +39,20 @@
 namespace Hoa\View\Test\Unit;
 
 use Hoa\Test;
+use Hoa\View as LUT;
 
 /**
  * Class \Hoa\View\Test\Unit\Viewable.
  *
  * Test suite of the interface.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Viewable extends Test\Unit\Suite
 {
-    public function case_interface()
+    public function case_interface(): void
     {
         $this
             ->when($result = new \Mock\Hoa\View\Viewable())
                 ->object($result)
-                    ->isInstanceOf('Hoa\View\Viewable');
+                    ->isInstanceOf(LUT\Viewable::class);
     }
 }
