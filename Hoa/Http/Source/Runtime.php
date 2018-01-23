@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -40,21 +42,20 @@ namespace Hoa\Http;
  * Class \Hoa\Http\Runtime.
  *
  * Runtime informations.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Runtime
 {
     /**
      * Get HTTP method.
-     *
-     * @return  string
      */
-    public static function getMethod()
+    public static function getMethod(): ?string
     {
         if ('cli' === php_sapi_name()) {
             return 'get';
+        }
+
+        if (!isset($_SERVER['REQUEST_METHOD'])) {
+            return null;
         }
 
         return strtolower($_SERVER['REQUEST_METHOD']);
@@ -62,22 +63,16 @@ class Runtime
 
     /**
      * Get URI.
-     *
-     * @return  string
      */
-    public static function getUri()
+    public static function getUri(): ?string
     {
-        return $_SERVER['REQUEST_URI'];
+        return $_SERVER['REQUEST_URI'] ?? null;
     }
 
     /**
      * Get data.
-     *
-     * @param   bool  $extended    Whether we want a larger support of
-     *                             content-type for example.
-     * @return  mixed
      */
-    public static function getData($extended = true)
+    public static function getData(bool $extended = true)
     {
         switch (static::getMethod()) {
             case Request::METHOD_GET:
@@ -123,10 +118,8 @@ class Runtime
 
     /**
      * Whether there is data or not.
-     *
-     * @return  bool
      */
-    public static function hasData()
+    public static function hasData(): bool
     {
         if (Request::METHOD_GET === static::getMethod()) {
             return !empty($_GET);
@@ -137,10 +130,8 @@ class Runtime
 
     /**
      * Get all headers.
-     *
-     * @return  array
      */
-    public static function getHeaders()
+    public static function getHeaders(): array
     {
         static $_headers = [];
 
@@ -174,11 +165,8 @@ class Runtime
 
     /**
      * Get a specific header.
-     *
-     * @param   string  $header    Header name.
-     * @return  string
      */
-    public static function getHeader($header)
+    public static function getHeader(string $header): ?string
     {
         $headers = static::getHeaders();
         $header  = strtolower($header);

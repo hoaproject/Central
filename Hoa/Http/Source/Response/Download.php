@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -38,11 +40,6 @@ namespace Hoa\Http\Response;
 
 /**
  * Class \Hoa\Http\Response\Download.
- *
- *
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Download extends Response
 {
