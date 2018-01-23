@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,24 +36,59 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\File\Exception;
+namespace Hoa\File;
 
-use Hoa\Consistency;
-use Hoa\Exception as HoaException;
+use Hoa\Iterator;
 
 /**
- * Class \Hoa\File\Exception.
+ * Class \Hoa\File\SplFileInfo.
  *
- * Extending the \Hoa\Exception\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Link between \Hoa\Iterator\SplFileInfo and \Hoa\File.
  */
-class Exception extends HoaException
+class SplFileInfo extends Iterator\SplFileInfo
 {
-}
+    /**
+     * Current stream.
+     */
+    protected $_stream = null;
 
-/**
- * Flex entity.
- */
-Consistency::flexEntity('Hoa\File\Exception\Exception');
+
+
+    /**
+     * Open the SplFileInfo as a Hoa\File stream.
+     */
+    public function open(): Generic
+    {
+        if (true === $this->isFile()) {
+            return $this->_stream = new ReadWrite($this->getPathname());
+        } elseif (true === $this->isDir()) {
+            return $this->_stream = new Directory($this->getPathname());
+        } elseif (true === $this->isLink()) {
+            return $this->_stream = new Link\ReadWrite($this->getPathname());
+        }
+
+        throw new Exception('%s has an unknown type.', 0, $this->getPathname());
+    }
+
+    /**
+     * Close the opened stream.
+     */
+    public function close()
+    {
+        if (null === $this->_stream) {
+            return;
+        }
+
+        return $this->_stream->close();
+    }
+
+    /**
+     * Destruct.
+     */
+    public function __destruct()
+    {
+        $this->close();
+
+        return;
+    }
+}

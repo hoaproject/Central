@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,35 +36,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\File\Link;
+namespace Hoa\File\Temporary;
 
 use Hoa\File;
 use Hoa\Stream;
 
 /**
- * Class \Hoa\File\Link\Read.
+ * Class \Hoa\File\Temporary\Write.
  *
- * File handler.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Write into a temporary file.
  */
-class Read extends Link implements Stream\IStream\In
+class Write extends Temporary implements Stream\IStream\Out
 {
     /**
      * Open a file.
-     *
-     * @param   string  $streamName    Stream name.
-     * @param   string  $mode          Open mode, see the parent::MODE_* constants.
-     * @param   string  $context       Context ID (please, see the
-     *                                 \Hoa\Stream\Context class).
-     * @param   bool    $wait          Differ opening or not.
      */
     public function __construct(
-        $streamName,
-        $mode    = parent::MODE_READ,
-        $context = null,
-        $wait    = false
+        string $streamName,
+        string $mode    = parent::MODE_APPEND_WRITE,
+        string $context = null,
+        bool $wait      = false
     ) {
         parent::__construct($streamName, $mode, $context, $wait);
 
@@ -71,17 +64,13 @@ class Read extends Link implements Stream\IStream\In
 
     /**
      * Open the stream and return the associated resource.
-     *
-     * @param   string               $streamName    Stream name (e.g. path or URL).
-     * @param   \Hoa\Stream\Context  $context       Context.
-     * @return  resource
-     * @throws  \Hoa\File\Exception\FileDoesNotExist
-     * @throws  \Hoa\File\Exception
      */
-    protected function &_open($streamName, Stream\Context $context = null)
+    protected function &_open(string $streamName, Stream\Context $context = null)
     {
         static $createModes = [
-            parent::MODE_READ
+            parent::MODE_TRUNCATE_WRITE,
+            parent::MODE_APPEND_WRITE,
+            parent::MODE_CREATE_WRITE
         ];
 
         if (!in_array($this->getMode(), $createModes)) {
@@ -109,23 +98,9 @@ class Read extends Link implements Stream\IStream\In
     }
 
     /**
-     * Test for end-of-file.
-     *
-     * @return  bool
+     * Write n characters.
      */
-    public function eof()
-    {
-        return feof($this->getStream());
-    }
-
-    /**
-     * Read n characters.
-     *
-     * @param   int     $length    Length.
-     * @return  string
-     * @throws  \Hoa\File\Exception
-     */
-    public function read($length)
+    public function write(string $string, int $length)
     {
         if (0 > $length) {
             throw new File\Exception(
@@ -135,103 +110,92 @@ class Read extends Link implements Stream\IStream\In
             );
         }
 
-        return fread($this->getStream(), $length);
+        return fwrite($this->getStream(), $string, $length);
     }
 
     /**
-     * Alias of $this->read().
-     *
-     * @param   int     $length    Length.
-     * @return  string
+     * Write a string.
      */
-    public function readString($length)
+    public function writeString(string $string)
     {
-        return $this->read($length);
+        $string = (string) $string;
+
+        return $this->write($string, strlen($string));
     }
 
     /**
-     * Read a character.
-     *
-     * @return  string
+     * Write a character.
      */
-    public function readCharacter()
+    public function writeCharacter(string $char)
     {
-        return fgetc($this->getStream());
+        return $this->write((string) $char[0], 1);
     }
 
     /**
-     * Read a boolean.
-     *
-     * @return  bool
+     * Write a boolean.
      */
-    public function readBoolean()
+    public function writeBoolean(bool $boolean)
     {
-        return (bool) $this->read(1);
+        return $this->write((string) (bool) $boolean, 1);
     }
 
     /**
-     * Read an integer.
-     *
-     * @param   int     $length    Length.
-     * @return  int
+     * Write an integer.
      */
-    public function readInteger($length = 1)
+    public function writeInteger(int $integer)
     {
-        return (int) $this->read($length);
+        $integer = (string) (int) $integer;
+
+        return $this->write($integer, strlen($integer));
     }
 
     /**
-     * Read a float.
-     *
-     * @param   int     $length    Length.
-     * @return  float
+     * Write a float.
      */
-    public function readFloat($length = 1)
+    public function writeFloat(float $float)
     {
-        return (float) $this->read($length);
+        $float = (string) (float) $float;
+
+        return $this->write($float, strlen($float));
     }
 
     /**
-     * Read an array.
-     * Alias of the $this->scanf() method.
-     *
-     * @param   string  $format    Format (see printf's formats).
-     * @return  array
+     * Write an array.
      */
-    public function readArray($format = null)
+    public function writeArray(array $array)
     {
-        return $this->scanf($format);
+        $array = var_export($array, true);
+
+        return $this->write($array, strlen($array));
     }
 
     /**
-     * Read a line.
-     *
-     * @return  string
+     * Write a line.
      */
-    public function readLine()
+    public function writeLine(string $line)
     {
-        return fgets($this->getStream());
+        if (false === $n = strpos($line, "\n")) {
+            return $this->write($line . "\n", strlen($line) + 1);
+        }
+
+        ++$n;
+
+        return $this->write(substr($line, 0, $n), $n);
     }
 
     /**
-     * Read all, i.e. read as much as possible.
-     *
-     * @param   int  $offset    Offset.
-     * @return  string
+     * Write all, i.e. as much as possible.
      */
-    public function readAll($offset = 0)
+    public function writeAll(string $string)
     {
-        return stream_get_contents($this->getStream(), -1, $offset);
+        return $this->write($string, strlen($string));
     }
 
     /**
-     * Parse input from a stream according to a format.
-     *
-     * @param   string  $format    Format (see printf's formats).
-     * @return  array
+     * Truncate a file to a given length.
      */
-    public function scanf($format)
+    public function truncate(int $size): bool
     {
-        return fscanf($this->getStream(), $format);
+        return ftruncate($this->getStream(), $size);
     }
 }

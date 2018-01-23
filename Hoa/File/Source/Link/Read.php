@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,37 +36,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\File;
+namespace Hoa\File\Link;
 
+use Hoa\File;
 use Hoa\Stream;
 
 /**
- * Class \Hoa\File\ReadWrite.
+ * Class \Hoa\File\Link\Read.
  *
  * File handler.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-class          ReadWrite
-    extends    File
-    implements Stream\IStream\In,
-               Stream\IStream\Out
+class Read extends Link implements Stream\IStream\In
 {
     /**
      * Open a file.
      *
      * @param   string  $streamName    Stream name.
-     * @param   string  $mode          Open mode, see the self::MODE_* constants.
+     * @param   string  $mode          Open mode, see the parent::MODE_* constants.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
      * @param   bool    $wait          Differ opening or not.
      */
     public function __construct(
-        $streamName,
-        $mode    = parent::MODE_APPEND_READ_WRITE,
-        $context = null,
-        $wait    = false
+        string $streamName,
+        string $mode    = parent::MODE_READ,
+        string $context = null,
+        bool $wait    = false
     ) {
         parent::__construct($streamName, $mode, $context, $wait);
 
@@ -80,17 +79,14 @@ class          ReadWrite
      * @throws  \Hoa\File\Exception\FileDoesNotExist
      * @throws  \Hoa\File\Exception
      */
-    protected function &_open($streamName, Stream\Context $context = null)
+    protected function &_open(string $streamName, Stream\Context $context = null): resource
     {
         static $createModes = [
-            parent::MODE_READ_WRITE,
-            parent::MODE_TRUNCATE_READ_WRITE,
-            parent::MODE_APPEND_READ_WRITE,
-            parent::MODE_CREATE_READ_WRITE
+            parent::MODE_READ
         ];
 
         if (!in_array($this->getMode(), $createModes)) {
-            throw new Exception(
+            throw new File\Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
                 0,
                 [$this->getMode(), implode(', ', $createModes)]
@@ -100,9 +96,8 @@ class          ReadWrite
         preg_match('#^(\w+)://#', $streamName, $match);
 
         if (((isset($match[1]) && $match[1] == 'file') || !isset($match[1])) &&
-            !file_exists($streamName) &&
-            parent::MODE_READ_WRITE == $this->getMode()) {
-            throw new Exception\FileDoesNotExist(
+            !file_exists($streamName)) {
+            throw new File\Exception\FileDoesNotExist(
                 'File %s does not exist.',
                 1,
                 $streamName
@@ -119,7 +114,7 @@ class          ReadWrite
      *
      * @return  bool
      */
-    public function eof()
+    public function eof(): bool
     {
         return feof($this->getStream());
     }
@@ -131,10 +126,10 @@ class          ReadWrite
      * @return  string
      * @throws  \Hoa\File\Exception
      */
-    public function read($length)
+    public function read(int $length)
     {
         if (0 > $length) {
-            throw new Exception(
+            throw new File\Exception(
                 'Length must be greater than 0, given %d.',
                 2,
                 $length
@@ -150,7 +145,7 @@ class          ReadWrite
      * @param   int     $length    Length.
      * @return  string
      */
-    public function readString($length)
+    public function readString(int $length)
     {
         return $this->read($length);
     }
@@ -181,7 +176,7 @@ class          ReadWrite
      * @param   int     $length    Length.
      * @return  int
      */
-    public function readInteger($length = 1)
+    public function readInteger(int $length = 1)
     {
         return (int) $this->read($length);
     }
@@ -192,7 +187,7 @@ class          ReadWrite
      * @param   int     $length    Length.
      * @return  float
      */
-    public function readFloat($length = 1)
+    public function readFloat(int $length = 1)
     {
         return (float) $this->read($length);
     }
@@ -204,7 +199,7 @@ class          ReadWrite
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function readArray($format = null)
+    public function readArray(string $format = null)
     {
         return $this->scanf($format);
     }
@@ -225,7 +220,7 @@ class          ReadWrite
      * @param   int  $offset    Offset.
      * @return  string
      */
-    public function readAll($offset = 0)
+    public function readAll(int $offset = 0)
     {
         return stream_get_contents($this->getStream(), -1, $offset);
     }
@@ -236,142 +231,8 @@ class          ReadWrite
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function scanf($format)
+    public function scanf(string $format): array
     {
         return fscanf($this->getStream(), $format);
-    }
-
-    /**
-     * Write n characters.
-     *
-     * @param   string  $string    String.
-     * @param   int     $length    Length.
-     * @return  mixed
-     * @throws  \Hoa\File\Exception
-     */
-    public function write($string, $length)
-    {
-        if (0 > $length) {
-            throw new Exception(
-                'Length must be greater than 0, given %d.',
-                3,
-                $length
-            );
-        }
-
-        return fwrite($this->getStream(), $string, $length);
-    }
-
-    /**
-     * Write a string.
-     *
-     * @param   string  $string    String.
-     * @return  mixed
-     */
-    public function writeString($string)
-    {
-        $string = (string) $string;
-
-        return $this->write($string, strlen($string));
-    }
-
-    /**
-     * Write a character.
-     *
-     * @param   string  $char    Character.
-     * @return  mixed
-     */
-    public function writeCharacter($char)
-    {
-        return $this->write((string) $char[0], 1);
-    }
-
-    /**
-     * Write a boolean.
-     *
-     * @param   bool    $boolean    Boolean.
-     * @return  mixed
-     */
-    public function writeBoolean($boolean)
-    {
-        return $this->write((string) (bool) $boolean, 1);
-    }
-
-    /**
-     * Write an integer.
-     *
-     * @param   int     $integer    Integer.
-     * @return  mixed
-     */
-    public function writeInteger($integer)
-    {
-        $integer = (string) (int) $integer;
-
-        return $this->write($integer, strlen($integer));
-    }
-
-    /**
-     * Write a float.
-     *
-     * @param   float   $float    Float.
-     * @return  mixed
-     */
-    public function writeFloat($float)
-    {
-        $float = (string) (float) $float;
-
-        return $this->write($float, strlen($float));
-    }
-
-    /**
-     * Write an array.
-     *
-     * @param   array   $array    Array.
-     * @return  mixed
-     */
-    public function writeArray(array $array)
-    {
-        $array = var_export($array, true);
-
-        return $this->write($array, strlen($array));
-    }
-
-    /**
-     * Write a line.
-     *
-     * @param   string  $line    Line.
-     * @return  mixed
-     */
-    public function writeLine($line)
-    {
-        if (false === $n = strpos($line, "\n")) {
-            return $this->write($line . "\n", strlen($line) + 1);
-        }
-
-        ++$n;
-
-        return $this->write(substr($line, 0, $n), $n);
-    }
-
-    /**
-     * Write all, i.e. as much as possible.
-     *
-     * @param   string  $string    String.
-     * @return  mixed
-     */
-    public function writeAll($string)
-    {
-        return $this->write($string, strlen($string));
-    }
-
-    /**
-     * Truncate a file to a given length.
-     *
-     * @param   int     $size    Size.
-     * @return  bool
-     */
-    public function truncate($size)
-    {
-        return ftruncate($this->getStream(), $size);
     }
 }
