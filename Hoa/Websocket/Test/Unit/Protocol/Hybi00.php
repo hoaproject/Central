@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -47,12 +49,11 @@ use Mock\Hoa\Websocket\Protocol\Hybi00 as SUT;
  *
  * Test suite for the Hybi00 protocol implementation.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Hybi00 extends Test\Unit\Suite
 {
-    public function case_extends_generic()
+    public function case_extends_generic(): void
     {
         $this
             ->given($socket = new Socket\Server('tcp://*:1234'))
@@ -62,7 +63,7 @@ class Hybi00 extends Test\Unit\Suite
                     ->isInstanceOf(Websocket\Protocol\Generic::class);
     }
 
-    public function case_do_handshake_illegal_sec_websocket_key_header()
+    public function case_do_handshake_illegal_sec_websocket_key_header(): void
     {
         $this
             ->given(
@@ -70,13 +71,13 @@ class Hybi00 extends Test\Unit\Suite
                 $socket   = new Socket\Server('tcp://*:1234'),
                 $protocol = new SUT($socket)
             )
-            ->exception(function () use ($protocol, $request) {
+            ->exception(function () use ($protocol, $request): void {
                 $protocol->doHandshake($request);
             })
                 ->isInstanceOf(Websocket\Exception\BadProtocol::class);
     }
 
-    public function case_do_handshake()
+    public function case_do_handshake(): void
     {
         $self = $this;
 
@@ -109,9 +110,9 @@ class Hybi00 extends Test\Unit\Suite
                         ->boolean($handshake)
                             ->isTrue();
 
-                    return;
+                    return true;
                 },
-                $this->calling($socket)->writeAll = function ($data) use (&$calledB, $self, $challenge) {
+                $this->calling($socket)->writeAll = function ($data) use (&$calledB, $self, $challenge): void {
                     $calledB = true;
 
                     $self
@@ -124,8 +125,6 @@ class Hybi00 extends Test\Unit\Suite
                                 'Sec-WebSocket-Location: ws://example.org/foobar' . CRLF . CRLF .
                                 $challenge . CRLF
                             );
-
-                    return;
                 }
             )
             ->when($result = $protocol->doHandshake($request))
@@ -138,14 +137,14 @@ class Hybi00 extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_read_empty_frame()
+    public function case_read_empty_frame(): void
     {
         $this
             ->given(
                 $socket   = new Socket\Server('tcp://*:1234'),
                 $protocol = new SUT($socket),
 
-                $this->calling($socket)->read = null
+                $this->calling($socket)->read = ''
             )
             ->when($result = $protocol->readFrame())
             ->then
@@ -162,7 +161,7 @@ class Hybi00 extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_read_frame()
+    public function case_read_frame(): void
     {
         $this
             ->given(
@@ -188,7 +187,7 @@ class Hybi00 extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_write_frame()
+    public function case_write_frame(): void
     {
         $self = $this;
 
@@ -220,7 +219,7 @@ class Hybi00 extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_send()
+    public function case_send(): void
     {
         $self = $this;
 
@@ -234,7 +233,7 @@ class Hybi00 extends Test\Unit\Suite
                 $end     = false,
                 $mask    = true,
 
-                $this->calling($protocol)->writeFrame = function ($_message, $_opcode, $_end, $_mask) use (&$called, $self, $message) {
+                $this->calling($protocol)->writeFrame = function ($_message, $_opcode, $_end, $_mask) use (&$called, $self, $message): void {
                     $called = true;
 
                     $self
@@ -258,14 +257,14 @@ class Hybi00 extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_close()
+    public function case_close(): void
     {
         $this
             ->given(
                 $socket   = new Socket\Server('tcp://*:1234'),
                 $protocol = new SUT($socket),
 
-                $this->calling($socket)->write = function () use (&$called) {
+                $this->calling($socket)->write = function () use (&$called): void {
                     $called = true;
                 }
             )

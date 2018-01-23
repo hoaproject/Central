@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -47,12 +49,11 @@ use Mock\Hoa\Websocket\Protocol\Rfc6455 as SUT;
  *
  * Test suite for the RFC6455 protocol implementation.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Rfc6455 extends Test\Unit\Suite
 {
-    public function case_guid()
+    public function case_guid(): void
     {
         $this
             ->when($result = SUT::GUID)
@@ -61,7 +62,7 @@ class Rfc6455 extends Test\Unit\Suite
                     ->isEqualTo('258EAFA5-E914-47DA-95CA-C5AB0DC85B11');
     }
 
-    public function case_extends_generic()
+    public function case_extends_generic(): void
     {
         $this
             ->given($socket = new Socket\Server('tcp://*:1234'))
@@ -71,7 +72,7 @@ class Rfc6455 extends Test\Unit\Suite
                     ->isInstanceOf(Websocket\Protocol\Generic::class);
     }
 
-    public function case_do_handshake_missing_sec_websocket_key_header()
+    public function case_do_handshake_missing_sec_websocket_key_header(): void
     {
         $this
             ->given(
@@ -79,13 +80,13 @@ class Rfc6455 extends Test\Unit\Suite
                 $socket   = new Socket\Server('tcp://*:1234'),
                 $protocol = new SUT($socket)
             )
-            ->exception(function () use ($protocol, $request) {
+            ->exception(function () use ($protocol, $request): void {
                 $protocol->doHandshake($request);
             })
                 ->isInstanceOf(Websocket\Exception\BadProtocol::class);
     }
 
-    public function case_do_handshake_illegal_sec_websocket_key_header_invalid_encoding()
+    public function case_do_handshake_illegal_sec_websocket_key_header_invalid_encoding(): void
     {
         $this
             ->given(
@@ -95,13 +96,13 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $request['sec-websocket-key'] = 'invalid'
             )
-            ->exception(function () use ($protocol, $request) {
+            ->exception(function () use ($protocol, $request): void {
                 $protocol->doHandshake($request);
             })
                 ->isInstanceOf(Websocket\Exception\BadProtocol::class);
     }
 
-    public function case_do_handshake_illegal_sec_websocket_key_header_invalid_length()
+    public function case_do_handshake_illegal_sec_websocket_key_header_invalid_length(): void
     {
         $this
             ->given(
@@ -111,13 +112,13 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $request['sec-websocket-key'] = base64_encode('invalid')
             )
-            ->exception(function () use ($protocol, $request) {
+            ->exception(function () use ($protocol, $request): void {
                 $protocol->doHandshake($request);
             })
                 ->isInstanceOf(Websocket\Exception\BadProtocol::class);
     }
 
-    public function case_do_handshake()
+    public function case_do_handshake(): void
     {
         $self = $this;
 
@@ -140,9 +141,9 @@ class Rfc6455 extends Test\Unit\Suite
                         ->boolean($handshake)
                             ->isTrue();
 
-                    return;
+                    return true;
                 },
-                $this->calling($socket)->writeAll = function ($_data) use (&$calledB, $self, $challenge) {
+                $this->calling($socket)->writeAll = function ($_data) use (&$calledB, $self, $challenge): void {
                     $calledB = true;
 
                     $self
@@ -154,8 +155,6 @@ class Rfc6455 extends Test\Unit\Suite
                                 'Sec-WebSocket-Accept: ' . $challenge . CRLF .
                                 'Sec-WebSocket-Version: 13' . CRLF . CRLF
                             );
-
-                    return;
                 }
             )
             ->when($result = $protocol->doHandshake($request))
@@ -168,14 +167,14 @@ class Rfc6455 extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_read_frame_no_opcode()
+    public function case_read_frame_no_opcode(): void
     {
         $this
             ->given(
                 $socket   = new Socket\Server('tcp://*:1234'),
                 $protocol = new SUT($socket),
 
-                $this->calling($socket)->read = null
+                $this->calling($socket)->read = ''
             )
             ->when($result = $protocol->readFrame())
             ->then
@@ -200,7 +199,7 @@ class Rfc6455 extends Test\Unit\Suite
         return $this->_case_read_frame_rsvX_is_not_equal_to_0(0x0, 0x0, 0x1);
     }
 
-    protected function _case_read_frame_rsvX_is_not_equal_to_0($rsv1, $rsv2, $rsv3)
+    protected function _case_read_frame_rsvX_is_not_equal_to_0($rsv1, $rsv2, $rsv3): void
     {
         $this
             ->given(
@@ -209,7 +208,7 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $this->calling($socket)->read[1] =
                     chr(
-                        (0x1   << 7)
+                        (0x1 << 7)
                       | ($rsv1 << 6)
                       | ($rsv2 << 5)
                       | ($rsv3 << 4)
@@ -221,7 +220,7 @@ class Rfc6455 extends Test\Unit\Suite
                       | 42
                     )
             )
-            ->exception(function () use ($protocol) {
+            ->exception(function () use ($protocol): void {
                 $protocol->readFrame();
             })
                 ->isInstanceOf(Websocket\Exception\CloseError::class)
@@ -229,7 +228,7 @@ class Rfc6455 extends Test\Unit\Suite
                 ->isEqualTo(Websocket\Connection::CLOSE_PROTOCOL_ERROR);
     }
 
-    public function case_read_frame_of_length_0()
+    public function case_read_frame_of_length_0(): void
     {
         $this
             ->given(
@@ -246,7 +245,7 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $this->calling($socket)->read[1] =
                     chr(
-                        ($fin  << 7)
+                        ($fin << 7)
                       | ($rsv1 << 6)
                       | ($rsv2 << 5)
                       | ($rsv3 << 4)
@@ -281,7 +280,7 @@ class Rfc6455 extends Test\Unit\Suite
         );
     }
 
-    protected function _case_read_frame_of_small_length($opcode, $fin)
+    protected function _case_read_frame_of_small_length($opcode, $fin): void
     {
         $this
             ->given(
@@ -296,7 +295,7 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $this->calling($socket)->read[1] =
                     chr(
-                        ($fin  << 7)
+                        ($fin << 7)
                       | ($rsv1 << 6)
                       | ($rsv2 << 5)
                       | ($rsv3 << 4)
@@ -326,7 +325,7 @@ class Rfc6455 extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_read_frame_of_medium_length()
+    public function case_read_frame_of_medium_length(): void
     {
         $this
             ->given(
@@ -343,7 +342,7 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $this->calling($socket)->read[1] =
                     chr(
-                        ($fin  << 7)
+                        ($fin << 7)
                       | ($rsv1 << 6)
                       | ($rsv2 << 5)
                       | ($rsv3 << 4)
@@ -374,7 +373,7 @@ class Rfc6455 extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_read_frame_of_long_length()
+    public function case_read_frame_of_long_length(): void
     {
         $this
             ->given(
@@ -391,7 +390,7 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $this->calling($socket)->read[1] =
                     chr(
-                        ($fin  << 7)
+                        ($fin << 7)
                       | ($rsv1 << 6)
                       | ($rsv2 << 5)
                       | ($rsv3 << 4)
@@ -430,7 +429,7 @@ class Rfc6455 extends Test\Unit\Suite
         );
     }
 
-    public function case_read_masked_frame_of_length_0()
+    public function case_read_masked_frame_of_length_0(): void
     {
         $this
             ->given(
@@ -447,7 +446,7 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $this->calling($socket)->read[1] =
                     chr(
-                        ($fin  << 7)
+                        ($fin << 7)
                       | ($rsv1 << 6)
                       | ($rsv2 << 5)
                       | ($rsv3 << 4)
@@ -475,7 +474,7 @@ class Rfc6455 extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_read_masked_frame_of_small_length()
+    public function case_read_masked_frame_of_small_length(): void
     {
         $self = $this;
 
@@ -496,7 +495,7 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $this->calling($socket)->read[1] =
                     chr(
-                        ($fin  << 7)
+                        ($fin << 7)
                       | ($rsv1 << 6)
                       | ($rsv2 << 5)
                       | ($rsv3 << 4)
@@ -535,7 +534,7 @@ class Rfc6455 extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_read_masked_frame_of_medium_length()
+    public function case_read_masked_frame_of_medium_length(): void
     {
         $self = $this;
 
@@ -556,7 +555,7 @@ class Rfc6455 extends Test\Unit\Suite
 
                 $this->calling($socket)->read[1] =
                     chr(
-                        ($fin  << 7)
+                        ($fin << 7)
                       | ($rsv1 << 6)
                       | ($rsv2 << 5)
                       | ($rsv3 << 4)
@@ -596,7 +595,7 @@ class Rfc6455 extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_write_frame_of_length_0()
+    public function case_write_frame_of_length_0(): void
     {
         $this
             ->given(
@@ -604,7 +603,7 @@ class Rfc6455 extends Test\Unit\Suite
                 $protocol = new SUT($socket),
                 $message  = '',
 
-                $this->calling($socket)->writeAll = function ($data) use (&$output) {
+                $this->calling($socket)->writeAll = function ($data) use (&$output): void {
                     $output = $data;
 
                     return;
@@ -639,7 +638,7 @@ class Rfc6455 extends Test\Unit\Suite
         );
     }
 
-    protected function _case_write_frame_of_small_length($opcode, $fin)
+    protected function _case_write_frame_of_small_length($opcode, $fin): void
     {
         $this
             ->given(
@@ -647,7 +646,7 @@ class Rfc6455 extends Test\Unit\Suite
                 $protocol = new SUT($socket),
                 $message  = str_repeat('a', 0x7d),
 
-                $this->calling($socket)->writeAll = function ($data) use (&$output) {
+                $this->calling($socket)->writeAll = function ($data) use (&$output): void {
                     $output = $data;
 
                     return;
@@ -661,9 +660,9 @@ class Rfc6455 extends Test\Unit\Suite
                     ->isEqualTo(
                         chr(
                             ($fin << 7)
-                          | (0x0  << 6)
-                          | (0x0  << 5)
-                          | (0x0  << 4)
+                          | (0x0 << 6)
+                          | (0x0 << 5)
+                          | (0x0 << 4)
                           | $opcode
                         ) .
                         chr(
@@ -674,7 +673,7 @@ class Rfc6455 extends Test\Unit\Suite
                     );
     }
 
-    public function case_write_frame_of_medium_length()
+    public function case_write_frame_of_medium_length(): void
     {
         $this
             ->given(
@@ -682,7 +681,7 @@ class Rfc6455 extends Test\Unit\Suite
                 $protocol = new SUT($socket),
                 $message  = str_repeat('a', 0x7e),
 
-                $this->calling($socket)->writeAll = function ($data) use (&$output) {
+                $this->calling($socket)->writeAll = function ($data) use (&$output): void {
                     $output = $data;
 
                     return;
@@ -710,7 +709,7 @@ class Rfc6455 extends Test\Unit\Suite
                     );
     }
 
-    public function case_write_frame_of_long_length()
+    public function case_write_frame_of_long_length(): void
     {
         $this
             ->given(
@@ -718,7 +717,7 @@ class Rfc6455 extends Test\Unit\Suite
                 $protocol = new SUT($socket),
                 $message  = str_repeat('a', 0x10000),
 
-                $this->calling($socket)->writeAll = function ($data) use (&$output) {
+                $this->calling($socket)->writeAll = function ($data) use (&$output): void {
                     $output = $data;
 
                     return;
@@ -764,7 +763,7 @@ class Rfc6455 extends Test\Unit\Suite
         return $this->_case_write_masked_frame_of_small_length(str_repeat('a', 0x7d));
     }
 
-    protected function _case_write_masked_frame_of_small_length($message)
+    protected function _case_write_masked_frame_of_small_length($message): void
     {
         $this
             ->given(
@@ -778,7 +777,7 @@ class Rfc6455 extends Test\Unit\Suite
                     $maskingKey
                 ),
 
-                $this->calling($socket)->writeAll = function ($data) use (&$output) {
+                $this->calling($socket)->writeAll = function ($data) use (&$output): void {
                     $output = $data;
 
                     return;
@@ -810,7 +809,7 @@ class Rfc6455 extends Test\Unit\Suite
                     );
     }
 
-    public function case_write_masked_frame_of_medium_length()
+    public function case_write_masked_frame_of_medium_length(): void
     {
         $this
             ->given(
@@ -824,7 +823,7 @@ class Rfc6455 extends Test\Unit\Suite
                     $maskingKey
                 ),
 
-                $this->calling($socket)->writeAll = function ($data) use (&$output) {
+                $this->calling($socket)->writeAll = function ($data) use (&$output): void {
                     $output = $data;
 
                     return;
@@ -857,7 +856,7 @@ class Rfc6455 extends Test\Unit\Suite
                     );
     }
 
-    public function case_write_masked_frame_of_long_length()
+    public function case_write_masked_frame_of_long_length(): void
     {
         $this
             ->given(
@@ -871,7 +870,7 @@ class Rfc6455 extends Test\Unit\Suite
                     $maskingKey
                 ),
 
-                $this->calling($socket)->writeAll = function ($data) use (&$output) {
+                $this->calling($socket)->writeAll = function ($data) use (&$output): void {
                     $output = $data;
 
                     return;
@@ -904,7 +903,7 @@ class Rfc6455 extends Test\Unit\Suite
                     );
     }
 
-    public function case_get_masking_key()
+    public function case_get_masking_key(): void
     {
         $this
             ->given(
@@ -981,7 +980,7 @@ class Rfc6455 extends Test\Unit\Suite
         );
     }
 
-    protected function _case_send_invalid_message($opcode)
+    protected function _case_send_invalid_message($opcode): void
     {
         $this
             ->given(
@@ -989,7 +988,7 @@ class Rfc6455 extends Test\Unit\Suite
                 $protocol = new SUT($socket),
                 $message  = iconv('UTF-8', 'UTF-16', '😄')
             )
-            ->exception(function () use ($protocol, $message) {
+            ->exception(function () use ($protocol, $message): void {
                 $protocol->send($message);
             })
                 ->isInstanceOf(Websocket\Exception\InvalidMessage::class);
@@ -1005,7 +1004,7 @@ class Rfc6455 extends Test\Unit\Suite
         );
     }
 
-    protected function _case_send($message, $opcode, $end, $mask)
+    protected function _case_send($message, $opcode, $end, $mask): void
     {
         $self = $this;
 
@@ -1014,7 +1013,7 @@ class Rfc6455 extends Test\Unit\Suite
                 $socket   = new Socket\Server('tcp://*:1234'),
                 $protocol = new SUT($socket),
 
-                $this->calling($protocol)->writeFrame = function ($_message, $_opcode, $_end, $_mask) use (&$called, $self, $message, $opcode, $end, $mask) {
+                $this->calling($protocol)->writeFrame = function ($_message, $_opcode, $_end, $_mask) use (&$called, $self, $message, $opcode, $end, $mask): void {
                     $called = true;
 
                     $self
@@ -1070,7 +1069,7 @@ class Rfc6455 extends Test\Unit\Suite
         return $this->_case_close($closeType, 'foobar', true);
     }
 
-    protected function _case_close($code, $reason, $mask)
+    protected function _case_close($code, $reason, $mask): void
     {
         $self = $this;
 
@@ -1092,7 +1091,7 @@ class Rfc6455 extends Test\Unit\Suite
                         ->boolean($_mask)
                             ->isEqualTo($mask);
 
-                    return;
+                    return strlen($_message);
                 }
             )
             ->when($result = $protocol->close($code, $reason, $mask))

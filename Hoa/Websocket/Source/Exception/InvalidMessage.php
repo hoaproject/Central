@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,46 +39,10 @@
 namespace Hoa\Websocket\Exception;
 
 /**
- * Class \Hoa\Websocket\Exception\CloseError.
+ * Class \Hoa\Websocket\Exception\InvalidMessage.
  *
  * Extending the \Hoa\Websocket\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
-class CloseError extends Exception
+class InvalidMessage extends Exception
 {
-    /**
-     * Error code.
-     *
-     * One of the \Hoa\Websocket\Connection::CLOSE_* constants.
-     *
-     * @var int
-     */
-    protected $_errorCode = null;
-
-
-    /**
-     * Set the error code.
-     *
-     * @param   int     $code    Code.
-     * @return  int
-     */
-    public function setErrorCode($code)
-    {
-        $old              = $this->_errorCode;
-        $this->_errorCode = $code;
-
-        return $old;
-    }
-
-    /**
-     * Get the error code.
-     *
-     * @return  int
-     */
-    public function getErrorCode()
-    {
-        return $this->_errorCode;
-    }
 }

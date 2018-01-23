@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,14 +38,19 @@
 
 namespace Hoa\Websocket\Exception;
 
+use Hoa\Consistency;
+use Hoa\Exception as HoaException;
+
 /**
- * Class \Hoa\Websocket\Exception\BadProtocol.
+ * Class \Hoa\Websocket\Exception.
  *
- * Extending the \Hoa\Websocket\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Extending the \Hoa\Exception\Exception class.
  */
-class BadProtocol extends Exception
+class Exception extends HoaException
 {
 }
+
+/**
+ * Flex entity.
+ */
+Consistency::flexEntity(Exception::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,22 +38,37 @@
 
 namespace Hoa\Websocket\Exception;
 
-use Hoa\Consistency;
-use Hoa\Exception as HoaException;
-
 /**
- * Class \Hoa\Websocket\Exception.
+ * Class \Hoa\Websocket\Exception\CloseError.
  *
- * Extending the \Hoa\Exception\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Extending the \Hoa\Websocket\Exception class.
  */
-class Exception extends HoaException
+class CloseError extends Exception
 {
-}
+    /**
+     * Error code.
+     *
+     * One of the \Hoa\Websocket\Connection::CLOSE_* constants.
+     */
+    protected $_errorCode = null;
 
-/**
- * Flex entity.
- */
-Consistency::flexEntity('Hoa\Websocket\Exception\Exception');
+
+    /**
+     * Set the error code.
+     */
+    public function setErrorCode(int $code): ?int
+    {
+        $old              = $this->_errorCode;
+        $this->_errorCode = $code;
+
+        return $old;
+    }
+
+    /**
+     * Get the error code.
+     */
+    public function getErrorCode(): ?int
+    {
+        return $this->_errorCode;
+    }
+}
