@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,18 +36,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Stream;
+namespace Hoa\Stream\Filter;
 
-use Hoa\Exception as HoaException;
+use Hoa\Stream;
 
 /**
- * Class \Hoa\Stream\Exception.
+ * Class \Hoa\Stream\Filter\Exception.
  *
- * Extending the \Hoa\Exception\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Extending the \Hoa\Stream\Exception class.
  */
-class Exception extends HoaException
+class Exception extends Stream\Exception
 {
 }

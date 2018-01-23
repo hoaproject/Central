@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,53 +36,62 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Stream\Test\Unit\IStream;
-
-use Hoa\Stream as LUT;
-use Hoa\Stream\IStream\Touchable as SUT;
-use Hoa\Test;
+namespace Hoa\Stream;
 
 /**
- * Class \Hoa\Stream\Test\Unit\IStream\Touchable.
+ * Class \Hoa\Stream\Composite.
  *
- * Test suite of the touchable interface.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Declare a composite stream, i.e. a stream that uses a stream.
  */
-class Touchable extends Test\Unit\Suite
+abstract class Composite
 {
-    public function case_is_a_valid_interface()
+    /**
+     * Current stream.
+     */
+    protected $_stream      = null;
+
+    /**
+     * Inner stream.
+     */
+    protected $_innerStream = null;
+
+
+
+    /**
+     * Set current stream.
+     */
+    protected function setStream($stream)
     {
-        $this
-            ->when($result = new \Mock\Hoa\Stream\IStream\Touchable())
-            ->then
-                ->object($result)
-                    ->isInstanceOf(SUT::class)
-                    ->isInstanceOf(LUT\IStream\Stream::class);
+        $old           = $this->_stream;
+        $this->_stream = $stream;
+
+        return $old;
     }
 
-    public function case_constants()
+    /**
+     * Get current stream.
+     */
+    public function getStream()
     {
-        $this
-            ->when($result = SUT::OVERWRITE)
-            ->then
-                ->boolean($result)
-                    ->isEqualTo(true)
+        return $this->_stream;
+    }
 
-            ->when($result = SUT::DO_NOT_OVERWRITE)
-            ->then
-                ->boolean($result)
-                    ->isEqualTo(false)
+    /**
+     * Set inner stream.
+     */
+    protected function setInnerStream(Stream $innerStream): ?Stream
+    {
+        $old                = $this->_innerStream;
+        $this->_innerStream = $innerStream;
 
-            ->when($result = SUT::MAKE_DIRECTORY)
-            ->then
-                ->boolean($result)
-                    ->isEqualTo(true)
+        return $old;
+    }
 
-            ->when($result = SUT::DO_NOT_MAKE_DIRECTORY)
-            ->then
-                ->boolean($result)
-                    ->isEqualTo(false);
+    /**
+     * Get inner stream.
+     */
+    public function getInnerStream(): ?Stream
+    {
+        return $this->_innerStream;
     }
 }

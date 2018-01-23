@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,19 +39,76 @@
 namespace Hoa\Stream\IStream;
 
 /**
- * Interface \Hoa\Stream\IStream\Stream.
+ * Interface \Hoa\Stream\IStream\Touchable.
  *
- * Interface for all streams.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for touchable input/output.
  */
-interface Stream
+interface Touchable extends Stream
 {
     /**
-     * Get the current stream.
-     *
-     * @return  resource
+     * Overwrite file if already exists.
      */
-    public function getStream();
+    public const OVERWRITE             = true;
+
+    /**
+     * Do not overwrite file if already exists.
+     */
+    public const DO_NOT_OVERWRITE      = false;
+
+    /**
+     * Make directory if does not exist.
+     */
+    public const MAKE_DIRECTORY        = true;
+
+    /**
+     * Do not make directory if does not exist.
+     */
+    public const DO_NOT_MAKE_DIRECTORY = false;
+
+
+
+    /**
+     * Set access and modification time of file.
+     */
+    public function touch(int $time = -1, int $atime = -1): bool;
+
+    /**
+     * Copy file.
+     * Return the destination file path if succeed, false otherwise.
+     */
+    public function copy(string $to, bool $force = self::DO_NOT_OVERWRITE): bool;
+
+    /**
+     * Move a file.
+     */
+    public function move(
+        string $name,
+        bool $force = self::DO_NOT_OVERWRITE,
+        bool $mkdir = self::DO_NOT_MAKE_DIRECTORY
+    ): bool;
+
+    /**
+     * Delete a file.
+     */
+    public function delete(): bool;
+
+    /**
+     * Change file group.
+     */
+    public function changeGroup($group): bool;
+
+    /**
+     * Change file mode.
+     */
+    public function changeMode(int $mode): bool;
+
+    /**
+     * Change file owner.
+     */
+    public function changeOwner($user): bool;
+
+    /**
+     * Change the current umask.
+     */
+    public static function umask(int $umask = null): int;
 }

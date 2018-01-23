@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,58 +39,54 @@
 namespace Hoa\Stream\IStream;
 
 /**
- * Interface \Hoa\Stream\IStream\Pointable.
+ * Interface \Hoa\Stream\IStream\Structural.
  *
- * Interface for pointable input/output.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for structural input/output.
  */
-interface Pointable extends Stream
+interface Structural extends Stream
 {
     /**
-     * Set position equal to $offset bytes.
-     *
-     * @const int
+     * Select root of the document: :root.
      */
-    const SEEK_SET     = SEEK_SET;
+    public function selectRoot(): self;
 
     /**
-     * Set position to current location plus $offset.
-     *
-     * @const int
+     * Select any elements: *.
      */
-    const SEEK_CURRENT = SEEK_CUR;
+    public function selectAnyElements(): array;
 
     /**
-     * Set position to end-of-file plus $offset.
-     *
-     * @const int
+     * Select elements of type E: E.
      */
-    const SEEK_END     = SEEK_END;
-
-
+    public function selectElements(string $E = null): array;
 
     /**
-     * Rewind the position of a stream pointer.
-     *
-     * @return  bool
+     * Select F elements descendant of an E element: E F.
      */
-    public function rewind();
+    public function selectDescendantElements(string $F = null): array;
 
     /**
-     * Seek on a stream pointer.
-     *
-     * @param   int     $offset    Offset (negative value should be supported).
-     * @param   int     $whence    Whence, use the self::SEEK_* constants.
-     * @return  int
+     * Select F elements children of an E element: E > F.
      */
-    public function seek($offset, $whence = self::SEEK_SET);
+    public function selectChildElements(string $F = null): array;
 
     /**
-     * Get the current position of the stream pointer.
-     *
-     * @return  int
+     * Select an F element immediately preceded by an E element: E + F.
      */
-    public function tell();
+    public function selectAdjacentSiblingElement(string $F): Structural;
+
+    /**
+     * Select F elements preceded by an E element: E ~ F.
+     */
+    public function selectSiblingElements(string $F = null): array;
+
+    /**
+     * Execute a query selector and return the first result.
+     */
+    public function querySelector(string $query): Structural;
+
+    /**
+     * Execute a query selector and return one or many results.
+     */
+    public function querySelectorAll(string $query): array;
 }

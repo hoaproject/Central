@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,99 +39,50 @@
 namespace Hoa\Stream\IStream;
 
 /**
- * Interface \Hoa\Stream\IStream\In.
+ * Interface \Hoa\Stream\IStream\Lockable.
  *
- * Interface for input.
+ * Interface for lockable input/output.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
-interface In extends Stream
+interface Lockable extends Stream
 {
     /**
-     * Test for end-of-stream.
+     * Acquire a shared lock (reader).
      *
+     * @const int
+     */
+    public const LOCK_SHARED    = LOCK_SH;
+
+    /**
+     * Acquire an exclusive lock (writer).
+     *
+     * @const int
+     */
+    public const LOCK_EXCLUSIVE = LOCK_EX;
+
+    /**
+     * Release a lock (shared or exclusive).
+     *
+     * @const int
+     */
+    public const LOCK_RELEASE   = LOCK_UN;
+
+    /**
+     * If we do not want $this->lock() to block while locking.
+     *
+     * @const int
+     */
+    public const LOCK_NO_BLOCK  = LOCK_NB;
+
+
+
+    /**
+     * Portable advisory locking.
+     * Should take a look at stream_supports_lock().
+     *
+     * @param   int     $operation    Operation, use the self::LOCK_* constants.
      * @return  bool
      */
-    public function eof();
-
-    /**
-     * Read n characters.
-     *
-     * @param   int     $length    Length.
-     * @return  string
-     */
-    public function read($length);
-
-    /**
-     * Alias of $this->read().
-     *
-     * @param   int     $length    Length.
-     * @return  string
-     */
-    public function readString($length);
-
-    /**
-     * Read a character.
-     * It could be equivalent to $this->read(1).
-     *
-     * @return  string
-     */
-    public function readCharacter();
-
-    /**
-     * Read a boolean.
-     *
-     * @return  bool
-     */
-    public function readBoolean();
-
-    /**
-     * Read an integer.
-     *
-     * @param   int     $length    Length.
-     * @return  int
-     */
-    public function readInteger($length = 1);
-
-    /**
-     * Read a float.
-     *
-     * @param   int     $length    Length.
-     * @return  float
-     */
-    public function readFloat($length = 1);
-
-    /**
-     * Read an array.
-     * In most cases, it could be an alias to the $this->scanf() method.
-     *
-     * @param   mixed   $argument    Argument (because the behavior is very
-     *                               different according to the implementation).
-     * @return  array
-     */
-    public function readArray($argument = null);
-
-    /**
-     * Read a line.
-     *
-     * @return  string
-     */
-    public function readLine();
-
-    /**
-     * Read all, i.e. read as much as possible.
-     *
-     * @param   int  $offset    Offset.
-     * @return  string
-     */
-    public function readAll($offset = 0);
-
-    /**
-     * Parse input from a stream according to a format.
-     *
-     * @param   string  $format    Format (see printf's formats).
-     * @return  array
-     */
-    public function scanf($format);
+    public function lock(int $operation): bool;
 }

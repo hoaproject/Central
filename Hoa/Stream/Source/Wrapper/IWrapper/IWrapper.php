@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,18 +36,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Stream\Filter;
+namespace Hoa\Stream\Wrapper\IWrapper;
 
-use Hoa\Stream;
+use Hoa\Consistency;
 
 /**
- * Class \Hoa\Stream\Filter\Exception.
+ * Interface \Hoa\Stream\Wrapper\IWrapper.
  *
- * Extending the \Hoa\Stream\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for stream wrapper class.
  */
-class Exception extends Stream\Exception
+interface IWrapper extends File, Stream
 {
+    /**
+     * Constructs a new stream wrapper.
+     * Called when opening the stream wrapper, right before self::stream_open().
+     */
+    public function __construct();
 }
+
+/**
+ * Flex entity.
+ */
+Consistency::flexEntity(IWrapper::class);

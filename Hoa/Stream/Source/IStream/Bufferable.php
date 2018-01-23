@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,93 +39,37 @@
 namespace Hoa\Stream\IStream;
 
 /**
- * Interface \Hoa\Stream\IStream\Out.
+ * Interface \Hoa\Stream\IStream\Bufferable.
  *
- * Interface for output.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for bufferable streams. It's complementary to native buffer support
+ * of Hoa\Stream (please, see *StreamBuffer*() methods). Classes implementing
+ * this interface are able to create nested buffers, flush them etc.
  */
-interface Out extends Stream
+interface Bufferable extends Stream
 {
     /**
-     * Write n characters.
-     *
-     * @param   string  $string    String.
-     * @param   int     $length    Length.
-     * @return  mixed
+     * Start a new buffer.
+     * The callable acts like a light filter.
      */
-    public function write($string, $length);
+    public function newBuffer(callable $callable = null, int $size = null): int;
 
     /**
-     * Write a string.
-     *
-     * @param   string  $string    String.
-     * @return  mixed
+     * Flush the buffer.
      */
-    public function writeString($string);
+    public function flush();
 
     /**
-     * Write a character.
-     *
-     * @param   string  $character    Character.
-     * @return  mixed
+     * Delete buffer.
      */
-    public function writeCharacter($character);
+    public function deleteBuffer(): bool;
 
     /**
-     * Write a boolean.
-     *
-     * @param   bool    $boolean    Boolean.
-     * @return  mixed
+     * Get bufffer level.
      */
-    public function writeBoolean($boolean);
+    public function getBufferLevel(): int;
 
     /**
-     * Write an integer.
-     *
-     * @param   int     $integer    Integer.
-     * @return  mixed
+     * Get buffer size.
      */
-    public function writeInteger($integer);
-
-    /**
-     * Write a float.
-     *
-     * @param   float   $float    Float.
-     * @return  mixed
-     */
-    public function writeFloat($float);
-
-    /**
-     * Write an array.
-     *
-     * @param   array   $array    Array.
-     * @return  mixed
-     */
-    public function writeArray(array $array);
-
-    /**
-     * Write a line.
-     *
-     * @param   string  $line    Line.
-     * @return  mixed
-     */
-    public function writeLine($line);
-
-    /**
-     * Write all, i.e. as much as possible.
-     *
-     * @param   string  $string    String.
-     * @return  mixed
-     */
-    public function writeAll($string);
-
-    /**
-     * Truncate a stream to a given length.
-     *
-     * @param   int     $size    Size.
-     * @return  bool
-     */
-    public function truncate($size);
+    public function getBufferSize(): int;
 }

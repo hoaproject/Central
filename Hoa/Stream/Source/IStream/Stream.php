@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,26 +39,14 @@
 namespace Hoa\Stream\IStream;
 
 /**
- * Interface \Hoa\Stream\IStream\Pathable.
+ * Interface \Hoa\Stream\IStream\Stream.
  *
- * Interface for pathable input/output.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for all streams.
  */
-interface Pathable extends Stream
+interface Stream
 {
     /**
-     * Get filename component of path.
-     *
-     * @return  string
+     * Get the current stream.
      */
-    public function getBasename();
-
-    /**
-     * Get directory name component of path.
-     *
-     * @return  string
-     */
-    public function getDirname();
+    public function getStream();
 }

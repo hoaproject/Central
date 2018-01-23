@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,82 +39,41 @@
 namespace Hoa\Stream\IStream;
 
 /**
- * Interface \Hoa\Stream\IStream\Structural.
+ * Interface \Hoa\Stream\IStream\Pointable.
  *
- * Interface for structural input/output.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for pointable input/output.
  */
-interface Structural extends Stream
+interface Pointable extends Stream
 {
     /**
-     * Select root of the document: :root.
-     *
-     * @return  \Hoa\Stream\IStream\Structural
+     * Set position equal to $offset bytes.
      */
-    public function selectRoot();
+    public const SEEK_SET     = SEEK_SET;
 
     /**
-     * Select any elements: *.
-     *
-     * @return  array
+     * Set position to current location plus $offset.
      */
-    public function selectAnyElements();
+    public const SEEK_CURRENT = SEEK_CUR;
 
     /**
-     * Select elements of type E: E.
-     *
-     * @param   string  $E    Element E.
-     * @return  array
+     * Set position to end-of-file plus $offset.
      */
-    public function selectElements($E = null);
+    public const SEEK_END     = SEEK_END;
+
+
 
     /**
-     * Select F elements descendant of an E element: E F.
-     *
-     * @param   string  $F    Element F.
-     * @return  array
+     * Rewind the position of a stream pointer.
      */
-    public function selectDescendantElements($F = null);
+    public function rewind(): bool;
 
     /**
-     * Select F elements children of an E element: E > F.
-     *
-     * @param   string  $F    Element F.
-     * @return  array
+     * Seek on a stream pointer.
      */
-    public function selectChildElements($F = null);
+    public function seek(int $offset, int $whence = self::SEEK_SET): int;
 
     /**
-     * Select an F element immediately preceded by an E element: E + F.
-     *
-     * @param   string  $F    Element F.
-     * @return  \Hoa\Stream\IStream\Structural
+     * Get the current position of the stream pointer.
      */
-    public function selectAdjacentSiblingElement($F);
-
-    /**
-     * Select F elements preceded by an E element: E ~ F.
-     *
-     * @param   string  $F    Element F.
-     * @return  array
-     */
-    public function selectSiblingElements($F = null);
-
-    /**
-     * Execute a query selector and return the first result.
-     *
-     * @param   string  $query    Query.
-     * @return  \Hoa\Stream\IStream\Structural
-     */
-    public function querySelector($query);
-
-    /**
-     * Execute a query selector and return one or many results.
-     *
-     * @param   string  $query    Query.
-     * @return  array
-     */
-    public function querySelectorAll($query);
+    public function tell(): int;
 }

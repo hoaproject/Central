@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,51 +39,59 @@
 namespace Hoa\Stream\IStream;
 
 /**
- * Interface \Hoa\Stream\IStream\Lockable.
+ * Interface \Hoa\Stream\IStream\Out.
  *
- * Interface for lockable input/output.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for output.
  */
-interface Lockable extends Stream
+interface Out extends Stream
 {
     /**
-     * Acquire a shared lock (reader).
-     *
-     * @const int
+     * Write n characters.
      */
-    const LOCK_SHARED    = LOCK_SH;
+    public function write(string $string, int $length);
 
     /**
-     * Acquire an exclusive lock (writer).
-     *
-     * @const int
+     * Write a string.
      */
-    const LOCK_EXCLUSIVE = LOCK_EX;
+    public function writeString(string $string);
 
     /**
-     * Release a lock (shared or exclusive).
-     *
-     * @const int
+     * Write a character.
      */
-    const LOCK_RELEASE   = LOCK_UN;
+    public function writeCharacter(string $character);
 
     /**
-     * If we do not want $this->lock() to block while locking.
-     *
-     * @const int
+     * Write a boolean.
      */
-    const LOCK_NO_BLOCK  = LOCK_NB;
-
-
+    public function writeBoolean(bool $boolean);
 
     /**
-     * Portable advisory locking.
-     * Should take a look at stream_supports_lock().
-     *
-     * @param   int     $operation    Operation, use the self::LOCK_* constants.
-     * @return  bool
+     * Write an integer.
      */
-    public function lock($operation);
+    public function writeInteger(int $integer);
+
+    /**
+     * Write a float.
+     */
+    public function writeFloat(float $float);
+
+    /**
+     * Write an array.
+     */
+    public function writeArray(array $array);
+
+    /**
+     * Write a line.
+     */
+    public function writeLine(string $line);
+
+    /**
+     * Write all, i.e. as much as possible.
+     */
+    public function writeAll(string $string);
+
+    /**
+     * Truncate a stream to a given length.
+     */
+    public function truncate(int $size): bool;
 }

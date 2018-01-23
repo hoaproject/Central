@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,18 +36,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Stream\Wrapper;
-
-use Hoa\Stream;
+namespace Hoa\Stream\IStream;
 
 /**
- * Class \Hoa\Stream\Wrapper\Exception.
+ * Interface \Hoa\Stream\IStream\Pathable.
  *
- * Extending the \Hoa\Stream\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for pathable input/output.
  */
-class Exception extends Stream\Exception
+interface Pathable extends Stream
 {
+    /**
+     * Get filename component of path.
+     */
+    public function getBasename(): string;
+
+    /**
+     * Get directory name component of path.
+     */
+    public function getDirname(): string;
 }

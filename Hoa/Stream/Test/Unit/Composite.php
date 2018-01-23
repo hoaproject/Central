@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,20 +38,20 @@
 
 namespace Hoa\Stream\Test\Unit;
 
-use Mock\Hoa\Stream\Composite as SUT;
+use Hoa\Stream as LUT;
 use Hoa\Test;
+use Mock\Hoa\Stream\Composite as SUT;
 
 /**
  * Class \Hoa\Stream\Test\Unit\Composite.
  *
  * Test suite of the composite stream.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Composite extends Test\Unit\Suite
 {
-    public function case_set_stream()
+    public function case_set_stream(): void
     {
         $this
             ->given(
@@ -62,7 +64,7 @@ class Composite extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_get_stream()
+    public function case_get_stream(): void
     {
         $this
             ->given(
@@ -76,11 +78,11 @@ class Composite extends Test\Unit\Suite
                     ->isIdenticalTo($stream);
     }
 
-    public function case_set_inner_stream()
+    public function case_set_inner_stream(): void
     {
         $this
             ->given(
-                $innerStream = new \Mock\Hoa\Stream(__FILE__),
+                $innerStream = new MockedStream(),
                 $composite   = new SUT()
             )
             ->when($result = $this->invoke($composite)->setInnerStream($innerStream))
@@ -89,11 +91,11 @@ class Composite extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_get_inner_stream()
+    public function case_get_inner_stream(): void
     {
         $this
             ->given(
-                $innerStream = new \Mock\Hoa\Stream(__FILE__),
+                $innerStream = new MockedStream(),
                 $composite   = new SUT(),
                 $this->invoke($composite)->setInnerStream($innerStream)
             )
@@ -101,5 +103,21 @@ class Composite extends Test\Unit\Suite
             ->then
                 ->object($result)
                     ->isIdenticalTo($innerStream);
+    }
+}
+
+class MockedStream extends LUT\Stream
+{
+    public function __construct()
+    {
+    }
+
+    public function &_open(string $fileName, LUT\Context $context = null)
+    {
+    }
+
+    public function _close(): bool
+    {
+        return false;
     }
 }

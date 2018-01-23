@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,13 +46,10 @@ use Hoa\Test;
  * Class \Hoa\Stream\Test\Integration\Stream.
  *
  * Test suite of the stream class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Stream extends Test\Integration\Suite
 {
-    public function case_notifications()
+    public function case_notifications(): void
     {
         $self = $this;
 
@@ -70,7 +69,7 @@ class Stream extends Test\Integration\Suite
 
                 $stream->on(
                     'connect',
-                    function (Event\Bucket $bucket) use ($self, &$connectCalled) {
+                    function (Event\Bucket $bucket) use ($self, &$connectCalled): void {
                         $connectCalled = true;
                         $data          = $bucket->getData();
 
@@ -87,7 +86,7 @@ class Stream extends Test\Integration\Suite
                 ),
                 $stream->on(
                     'mimetype',
-                    function (Event\Bucket $bucket) use ($self, &$mimetypeCalled) {
+                    function (Event\Bucket $bucket) use ($self, &$mimetypeCalled): void {
                         $mimetypeCalled = true;
                         $data           = $bucket->getData();
 
@@ -104,7 +103,7 @@ class Stream extends Test\Integration\Suite
                 ),
                 $stream->on(
                     'size',
-                    function (Event\Bucket $bucket) use ($self, &$sizeCalled) {
+                    function (Event\Bucket $bucket) use ($self, &$sizeCalled): void {
                         $sizeCalled = true;
                         $data       = $bucket->getData();
 
@@ -121,7 +120,7 @@ class Stream extends Test\Integration\Suite
                 ),
                 $stream->on(
                     'progress',
-                    function (Event\Bucket $bucket) use ($self, &$progressCalled) {
+                    function (Event\Bucket $bucket) use ($self, &$progressCalled): void {
                         $progressCalled = true;
                         $data           = $bucket->getData();
 
@@ -153,7 +152,7 @@ class Stream extends Test\Integration\Suite
 
 class SUT extends LUT\Stream
 {
-    protected function &_open($streamName, LUT\Context $context = null)
+    protected function &_open(string $streamName, LUT\Context $context = null)
     {
         if (null === $context) {
             $out = fopen($streamName, 'rb');
@@ -164,7 +163,7 @@ class SUT extends LUT\Stream
         return $out;
     }
 
-    protected function _close()
+    protected function _close(): bool
     {
         return fclose($this->getStream());
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,77 +38,13 @@
 
 namespace Hoa\Stream;
 
+use Hoa\Exception as HoaException;
+
 /**
- * Class \Hoa\Stream\Composite.
+ * Class \Hoa\Stream\Exception.
  *
- * Declare a composite stream, i.e. a stream that uses a stream.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Extending the \Hoa\Exception\Exception class.
  */
-abstract class Composite
+class Exception extends HoaException
 {
-    /**
-     * Current stream.
-     *
-     * @var mixed
-     */
-    protected $_stream      = null;
-
-    /**
-     * Inner stream.
-     *
-     * @var \Hoa\Stream
-     */
-    protected $_innerStream = null;
-
-
-
-    /**
-     * Set current stream.
-     *
-     * @param   object  $stream    Current stream.
-     * @return  object
-     */
-    protected function setStream($stream)
-    {
-        $old           = $this->_stream;
-        $this->_stream = $stream;
-
-        return $old;
-    }
-
-    /**
-     * Get current stream.
-     *
-     * @return  object
-     */
-    public function getStream()
-    {
-        return $this->_stream;
-    }
-
-    /**
-     * Set inner stream.
-     *
-     * @param   \Hoa\Stream  $innerStream    Inner stream.
-     * @return  \Hoa\Stream
-     */
-    protected function setInnerStream(Stream $innerStream)
-    {
-        $old                = $this->_innerStream;
-        $this->_innerStream = $innerStream;
-
-        return $old;
-    }
-
-    /**
-     * Get inner stream.
-     *
-     * @return  \Hoa\Stream
-     */
-    public function getInnerStream()
-    {
-        return $this->_innerStream;
-    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,110 +39,66 @@
 namespace Hoa\Stream\IStream;
 
 /**
- * Interface \Hoa\Stream\IStream\Statable.
+ * Interface \Hoa\Stream\IStream\In.
  *
- * Interface for statable input/output.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for input.
  */
-interface Statable extends Stream
+interface In extends Stream
 {
     /**
-     * Size is undefined.
-     *
-     * @const int
+     * Test for end-of-stream.
      */
-    const SIZE_UNDEFINED = -1;
+    public function eof(): bool;
 
     /**
-     * Get size.
-     *
-     * @return  int
+     * Read n characters.
      */
-    public function getSize();
+    public function read(int $length);
 
     /**
-     * Get informations about a file.
-     *
-     * @return  array
+     * Alias of $this->read().
      */
-    public function getStatistic();
+    public function readString(int $length);
 
     /**
-     * Get last access time of file.
-     *
-     * @return  int
+     * Read a character.
+     * It could be equivalent to $this->read(1).
      */
-    public function getATime();
+    public function readCharacter();
 
     /**
-     * Get inode change time of file.
-     *
-     * @return  int
+     * Read a boolean.
      */
-    public function getCTime();
+    public function readBoolean();
 
     /**
-     * Get file modification time.
-     *
-     * @return  int
+     * Read an integer.
      */
-    public function getMTime();
+    public function readInteger(int $length = 1);
 
     /**
-     * Get file group.
-     *
-     * @return  int
+     * Read a float.
      */
-    public function getGroup();
+    public function readFloat(int $length = 1);
 
     /**
-     * Get file owner.
-     *
-     * @return  int
+     * Read an array.
+     * In most cases, it could be an alias to the $this->scanf() method.
      */
-    public function getOwner();
+    public function readArray();
 
     /**
-     * Get file permissions.
-     *
-     * @return  int
+     * Read a line.
      */
-    public function getPermissions();
+    public function readLine();
 
     /**
-     * Check if the file is readable.
-     *
-     * @return  bool
+     * Read all, i.e. read as much as possible.
      */
-    public function isReadable();
+    public function readAll(int $offset = 0);
 
     /**
-     * Check if the file is writable.
-     *
-     * @return  bool
+     * Parse input from a stream according to a format.
      */
-    public function isWritable();
-
-    /**
-     * Check if the file is executable.
-     *
-     * @return  bool
-     */
-    public function isExecutable();
-
-    /**
-     * Clear file status cache.
-     *
-     * @return  void
-     */
-    public function clearStatisticCache();
-
-    /**
-     * Clear all files status cache.
-     *
-     * @return  void
-     */
-    public static function clearAllStatisticCaches();
+    public function scanf(string $format): array;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,52 +39,79 @@
 namespace Hoa\Stream\IStream;
 
 /**
- * Interface \Hoa\Stream\IStream\Bufferable.
+ * Interface \Hoa\Stream\IStream\Statable.
  *
- * Interface for bufferable streams. It's complementary to native buffer support
- * of Hoa\Stream (please, see *StreamBuffer*() methods). Classes implementing
- * this interface are able to create nested buffers, flush them etc.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Interface for statable input/output.
  */
-interface Bufferable extends Stream
+interface Statable extends Stream
 {
     /**
-     * Start a new buffer.
-     * The callable acts like a light filter.
-     *
-     * @param   mixed   $callable    Callable.
-     * @param   int     $size        Size.
-     * @return  int
+     * Size is undefined.
      */
-    public function newBuffer($callable = null, $size = null);
+    public const SIZE_UNDEFINED = -1;
 
     /**
-     * Flush the buffer.
-     *
-     * @return  void
+     * Get size.
      */
-    public function flush();
+    public function getSize(): int;
 
     /**
-     * Delete buffer.
-     *
-     * @return  bool
+     * Get informations about a file.
      */
-    public function deleteBuffer();
+    public function getStatistic(): array;
 
     /**
-     * Get bufffer level.
-     *
-     * @return  int
+     * Get last access time of file.
      */
-    public function getBufferLevel();
+    public function getATime(): int;
 
     /**
-     * Get buffer size.
-     *
-     * @return  int
+     * Get inode change time of file.
      */
-    public function getBufferSize();
+    public function getCTime(): int;
+
+    /**
+     * Get file modification time.
+     */
+    public function getMTime(): int;
+
+    /**
+     * Get file group.
+     */
+    public function getGroup(): int;
+
+    /**
+     * Get file owner.
+     */
+    public function getOwner(): int;
+
+    /**
+     * Get file permissions.
+     */
+    public function getPermissions(): int;
+
+    /**
+     * Check if the file is readable.
+     */
+    public function isReadable(): bool;
+
+    /**
+     * Check if the file is writable.
+     */
+    public function isWritable(): bool;
+
+    /**
+     * Check if the file is executable.
+     */
+    public function isExecutable(): bool;
+
+    /**
+     * Clear file status cache.
+     */
+    public function clearStatisticCache();
+
+    /**
+     * Clear all files status cache.
+     */
+    public static function clearAllStatisticCaches();
 }
