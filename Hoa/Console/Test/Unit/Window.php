@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -46,20 +48,19 @@ use Hoa\Test;
  *
  * Test suite of the window.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Window extends Test\Unit\Suite
 {
-    public function beforeTestMethod($methodName)
+    public function beforeTestMethod($methodName): void
     {
         parent::beforeTestMethod($methodName);
-        LUT::setTput(new LUT\Tput('hoa://Library/Console/Terminfo/78/xterm-256color'));
+        LUT::setTput(new LUT\Tput('hoa://Library/Console/Source/Terminfo/78/xterm-256color'));
 
         return;
     }
 
-    public function case_get_instance()
+    public function case_get_instance(): void
     {
         $this
             ->when($result = SUT::getInstance())
@@ -68,7 +69,7 @@ class Window extends Test\Unit\Suite
                     ->isIdenticalTo(SUT::getInstance());
     }
 
-    public function case_set_size()
+    public function case_set_size(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -78,7 +79,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[8;42;7t");
     }
 
-    public function case_set_size_on_windows()
+    public function case_set_size_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -88,7 +89,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_move_to()
+    public function case_move_to(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -98,7 +99,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[3;7;42t");
     }
 
-    public function case_move_to_on_windows()
+    public function case_move_to_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -108,7 +109,7 @@ class Window extends Test\Unit\Suite
                 ->isEmpty();
     }
 
-    public function case_get_position()
+    public function case_get_position(): void
     {
         $this
             ->given(
@@ -130,19 +131,22 @@ class Window extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_get_position_on_windows()
+    public function case_get_position_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
             ->when($result = SUT::getPosition())
             ->then
-                ->variable($result)
-                    ->isNull()
                 ->output
-                    ->isEmpty();
+                    ->isEmpty()
+                ->array($result)
+                    ->isEqualTo([
+                        'x' => 0,
+                        'y' => 0
+                    ]);
     }
 
-    public function case_scroll_u()
+    public function case_scroll_u(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -152,7 +156,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[1S");
     }
 
-    public function case_scroll_up()
+    public function case_scroll_up(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -162,7 +166,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[1S");
     }
 
-    public function case_scroll_d()
+    public function case_scroll_d(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -172,7 +176,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[1T");
     }
 
-    public function case_scroll_down()
+    public function case_scroll_down(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -182,7 +186,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[1T");
     }
 
-    public function case_scroll_u_d_up_down()
+    public function case_scroll_u_d_up_down(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -192,7 +196,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[2S\033[2T");
     }
 
-    public function case_scroll_up_repeated()
+    public function case_scroll_up_repeated(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -202,7 +206,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[3S");
     }
 
-    public function case_scroll_on_windows()
+    public function case_scroll_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -212,7 +216,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_minimize()
+    public function case_minimize(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -222,7 +226,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[2t");
     }
 
-    public function case_minimize_on_windows()
+    public function case_minimize_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -232,7 +236,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_restore()
+    public function case_restore(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -242,7 +246,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[1t");
     }
 
-    public function case_restore_on_windows()
+    public function case_restore_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -252,7 +256,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_raise()
+    public function case_raise(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -262,7 +266,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[5t");
     }
 
-    public function case_raise_on_windows()
+    public function case_raise_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -272,7 +276,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_lower()
+    public function case_lower(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -282,7 +286,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[6t");
     }
 
-    public function case_lower_on_windows()
+    public function case_lower_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -292,7 +296,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_set_title()
+    public function case_set_title(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -302,7 +306,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033]0;foobar 😄\033\\");
     }
 
-    public function case_set_title_on_windows()
+    public function case_set_title_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -312,7 +316,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_get_title()
+    public function case_get_title(): void
     {
         $this
             ->given(
@@ -335,7 +339,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo($title);
     }
 
-    public function case_get_title_on_windows()
+    public function case_get_title_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -347,7 +351,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_get_title_timed_out()
+    public function case_get_title_timed_out(): void
     {
         $this
             ->given(
@@ -363,7 +367,7 @@ class Window extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_get_label()
+    public function case_get_label(): void
     {
         $this
             ->given(
@@ -386,7 +390,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo($label);
     }
 
-    public function case_get_label_timed_out()
+    public function case_get_label_timed_out(): void
     {
         $this
             ->given(
@@ -402,7 +406,7 @@ class Window extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_get_label_on_windows()
+    public function case_get_label_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -414,7 +418,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_refresh()
+    public function case_refresh(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -424,7 +428,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[7t");
     }
 
-    public function case_refresh_on_windows()
+    public function case_refresh_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -434,7 +438,7 @@ class Window extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_copy()
+    public function case_copy(): void
     {
         unset($_SERVER['TMUX']);
 
@@ -446,7 +450,7 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033]52;;" . base64_encode('bla') . "\033\\");
     }
 
-    public function case_copy_on_tmux()
+    public function case_copy_on_tmux(): void
     {
         $this
             ->given(
@@ -463,7 +467,7 @@ class Window extends Test\Unit\Suite
                     );
     }
 
-    public function case_copy_on_windows()
+    public function case_copy_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)

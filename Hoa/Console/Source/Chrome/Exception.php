@@ -36,30 +36,15 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Console\Test\Unit\Readline;
+namespace Hoa\Console\Chrome;
 
-use Hoa\Console as LUT;
-use Hoa\Console\Readline\Password as SUT;
-use Hoa\Test;
+use Hoa\Console;
 
 /**
- * Class \Hoa\Console\Test\Unit\Readline\Password.
+ * Class \Hoa\Console\Chrome\Exception.
  *
- * Test suite of the password readline.
- *
- * @license    New BSD License
+ * Extending the \Hoa\Console\Exception class.
  */
-class Password extends Test\Unit\Suite
+class Exception extends Console\Exception
 {
-    public function case_ensure_hidden(): void
-    {
-        $this
-            ->when($result = SUT::STATE_CONTINUE)
-            ->then
-                ->integer($result)
-                    ->isEqualTo(
-                        LUT\Readline::STATE_CONTINUE |
-                        LUT\Readline::STATE_NO_ECHO
-                    );
-    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,18 +36,80 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Console\Chrome;
-
-use Hoa\Console;
+namespace Hoa\Console\Readline\Autocompleter;
 
 /**
- * Class \Hoa\Console\Chrome\Exception.
+ * Class \Hoa\Console\Readline\Autocompleter\Word.
  *
- * Extending the \Hoa\Console\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * The simplest auto-completer: complete a word.
  */
-class Exception extends Console\Exception
+class Word implements Autocompleter
 {
+    /**
+     * List of words.
+     */
+    protected $_words = null;
+
+
+
+    /**
+     * Constructor.
+     */
+    public function __construct(array $words)
+    {
+        $this->setWords($words);
+    }
+
+    /**
+     * Complete a word.
+     * Returns null for no word, a full-word or an array of full-words.
+     */
+    public function complete(?string &$prefix)
+    {
+        $out    = [];
+        $length = mb_strlen($prefix);
+
+        foreach ($this->getWords() as $word) {
+            if (mb_substr($word, 0, $length) === $prefix) {
+                $out[] = $word;
+            }
+        }
+
+        if (empty($out)) {
+            return null;
+        }
+
+        if (1 === count($out)) {
+            return $out[0];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Get definition of a word.
+     */
+    public function getWordDefinition(): string
+    {
+        return '\b\w+';
+    }
+
+    /**
+     * Set list of words.
+     */
+    public function setWords(array $words): ?array
+    {
+        $old          = $this->_words;
+        $this->_words = $words;
+
+        return $old;
+    }
+
+    /**
+     * Get list of words.
+     */
+    public function getWords(): array
+    {
+        return $this->_words;
+    }
 }

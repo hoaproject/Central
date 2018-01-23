@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,6 +39,7 @@
 namespace Hoa\Console\Test\Unit\Readline\Autocompleter;
 
 use Hoa\Console\Readline\Autocompleter\Path as SUT;
+use Hoa\Protocol;
 use Hoa\Test;
 
 /**
@@ -44,12 +47,11 @@ use Hoa\Test;
  *
  * Test suite of the path autocompleter for the readline.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Path extends Test\Unit\Suite
 {
-    public function case_get_word_definition()
+    public function case_get_word_definition(): void
     {
         $this
             ->given($autocompleter = new SUT())
@@ -59,7 +61,7 @@ class Path extends Test\Unit\Suite
                     ->isEqualTo('/?[\w\d\\_\-\.]+(/[\w\d\\_\-\.]*)*');
     }
 
-    public function case_constructor()
+    public function case_constructor(): void
     {
         $this
             ->given(
@@ -78,13 +80,13 @@ class Path extends Test\Unit\Suite
                     ->isIdenticalTo($iteratorFactory);
     }
 
-    public function case_complete_no_solution()
+    public function case_complete_no_solution(): void
     {
         $this
             ->given(
-                resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/Foo?type=file'),
-                resolve('hoa://Test/Vfs/Root/Bar?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root?type=directory'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Foo?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Bar?type=file'),
 
                 $autocompleter = new SUT('hoa://Test/Vfs/Root'),
                 $prefix        = 'Q'
@@ -97,13 +99,13 @@ class Path extends Test\Unit\Suite
                     ->isEqualTo('Q');
     }
 
-    public function case_complete_one_solution()
+    public function case_complete_one_solution(): void
     {
         $this
             ->given(
-                resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/Foo?type=file'),
-                resolve('hoa://Test/Vfs/Root/Bar?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root?type=directory'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Foo?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Bar?type=file'),
 
                 $autocompleter = new SUT('hoa://Test/Vfs/Root'),
                 $prefix        = 'F'
@@ -116,15 +118,15 @@ class Path extends Test\Unit\Suite
                     ->isEqualTo('F');
     }
 
-    public function case_complete_with_smallest_prefix()
+    public function case_complete_with_smallest_prefix(): void
     {
         $this
             ->given(
-                resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/Foo?type=file'),
-                resolve('hoa://Test/Vfs/Root/Bar?type=file'),
-                resolve('hoa://Test/Vfs/Root/Baz?type=file'),
-                resolve('hoa://Test/Vfs/Root/Qux?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root?type=directory'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Foo?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Bar?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Baz?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Qux?type=file'),
 
                 $autocompleter = new SUT('hoa://Test/Vfs/Root'),
                 $prefix        = 'B'
@@ -137,14 +139,14 @@ class Path extends Test\Unit\Suite
                     ->isEqualTo('B');
     }
 
-    public function case_complete_with_longer_prefix()
+    public function case_complete_with_longer_prefix(): void
     {
         $this
             ->given(
-                resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/Bara?type=file'),
-                resolve('hoa://Test/Vfs/Root/Barb?type=file'),
-                resolve('hoa://Test/Vfs/Root/Baza?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root?type=directory'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Bara?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Barb?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Baza?type=file'),
 
                 $autocompleter = new SUT('hoa://Test/Vfs/Root'),
                 $prefix        = 'Bar'
@@ -157,7 +159,7 @@ class Path extends Test\Unit\Suite
                     ->isEqualTo('Bar');
     }
 
-    public function case_set_root()
+    public function case_set_root(): void
     {
         $this
             ->given($autocompleter = new SUT())
@@ -172,7 +174,7 @@ class Path extends Test\Unit\Suite
                     ->isEqualTo('foo');
     }
 
-    public function case_get_root()
+    public function case_get_root(): void
     {
         $this
             ->given(
@@ -185,7 +187,7 @@ class Path extends Test\Unit\Suite
                     ->isEqualTo('foo');
     }
 
-    public function case_set_iterator_factory()
+    public function case_set_iterator_factory(): void
     {
         $this
             ->given($autocompleter = new SUT())
@@ -208,7 +210,7 @@ class Path extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_get_iterator_factory()
+    public function case_get_iterator_factory(): void
     {
         $this
             ->given(
@@ -217,7 +219,7 @@ class Path extends Test\Unit\Suite
                     return 42;
                 })
             )
-            ->when(function () use (&$result, $autocompleter) {
+            ->when(function () use (&$result, $autocompleter): void {
                 $result = $autocompleter->getIteratorFactory();
             })
             ->then
@@ -225,10 +227,10 @@ class Path extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_get_default_iterator_factory()
+    public function case_get_default_iterator_factory(): void
     {
         $this
-            ->when(function () use (&$result) {
+            ->when(function () use (&$result): void {
                 $result = SUT::getDefaultIteratorFactory();
             })
             ->then

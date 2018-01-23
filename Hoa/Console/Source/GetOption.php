@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -46,53 +48,38 @@ use Hoa\Ustring;
  * interactivity, option name etc.
  * And, of course, it proposes the getOption method, that allow user to loop
  * easily the command options/arguments.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class GetOption
 {
     /**
      * Argument: no argument is needed.
-     *
-     * @const int
      */
-    const NO_ARGUMENT        = 0;
+    public const NO_ARGUMENT        = 0;
 
     /**
      * Argument: required.
-     *
-     * @const int
      */
-    const REQUIRED_ARGUMENT  = 1;
+    public const REQUIRED_ARGUMENT  = 1;
 
     /**
      * Argument: optional.
-     *
-     * @const int
      */
-    const OPTIONAL_ARGUMENT  = 2;
+    public const OPTIONAL_ARGUMENT  = 2;
 
     /**
      * Option bucket: name.
-     *
-     * @const int
      */
-    const OPTION_NAME        = 0;
+    public const OPTION_NAME        = 0;
 
     /**
      * Option bucket: has argument.
-     *
-     * @const int
      */
-    const OPTION_HAS_ARG     = 1;
+    public const OPTION_HAS_ARG     = 1;
 
     /**
      * Option bucket: value.
-     *
-     * @const int
      */
-    const OPTION_VAL         = 2;
+    public const OPTION_VAL         = 2;
 
     /**
      * Describe the command options (or switches).
@@ -104,22 +91,16 @@ class GetOption
      * The has_arg is a constant: NO_ARGUMENT, REQUIRED_ARGUMENT, and
      * OPTIONAL_ARGUMENT.
      * The val is the short option value.
-     *
-     * @var array
      */
     protected $_options       = [];
 
     /**
      * Parser.
-     *
-     * @var \Hoa\Console\Parser
      */
     protected $_parser        = null;
 
     /**
      * The pipette contains all the short value of options.
-     *
-     * @var array
      */
     protected $_pipette       = [];
 
@@ -127,10 +108,6 @@ class GetOption
 
     /**
      * Prepare the pipette.
-     *
-     * @param   array                $options    The option definition.
-     * @param   \Hoa\Console\Parser  $parser     The parser.
-     * @throws  \Hoa\Console\Exception
      */
     public function __construct(array $options, Parser $parser)
     {
@@ -230,15 +207,8 @@ class GetOption
 
     /**
      * Get option from the pipette.
-     *
-     * @param   string  &$optionValue    Place a variable that will receive the
-     *                                   value of the current option.
-     * @param   string  $short           Short options to scan (in a single
-     *                                   string). If $short = null, all short
-     *                                   options will be selected.
-     * @return  mixed
      */
-    public function getOption(&$optionValue, $short = null)
+    public function getOption(&$optionValue, string $short = null)
     {
         static $first = true;
 
@@ -285,12 +255,10 @@ class GetOption
 
     /**
      * Check if the pipette is empty.
-     *
-     * @return  bool
      */
-    public function isPipetteEmpty()
+    public function isPipetteEmpty(): bool
     {
-        return count($this->_pipette) == 1;
+        return 1 === count($this->_pipette);
     }
 
     /**
@@ -298,10 +266,6 @@ class GetOption
      * “ambiguous” in the self::__construct method.
      * For a smarter resolving, you could use the console kit (please, see
      * Hoa\Console\Dispatcher\Kit).
-     *
-     * @param   array  $solutions    Solutions.
-     * @return  void
-     * @throws  \Hoa\Console\Exception
      */
     public function resolveOptionAmbiguity(array $solutions)
     {

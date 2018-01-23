@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -40,16 +42,11 @@ namespace Hoa\Console\Readline;
  * Class \Hoa\Console\Readline\Password.
  *
  * Read, edit, bind… a password from the input.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Password extends Readline
 {
     /**
      * State: continue to read and no output.
-     *
-     * @const int
      */
-    const STATE_CONTINUE = 5; // parent::STATE_CONTINUE | parent::STATE_NO_ECHO
+    public const STATE_CONTINUE = parent::STATE_CONTINUE | parent::STATE_NO_ECHO;
 }

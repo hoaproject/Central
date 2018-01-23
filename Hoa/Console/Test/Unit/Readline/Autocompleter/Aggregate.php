@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,12 +46,11 @@ use Hoa\Test;
  *
  * Test suite of the readline autocompleter aggregator.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Aggregate extends Test\Unit\Suite
 {
-    public function case_get_word_definition()
+    public function case_get_word_definition(): void
     {
         $this
             ->given($autocompleter = new SUT([]))
@@ -59,7 +60,7 @@ class Aggregate extends Test\Unit\Suite
                     ->isEqualTo('.*');
     }
 
-    public function case_constructor()
+    public function case_constructor(): void
     {
         $this
             ->given(
@@ -81,19 +82,15 @@ class Aggregate extends Test\Unit\Suite
                     ->isIdenticalTo($autocompleterB);
     }
 
-    public function case_complete_no_solution()
+    public function case_complete_no_solution(): void
     {
         $this
             ->given(
                 $autocompleterA = new \Mock\Hoa\Console\Readline\Autocompleter\Autocompleter(),
-                $autocompleterA->getWordDefinition = function () {
-                    return 'aaa';
-                },
+                $this->calling($autocompleterA)->getWordDefinition = 'aaa',
 
                 $autocompleterB = new \Mock\Hoa\Console\Readline\Autocompleter\Autocompleter(),
-                $autocompleterB->getWordDefinition = function () {
-                    return 'bbb';
-                },
+                $this->calling($autocompleterB)->getWordDefinition = 'bbb',
 
                 $autocompleter = new SUT([$autocompleterA, $autocompleterB]),
                 $prefix        = 'ccc'
@@ -106,7 +103,7 @@ class Aggregate extends Test\Unit\Suite
                     ->isEqualTo('ccc');
     }
 
-    public function case_complete_one_solution_first_autocompleter()
+    public function case_complete_one_solution_first_autocompleter(): void
     {
         $self = $this;
 
@@ -128,7 +125,7 @@ class Aggregate extends Test\Unit\Suite
                 $this->calling($autocompleterB)->getWordDefinition = function () {
                     return 'bbb';
                 },
-                $this->calling($autocompleterB)->complete = function ($prefix) use ($self) {
+                $this->calling($autocompleterB)->complete = function ($prefix) use ($self): void {
                     $self->fail('Bad autocompleter called.');
                 },
 
@@ -143,7 +140,7 @@ class Aggregate extends Test\Unit\Suite
                     ->isEqualTo('aaa');
     }
 
-    public function case_complete_one_solution_second_autocompleter()
+    public function case_complete_one_solution_second_autocompleter(): void
     {
         $self = $this;
 
@@ -153,7 +150,7 @@ class Aggregate extends Test\Unit\Suite
                 $this->calling($autocompleterA)->getWordDefinition = function () {
                     return 'aaa';
                 },
-                $this->calling($autocompleterA)->complete = function ($prefix) use ($self) {
+                $this->calling($autocompleterA)->complete = function ($prefix) use ($self): void {
                     $self->fail('Bad autocompleter called.');
                 },
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -42,49 +44,35 @@ use Hoa\Console;
  * Class \Hoa\Console\Chrome\Text.
  *
  * This class builts the text layout.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Text
 {
     /**
      * Align the text to left.
-     *
-     * @const int
      */
-    const ALIGN_LEFT   = 0;
+    public const ALIGN_LEFT   = 0;
 
     /**
      * Align the text to right.
-     *
-     * @const int
      */
-    const ALIGN_RIGHT  = 1;
+    public const ALIGN_RIGHT  = 1;
 
     /**
      * Align the text to center.
-     *
-     * @const int
      */
-    const ALIGN_CENTER = 2;
+    public const ALIGN_CENTER = 2;
 
 
 
     /**
      * Colorize a portion of a text.
      * It is kind of a shortcut of \Hoa\Console\Color.
-     *
-     * @param   string  $text                Text.
-     * @param   string  $attributesBefore    Style to apply.
-     * @param   string  $attributesAfter     Reset style.
-     * @return  string
      */
     public static function colorize(
-        $text,
-        $attributesBefore,
-        $attributesAfter = 'normal'
-    ) {
+        string $text,
+        string $attributesBefore,
+        string $attributesAfter = 'normal'
+    ): string {
         ob_start();
         Console\Cursor::colorize($attributesBefore);
         Console::getOutput()->writeAll($text);
@@ -112,24 +100,14 @@ class Text
      * For example : '|: ', will set a ': ' between the first and second column,
      * and nothing for the other.
      *
-     * @param   Array   $line                 The table represented by an array
-     *                                        (see the documentation).
-     * @param   int     $alignement           The global alignement of the text
-     *                                        in cell.
-     * @param   int     $horizontalPadding    The horizontal padding (right
-     *                                        padding).
-     * @param   int     $verticalPadding      The vertical padding.
-     * @param   string  $separator            String where each character is a
-     *                                        column separator.
-     * @return  string
      */
     public static function columnize(
         array $line,
-        $alignement        = self::ALIGN_LEFT,
-        $horizontalPadding = 2,
-        $verticalPadding   = 0,
-        $separator         = null
-    ) {
+        int $alignement          = self::ALIGN_LEFT,
+        float $horizontalPadding = 2,
+        float $verticalPadding   = 0,
+        string $separator        = null
+    ): string {
         if (empty($line)) {
             return '';
         }
@@ -149,7 +127,7 @@ class Text
             $handle > $nbColumn and $nbColumn = $handle;
         }
 
-        $xtraWidth  += $horizontalPadding * $nbColumn;
+        $xtraWidth += $horizontalPadding * $nbColumn;
 
         // Get the column width.
         $columnWidth = array_fill(0, $nbColumn, 0);
@@ -268,7 +246,7 @@ class Text
                 }
             }
 
-            $format .= str_repeat("\n", $verticalPadding + 1);
+            $format .= str_repeat("\n", (int) round($verticalPadding + 1));
 
             array_unshift($handle, $format);
             $out .= call_user_func_array('sprintf', $handle);
@@ -279,17 +257,12 @@ class Text
 
     /**
      * Align a text according a “layer”. The layer width is given in arguments.
-     *
-     * @param   string  $text          The text.
-     * @param   int     $alignement    The text alignement.
-     * @param   int     $width         The layer width.
-     * @return  string
      */
     public static function align(
-        $text,
-        $alignement = self::ALIGN_LEFT,
-        $width      = null
-    ) {
+        string $text,
+        int $alignement = self::ALIGN_LEFT,
+        int $width      = null
+    ): string {
         if (null === $width) {
             $window = Console\Window::getSize();
             $width  = $window['x'];
@@ -325,11 +298,8 @@ class Text
 
     /**
      * Get the maximum line width.
-     *
-     * @param   mixed      $lines    The line (or group of lines).
-     * @return  int
      */
-    protected static function getMaxLineWidth($lines)
+    protected static function getMaxLineWidth($lines): int
     {
         if (!is_array($lines)) {
             $lines = [$lines];
@@ -349,11 +319,8 @@ class Text
 
     /**
      * Get the maximum line number (count the new-line character).
-     *
-     * @param   mixed      $lines    The line (or group of lines).
-     * @return  int
      */
-    protected static function getMaxLineNumber($lines)
+    protected static function getMaxLineNumber($lines): int
     {
         if (!is_array($lines)) {
             $lines = [$lines];
@@ -371,13 +338,8 @@ class Text
 
     /**
      * My own wordwrap (just force the wordwrap() $cut parameter)..
-     *
-     * @param   string  $text     Text to wrap.
-     * @param   int     $width    Line width.
-     * @param   string  $break    String to make the break.
-     * @return  string
      */
-    public static function wordwrap($text, $width = null, $break = "\n")
+    public static function wordwrap(string $text, int $width = null, string $break = "\n"): string
     {
         if (null === $width) {
             $window = Console\Window::getSize();
@@ -389,12 +351,8 @@ class Text
 
     /**
      * Underline with a special string.
-     *
-     * @param   string  $text       The text to underline.
-     * @param   string  $pattern    The string used to underline.
-     * @return  string
      */
-    public static function underline($text, $pattern = '*')
+    public static function underline(string $text, string $pattern = '*'): string
     {
         $text = explode("\n", $text);
         $card = strlen($pattern);

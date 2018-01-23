@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,12 +46,11 @@ use Hoa\Test;
  *
  * Test suite of the tput parser.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Tput extends Test\Unit\Suite
 {
-    public function case_get_term_from_environment()
+    public function case_get_term_from_environment(): void
     {
         $this
             ->given($_SERVER['TERM'] = 'foo')
@@ -59,7 +60,7 @@ class Tput extends Test\Unit\Suite
                     ->isEqualTo('foo');
     }
 
-    public function case_get_unknown_term_on_windows()
+    public function case_get_unknown_term_on_windows(): void
     {
         unset($_SERVER['TERM']);
 
@@ -71,7 +72,7 @@ class Tput extends Test\Unit\Suite
                     ->isEqualTo('windows-ansi');
     }
 
-    public function case_get_unknown_term()
+    public function case_get_unknown_term(): void
     {
         unset($_SERVER['TERM']);
 
@@ -83,24 +84,24 @@ class Tput extends Test\Unit\Suite
                     ->isEqualTo('xterm');
     }
 
-    public function case_unknown_file_when_parsing()
+    public function case_unknown_file_when_parsing(): void
     {
         $this
-            ->exception(function () {
+            ->exception(function (): void {
                 new SUT('/hoa/flatland');
             })
                 ->isInstanceOf('Hoa\Console\Exception');
     }
 
-    public function case_all_informations()
+    public function case_all_informations(): void
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->getInformations())
             ->then
                 ->array($result)
                     ->isIdenticalTo([
-                        'file'    => 'hoa://Library/Console/Terminfo/78/xterm',
+                        'file'    => 'hoa://Library/Console/Source/Terminfo/78/xterm',
                         'headers' => [
                             'data_size'         => 3258,
                             'header_size'       => 12,
@@ -344,10 +345,10 @@ class Tput extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_has()
+    public function case_has(): void
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->has('auto_left_margin'))
             ->then
                 ->boolean($result)
@@ -359,50 +360,50 @@ class Tput extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_has_unknown_boolean()
+    public function case_has_unknown_boolean(): void
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->has('💩'))
             ->then
                 ->boolean($result)
                     ->isFalse();
     }
 
-    public function case_count()
+    public function case_count(): void
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->count('columns'))
             ->then
                 ->integer($result)
                     ->isEqualTo(80);
     }
 
-    public function case_count_unknown_integer()
+    public function case_count_unknown_integer(): void
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->count('💩'))
             ->then
                 ->integer($result)
                     ->isEqualTo(0);
     }
 
-    public function case_get()
+    public function case_get(): void
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->get('cursor_down'))
             ->then
                 ->string($result)
                     ->isEqualTo("\n");
     }
 
-    public function case_get_unknown_string()
+    public function case_get_unknown_string(): void
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->get('💩'))
             ->then
                 ->variable($result)

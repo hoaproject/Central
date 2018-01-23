@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,18 +36,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Console;
+namespace Hoa\Console\Chrome;
 
-use Hoa\Exception as HoaException;
+use Hoa\Console;
 
 /**
- * Class \Hoa\Console\Exception.
+ * Class \Hoa\Console\Chrome\Editor.
  *
- * Extending the \Hoa\Exception\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Start an editor.
  */
-class Exception extends HoaException
+class Editor
 {
+    /**
+     * Open an editor.
+     */
+    public static function open(string $file = '', string $editor = null): ?string
+    {
+        if (null === $editor) {
+            if (isset($_SERVER['EDITOR'])) {
+                $editor = $_SERVER['EDITOR'];
+            } else {
+                $editor = 'vi';
+            }
+        }
+
+        if (!empty($file)) {
+            $file = escapeshellarg($file);
+        }
+
+        return Console\Processus::execute(
+            $editor . ' ' . $file . ' > `tty` < `tty`',
+            false
+        );
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -39,40 +41,74 @@ namespace Hoa\Console\Chrome;
 use Hoa\Console;
 
 /**
- * Class \Hoa\Console\Chrome\Editor.
+ * Class \Hoa\Console\Chrome\Pager.
  *
- * Start an editor.
+ * Use a pager for the output buffer. Example:
  *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ *     ob_start('Hoa\Console\Chrome\Pager::less');
+ *     echo file_get_contents(__FILE__);
  */
-class Editor
+class Pager
 {
     /**
-     * Open an editor.
-     *
-     * @param   string  $file      File to open.
-     * @param   string  $editor    Editor to use ($_SERVER['EDITOR'] by
-     *                             default).
-     * @return  string
+     * Represent LESS(1).
      */
-    public static function open($file = '', $editor = null)
+    public const LESS = 'less';
+
+    /**
+     * Represent MORE(1).
+     */
+    public const MORE = 'more';
+
+
+
+    /**
+     * Use less.
+     */
+    public static function less(string $output, int $mode): string
     {
-        if (null === $editor) {
-            if (isset($_SERVER['EDITOR'])) {
-                $editor = $_SERVER['EDITOR'];
-            } else {
-                $editor = 'vi';
+        return self::pager($output, $mode, self::LESS);
+    }
+
+    /**
+     * Use more.
+     */
+    public static function more(string $output, int $mode): string
+    {
+        return self::pager($output, $mode, self::MORE);
+    }
+
+    /**
+     * Use pager set in the environment (i.e. $_ENV['PAGER']).
+     */
+    public static function pager(string $output, int $mode, string $type = null): ?string
+    {
+        static $process = null;
+
+        if ($mode & PHP_OUTPUT_HANDLER_START) {
+            $pager
+                = null !== $type
+                    ? Console\Processus::locate($type)
+                    : ($_ENV['PAGER'] ?? null);
+
+            if (null === $pager) {
+                return $output;
             }
+
+            $process = new Console\Processus(
+                $pager,
+                null,
+                [['pipe', 'r']]
+            );
+            $process->open();
         }
 
-        if (!empty($file)) {
-            $file = escapeshellarg($file);
+        $process->writeAll($output);
+
+        if ($mode & PHP_OUTPUT_HANDLER_FINAL) {
+            $process->close();
         }
 
-        return Console\Processus::execute(
-            $editor . ' ' . $file . ' > `tty` < `tty`',
-            false
-        );
+        return null;
     }
 }
