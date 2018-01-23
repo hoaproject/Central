@@ -36,52 +36,67 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Test\Unit;
+namespace Hoa\Iterator\Recursive;
 
-use Hoa\Iterator as LUT;
-use Hoa\Test;
+use Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Test\Unit\Mock.
+ * Class \Hoa\Iterator\Recursive\RegularExpression.
  *
- * Test suite of the mock iterator.
+ * Re-implement the SPL RecursiveRegexIterator class.
+ * There are too many bugs in php-src and HHVM, so we re-implement it from
+ * scratch without extending the existing class.
  *
- * @license    New BSD License
+ * Inspired by hhvm://hphp/system/php/spl/iterators/RecursiveRegexIterator.php
  */
-class Mock extends Test\Unit\Suite
+class RegularExpression extends Iterator\RegularExpression implements Recursive
 {
-    public function case_classic(): void
-    {
-        $this
-            ->given($iterator = new LUT\Mock())
-            ->when($result = iterator_to_array($iterator))
-            ->then
-                ->array($result)
-                    ->isEmpty();
+    /**
+     * Constructor.
+     */
+    public function __construct(
+        \RecursiveIterator $iterator,
+        string $regex,
+        int $mode      = self::MATCH,
+        int $flags     = 0,
+        int $pregFlags = 0
+    ) {
+        parent::__construct($iterator, $regex, $mode, $flags, $pregFlags);
+
+        return;
     }
 
-    public function case_recursive_mock_mock(): void
+    /**
+     * Get accept status.
+     */
+    public function accept(): bool
     {
-        $this
-            ->when($iterator = new LUT\Recursive\Mock(new LUT\Mock()))
-            ->then
-                ->variable($iterator->getChildren())
-                    ->isNull()
-                ->boolean($iterator->hasChildren())
-                    ->isFalse();
+        return
+            true === $this->hasChildren() ||
+            true === parent::accept();
     }
 
-    public function case_recursive(): void
+    /**
+     * Get an iterator for the current entry.
+     */
+    public function getChildren(): self
     {
-        $this
-            ->given(
-                $map              = new LUT\Map(['a', 'b', 'c']),
-                $mock             = new LUT\Recursive\Mock($map),
-                $iteratoriterator = new LUT\Recursive\Iterator($mock)
-            )
-            ->when($result = iterator_to_array($map, false))
-            ->then
-                ->array($result)
-                    ->isEqualTo(['a', 'b', 'c']);
+        return new static(
+            true === $this->hasChildren()
+                ? $this->getInnerIterator()->getChildren()
+                : null,
+            $this->getRegex(),
+            $this->getMode(),
+            $this->getFlags(),
+            $this->getPregFlags()
+        );
+    }
+
+    /**
+     * Check whether an iterator can be obtained for the current entry.
+     */
+    public function hasChildren(): bool
+    {
+        return $this->getInnerIterator()->hasChildren();
     }
 }

@@ -36,52 +36,92 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Test\Unit;
-
-use Hoa\Iterator as LUT;
-use Hoa\Test;
+namespace Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Test\Unit\Mock.
+ * Class \Hoa\Iterator\Demultiplexer.
  *
- * Test suite of the mock iterator.
- *
- * @license    New BSD License
+ * Demux result from another iterator.
+ * This iterator is somehow the opposite of the Hoa\Iterator\Multiple iterator.
  */
-class Mock extends Test\Unit\Suite
+class Demultiplexer implements Iterator
 {
-    public function case_classic(): void
+    /**
+     * Current iterator.
+     */
+    protected $_iterator = null;
+
+    /**
+     * Current computed value.
+     */
+    protected $_current  = null;
+
+    /**
+     * Demuxer (callable to execute each time).
+     */
+    protected $_demuxer  = null;
+
+
+
+    /**
+     * Constructor.
+     */
+    public function __construct(iterable $iterator, callable $demuxer)
     {
-        $this
-            ->given($iterator = new LUT\Mock())
-            ->when($result = iterator_to_array($iterator))
-            ->then
-                ->array($result)
-                    ->isEmpty();
+        if ($iterator instanceof \IteratorAggregate) {
+            $iterator = $iterator->getIterator();
+        }
+
+        $this->_iterator = $iterator;
+        $this->_demuxer  = $demuxer;
+
+        return;
     }
 
-    public function case_recursive_mock_mock(): void
+    /**
+     * Return the current element.
+     */
+    public function current()
     {
-        $this
-            ->when($iterator = new LUT\Recursive\Mock(new LUT\Mock()))
-            ->then
-                ->variable($iterator->getChildren())
-                    ->isNull()
-                ->boolean($iterator->hasChildren())
-                    ->isFalse();
+        if (null !== $this->_current) {
+            return $this->_current;
+        }
+
+        $demuxer = $this->_demuxer;
+
+        return $this->_current = $demuxer($this->_iterator->current());
     }
 
-    public function case_recursive(): void
+    /**
+     * Return the key of the current element.
+     */
+    public function key()
     {
-        $this
-            ->given(
-                $map              = new LUT\Map(['a', 'b', 'c']),
-                $mock             = new LUT\Recursive\Mock($map),
-                $iteratoriterator = new LUT\Recursive\Iterator($mock)
-            )
-            ->when($result = iterator_to_array($map, false))
-            ->then
-                ->array($result)
-                    ->isEqualTo(['a', 'b', 'c']);
+        return $this->_iterator->key();
+    }
+
+    /**
+     * Move forward to next element.
+     */
+    public function next(): void
+    {
+        $this->_current = null;
+        $this->_iterator->next();
+    }
+
+    /**
+     * Rewind the iterator to the first element.
+     */
+    public function rewind(): void
+    {
+        $this->_iterator->rewind();
+    }
+
+    /**
+     * Check if current position is valid.
+     */
+    public function valid(): bool
+    {
+        return $this->_iterator->valid();
     }
 }

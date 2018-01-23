@@ -36,52 +36,56 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Test\Unit;
-
-use Hoa\Iterator as LUT;
-use Hoa\Test;
+namespace Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Test\Unit\Mock.
+ * Class \Hoa\Iterator\Multiple.
  *
- * Test suite of the mock iterator.
- *
- * @license    New BSD License
+ * Extending the SPL MultipleIterator class.
  */
-class Mock extends Test\Unit\Suite
+class Multiple extends \MultipleIterator
 {
-    public function case_classic(): void
-    {
-        $this
-            ->given($iterator = new LUT\Mock())
-            ->when($result = iterator_to_array($iterator))
-            ->then
-                ->array($result)
-                    ->isEmpty();
+    /**
+     * Default value for each $infos.
+     */
+    protected $_infos = [];
+
+
+
+    /**
+     * Attach iterator informations.
+     * Add the $default argument that will be use when the iterator has reached
+     * its end.
+     */
+    public function attachIterator(
+        \Iterator $iterator,
+        $infos   = null,
+        $default = null
+    ) {
+        $out = parent::attachIterator($iterator, $infos);
+
+        if (null === $infos) {
+            $this->_infos[]       = $default;
+        } else {
+            $this->_infos[$infos] = $default;
+        }
+
+        return $out;
     }
 
-    public function case_recursive_mock_mock(): void
+    /**
+     * Get the registered iterator instances.
+     */
+    public function current(): array
     {
-        $this
-            ->when($iterator = new LUT\Recursive\Mock(new LUT\Mock()))
-            ->then
-                ->variable($iterator->getChildren())
-                    ->isNull()
-                ->boolean($iterator->hasChildren())
-                    ->isFalse();
-    }
+        $out = parent::current();
 
-    public function case_recursive(): void
-    {
-        $this
-            ->given(
-                $map              = new LUT\Map(['a', 'b', 'c']),
-                $mock             = new LUT\Recursive\Mock($map),
-                $iteratoriterator = new LUT\Recursive\Iterator($mock)
-            )
-            ->when($result = iterator_to_array($map, false))
-            ->then
-                ->array($result)
-                    ->isEqualTo(['a', 'b', 'c']);
+        foreach ($out as $key => &$value) {
+            if (null === $value) {
+                $value = $this->_infos[$key];
+            }
+        }
+
+        return $out;
     }
 }

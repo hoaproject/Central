@@ -36,52 +36,54 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Test\Unit;
-
-use Hoa\Iterator as LUT;
-use Hoa\Test;
+namespace Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Test\Unit\Mock.
+ * Class \Hoa\Iterator\FileSystem.
  *
- * Test suite of the mock iterator.
- *
- * @license    New BSD License
+ * Extending the SPL FileSystemIterator class.
  */
-class Mock extends Test\Unit\Suite
+class FileSystem extends \FilesystemIterator
 {
-    public function case_classic(): void
+    /**
+     * SplFileInfo classname.
+     */
+    protected $_splFileInfoClass = null;
+
+
+
+    /**
+     * Constructor.
+     * Please, see \FileSystemIterator::__construct() method.
+     * We add the $splFileInfoClass parameter.
+     */
+    public function __construct(string $path, int $flags = null, string $splFileInfoClass = null)
     {
-        $this
-            ->given($iterator = new LUT\Mock())
-            ->when($result = iterator_to_array($iterator))
-            ->then
-                ->array($result)
-                    ->isEmpty();
+        $this->_splFileInfoClass = $splFileInfoClass;
+
+        if (null === $flags) {
+            parent::__construct($path);
+        } else {
+            parent::__construct($path, $flags);
+        }
+
+        return;
     }
 
-    public function case_recursive_mock_mock(): void
+    /**
+     * Current.
+     * Please, see \FileSystemIterator::current() method.
+     */
+    public function current()
     {
-        $this
-            ->when($iterator = new LUT\Recursive\Mock(new LUT\Mock()))
-            ->then
-                ->variable($iterator->getChildren())
-                    ->isNull()
-                ->boolean($iterator->hasChildren())
-                    ->isFalse();
-    }
+        $out = parent::current();
 
-    public function case_recursive(): void
-    {
-        $this
-            ->given(
-                $map              = new LUT\Map(['a', 'b', 'c']),
-                $mock             = new LUT\Recursive\Mock($map),
-                $iteratoriterator = new LUT\Recursive\Iterator($mock)
-            )
-            ->when($result = iterator_to_array($map, false))
-            ->then
-                ->array($result)
-                    ->isEqualTo(['a', 'b', 'c']);
+        if (null !== $this->_splFileInfoClass &&
+            $out instanceof \SplFileInfo) {
+            $out->setInfoClass($this->_splFileInfoClass);
+            $out = $out->getFileInfo();
+        }
+
+        return $out;
     }
 }

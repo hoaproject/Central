@@ -36,52 +36,82 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Test\Unit;
-
-use Hoa\Iterator as LUT;
-use Hoa\Test;
+namespace Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Test\Unit\Mock.
+ * Class \Hoa\Iterator\CallbackGenerator.
  *
- * Test suite of the mock iterator.
- *
- * @license    New BSD License
+ * Yield a value based on a callback.
  */
-class Mock extends Test\Unit\Suite
+class CallbackGenerator implements Iterator
 {
-    public function case_classic(): void
+    /**
+     * Callback.
+     */
+    protected $_callback = null;
+
+    /**
+     * Current key.
+     */
+    protected $_key      = 0;
+
+    /**
+     * Current computed value.
+     */
+    protected $_current  = null;
+
+
+
+    /**
+     * Constructor.
+     */
+    public function __construct(callable $callback)
     {
-        $this
-            ->given($iterator = new LUT\Mock())
-            ->when($result = iterator_to_array($iterator))
-            ->then
-                ->array($result)
-                    ->isEmpty();
+        $this->_callback = $callback;
+
+        return;
     }
 
-    public function case_recursive_mock_mock(): void
+    /**
+     * Return the current element.
+     */
+    public function current()
     {
-        $this
-            ->when($iterator = new LUT\Recursive\Mock(new LUT\Mock()))
-            ->then
-                ->variable($iterator->getChildren())
-                    ->isNull()
-                ->boolean($iterator->hasChildren())
-                    ->isFalse();
+        $handle = $this->_callback;
+
+        return $this->_current = $handle($this->_key);
     }
 
-    public function case_recursive(): void
+    /**
+     * Return the key of the current element.
+     */
+    public function key()
     {
-        $this
-            ->given(
-                $map              = new LUT\Map(['a', 'b', 'c']),
-                $mock             = new LUT\Recursive\Mock($map),
-                $iteratoriterator = new LUT\Recursive\Iterator($mock)
-            )
-            ->when($result = iterator_to_array($map, false))
-            ->then
-                ->array($result)
-                    ->isEqualTo(['a', 'b', 'c']);
+        return $this->_key;
+    }
+
+    /**
+     * Move forward to next element.
+     */
+    public function next(): void
+    {
+        ++$this->_key;
+    }
+
+    /**
+     * Rewind the iterator to the first element.
+     */
+    public function rewind(): void
+    {
+        $this->_key     = 0;
+        $this->_current = null;
+    }
+
+    /**
+     * Check if current position is valid.
+     */
+    public function valid(): bool
+    {
+        return true;
     }
 }

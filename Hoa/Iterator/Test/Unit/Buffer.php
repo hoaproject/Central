@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,12 +47,11 @@ use Hoa\Test;
  *
  * Test suite of the buffer iterator.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Buffer extends Test\Unit\Suite
 {
-    public function case_constructor()
+    public function case_constructor(): void
     {
         $this
             ->given(
@@ -70,7 +71,7 @@ class Buffer extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_negative_buffer_size()
+    public function case_negative_buffer_size(): void
     {
         $this
             ->given(
@@ -83,7 +84,7 @@ class Buffer extends Test\Unit\Suite
                     ->isEqualTo(1);
     }
 
-    public function case_null_buffer_size()
+    public function case_null_buffer_size(): void
     {
         $this
             ->given(
@@ -96,7 +97,7 @@ class Buffer extends Test\Unit\Suite
                     ->isEqualTo(1);
     }
 
-    public function case_fast_forward()
+    public function case_fast_forward(): void
     {
         $this
             ->given($iterator = new SUT($this->getInnerIterator(), 3))
@@ -106,22 +107,13 @@ class Buffer extends Test\Unit\Suite
                     ->isEqualTo(['a', 'b', 'c', 'd', 'e'])
                 ->array(iterator_to_array($this->invoke($iterator)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $iterator::BUFFER_KEY   => 3,
-                            $iterator::BUFFER_VALUE => 'd'
-                        ],
-                        1 => [
-                            $iterator::BUFFER_KEY   => 4,
-                            $iterator::BUFFER_VALUE => 'e'
-                        ],
-                        2 => [
-                            $iterator::BUFFER_KEY   => null,
-                            $iterator::BUFFER_VALUE => null
-                        ]
+                        0 => [3, 'd'],
+                        1 => [4, 'e'],
+                        2 => [null, null]
                     ]);
     }
 
-    public function case_fast_forward_with_too_big_buffer()
+    public function case_fast_forward_with_too_big_buffer(): void
     {
         $this
             ->given($iterator = new SUT($this->getInnerIterator(), 10))
@@ -131,34 +123,16 @@ class Buffer extends Test\Unit\Suite
                     ->isEqualTo(['a', 'b', 'c', 'd', 'e'])
                 ->array(iterator_to_array($this->invoke($iterator)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $iterator::BUFFER_KEY   => 0,
-                            $iterator::BUFFER_VALUE => 'a'
-                        ],
-                        1 => [
-                            $iterator::BUFFER_KEY   => 1,
-                            $iterator::BUFFER_VALUE => 'b'
-                        ],
-                        2 => [
-                            $iterator::BUFFER_KEY   => 2,
-                            $iterator::BUFFER_VALUE => 'c'
-                        ],
-                        3 => [
-                            $iterator::BUFFER_KEY   => 3,
-                            $iterator::BUFFER_VALUE => 'd'
-                        ],
-                        4 => [
-                            $iterator::BUFFER_KEY   => 4,
-                            $iterator::BUFFER_VALUE => 'e'
-                        ],
-                        5 => [
-                            $iterator::BUFFER_KEY   => null,
-                            $iterator::BUFFER_VALUE => null
-                        ]
+                        0 => [0, 'a'],
+                        1 => [1, 'b'],
+                        2 => [2, 'c'],
+                        3 => [3, 'd'],
+                        4 => [4, 'e'],
+                        5 => [null, null]
                     ]);
     }
 
-    public function case_fast_forward_with_smallest_buffer()
+    public function case_fast_forward_with_smallest_buffer(): void
     {
         $this
             ->given($iterator = new SUT($this->getInnerIterator(), 1))
@@ -168,14 +142,11 @@ class Buffer extends Test\Unit\Suite
                     ->isEqualTo(['a', 'b', 'c', 'd', 'e'])
                 ->array(iterator_to_array($this->invoke($iterator)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $iterator::BUFFER_KEY   => null,
-                            $iterator::BUFFER_VALUE => null
-                        ]
+                        0 => [null, null]
                     ]);
     }
 
-    public function case_forward_forward_forward()
+    public function case_forward_forward_forward(): void
     {
         $this
             ->when($result = new SUT(new LUT\Map(['a', 'b', 'c']), 2))
@@ -217,7 +188,7 @@ class Buffer extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_forward_forward_backward_backward_forward_forward_forward_step_by_step()
+    public function case_forward_forward_backward_backward_forward_forward_forward_step_by_step(): void
     {
         $this
             ->when($result = new SUT(new LUT\Map(['a', 'b', 'c']), 3))
@@ -226,10 +197,7 @@ class Buffer extends Test\Unit\Suite
                     ->isNull()
                 ->array(iterator_to_array($this->invoke($result)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $result::BUFFER_KEY   => 0,
-                            $result::BUFFER_VALUE => 'a'
-                        ]
+                        0 => [0, 'a']
                     ])
 
                 ->boolean($result->valid())
@@ -242,14 +210,8 @@ class Buffer extends Test\Unit\Suite
                     ->isNull()
                 ->array(iterator_to_array($this->invoke($result)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $result::BUFFER_KEY   => 0,
-                            $result::BUFFER_VALUE => 'a'
-                        ],
-                        1 => [
-                            $result::BUFFER_KEY   => 1,
-                            $result::BUFFER_VALUE => 'b'
-                        ]
+                        0 => [0, 'a'],
+                        1 => [1, 'b']
                     ])
 
                 ->boolean($result->valid())
@@ -262,18 +224,9 @@ class Buffer extends Test\Unit\Suite
                     ->isNull()
                 ->array(iterator_to_array($this->invoke($result)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $result::BUFFER_KEY   => 0,
-                            $result::BUFFER_VALUE => 'a'
-                        ],
-                        1 => [
-                            $result::BUFFER_KEY   => 1,
-                            $result::BUFFER_VALUE => 'b'
-                        ],
-                        2 => [
-                            $result::BUFFER_KEY   => 2,
-                            $result::BUFFER_VALUE => 'c'
-                        ]
+                        0 => [0, 'a'],
+                        1 => [1, 'b'],
+                        2 => [2, 'c']
                     ])
 
                 ->boolean($result->valid())
@@ -286,18 +239,9 @@ class Buffer extends Test\Unit\Suite
                     ->isNull()
                 ->array(iterator_to_array($this->invoke($result)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $result::BUFFER_KEY   => 0,
-                            $result::BUFFER_VALUE => 'a'
-                        ],
-                        1 => [
-                            $result::BUFFER_KEY   => 1,
-                            $result::BUFFER_VALUE => 'b'
-                        ],
-                        2 => [
-                            $result::BUFFER_KEY   => 2,
-                            $result::BUFFER_VALUE => 'c'
-                        ]
+                        0 => [0, 'a'],
+                        1 => [1, 'b'],
+                        2 => [2, 'c']
                     ])
 
                 ->boolean($result->valid())
@@ -310,18 +254,9 @@ class Buffer extends Test\Unit\Suite
                     ->isNull()
                 ->array(iterator_to_array($this->invoke($result)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $result::BUFFER_KEY   => 0,
-                            $result::BUFFER_VALUE => 'a'
-                        ],
-                        1 => [
-                            $result::BUFFER_KEY   => 1,
-                            $result::BUFFER_VALUE => 'b'
-                        ],
-                        2 => [
-                            $result::BUFFER_KEY   => 2,
-                            $result::BUFFER_VALUE => 'c'
-                        ]
+                        0 => [0, 'a'],
+                        1 => [1, 'b'],
+                        2 => [2, 'c']
                     ])
 
                 ->boolean($result->valid())
@@ -334,18 +269,9 @@ class Buffer extends Test\Unit\Suite
                     ->isNull()
                 ->array(iterator_to_array($this->invoke($result)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $result::BUFFER_KEY   => 0,
-                            $result::BUFFER_VALUE => 'a'
-                        ],
-                        1 => [
-                            $result::BUFFER_KEY   => 1,
-                            $result::BUFFER_VALUE => 'b'
-                        ],
-                        2 => [
-                            $result::BUFFER_KEY   => 2,
-                            $result::BUFFER_VALUE => 'c'
-                        ]
+                        0 => [0, 'a'],
+                        1 => [1, 'b'],
+                        2 => [2, 'c']
                     ])
 
                 ->boolean($result->valid())
@@ -358,18 +284,9 @@ class Buffer extends Test\Unit\Suite
                     ->isNull()
                 ->array(iterator_to_array($this->invoke($result)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $result::BUFFER_KEY   => 0,
-                            $result::BUFFER_VALUE => 'a'
-                        ],
-                        1 => [
-                            $result::BUFFER_KEY   => 1,
-                            $result::BUFFER_VALUE => 'b'
-                        ],
-                        2 => [
-                            $result::BUFFER_KEY   => 2,
-                            $result::BUFFER_VALUE => 'c'
-                        ]
+                        0 => [0, 'a'],
+                        1 => [1, 'b'],
+                        2 => [2, 'c']
                     ])
 
                 ->boolean($result->valid())
@@ -382,18 +299,9 @@ class Buffer extends Test\Unit\Suite
                     ->isNull()
                 ->array(iterator_to_array($this->invoke($result)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $result::BUFFER_KEY   => 1,
-                            $result::BUFFER_VALUE => 'b'
-                        ],
-                        1 => [
-                            $result::BUFFER_KEY   => 2,
-                            $result::BUFFER_VALUE => 'c'
-                        ],
-                        2 => [
-                            $result::BUFFER_KEY   => null,
-                            $result::BUFFER_VALUE => null
-                        ]
+                        0 => [1, 'b'],
+                        1 => [2, 'c'],
+                        2 => [null, null]
                     ])
 
                 ->boolean($result->valid())
@@ -404,7 +312,7 @@ class Buffer extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_backward_out_of_buffer()
+    public function case_backward_out_of_buffer(): void
     {
         $this
             ->when($result = new SUT(new LUT\Map(['a', 'b', 'c']), 1))
@@ -433,7 +341,7 @@ class Buffer extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_rewind_rewind()
+    public function case_rewind_rewind(): void
     {
         $this
             ->when($result = new SUT(new LUT\Map(['a', 'b']), 3))
@@ -462,14 +370,8 @@ class Buffer extends Test\Unit\Suite
 
                 ->array(iterator_to_array($this->invoke($result)->getBuffer()))
                     ->isEqualTo([
-                        0 => [
-                            $result::BUFFER_KEY   => 0,
-                            $result::BUFFER_VALUE => 'a'
-                        ],
-                        1 => [
-                            $result::BUFFER_KEY   => 1,
-                            $result::BUFFER_VALUE => 'b'
-                        ]
+                        0 => [0, 'a'],
+                        1 => [1, 'b']
                     ]);
     }
 

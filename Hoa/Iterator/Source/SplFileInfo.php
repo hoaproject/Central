@@ -36,52 +36,91 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Test\Unit;
-
-use Hoa\Iterator as LUT;
-use Hoa\Test;
+namespace Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Test\Unit\Mock.
+ * Class \Hoa\Iterator\SplFileInfo.
  *
- * Test suite of the mock iterator.
- *
- * @license    New BSD License
+ * Enhance SplFileInfo implementation.
  */
-class Mock extends Test\Unit\Suite
+class SplFileInfo extends \SplFileInfo
 {
-    public function case_classic(): void
+    /**
+     * Hash.
+     */
+    protected $_hash         = null;
+
+    /**
+     * Relative path.
+     */
+    protected $_relativePath = null;
+
+
+
+    /**
+     * Construct.
+     */
+    public function __construct(string $filename, string $relativePath = null)
     {
-        $this
-            ->given($iterator = new LUT\Mock())
-            ->when($result = iterator_to_array($iterator))
-            ->then
-                ->array($result)
-                    ->isEmpty();
+        parent::__construct($filename);
+
+        if (-1 !== $mtime = $this->getMTime()) {
+            $this->_hash = md5($this->getPathname() . $mtime);
+        }
+
+        $this->_relativePath = $relativePath;
+
+        return;
     }
 
-    public function case_recursive_mock_mock(): void
+    /**
+     * Get the hash.
+     */
+    public function getHash(): string
     {
-        $this
-            ->when($iterator = new LUT\Recursive\Mock(new LUT\Mock()))
-            ->then
-                ->variable($iterator->getChildren())
-                    ->isNull()
-                ->boolean($iterator->hasChildren())
-                    ->isFalse();
+        return $this->_hash;
     }
 
-    public function case_recursive(): void
+    /**
+     * Get the MTime.
+     */
+    public function getMTime(): int
     {
-        $this
-            ->given(
-                $map              = new LUT\Map(['a', 'b', 'c']),
-                $mock             = new LUT\Recursive\Mock($map),
-                $iteratoriterator = new LUT\Recursive\Iterator($mock)
-            )
-            ->when($result = iterator_to_array($map, false))
-            ->then
-                ->array($result)
-                    ->isEqualTo(['a', 'b', 'c']);
+        try {
+            return parent::getMTime();
+        } catch (\RuntimeException $e) {
+            return -1;
+        }
+    }
+
+    /**
+     * Set relative path.
+     */
+    public function setRelativePath(string $relativePath): ?string
+    {
+        $old                 = $this->_relativePath;
+        $this->_relativePath = $relativePath;
+
+        return $old;
+    }
+
+    /**
+     * Get relative path (if given).
+     */
+    public function getRelativePath(): ?string
+    {
+        return $this->_relativePath;
+    }
+
+    /**
+     * Get relative pathname (if possible).
+     */
+    public function getRelativePathname(): string
+    {
+        if (null === $relative = $this->getRelativePath()) {
+            return $this->getPathname();
+        }
+
+        return substr($this->getPathname(), strlen($relative));
     }
 }

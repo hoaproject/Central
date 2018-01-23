@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,6 +39,7 @@
 namespace Hoa\Iterator\Test\Unit;
 
 use Hoa\Iterator as LUT;
+use Hoa\Protocol;
 use Hoa\Test;
 
 /**
@@ -44,24 +47,23 @@ use Hoa\Test;
  *
  * Test suite of the filesystem iterator.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class FileSystem extends Test\Unit\Suite
 {
-    public function case_classic()
+    public function case_classic(): void
     {
         $this
             ->given(
-                $root = resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/.?type=directory'),
-                resolve('hoa://Test/Vfs/Root/..?type=directory'),
-                resolve('hoa://Test/Vfs/Root/A?type=file'),
-                resolve('hoa://Test/Vfs/Root/B?type=file'),
+                $root = $this->resolve('hoa://Test/Vfs/Root?type=directory'),
+                $this->resolve('hoa://Test/Vfs/Root/.?type=directory'),
+                $this->resolve('hoa://Test/Vfs/Root/..?type=directory'),
+                $this->resolve('hoa://Test/Vfs/Root/A?type=file'),
+                $this->resolve('hoa://Test/Vfs/Root/B?type=file'),
                 $iterator = new LUT\FileSystem($root),
                 $result   = []
             )
-            ->when(function () use ($iterator, &$result) {
+            ->when(function () use ($iterator, &$result): void {
                 foreach ($iterator as $pathname => $file) {
                     $this
                         ->object($file)
@@ -77,18 +79,18 @@ class FileSystem extends Test\Unit\Suite
                 ]);
     }
 
-    public function case_splFileClassInfo()
+    public function case_splFileClassInfo(): void
     {
         $this
             ->given(
                 $splFileInfo = 'Hoa\Iterator\SplFileInfo',
-                $root        = resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/a?type=file'),
-                resolve('hoa://Test/Vfs/Root/b?type=file'),
-                resolve('hoa://Test/Vfs/Root/c?type=file'),
-                resolve('hoa://Test/Vfs/Root/d?type=file'),
-                resolve('hoa://Test/Vfs/Root/e?type=file'),
-                resolve('hoa://Test/Vfs/Root/f?type=file'),
+                $root        = $this->resolve('hoa://Test/Vfs/Root?type=directory'),
+                $this->resolve('hoa://Test/Vfs/Root/a?type=file'),
+                $this->resolve('hoa://Test/Vfs/Root/b?type=file'),
+                $this->resolve('hoa://Test/Vfs/Root/c?type=file'),
+                $this->resolve('hoa://Test/Vfs/Root/d?type=file'),
+                $this->resolve('hoa://Test/Vfs/Root/e?type=file'),
+                $this->resolve('hoa://Test/Vfs/Root/f?type=file'),
                 $iterator = new LUT\FileSystem(
                     $root,
                     LUT\FileSystem::CURRENT_AS_FILEINFO,
@@ -96,7 +98,7 @@ class FileSystem extends Test\Unit\Suite
                 ),
                 $result   = []
             )
-            ->when(function () use ($iterator, $splFileInfo, &$result) {
+            ->when(function () use ($iterator, $splFileInfo, &$result): void {
                 foreach ($iterator as $file) {
                     $this
                         ->object($file)
@@ -115,5 +117,10 @@ class FileSystem extends Test\Unit\Suite
                         'e',
                         'f'
                     ]);
+    }
+
+    private function resolve(string $path)
+    {
+        return Protocol\Protocol::getInstance()->resolve($path);
     }
 }

@@ -36,52 +36,78 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Test\Unit;
-
-use Hoa\Iterator as LUT;
-use Hoa\Test;
+namespace Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Test\Unit\Mock.
+ * Class \Hoa\Iterator\Directory.
  *
- * Test suite of the mock iterator.
- *
- * @license    New BSD License
+ * Extending the SPL DirectoryIterator class.
  */
-class Mock extends Test\Unit\Suite
+class Directory extends \DirectoryIterator
 {
-    public function case_classic(): void
+    /**
+     * SplFileInfo classname.
+     */
+    protected $_splFileInfoClass = null;
+
+    /**
+     * Relative path.
+     */
+    protected $_relativePath     = null;
+
+
+
+    /**
+     * Constructor.
+     * Please, see \DirectoryIterator::__construct() method.
+     * We add the $splFileInfoClass parameter.
+     */
+    public function __construct(string $path, string $splFileInfoClass = null)
     {
-        $this
-            ->given($iterator = new LUT\Mock())
-            ->when($result = iterator_to_array($iterator))
-            ->then
-                ->array($result)
-                    ->isEmpty();
+        $this->_splFileInfoClass = $splFileInfoClass;
+        parent::__construct($path);
+        $this->setRelativePath($path);
+
+        return;
     }
 
-    public function case_recursive_mock_mock(): void
+    /**
+     * Current.
+     * Please, see \DirectoryIterator::current() method.
+     */
+    public function current()
     {
-        $this
-            ->when($iterator = new LUT\Recursive\Mock(new LUT\Mock()))
-            ->then
-                ->variable($iterator->getChildren())
-                    ->isNull()
-                ->boolean($iterator->hasChildren())
-                    ->isFalse();
+        $out = parent::current();
+
+        if (null !== $this->_splFileInfoClass &&
+            $out instanceof \SplFileInfo) {
+            $out->setInfoClass($this->_splFileInfoClass);
+            $out = $out->getFileInfo();
+
+            if ($out instanceof SplFileInfo) {
+                $out->setRelativePath($this->getRelativePath());
+            }
+        }
+
+        return $out;
     }
 
-    public function case_recursive(): void
+    /**
+     * Set relative path.
+     */
+    protected function setRelativePath($path): ?string
     {
-        $this
-            ->given(
-                $map              = new LUT\Map(['a', 'b', 'c']),
-                $mock             = new LUT\Recursive\Mock($map),
-                $iteratoriterator = new LUT\Recursive\Iterator($mock)
-            )
-            ->when($result = iterator_to_array($map, false))
-            ->then
-                ->array($result)
-                    ->isEqualTo(['a', 'b', 'c']);
+        $old                 = $this->_relativePath;
+        $this->_relativePath = $path;
+
+        return $old;
+    }
+
+    /**
+     * Get relative path (if given).
+     */
+    public function getRelativePath(): string
+    {
+        return $this->_relativePath;
     }
 }

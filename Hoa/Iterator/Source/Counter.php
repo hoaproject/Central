@@ -36,52 +36,103 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Iterator\Test\Unit;
-
-use Hoa\Iterator as LUT;
-use Hoa\Test;
+namespace Hoa\Iterator;
 
 /**
- * Class \Hoa\Iterator\Test\Unit\Mock.
+ * Class \Hoa\Iterator\Counter.
  *
- * Test suite of the mock iterator.
- *
- * @license    New BSD License
+ * A counter.
  */
-class Mock extends Test\Unit\Suite
+class Counter implements Iterator
 {
-    public function case_classic(): void
+    /**
+     * From (lower bound).
+     */
+    protected $_from = 0;
+
+    /**
+     * Current key.
+     */
+    protected $_key  = 0;
+
+    /**
+     * Current index.
+     */
+    protected $_i    = 0;
+
+    /**
+     * To (upper bound).
+     */
+    protected $_to   = 0;
+
+    /**
+     * Step.
+     */
+    protected $_step = 0;
+
+
+
+    /**
+     * Constructor.
+     * Equivalent to:
+     *     for($i = $from; $i < $to; $i += $step)
+     */
+    public function __construct(int $from, int $to, int $step)
     {
-        $this
-            ->given($iterator = new LUT\Mock())
-            ->when($result = iterator_to_array($iterator))
-            ->then
-                ->array($result)
-                    ->isEmpty();
+        if ($step <= 0) {
+            throw new Exception(
+                'The step must be non-negative; given %d.',
+                0,
+                $step
+            );
+        }
+
+        $this->_from = $from;
+        $this->_to   = $to;
+        $this->_step = $step;
+
+        return;
     }
 
-    public function case_recursive_mock_mock(): void
+    /**
+     * Return the current element.
+     */
+    public function current(): int
     {
-        $this
-            ->when($iterator = new LUT\Recursive\Mock(new LUT\Mock()))
-            ->then
-                ->variable($iterator->getChildren())
-                    ->isNull()
-                ->boolean($iterator->hasChildren())
-                    ->isFalse();
+        return $this->_i;
     }
 
-    public function case_recursive(): void
+    /**
+     * Return the key of the current element.
+     */
+    public function key(): int
     {
-        $this
-            ->given(
-                $map              = new LUT\Map(['a', 'b', 'c']),
-                $mock             = new LUT\Recursive\Mock($map),
-                $iteratoriterator = new LUT\Recursive\Iterator($mock)
-            )
-            ->when($result = iterator_to_array($map, false))
-            ->then
-                ->array($result)
-                    ->isEqualTo(['a', 'b', 'c']);
+        return $this->_key;
+    }
+
+    /**
+     * Move forward to next element.
+     */
+    public function next(): void
+    {
+        ++$this->_key;
+        $this->_i += $this->_step;
+    }
+
+    /**
+     * Rewind the iterator to the first element.
+     */
+    public function rewind(): void
+    {
+        $this->_key = 0;
+        $this->_i   = $this->_from;
+    }
+
+    /**
+     * Check if current position is valid.
+     */
+    public function valid(): bool
+    {
+        return $this->_i < $this->_to;
     }
 }
