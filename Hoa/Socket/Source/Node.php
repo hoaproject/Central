@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -34,16 +36,89 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Exception;
+namespace Hoa\Socket;
 
 /**
- * Class \Hoa\Socket\Exception\BrokenPipe.
+ * Class \Hoa\Socket\Node.
  *
- * Extending the \Hoa\Socket\Exception\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Represent a generic node.
  */
-class BrokenPipe extends Exception
+class Node
 {
+    /**
+     * Node's ID.
+     */
+    protected $_id             = null;
+
+    /**
+     * Node's socket resource.
+     */
+    private $_socket           = null;
+
+    /**
+     * Get server.
+     */
+    private $_connection       = null;
+
+    /**
+     * Encryption type.
+     */
+    protected $_encryptionType = null;
+
+
+
+    /**
+     * Constructor.
+     */
+    public function __construct(string $id, $socket, Connection $connection)
+    {
+        $this->_id         = $id;
+        $this->_socket     = $socket;
+        $this->_connection = $connection;
+
+        return;
+    }
+
+    /**
+     * Get node's ID.
+     */
+    public function getId(): string
+    {
+        return $this->_id;
+    }
+
+    /**
+     * Get node's socket resource.
+     */
+    public function getSocket()
+    {
+        return $this->_socket;
+    }
+
+    /**
+     * Get connection.
+     */
+    public function getConnection(): Connection
+    {
+        return $this->_connection;
+    }
+
+    /**
+     * Set encryption type.
+     */
+    public function setEncryptionType(int $type): ?int
+    {
+        $old                   = $this->_encryptionType;
+        $this->_encryptionType = $type;
+
+        return $old;
+    }
+
+    /**
+     * Get encryption type.
+     */
+    public function getEncryptionType(): ?int
+    {
+        return $this->_encryptionType;
+    }
 }

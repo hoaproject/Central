@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,30 +47,21 @@ use Hoa\Socket;
  * This class provides a connection handler: a complete connection skeleton.  We
  * are able to run() a connection (client or server), to merge() with other ones
  * and to send messages in different ways (A -> A, A -> B, A -> *\A etc.).
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 abstract class Handler
 {
     /**
      * Original connection.
-     *
-     * @var \Hoa\Socket\Connection
      */
     protected $_originalConnection = null;
 
     /**
      * Current connection.
-     *
-     * @var \Hoa\Socket\Connection
      */
     protected $_connection         = null;
 
     /**
      * All other connections that have been merged.
-     *
-     * @var array
      */
     protected $_connections        = [];
 
@@ -76,8 +69,6 @@ abstract class Handler
 
     /**
      * Constructor. Must be called.
-     *
-     * @param   \Hoa\Socket\Connection  $connection    Connection.
      */
     public function __construct(Connection $connection)
     {
@@ -89,11 +80,8 @@ abstract class Handler
 
     /**
      * Set current connection.
-     *
-     * @param   \Hoa\Socket\Connection  $connection    Connection.
-     * @return  \Hoa\Socket\Connection
      */
-    protected function setConnection(Connection $connection)
+    protected function setConnection(Connection $connection): ?Connection
     {
         $old               = $this->_connection;
         $this->_connection = $connection;
@@ -103,30 +91,24 @@ abstract class Handler
 
     /**
      * Get original connection.
-     *
-     * @return  \Hoa\Socket\Connection
      */
-    protected function getOriginalConnection()
+    protected function getOriginalConnection(): ?Connection
     {
         return $this->_originalConnection;
     }
 
     /**
      * Get current connection.
-     *
-     * @return  \Hoa\Socket\Connection
      */
-    public function getConnection()
+    public function getConnection(): ?Connection
     {
         return $this->_connection;
     }
 
     /**
      * Get all merged connections.
-     *
-     * @return  array
      */
-    public function getMergedConnections()
+    public function getMergedConnections(): array
     {
         return $this->_connections;
     }
@@ -139,18 +121,13 @@ abstract class Handler
      *         // body
      *
      * The body is given by this method.
-     *
-     * @param   \Hoa\Socket\Node  $node    Node.
-     * @return  void
      */
-    abstract protected function _run(Socket\Node $node);
+    abstract protected function _run(Socket\Node $node): void;
 
     /**
      * Run the connection.
-     *
-     * @return  void
      */
-    public function run()
+    public function run(): void
     {
         $connection = $this->getConnection();
 
@@ -197,8 +174,6 @@ abstract class Handler
         } while (SUCCEED);
 
         $connection->disconnect();
-
-        return;
     }
 
     /**
@@ -207,11 +182,8 @@ abstract class Handler
      * Hoa\Socket\Connection::consider() and Hoa\Socket\Connection::is() methods
      * are helpful but this whole class eases the merge of “high-level”
      * connections.
-     *
-     * @param   \Hoa\Socket\Connection\Handler  $other    Connection to merge.
-     * @return  \Hoa\Socket\Connection\Handler
      */
-    public function merge(self $other)
+    public function merge(self $other): self
     {
         $thisConnection  = $this->getConnection();
         $otherConnection = $other->getConnection();
@@ -231,22 +203,13 @@ abstract class Handler
      * The sending dedicated part of the self::send() method.
      * If the send() method is overrided with more arguments, this method could
      * return a function: it works like a currying.
-     *
-     * @param   string            $message    Message.
-     * @param   \Hoa\Socket\Node  $node       Node (if null, current node).
-     * @return  void
      */
-    abstract protected function _send($message, Socket\Node $node);
+    abstract protected function _send(string $message, Socket\Node $node);
 
     /**
      * Send a message to a specific node.
-     *
-     * @param   string            $message    Message.
-     * @param   \Hoa\Socket\Node  $node       Node (if null, current node).
-     *                                        current node).
-     * @return  mixed
      */
-    public function send($message, Socket\Node $node = null)
+    public function send(string $message, Socket\Node $node = null)
     {
         if (null === $node) {
             $node = $this->getConnection()->getCurrentNode();
@@ -269,9 +232,9 @@ abstract class Handler
         if ($send instanceof \Closure) {
             $self = $this;
 
-            return function () use (&$send, &$old, &$self) {
+            return function (...$arguments) use (&$send, &$old, &$self) {
                 try {
-                    $out = call_user_func_array($send, func_get_args());
+                    $out = $send(...$arguments);
                 } finally {
                     $self->getConnection()->_setStream($old);
                 }
@@ -288,12 +251,8 @@ abstract class Handler
     /**
      * Broadcast a message, i.e. send the message to all other nodes except the
      * current one.
-     *
-     * @param   string  $message    Message.
-     * @param   …       …           …
-     * @return  void
      */
-    public function broadcast($message)
+    public function broadcast(string $message)
     {
         $currentNode = $this->getConnection()->getCurrentNode();
         $arguments   = func_get_args();
@@ -304,26 +263,19 @@ abstract class Handler
             }
         );
 
-        return call_user_func_array([$this, 'broadcastIf'], $arguments);
+        return $this->broadcastIf(...$arguments);
     }
 
     /**
      * Broadcast a message to a subset of nodes that fulfill a predicate.
-     *
-     * @param   \Closure  $predicate    Predicate. Take a node in argument.
-     * @param   string    $message      Message.
-     * @param   …         …             …
-     * @return  void
-     * @throws  \Hoa\Exception\Group
      */
-    public function broadcastIf(\Closure $predicate, $message)
+    public function broadcastIf(\Closure $predicate, string $message): void
     {
         $connection    = $this->getConnection();
         $currentSocket = $this->getOriginalConnection()->getSocket();
 
         $arguments = array_slice(func_get_args(), 2);
         array_unshift($arguments, $message, null);
-        $callable   = [$this, 'send'];
         $exceptions = new HoaException\Group(
             'Message cannot be sent to some nodes.'
         );
@@ -333,7 +285,7 @@ abstract class Handler
                 $node->getConnection()->getSocket() === $currentSocket) {
                 $arguments[1] = $node;
                 try {
-                    call_user_func_array($callable, $arguments);
+                    $this->send(...$arguments);
                 } catch (Socket\Exception $e) {
                     $exceptions[$node->getId()] = $e;
                 }
@@ -343,7 +295,5 @@ abstract class Handler
         if (0 < $exceptions->count()) {
             throw $exceptions;
         }
-
-        return;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,7 +46,6 @@ use Hoa\Test;
  *
  * Test suite for the socket object.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Socket extends Test\Unit\Suite
@@ -166,20 +167,20 @@ class Socket extends Test\Unit\Suite
         );
     }
 
-    public function case_ipv6_disabled_by_STREAM_PF_INET6()
+    public function case_ipv6_disabled_by_STREAM_PF_INET6(): void
     {
         $this
             ->given(
                 $this->function->defined         = false,
                 $this->function->function_exists = false
             )
-            ->exception(function () {
+            ->exception(function (): void {
                 new SUT('tcp://[2001:0db8:85a3::]:80');
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(SUT\Exception::class);
     }
 
-    public function case_ipv6_disabled_by_AF_INET6()
+    public function case_ipv6_disabled_by_AF_INET6(): void
     {
         $this
             ->given(
@@ -188,10 +189,10 @@ class Socket extends Test\Unit\Suite
                     return 'AF_INET6' !== $constantName;
                 }
             )
-            ->exception(function () {
+            ->exception(function (): void {
                 new SUT('tcp://[2001:0db8:85a3::]:80');
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(SUT\Exception::class);
     }
 
     public function case_full_path()
@@ -207,16 +208,16 @@ class Socket extends Test\Unit\Suite
         );
     }
 
-    public function case_no_a_URI()
+    public function case_no_a_URI(): void
     {
         $this
-            ->exception(function () {
+            ->exception(function (): void {
                 new SUT('foobar');
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(SUT\Exception::class);
     }
 
-    public function case_has_port()
+    public function case_has_port(): void
     {
         $this
             ->when($result = new SUT('tcp://hoa-project.net:80'))
@@ -225,7 +226,7 @@ class Socket extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_has_no_port()
+    public function case_has_no_port(): void
     {
         $this
             ->when($result = new SUT('tcp://hoa-project.net'))
@@ -234,7 +235,7 @@ class Socket extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_is_not_secured()
+    public function case_is_not_secured(): void
     {
         $this
             ->when($result = new SUT('tcp://hoa-project.net:80'))
@@ -243,7 +244,7 @@ class Socket extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    protected function _case_check($uri, $expect)
+    protected function _case_check($uri, $expect): void
     {
         $this
             ->given(

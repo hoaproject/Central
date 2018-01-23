@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,23 +47,22 @@ use Hoa\Test;
  *
  * Test suite of the connection group.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Group extends Test\Unit\Suite
 {
-    public function case_interfaces()
+    public function case_interfaces(): void
     {
         $this
             ->when($result = new SUT())
             ->then
                 ->object($result)
-                    ->isInstanceOf('ArrayAccess')
-                    ->isInstanceOf('IteratorAggregate')
-                    ->isInstanceOf('Countable');
+                    ->isInstanceOf(\ArrayAccess::class)
+                    ->isInstanceOf(\IteratorAggregate::class)
+                    ->isInstanceOf(\Countable::class);
     }
 
-    public function case_offset_exists()
+    public function case_offset_exists(): void
     {
         $this
             ->given(
@@ -76,7 +77,7 @@ class Group extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_offset_does_not_exist()
+    public function case_offset_does_not_exist(): void
     {
         $this
             ->given($group = new SUT())
@@ -86,7 +87,7 @@ class Group extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_offset_get()
+    public function case_offset_get(): void
     {
         $this
             ->given(
@@ -102,7 +103,7 @@ class Group extends Test\Unit\Suite
                     ->isIdenticalTo($connection);
     }
 
-    public function case_offset_get_an_undefined_offset()
+    public function case_offset_get_an_undefined_offset(): void
     {
         $this
             ->given($group = new SUT())
@@ -112,17 +113,17 @@ class Group extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_offset_set_not_a_connection()
+    public function case_offset_set_not_a_connection(): void
     {
         $this
             ->given($group = new SUT())
-            ->exception(function () use ($group) {
+            ->exception(function () use ($group): void {
                 $group->offsetSet(null, 42);
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
-    public function case_offset_set_with_a_null_offset()
+    public function case_offset_set_with_a_null_offset(): void
     {
         $this
             ->given(
@@ -143,7 +144,7 @@ class Group extends Test\Unit\Suite
                     ->isIdenticalTo($connection);
     }
 
-    public function case_offset_set()
+    public function case_offset_set(): void
     {
         $this
             ->given(
@@ -164,7 +165,7 @@ class Group extends Test\Unit\Suite
                     ->isIdenticalTo($connection);
     }
 
-    public function case_offset_set_with_the_same_key()
+    public function case_offset_set_with_the_same_key(): void
     {
         $this
             ->given(
@@ -187,7 +188,7 @@ class Group extends Test\Unit\Suite
                     ->isIdenticalTo($connectionB);
     }
 
-    public function case_offset_set_another_connection()
+    public function case_offset_set_another_connection(): void
     {
         $self = $this;
 
@@ -196,12 +197,14 @@ class Group extends Test\Unit\Suite
                 $this->mockGenerator->orphanize('__construct'),
                 $connectionA = new \Mock\Hoa\Socket\Connection\Handler(),
                 $connectionB = new \Mock\Hoa\Socket\Connection\Handler(),
-                $this->calling($connectionA)->merge = function (LUT\Connection\Handler $connection) use ($self, &$called, $connectionB) {
+                $this->calling($connectionA)->merge = function (LUT\Connection\Handler $connection) use ($self, &$called, $connectionA, $connectionB) {
                     $called = true;
 
                     $self
                         ->object($connection)
                             ->isIdenticalTo($connectionB);
+
+                    return $connectionA;
                 },
 
                 $group = new SUT(),
@@ -226,28 +229,28 @@ class Group extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_offset_unset()
+    public function case_offset_unset(): void
     {
         $this
             ->given($group = new SUT())
-            ->exception(function () use ($group) {
+            ->exception(function () use ($group): void {
                 $group->offsetUnset('foo');
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
-    public function case_get_empty_iterator()
+    public function case_get_empty_iterator(): void
     {
         $this
             ->given($group = new SUT())
             ->when($result = $group->getIterator())
             ->then
                 ->iterator($result)
-                    ->isInstanceOf('ArrayIterator')
+                    ->isInstanceOf(\ArrayIterator::class)
                     ->hasSize(0);
     }
 
-    public function case_get_iterator()
+    public function case_get_iterator(): void
     {
         $this
             ->given(
@@ -258,11 +261,11 @@ class Group extends Test\Unit\Suite
             ->when($result = $group->getIterator())
             ->then
                 ->iterator($result)
-                    ->isInstanceOf('ArrayIterator')
+                    ->isInstanceOf(\ArrayIterator::class)
                     ->hasSize(1);
     }
 
-    public function case_count_zero()
+    public function case_count_zero(): void
     {
         $this
             ->given($group = new SUT())
@@ -272,7 +275,7 @@ class Group extends Test\Unit\Suite
                     ->isEqualTo(0);
     }
 
-    public function case_count()
+    public function case_count(): void
     {
         $this
             ->given(
@@ -288,7 +291,7 @@ class Group extends Test\Unit\Suite
                     ->isEqualTo(2);
     }
 
-    public function case_merge()
+    public function case_merge(): void
     {
         $this
             ->given(
@@ -309,17 +312,17 @@ class Group extends Test\Unit\Suite
                     ->isIdenticalTo($connection);
     }
 
-    public function case_run_no_connection()
+    public function case_run_no_connection(): void
     {
         $this
             ->given($group = new SUT())
-            ->exception(function () use ($group) {
+            ->exception(function () use ($group): void {
                 $group->run();
             })
-                ->isInstanceOf('Hoa\Socket\Exception');
+                ->isInstanceOf(LUT\Exception::class);
     }
 
-    public function case_run()
+    public function case_run(): void
     {
         $this
             ->given(
@@ -328,7 +331,7 @@ class Group extends Test\Unit\Suite
                 $group   = new SUT(),
                 $group[] = new \Mock\Hoa\Socket\Connection\Handler(),
                 $group[] = new \Mock\Hoa\Socket\Connection\Handler(),
-                $this->calling($group[0])->run = function () use (&$called) {
+                $this->calling($group[0])->run = function () use (&$called): void {
                     $called = true;
 
                     return;
@@ -342,7 +345,7 @@ class Group extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_get_first_connection()
+    public function case_get_first_connection(): void
     {
         $this
             ->given(

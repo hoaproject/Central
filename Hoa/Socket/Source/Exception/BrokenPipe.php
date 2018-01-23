@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,22 +38,11 @@
 
 namespace Hoa\Socket\Exception;
 
-use Hoa\Consistency;
-use Hoa\Exception as HoaException;
-
 /**
- * Class \Hoa\Socket\Exception\Exception.
+ * Class \Hoa\Socket\Exception\BrokenPipe.
  *
- * Extending the \Hoa\Exception\Exception class.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
+ * Extending the \Hoa\Socket\Exception\Exception class.
  */
-class Exception extends HoaException
+class BrokenPipe extends Exception
 {
 }
-
-/**
- * Flex entity.
- */
-Consistency::flexEntity('Hoa\Socket\Exception\Exception');

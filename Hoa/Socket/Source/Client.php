@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,93 +45,66 @@ use Hoa\Stream;
  * Class \Hoa\Socket\Client.
  *
  * Established a client connection.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Client extends Connection
 {
     /**
      * Open client socket asynchronously.
-     *
-     * @const int
      */
-    const ASYNCHRONOUS       = STREAM_CLIENT_ASYNC_CONNECT;
+    public const ASYNCHRONOUS       = STREAM_CLIENT_ASYNC_CONNECT;
 
     /**
      * Open client socket connection.
-     *
-     * @const int
      */
-    const CONNECT            = STREAM_CLIENT_CONNECT;
+    public const CONNECT            = STREAM_CLIENT_CONNECT;
 
     /**
      * Client socket should remain persistent between page loads.
-     *
-     * @const int
      */
-    const PERSISTENT         = STREAM_CLIENT_PERSISTENT;
+    public const PERSISTENT         = STREAM_CLIENT_PERSISTENT;
 
     /**
      * Encryption: SSLv2.
-     *
-     * @const int
      */
-    const ENCRYPTION_SSLv2   = STREAM_CRYPTO_METHOD_SSLv2_CLIENT;
+    public const ENCRYPTION_SSLv2   = STREAM_CRYPTO_METHOD_SSLv2_CLIENT;
 
     /**
      * Encryption: SSLv3.
-     *
-     * @const int
      */
-    const ENCRYPTION_SSLv3   = STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
+    public const ENCRYPTION_SSLv3   = STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
 
     /**
      * Encryption: SSLv2.3.
-     *
-     * @const int
      */
-    const ENCRYPTION_SSLv23  = STREAM_CRYPTO_METHOD_SSLv23_CLIENT;
+    public const ENCRYPTION_SSLv23  = STREAM_CRYPTO_METHOD_SSLv23_CLIENT;
 
     /**
      * Encryption: TLS.
-     *
-     * @const int
      */
-    const ENCRYPTION_TLS     = STREAM_CRYPTO_METHOD_TLS_CLIENT;
+    public const ENCRYPTION_TLS     = STREAM_CRYPTO_METHOD_TLS_CLIENT;
 
     /**
      * Encryption: TLSv1.0.
-     *
-     * @const int
      */
-    const ENCRYPTION_TLSv1_0 = STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT;
+    public const ENCRYPTION_TLSv1_0 = STREAM_CRYPTO_METHOD_TLSv1_0_CLIENT;
 
     /**
      * Encryption: TLSv1.1.
-     *
-     * @const int
      */
-    const ENCRYPTION_TLSv1_1 = STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT;
+    public const ENCRYPTION_TLSv1_1 = STREAM_CRYPTO_METHOD_TLSv1_1_CLIENT;
 
     /**
      * Encryption: TLSv1.2.
-     *
-     * @const int
      */
-    const ENCRYPTION_TLSv1_2 = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
+    public const ENCRYPTION_TLSv1_2 = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
 
     /**
      * Encryption: ANY
-     *
-     * @const int
      */
-    const ENCRYPTION_ANY     = STREAM_CRYPTO_METHOD_ANY_CLIENT;
+    public const ENCRYPTION_ANY     = STREAM_CRYPTO_METHOD_ANY_CLIENT;
 
     /**
      * Stack of connections.
-     *
-     * @var array
      */
     protected $_stack = [];
 
@@ -137,18 +112,12 @@ class Client extends Connection
 
     /**
      * Start a connection.
-     *
-     * @param   string  $socket     Socket URI.
-     * @param   int     $timeout    Timeout.
-     * @param   int     $flag       Flag, see the child::* constants.
-     * @param   string  $context    Context ID (please, see the
-     *                              \Hoa\Stream\Context class).
      */
     public function __construct(
-        $socket,
-        $timeout = 30,
-        $flag    = self::CONNECT,
-        $context = null
+        string $socket,
+        int $timeout    = 30,
+        int $flag       = self::CONNECT,
+        string $context = null
     ) {
         parent::__construct($socket, $timeout, self::CONNECT | $flag, $context);
 
@@ -157,13 +126,8 @@ class Client extends Connection
 
     /**
      * Open the stream and return the associated resource.
-     *
-     * @param   string               $streamName    Socket URI.
-     * @param   \Hoa\Stream\Context  $context       Context.
-     * @return  resource
-     * @throws  \Hoa\Socket\Exception
      */
-    protected function &_open($streamName, Stream\Context $context = null)
+    protected function &_open(string $streamName, Stream\Context $context = null)
     {
         if (null === $context) {
             $connection = @stream_socket_client(
@@ -210,10 +174,8 @@ class Client extends Connection
 
     /**
      * Close the current stream.
-     *
-     * @return  bool
      */
-    protected function _close()
+    protected function _close(): bool
     {
         if (true === $this->isPersistent()) {
             return false;
@@ -224,10 +186,8 @@ class Client extends Connection
 
     /**
      * Select connections.
-     *
-     * @return  \Hoa\Socket\Client
      */
-    public function select()
+    public function select(): iterable
     {
         $read   = $this->getStack();
         $write  = null;
@@ -244,12 +204,8 @@ class Client extends Connection
 
     /**
      * Consider another client when selecting connection.
-     *
-     * @param   \Hoa\Socket\Connection  $other    Other client.
-     * @return  \Hoa\Socket\Client
-     * @throws  \Hoa\Socket\Exception
      */
-    public function consider(Connection $other)
+    public function consider(Connection $other): Connection
     {
         if (!($other instanceof self)) {
             throw new Exception(
@@ -272,21 +228,16 @@ class Client extends Connection
 
     /**
      * Check if the current node belongs to a specific server.
-     *
-     * @param   \Hoa\Socket\Connection  $server    Server.
-     * @return  bool
      */
-    public function is(Connection $server)
+    public function is(Connection $server): bool
     {
         return $this->getStream() === $server->getStream();
     }
 
     /**
      * Set and get the current selected connection.
-     *
-     * @return  \Hoa\Socket\Node
      */
-    public function current()
+    public function current(): Node
     {
         $current = parent::_current();
 
@@ -295,40 +246,32 @@ class Client extends Connection
 
     /**
      * Check if the connection is connected or not.
-     *
-     * @return  bool
      */
-    public function isConnected()
+    public function isConnected(): bool
     {
         return (bool) ($this->getFlag() & self::CONNECT);
     }
 
     /**
      * Check if the connection is asynchronous or not.
-     *
-     * @return  bool
      */
-    public function isAsynchronous()
+    public function isAsynchronous(): bool
     {
         return (bool) ($this->getFlag() & self::ASYNCHRONOUS);
     }
 
     /**
      * Check if the connection is persistent or not.
-     *
-     * @return  bool
      */
-    public function isPersistent()
+    public function isPersistent(): bool
     {
         return (bool) ($this->getFlag() & self::PERSISTENT);
     }
 
     /**
      * Return internal node stack.
-     *
-     * @return  array
      */
-    protected function getStack()
+    protected function getStack(): array
     {
         return $this->_stack;
     }

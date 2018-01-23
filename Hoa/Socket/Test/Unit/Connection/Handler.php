@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -36,6 +38,7 @@
 
 namespace Hoa\Socket\Test\Unit\Connection;
 
+use Hoa\Exception;
 use Hoa\Socket as LUT;
 use Hoa\Test;
 use Mock\Hoa\Socket\Connection\Handler as SUT;
@@ -45,12 +48,11 @@ use Mock\Hoa\Socket\Connection\Handler as SUT;
  *
  * Test suite of the connection handler.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Handler extends Test\Unit\Suite
 {
-    public function case_constructor()
+    public function case_constructor(): void
     {
         $this
             ->given(
@@ -63,7 +65,7 @@ class Handler extends Test\Unit\Suite
                     ->isIdenticalTo($connection);
     }
 
-    public function case_get_original_connection()
+    public function case_get_original_connection(): void
     {
         $this
             ->given(
@@ -77,7 +79,7 @@ class Handler extends Test\Unit\Suite
                     ->isIdenticalTo($connection);
     }
 
-    public function case_get_merged_connections()
+    public function case_get_merged_connections(): void
     {
         $self = $this;
 
@@ -97,7 +99,7 @@ class Handler extends Test\Unit\Suite
                     ->isEqualTo([$handlerB]);
     }
 
-    public function case_run_connect_and_wait()
+    public function case_run_connect_and_wait(): void
     {
         $this
             ->given(
@@ -105,13 +107,15 @@ class Handler extends Test\Unit\Suite
                 $connection = new \Mock\Hoa\Socket\Server(),
                 $handler    = new SUT($connection),
 
-                $this->calling($connection)->connectAndWait = function () use (&$connectCalled) {
+                $this->calling($connection)->connectAndWait = function () use (&$connectCalled, $connection) {
                     $connectCalled = true;
+
+                    return $connection;
                 },
-                $this->calling($connection)->disconnect = function () use (&$disconnectCalled) {
+                $this->calling($connection)->disconnect = function () use (&$disconnectCalled): void {
                     $disconnectCalled = true;
                 },
-                $this->calling($connection)->select = [],
+                $this->calling($connection)->select = $connection,
 
                 $this->constant->SUCCEED = false
             )
@@ -125,7 +129,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_run_connect()
+    public function case_run_connect(): void
     {
         $this
             ->given(
@@ -133,13 +137,15 @@ class Handler extends Test\Unit\Suite
                 $connection = new \Mock\Hoa\Socket\Connection(),
                 $handler    = new SUT($connection),
 
-                $this->calling($connection)->connect = function () use (&$connectCalled) {
+                $this->calling($connection)->connect = function () use (&$connectCalled, $connection) {
                     $connectCalled = true;
+
+                    return $connection;
                 },
-                $this->calling($connection)->disconnect = function () use (&$disconnectCalled) {
+                $this->calling($connection)->disconnect = function () use (&$disconnectCalled): void {
                     $disconnectCalled = true;
                 },
-                $this->calling($connection)->select = [],
+                $this->calling($connection)->select = $connection,
 
                 $this->constant->SUCCEED = false
             )
@@ -153,7 +159,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_run_node_on_the_current_handler()
+    public function case_run_node_on_the_current_handler(): void
     {
         $self = $this;
 
@@ -182,7 +188,7 @@ class Handler extends Test\Unit\Suite
                     return false;
                 },
 
-                $this->calling($handlerA)->_run = function (LUT\Node $node) use ($self, &$runCalled, $nodeX) {
+                $this->calling($handlerA)->_run = function (LUT\Node $node) use ($self, &$runCalled, $nodeX): void {
                     $runCalled = true;
 
                     $self
@@ -202,7 +208,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_run_node_on_another_handler()
+    public function case_run_node_on_another_handler(): void
     {
         $self = $this;
 
@@ -231,10 +237,10 @@ class Handler extends Test\Unit\Suite
                     return true;
                 },
 
-                $this->calling($handlerA)->_run = function (LUT\Node $node) use (&$runCalledA) {
+                $this->calling($handlerA)->_run = function (LUT\Node $node) use (&$runCalledA): void {
                     $runCalledA = true;
                 },
-                $this->calling($handlerB)->_run = function (LUT\Node $node) use ($self, &$runCalledB, $nodeX) {
+                $this->calling($handlerB)->_run = function (LUT\Node $node) use ($self, &$runCalledB, $nodeX): void {
                     $runCalledB = true;
 
                     $self
@@ -256,7 +262,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_run_when_connection_failed_to_detect_the_node()
+    public function case_run_when_connection_failed_to_detect_the_node(): void
     {
         $self = $this;
 
@@ -275,16 +281,18 @@ class Handler extends Test\Unit\Suite
                 $this->mockGenerator->orphanize('__construct'),
                 $nodeX = new \Mock\Hoa\Socket\Node(),
 
-                $resourceY = 42,
+                $this->mockGenerator->orphanize('__construct'),
+                $socketY = new \Mock\Hoa\Socket(),
 
-                $this->calling($connectionA)->select         = [$resourceY],
+                $this->calling($connectionA)->select         = [42],
+                $this->calling($connectionA)->is             = true,
                 $this->calling($connectionB)->getCurrentNode = $nodeX,
-                $this->calling($nodeX)->getSocket            = $resourceY,
+                $this->calling($nodeX)->getSocket            = $socketY,
 
-                $this->calling($handlerA)->_run = function (LUT\Node $node) use (&$runCalledA) {
+                $this->calling($handlerA)->_run = function (LUT\Node $node) use (&$runCalledA): void {
                     $runCalledA = true;
                 },
-                $this->calling($handlerB)->_run = function (LUT\Node $node) use ($self, &$runCalledB, $nodeX) {
+                $this->calling($handlerB)->_run = function (LUT\Node $node) use ($self, &$runCalledB, $nodeX): void {
                     $runCalledB = true;
 
                     $self
@@ -304,7 +312,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_merge()
+    public function case_merge(): void
     {
         $self = $this;
 
@@ -316,14 +324,14 @@ class Handler extends Test\Unit\Suite
                 $connectionB = new \Mock\Hoa\Socket\Connection(),
                 $handlerB    = new SUT($connectionB),
 
-                $this->calling($connectionA)->consider = function (LUT\Connection $connection) use ($self, &$called, $connectionB) {
+                $this->calling($connectionA)->consider = function (LUT\Connection $connection) use ($self, &$called, $connectionA, $connectionB) {
                     $called = true;
 
                     $self
                         ->object($connection)
                             ->isIdenticalTo($connectionB);
 
-                    return;
+                    return $connectionA;
                 }
             )
             ->when($result = $handlerA->merge($handlerB))
@@ -334,7 +342,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_merge_a_server()
+    public function case_merge_a_server(): void
     {
         $self = $this;
 
@@ -348,7 +356,7 @@ class Handler extends Test\Unit\Suite
                 $connectionB = new \Mock\Hoa\Socket\Server(),
                 $handlerB    = new \Mock\Handlerz($connectionB),
 
-                $this->calling($handlerB)->setConnection = function (LUT\Connection $connection) use ($self, &$called, $connectionA) {
+                $this->calling($handlerB)->setConnection = function (LUT\Connection $connection) use ($self, &$called, $connectionA): void {
                     $called = true;
 
                     $self
@@ -366,7 +374,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_send_on_nonexistent_node()
+    public function case_send_on_nonexistent_node(): void
     {
         $this
             ->given(
@@ -382,7 +390,7 @@ class Handler extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_send_on_unspecified_node()
+    public function case_send_on_unspecified_node(): void
     {
         $self = $this;
 
@@ -444,7 +452,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_send_broken_pipe()
+    public function case_send_broken_pipe(): void
     {
         $self = $this;
 
@@ -484,7 +492,7 @@ class Handler extends Test\Unit\Suite
                 $this->calling($node)->getSocket       = $resource,
                 $this->calling($handler)->_send->throw = $exception
             )
-            ->exception(function () use ($handler, $message, $node) {
+            ->exception(function () use ($handler, $message, $node): void {
                 $handler->send($message, $node);
             })
                 ->isIdenticalTo($exception)
@@ -494,7 +502,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_send()
+    public function case_send(): void
     {
         $self = $this;
 
@@ -555,7 +563,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_send_on_closure()
+    public function case_send_on_closure(): void
     {
         $self = $this;
 
@@ -606,7 +614,7 @@ class Handler extends Test\Unit\Suite
                     };
                 }
             )
-            ->when(function () use (&$result, $handler, $message, $node) {
+            ->when(function () use (&$result, $handler, $message, $node): void {
                 $result = $handler->send($message, $node);
 
                 return;
@@ -622,7 +630,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_broadcast()
+    public function case_broadcast(): void
     {
         $self = $this;
 
@@ -640,7 +648,7 @@ class Handler extends Test\Unit\Suite
 
                 $this->calling($connection)->getCurrentNode = $nodeX,
 
-                $this->calling($handler)->broadcastIf = function (\Closure $predicate, $message) use ($self, &$called, $nodeX, $nodeY) {
+                $this->calling($handler)->broadcastIf = function (\Closure $predicate, $message) use ($self, &$called, $nodeX, $nodeY): void {
                     $called = true;
 
                     $self
@@ -667,7 +675,7 @@ class Handler extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_broadcast_if_broken_pipe()
+    public function case_broadcast_if_broken_pipe(): void
     {
         $self = $this;
 
@@ -680,7 +688,9 @@ class Handler extends Test\Unit\Suite
                 $exception = new LUT\Exception\BrokenPipe('Foo', 0),
 
                 $this->mockGenerator->orphanize('__construct'),
-                $resource   = 42,
+                $socket = new \Mock\Hoa\Socket(),
+
+                $this->mockGenerator->orphanize('__construct'),
                 $connection = new \Mock\Hoa\Socket\Connection(),
                 $handler    = new SUT($connection),
 
@@ -689,7 +699,7 @@ class Handler extends Test\Unit\Suite
                 $nodeY = new \Mock\Hoa\Socket\Node(),
                 $nodeZ = new \Mock\Hoa\Socket\Node(),
 
-                $this->calling($connection)->getSocket = $resource,
+                $this->calling($connection)->getSocket = $socket,
                 $this->calling($connection)->getNodes  = [$nodeX, $nodeY, $nodeZ],
 
                 $this->calling($nodeY)->getConnection = $connection,
@@ -700,10 +710,10 @@ class Handler extends Test\Unit\Suite
 
                 $this->calling($handler)->send->throw = $exception
             )
-            ->exception(function () use ($handler, $predicate, $message) {
+            ->exception(function () use ($handler, $predicate, $message): void {
                 $handler->broadcastIf($predicate, $message, 'bar', 'baz');
             })
-                ->isInstanceOf('Hoa\Exception\Group')
+                    ->isInstanceOf(Exception\Group::class)
                 ->integer(count($this->exception))
                     ->isEqualTo(2)
                 ->object($this->exception[$nodeY->getId()])
@@ -712,7 +722,7 @@ class Handler extends Test\Unit\Suite
                     ->isIdenticalTo($exception);
     }
 
-    public function case_broadcast_if()
+    public function case_broadcast_if(): void
     {
         $self = $this;
 
@@ -724,7 +734,9 @@ class Handler extends Test\Unit\Suite
                 },
 
                 $this->mockGenerator->orphanize('__construct'),
-                $resource   = 42,
+                $socket = new \Mock\Hoa\Socket(),
+
+                $this->mockGenerator->orphanize('__construct'),
                 $connection = new \Mock\Hoa\Socket\Connection(),
                 $handler    = new SUT($connection),
 
@@ -733,12 +745,12 @@ class Handler extends Test\Unit\Suite
                 $nodeY = new \Mock\Hoa\Socket\Node(),
                 $nodeZ = new \Mock\Hoa\Socket\Node(),
 
-                $this->calling($connection)->getSocket = $resource,
+                $this->calling($connection)->getSocket = $socket,
                 $this->calling($connection)->getNodes  = [$nodeX, $nodeY, $nodeZ],
 
                 $this->calling($nodeY)->getConnection = $connection,
 
-                $this->calling($handler)->send = function ($message, LUT\Node $node, $extra1, $extra2) use ($self, &$called, $nodeY) {
+                $this->calling($handler)->send = function ($message, LUT\Node $node, $extra1, $extra2) use ($self, &$called, $nodeY): void {
                     ++$called;
 
                     $self

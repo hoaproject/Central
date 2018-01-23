@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,107 +45,76 @@ use Hoa\Stream;
  * Class \Hoa\Socket\Server.
  *
  * Established a server connection.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Server extends Connection
 {
     /**
      * Tell a stream to bind to the specified target.
-     *
-     * @const int
      */
-    const BIND               = STREAM_SERVER_BIND;
+    public const BIND               = STREAM_SERVER_BIND;
 
     /**
      * Tell a stream to start listening on the socket.
-     *
-     * @const int
      */
-    const LISTEN             = STREAM_SERVER_LISTEN;
+    public const LISTEN             = STREAM_SERVER_LISTEN;
 
     /**
      * Encryption: SSLv2.
-     *
-     * @const int
      */
-    const ENCRYPTION_SSLv2   = STREAM_CRYPTO_METHOD_SSLv2_SERVER;
+    public const ENCRYPTION_SSLv2   = STREAM_CRYPTO_METHOD_SSLv2_SERVER;
 
     /**
      * Encryption: SSLv3.
-     *
-     * @const int
      */
-    const ENCRYPTION_SSLv3   = STREAM_CRYPTO_METHOD_SSLv3_SERVER;
+    public const ENCRYPTION_SSLv3   = STREAM_CRYPTO_METHOD_SSLv3_SERVER;
 
     /**
      * Encryption: SSLv2.3.
-     *
-     * @const int
      */
-    const ENCRYPTION_SSLv23  = STREAM_CRYPTO_METHOD_SSLv23_SERVER;
+    public const ENCRYPTION_SSLv23  = STREAM_CRYPTO_METHOD_SSLv23_SERVER;
 
     /**
      * Encryption: TLS.
-     *
-     * @const int
      */
-    const ENCRYPTION_TLS     = STREAM_CRYPTO_METHOD_TLS_SERVER;
+    public const ENCRYPTION_TLS     = STREAM_CRYPTO_METHOD_TLS_SERVER;
 
     /**
      * Encryption: TLSv1.0.
-     *
-     * @const int
      */
-    const ENCRYPTION_TLSv1_0 = STREAM_CRYPTO_METHOD_TLSv1_0_SERVER;
+    public const ENCRYPTION_TLSv1_0 = STREAM_CRYPTO_METHOD_TLSv1_0_SERVER;
 
     /**
      * Encryption: TLSv1.1.
-     *
-     * @const int
      */
-    const ENCRYPTION_TLSv1_1 = STREAM_CRYPTO_METHOD_TLSv1_1_SERVER;
+    public const ENCRYPTION_TLSv1_1 = STREAM_CRYPTO_METHOD_TLSv1_1_SERVER;
 
     /**
      * Encryption: TLSv1.2.
-     *
-     * @const int
      */
-    const ENCRYPTION_TLSv1_2 = STREAM_CRYPTO_METHOD_TLSv1_2_SERVER;
+    public const ENCRYPTION_TLSv1_2 = STREAM_CRYPTO_METHOD_TLSv1_2_SERVER;
 
     /**
      * Encryption: ANY
-     *
-     * @const int
      */
-    const ENCRYPTION_ANY     = STREAM_CRYPTO_METHOD_ANY_SERVER;
+    public const ENCRYPTION_ANY     = STREAM_CRYPTO_METHOD_ANY_SERVER;
 
     /**
      * Master connection.
-     *
-     * @var resource
      */
     protected $_master   = null;
 
     /**
      * All considered server.
-     *
-     * @var array
      */
     protected $_servers  = [];
 
     /**
      * Masters connection.
-     *
-     * @var array
      */
     protected $_masters  = [];
 
     /**
      * Stack of connections.
-     *
-     * @var array
      */
     protected $_stack    = [];
 
@@ -151,19 +122,12 @@ class Server extends Connection
 
     /**
      * Start a connection.
-     *
-     * @param   string  $socket     Socket URI.
-     * @param   int     $timeout    Timeout.
-     * @param   int     $flag       Flag, see the child::* constants.
-     * @param   string  $context    Context ID (please, see the
-     *                              \Hoa\Stream\Context class).
-     * @throws  \Hoa\Socket\Exception
      */
     public function __construct(
-        $socket,
-        $timeout = 30,
-        $flag    = -1,
-        $context = null
+        string $socket,
+        int $timeout    = 30,
+        int $flag       = -1,
+        string $context = null
     ) {
         $this->setSocket($socket);
         $socket = $this->getSocket();
@@ -210,13 +174,8 @@ class Server extends Connection
 
     /**
      * Open the stream and return the associated resource.
-     *
-     * @param   string               $streamName    Socket URI.
-     * @param   \Hoa\Stream\Context  $context       Context.
-     * @return  resource
-     * @throws  \Hoa\Socket\Exception
      */
-    protected function &_open($streamName, Stream\Context $context = null)
+    protected function &_open(string $streamName, Stream\Context $context = null)
     {
         if (null === $context) {
             $this->_master = @stream_socket_server(
@@ -253,10 +212,8 @@ class Server extends Connection
 
     /**
      * Close the current stream.
-     *
-     * @return  bool
      */
-    protected function _close()
+    protected function _close(): bool
     {
         $current = $this->getStream();
 
@@ -284,11 +241,8 @@ class Server extends Connection
 
     /**
      * Connect and accept the first connection.
-     *
-     * @return  \Hoa\Socket\Server
-     * @throws  \Hoa\Socket\Exception
      */
-    public function connect()
+    public function connect(): Connection
     {
         parent::connect();
 
@@ -308,21 +262,16 @@ class Server extends Connection
 
     /**
      * Connect but wait for select and accept new connections.
-     *
-     * @return  \Hoa\Socket\Server
      */
-    public function connectAndWait()
+    public function connectAndWait(): self
     {
         return parent::connect();
     }
 
     /**
      * Select connections.
-     *
-     * @return  \Hoa\Socket\Server
-     * @throws  \Hoa\Socket\Exception
      */
-    public function select()
+    public function select(): iterable
     {
         $read   = $this->getStack();
         $write  = null;
@@ -362,11 +311,8 @@ class Server extends Connection
 
     /**
      * Consider another server when selecting connection.
-     *
-     * @param   \Hoa\Socket\Connection  $other    Other server.
-     * @return  \Hoa\Socket\Server
      */
-    public function consider(Connection $other)
+    public function consider(Connection $other): Connection
     {
         if ($other instanceof Client) {
             if (true === $other->isDisconnected()) {
@@ -392,21 +338,16 @@ class Server extends Connection
 
     /**
      * Check if the current node belongs to a specific server.
-     *
-     * @param   \Hoa\Socket\Connection  $server    Server.
-     * @return  bool
      */
-    public function is(Connection $server)
+    public function is(Connection $server): bool
     {
         return $this->getCurrentNode()->getConnection() === $server;
     }
 
     /**
      * Set and get the current selected connection.
-     *
-     * @return  \Hoa\Socket\Node
      */
-    public function current()
+    public function current(): Node
     {
         $current = parent::_current();
         $id      = $this->getNodeId($current);
@@ -420,50 +361,40 @@ class Server extends Connection
 
     /**
      * Check if the server bind or not.
-     *
-     * @return  bool
      */
-    public function isBinding()
+    public function isBinding(): bool
     {
         return (bool) ($this->getFlag() & self::BIND);
     }
 
     /**
      * Check if the server is listening or not.
-     *
-     * @return  bool
      */
-    public function isListening()
+    public function isListening(): bool
     {
         return (bool) ($this->getFlag() & self::LISTEN);
     }
 
     /**
      * Return internal considered servers.
-     *
-     * @return  array
      */
-    protected function getServers()
+    protected function getServers(): array
     {
         return $this->_servers;
     }
 
     /**
      * Return internal master connections.
-     *
-     * @return  array
      */
-    protected function getMasters()
+    protected function getMasters(): array
     {
         return $this->_masters;
     }
 
     /**
      * Return internal node stack.
-     *
-     * @return  array
      */
-    protected function &getStack()
+    protected function &getStack(): array
     {
         return $this->_stack;
     }

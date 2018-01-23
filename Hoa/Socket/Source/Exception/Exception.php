@@ -36,27 +36,21 @@ declare(strict_types=1);
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Socket\Test\Unit\Exception;
+namespace Hoa\Socket\Exception;
 
-use Hoa\Socket as LUT;
-use Hoa\Socket\Exception\BrokenPipe as SUT;
-use Hoa\Test;
+use Hoa\Consistency;
+use Hoa\Exception as HoaException;
 
 /**
- * Class \Hoa\Socket\Test\Unit\Exception\BrokenPipe.
+ * Class \Hoa\Socket\Exception\Exception.
  *
- * Test suite of the broken pipe exception.
- *
- * @license    New BSD License
+ * Extending the \Hoa\Exception\Exception class.
  */
-class BrokenPipe extends Test\Unit\Suite
+class Exception extends HoaException
 {
-    public function case_hoa_socket_exception(): void
-    {
-        $this
-            ->when($result = new SUT('foo', 0))
-            ->then
-                ->object($result)
-                    ->isInstanceOf(LUT\Exception\Exception::class);
-    }
 }
+
+/**
+ * Flex entity.
+ */
+Consistency::flexEntity(Exception::class);
