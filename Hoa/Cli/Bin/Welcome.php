@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -39,19 +41,12 @@ namespace Hoa\Cli\Bin;
 use Hoa\Console;
 
 /**
- * Class \Hoa\Cli\Bin\Welcome.
- *
  * Welcome screen.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Welcome extends Console\Dispatcher\Kit
 {
     /**
      * Options description.
-     *
-     * @var array
      */
     protected $options = [
         ['library',    Console\GetOption::REQUIRED_ARGUMENT, 'l'],
@@ -64,10 +59,8 @@ class Welcome extends Console\Dispatcher\Kit
 
     /**
      * The entry method.
-     *
-     * @return  int
      */
-    public function main()
+    public function main(): ?int
     {
         $library = null;
         $verbose = Console::isDirect(STDOUT);
@@ -127,7 +120,7 @@ class Welcome extends Console\Dispatcher\Kit
 
         if (WITH_COMPOSER) {
             $iterator->append(new \GlobIterator(
-                dirname(dirname(dirname(dirname(__DIR__)))) . DIRECTORY_SEPARATOR . 'Bin' . DIRECTORY_SEPARATOR . '*.php'
+                dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'Bin' . DIRECTORY_SEPARATOR . '*.php'
             ));
         }
 
@@ -135,7 +128,7 @@ class Welcome extends Console\Dispatcher\Kit
 
         foreach ($iterator as $entry) {
             $pathname = $entry->getPathname();
-            $lib      = mb_strtolower(basename(dirname(dirname($pathname))));
+            $lib      = mb_strtolower(basename(dirname($pathname, 2)));
             $bin      = mb_strtolower(
                 mb_substr($entry->getBasename(), 0, -4)
             );
@@ -210,15 +203,13 @@ class Welcome extends Console\Dispatcher\Kit
             echo $out;
         }
 
-        return;
+        return 0;
     }
 
     /**
      * The command usage.
-     *
-     * @return  int
      */
-    public function usage()
+    public function usage(): void
     {
         echo
             'Usage   : cli:welcome <options>', "\n",
@@ -229,8 +220,6 @@ class Welcome extends Console\Dispatcher\Kit
                           'print essential informations.',
                 'help' => 'This help.'
             ]);
-
-        return;
     }
 }
 

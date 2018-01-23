@@ -35,7 +35,7 @@ your dependencies, you need to
 require [`hoa/cli`](https://packagist.org/packages/hoa/cli):
 
 ```sh
-$ composer require hoa/cli '~2.0'
+$ composer require hoa/cli '~3.0'
 ```
 
 For more installation procedures, please read [the Source
