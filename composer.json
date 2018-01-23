@@ -27,14 +27,13 @@
         "atoum/praspel-extension"   : "~0.17",
         "atoum/ruler-extension"     : "~1.3",
         "atoum/visibility-extension": "~1.3",
-        "hoa/cli"                   : "~2.0",
-        "hoa/consistency"           : "~1.0",
-        "hoa/console"               : "~3.0",
-        "hoa/devtools"              : "~1.0",
-        "hoa/file"                  : "~1.0",
+        "hoa/cli"                   : "dev-master",
+        "hoa/consistency"           : "dev-master",
+        "hoa/console"               : "dev-master",
+        "hoa/file"                  : "dev-master",
         "hoa/kitab"                 : "~0.6",
-        "hoa/protocol"              : "~1.0",
-        "hoa/ustring"               : "~4.0"
+        "hoa/protocol"              : "dev-master",
+        "hoa/ustring"               : "dev-master"
     },
     "autoload": {
         "psr-4": {
