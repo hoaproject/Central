@@ -58,7 +58,8 @@ class Cs extends Console\Dispatcher\Kit
         ['dry-run', Console\GetOption::NO_ARGUMENT, 'd'],
         ['diff',    Console\GetOption::NO_ARGUMENT, 'D'],
         ['help',    Console\GetOption::NO_ARGUMENT, 'h'],
-        ['help',    Console\GetOption::NO_ARGUMENT, '?']
+        ['help',    Console\GetOption::NO_ARGUMENT, '?'],
+        ['verbose', Console\GetOption::NO_ARGUMENT, 'v']
     ];
 
 
@@ -70,8 +71,9 @@ class Cs extends Console\Dispatcher\Kit
      */
     public function main()
     {
-        $dryRun = false;
-        $diff   = false;
+        $dryRun  = false;
+        $diff    = false;
+        $verbose = false;
 
         while (false !== $c = $this->getOption($v)) {
             switch ($c) {
@@ -82,6 +84,11 @@ class Cs extends Console\Dispatcher\Kit
 
                 case 'd':
                     $dryRun = true;
+
+                    break;
+
+                case 'v':
+                    $verbose = true;
 
                     break;
 
@@ -116,6 +123,9 @@ class Cs extends Console\Dispatcher\Kit
 
         if (true === $dryRun) {
             $arguments[] = '--dry-run';
+        }
+        if (true === $verbose) {
+            $arguments[] = '-vvv';
         }
 
         if (true === $diff) {
