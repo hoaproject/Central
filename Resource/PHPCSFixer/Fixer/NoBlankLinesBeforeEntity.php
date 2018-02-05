@@ -39,6 +39,7 @@ namespace Hoa\Devtools\Resource\PHPCSFixer\Fixer;
 use PhpCsFixer\AbstractLinesBeforeNamespaceFixer;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Tokenizer\Tokens;
+use PhpCsFixer\Console\Application;
 use SplFileInfo;
 
 /**
@@ -51,6 +52,21 @@ use SplFileInfo;
  */
 class NoBlankLinesBeforeEntity extends AbstractLinesBeforeNamespaceFixer
 {
+    /**
+     * Are we using php-cs-fixer > 2.8.0
+     * @var boolean
+     */
+    private $v28 = false;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (version_compare(Application::VERSION, '2.8.0') > 0) {
+            $this->v28 = true;
+        }
+    }
+
     protected function applyfix(SplFileInfo $file, Tokens $tokens)
     {
         foreach ($tokens as $index => $token) {
@@ -64,7 +80,15 @@ class NoBlankLinesBeforeEntity extends AbstractLinesBeforeNamespaceFixer
                     false
                 );
                 $firstSignificantIndex = $tokens->getNextNonWhitespace($docCommentIndex);
-                $this->fixLinesBeforeNamespace($tokens, $firstSignificantIndex, 1);
+
+                //The fixLinesBeforeNamespace has changed signature after the
+                //php-cs-fixer v2.8.1 release.
+                //@see https://github.com/FriendsOfPHP/PHP-CS-Fixer/commit/d3a71014777b2d5f35da75944c1ad2a6e983aed4#diff-41cf271d3466dbb2548c606fee86f147
+                if (true === $this->v28) {
+                    $this->fixLinesBeforeNamespace($tokens, $firstSignificantIndex, 0, 1);
+                } else {
+                    $this->fixLinesBeforeNamespace($tokens, $firstSignificantIndex, 1);
+                }
             }
         }
 
