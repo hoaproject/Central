@@ -57,9 +57,9 @@ class Cs extends Console\Dispatcher\Kit
     protected $options = [
         ['dry-run', Console\GetOption::NO_ARGUMENT, 'd'],
         ['diff',    Console\GetOption::NO_ARGUMENT, 'D'],
+        ['verbose', Console\GetOption::NO_ARGUMENT, 'v'],
         ['help',    Console\GetOption::NO_ARGUMENT, 'h'],
-        ['help',    Console\GetOption::NO_ARGUMENT, '?'],
-        ['verbose', Console\GetOption::NO_ARGUMENT, 'v']
+        ['help',    Console\GetOption::NO_ARGUMENT, '?']
     ];
 
 
@@ -164,6 +164,7 @@ class Cs extends Console\Dispatcher\Kit
             $this->makeUsageOptionsList([
                 'd'    => 'Only shows which files would have been modified.',
                 'D'    => 'Produce diff for each file.',
+                'v'    => 'Be verbose.',
                 'help' => 'This help.'
             ]), "\n";
 
