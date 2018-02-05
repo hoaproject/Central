@@ -124,6 +124,7 @@ class Cs extends Console\Dispatcher\Kit
         if (true === $dryRun) {
             $arguments[] = '--dry-run';
         }
+
         if (true === $verbose) {
             $arguments[] = '-vvv';
         }
