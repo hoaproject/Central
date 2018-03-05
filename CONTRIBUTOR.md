@@ -20,6 +20,7 @@ cloak on IRC, etc.
   * Antoine Darche (ecureuilvirtuel)
   * Grégory Darche (tetardo)
   * Benjamin Delespierre (bdelespierre)
+  * Nicolas Dermine (nicoder)
   * James DeVincentis (jmdevince)
   * Guillaume Dievart (guillaumedievart)
   * Gautier Di Folco (black-heaven)
