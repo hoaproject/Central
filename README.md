@@ -5,6 +5,8 @@ Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
 # Central
 
+[![Join the chat at https://gitter.im/hoaproject/Central](https://badges.gitter.im/hoaproject/Central.svg)](https://gitter.im/hoaproject/Central?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The central repository contains all Hoa's libraries. It is a read-only
 repository.
 
