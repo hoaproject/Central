@@ -83,6 +83,8 @@ cloak on IRC, etc.
   * bureX
   * flip101
   * gitomato
+  * Rex Kelly (rexfordkelly)
+  * rodion-k
 
 # Special thanks
 
