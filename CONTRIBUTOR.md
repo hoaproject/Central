@@ -85,6 +85,8 @@ cloak on IRC, etc.
   * gitomato
   * Rex Kelly (rexfordkelly)
   * rodion-k
+  * Dmytro Naumenko (SilverFire)
+  * Jonathan H. Wage (jwage)
 
 # Special thanks
 
