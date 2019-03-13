@@ -88,6 +88,7 @@ cloak on IRC, etc.
   * Dmytro Naumenko (SilverFire)
   * Jonathan H. Wage (jwage)
   * Atef Ben Ali (atefBB)
+  * Taylor Otwell (taylorotwell)
 
 # Special thanks
 
