@@ -7,6 +7,7 @@ The symbol `➜` indicates that the contributor has an email address of the form
 cloak on IRC, etc.
 
   * ➜ Ivan Enderlin (hywan)
+  * Atef Ben Ali (atefBB)
   * Armen Baghumian (armen)
   * Timothée Barray (tyx)
   * Jonathan Van Belle (grummfy)
@@ -47,6 +48,7 @@ cloak on IRC, etc.
   * ➜ Sébastien Houzé (shouze)
   * Stéphane Hulard (shulard)
   * Zack Katz (zackkatz)
+  * Rex Kelly (rexfordkelly)
   * ➜ Matthieu de Laubrie (metalaka)
   * Samuel Laulhau (lalop)
   * Baptiste Leduc (korbeil)
@@ -60,8 +62,10 @@ cloak on IRC, etc.
   * Simon Mönch (smoench)
   * Joris Mulliez (jojolapine)
   * Matthieu Napoli (mnapoli)
+  * Dmytro Naumenko (SilverFire)
   * Kirill Nesmeyanov (serafimarts)
   * Cosmin Nitu (ncosmin2001)
+  * Taylor Otwell (taylorotwell)
   * Rémi Parpaillon (rparpa)
   * Benjamin Perche (lovenunu)
   * Grégoire Pineau (lyrixx)
@@ -78,17 +82,13 @@ cloak on IRC, etc.
   * David Thalmann (boast)
   * Emmanuel Thierry (sekiltoyai)
   * ➜ Pierre Tomasina (pierozi)
+  * Jonathan H. Wage (jwage)
   * Alex Walker (alexpw)
   * Ahmed Waqas (wakqasahmed)
   * bureX
   * flip101
   * gitomato
-  * Rex Kelly (rexfordkelly)
   * rodion-k
-  * Dmytro Naumenko (SilverFire)
-  * Jonathan H. Wage (jwage)
-  * Atef Ben Ali (atefBB)
-  * Taylor Otwell (taylorotwell)
 
 # Special thanks
 
